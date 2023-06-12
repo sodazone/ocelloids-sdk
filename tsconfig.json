@@ -1,0 +1,30 @@
+{
+    "compilerOptions": {
+      "incremental": true,
+      "removeComments": true,
+      "preserveConstEnums": true,
+      "sourceMap": true,
+      "strict": true,
+      "noImplicitReturns": true,
+      "moduleResolution": "node",
+      "esModuleInterop": true,
+      "stripInternal": true,
+      "noEmit": true,
+      "lib": [
+        "esnext",
+        "dom"
+      ],
+      "target": "esnext",
+      "baseUrl": ".",
+      "paths": {
+        "ocelloids": ["./src/index"]
+      }
+    },
+    "watchOptions": {
+      "watchFile": "useFsEvents",
+      "watchDirectory": "useFsEvents",
+      "fallbackPolling": "dynamicPriority",
+      "synchronousWatchDirectory": true,
+      "excludeDirectories": ["**/node_modules", "dist"],
+    }
+  }

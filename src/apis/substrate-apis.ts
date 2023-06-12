@@ -1,0 +1,7 @@
+class SubstrateApis {
+
+}
+
+export {
+  SubstrateApis
+};
