@@ -1,7 +1,8 @@
-import { Configuration } from '../conf/index.js';
 import { ApiPromise, ApiRx, WsProvider } from '@polkadot/api';
 import { Observable, share } from 'rxjs';
+
 import { logger } from '../log/index.js';
+import { Configuration } from '../conf/index.js';
 
 export class SubstrateApis {
   private readonly chains: string[] = [];
@@ -30,25 +31,17 @@ export class SubstrateApis {
 
       this.chains.push(name);
     });
-
-    /*
-      return new Proxy(this, {
-        get(target, prop, receiver) {
-          const p = prop.toString()
-          if (p in target.chains) {
-            return target.promises[p]
-          }
-          return Reflect.get(target, prop, receiver)
-        }
-      }) */
   }
 
-  get api(): Record<string, ApiPromise> {
+  get promise(): Record<string, ApiPromise> {
     return new Proxy(this.promises, {
       get(target, prop) {
-        // TODO check if exists
-        // console.log(prop, target)
-        return target[prop.toString()];
+        const key = prop.toString();
+        const res = target[key];
+        if (res) {
+          return res;
+        }
+        throw new Error(`${key} not found in registered api promise.`);
       }
     });
   }
@@ -56,9 +49,12 @@ export class SubstrateApis {
   get rx(): Record<string, Observable<ApiRx>> {
     return new Proxy(this.apiRx, {
       get(target, prop) {
-        const name = prop.toString();
-        // TODO handle not exists
-        return target[name].isReady.pipe(share());
+        const key = prop.toString();
+        const res = target[key];
+        if (res) {
+          return res.isReady.pipe(share());
+        }
+        throw new Error(`${key} not found in registered api rx.`);
       }
     }) as unknown as Record<string, Observable<ApiRx>>;
   }
