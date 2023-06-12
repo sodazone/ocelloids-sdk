@@ -11,11 +11,11 @@ export class SubstrateApis {
   private readonly promises: Record<string, ApiPromise> = {};
 
   constructor(
-      private readonly config: Configuration
+    config: Configuration
   ) {
     logger.info('Initialize Substrate APIs');
 
-    this.config.providers.forEach((ws: string, name: string) => {
+    config.providers.forEach((ws: string, name: string) => {
       logger.info('- Register APIs for provider: [%s, %s]', name, ws);
 
       const provider = new WsProvider(ws);

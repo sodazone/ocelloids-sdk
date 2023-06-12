@@ -4,6 +4,7 @@ import { SubstrateApis } from './substrate-apis.js';
 test('instantiate', async () => {
   //* TODO: mock ws
   const apis = new SubstrateApis(configuration);
+  console.log(apis.promise.polkadot.isReady);
   expect(apis).toBeDefined();
   //*/
 });
