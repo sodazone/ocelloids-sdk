@@ -6,3 +6,4 @@ typings/
 /dist/
 /dist-compat/
 coverage/
+.eslintcache
