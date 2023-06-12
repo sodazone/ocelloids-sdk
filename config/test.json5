@@ -1,0 +1,8 @@
+{
+  // Substrate APIs module configs
+  "substrate": {
+    "polkadot": {
+      "ws": "wss://rpc.polkadot.io"
+    }
+  }
+}

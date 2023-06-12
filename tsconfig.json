@@ -6,15 +6,21 @@
       "sourceMap": true,
       "strict": true,
       "noImplicitReturns": true,
-      "moduleResolution": "node",
+      // if TS 5.x+
+      "moduleResolution": "bundler",
+      // "allowImportingTsExtensions": true,
+      "moduleDetection": "auto",
       "esModuleInterop": true,
       "stripInternal": true,
       "noEmit": true,
+      "importHelpers": true,
+      "skipLibCheck": true,
+      "allowJs": true,
       "lib": [
         "esnext",
         "dom"
       ],
-      "target": "esnext",
+      "target": "ES2022",
       "baseUrl": ".",
       "paths": {
         "ocelloids": ["./src/index"]

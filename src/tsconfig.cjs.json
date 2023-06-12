@@ -1,8 +1,9 @@
 {
     "extends": "./tsconfig.base.json",
     "compilerOptions": {
+      "moduleResolution": "nodenext",
       "module": "commonjs",
-      "target": "es5",
+      "target": "ES2022",
       "downlevelIteration": true,
       "outDir": "../dist/cjs"
     }

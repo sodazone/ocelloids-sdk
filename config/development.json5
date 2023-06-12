@@ -1,0 +1,14 @@
+{
+  // Substrate APIs module configs
+  "substrate": {
+    "polkadot": {
+      "ws": "wss://rpc.polkadot.io"
+    },
+    "astar": {
+      "ws": "wss://rpc.astar.network"
+    },
+    "rococo": {
+      "ws": "wss://rococo-rpc.polkadot.io"
+    }
+  }
+}

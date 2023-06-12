@@ -5,6 +5,8 @@
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
   "types": "index.d.ts",
+  "browser": "./dist/browser.js",
+  "type": "module",
   "typesVersions": {
     ">=0.0.1": {
       "*": [
@@ -23,7 +25,7 @@
   },
   "scripts": {
     "lint:fix": "eslint --cache --fix \"src/**/*.ts\"",
-    "compile": "tsc -b ./src/tsconfig.cjs.json ./src/tsconfig.esm.json ./src/tsconfig.types.json",
+    "build": "tsc -b ./src/tsconfig.cjs.json ./src/tsconfig.esm.json ./src/tsconfig.types.json",
     "build:clean": "shx rm -rf ./dist",
     "build:package": "npm run build:clean && npm run compile",
     "watch": "tsc -b ./src/tsconfig.cjs.json ./src/tsconfig.esm.json ./src/tsconfig.types.json --watch",
@@ -32,6 +34,7 @@
   "author": "soda <projects@soda.zone>",
   "license": "Apache-2.0",
   "devDependencies": {
+    "@types/config": "^3.3.0",
     "@types/jest": "^29.5.2",
     "@typescript-eslint/eslint-plugin": "^5.59.9",
     "@typescript-eslint/parser": "^5.59.9",
@@ -54,5 +57,11 @@
     "package.json",
     "README.md",
     "tsconfig.json"
-  ]
+  ],
+  "dependencies": {
+    "@polkadot/api": "^10.9.1",
+    "config": "^3.3.9",
+    "pino": "^8.14.1",
+    "rxjs": "^7.8.1"
+  }
 }
