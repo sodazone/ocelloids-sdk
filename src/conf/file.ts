@@ -2,7 +2,7 @@ import config from 'config';
 
 import { Configuration, SubstrateConfig } from './config.js';
 
-class FileConfiguration implements Configuration {
+export class FileConfiguration implements Configuration {
   public get providers() {
     const providers = new Map<string, string>();
     const confs: SubstrateConfig = config.get('substrate');
@@ -14,5 +14,3 @@ class FileConfiguration implements Configuration {
     return providers;
   }
 }
-
-export const configuration = new FileConfiguration();

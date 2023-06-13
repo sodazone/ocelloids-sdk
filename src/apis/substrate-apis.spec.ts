@@ -16,14 +16,14 @@ jest.mock('@polkadot/api', () => {
   };
 });
 
-import { configuration } from '../index.js';
+import { FileConfiguration } from '../index.js';
 import { SubstrateApis } from './substrate-apis.js';
 
 describe('substrate APIs', () => {
   let apis: SubstrateApis;
 
   beforeAll(() => {
-    apis = new SubstrateApis(configuration);
+    apis = new SubstrateApis(new FileConfiguration());
   });
 
   test('instantiate', () => {
