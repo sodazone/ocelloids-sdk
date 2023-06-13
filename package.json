@@ -60,9 +60,7 @@
     "dist/types/**/!(*.tsbuildinfo)",
     "apis",
     "src",
-    "CHANGELOG.md",
-    "CODE_OF_CONDUCT.md",
-    "LICENSE.txt",
+    "LICENSE",
     "package.json",
     "README.md",
     "tsconfig.json"
