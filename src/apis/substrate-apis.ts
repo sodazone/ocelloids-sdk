@@ -101,6 +101,6 @@ export class SubstrateApis {
     const promises = Object.entries(this.providers).map(
       async ([_, provider]) =>  await provider.disconnect()
     );
-    return Promise.all(promises);
+    return Promise.all(promises).catch(l.error);
   }
 }
