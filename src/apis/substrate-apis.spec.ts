@@ -1,5 +1,3 @@
-import type { Logger } from '@polkadot/util/types';
-
 jest.mock('@polkadot/api', () => {
   const original = jest.requireActual('@polkadot/api');
 
@@ -18,13 +16,21 @@ jest.mock('@polkadot/api', () => {
   };
 });
 
-const logger : Logger = {
-  debug: jest.fn(),
-  error: jest.fn(),
-  log: jest.fn(),
-  noop: jest.fn(),
-  warn: jest.fn()
-};
+jest.mock('@polkadot/util', () => {
+  const original = jest.requireActual('@polkadot/util');
+
+  return {
+    ...original,
+    logger: jest.fn(() => {
+      return {
+        log: jest.fn(),
+        warn: jest.fn(),
+        error: jest.fn(),
+        debug: jest.fn(),
+        noop: jest.fn(),
+      }; })
+  };
+});
 
 import { SubstrateApis } from './substrate-apis.js';
 
@@ -40,8 +46,8 @@ describe('substrate APIs', () => {
         rococo: {
           ws: 'wss://rococo.local.test'
         }
-      }
-    }, logger);
+      },
+    });
   });
 
   test('instantiate', () => {

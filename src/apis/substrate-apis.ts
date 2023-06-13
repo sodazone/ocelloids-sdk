@@ -1,9 +1,11 @@
 import { ApiPromise, ApiRx, HttpProvider, WsProvider } from '@polkadot/api';
-import type { Logger } from '@polkadot/util/types';
+import { logger } from '@polkadot/util';
 
 import { Observable, share } from 'rxjs';
 
 import { Configuration } from '../conf/index.js';
+
+const l = logger('oc-substrate-apis');
 
 /**
  * Substrate APIs wrapper with multi-chain support.
@@ -19,13 +21,12 @@ export class SubstrateApis {
    * @param config The configuration instance
    */
   constructor(
-    config: Configuration,
-    logger: Logger
+    config: Configuration
   ) {
-    logger.log('Initialize Substrate APIs');
+    l.log('Initialize Substrate APIs');
 
     Object.entries(config.providers).forEach(([name, endpoint]) => {
-      logger.log('- Register APIs for provider:', name, endpoint);
+      l.log('- Register APIs for provider:', name, endpoint);
 
       if (endpoint.ws === undefined && endpoint.http === undefined) {
         throw new Error('please, provide a ws or http endpoint');
