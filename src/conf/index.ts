@@ -1,6 +1,6 @@
 /**
  * Configuration interfaces and implementations.
  *
- * @module
+ * @module config
  */
 export * from './config.js';

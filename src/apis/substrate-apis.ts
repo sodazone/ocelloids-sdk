@@ -4,12 +4,19 @@ import { Observable, share } from 'rxjs';
 import { logger } from '../log/index.js';
 import { Configuration } from '../conf/index.js';
 
+/**
+ * Substrate APIs wrapper with multi-chain support.
+ */
 export class SubstrateApis {
   private readonly chains: string[] = [];
   private readonly providers: Record<string, WsProvider> = {};
   private readonly apiRx: Record<string, ApiRx> = {};
   private readonly promises: Record<string, ApiPromise> = {};
 
+  /**
+   * @constructor
+   * @param config The configuration instance
+   */
   constructor(
     config: Configuration
   ) {
@@ -33,6 +40,16 @@ export class SubstrateApis {
     });
   }
 
+  /**
+   * Returns the promise-based API instance for a given provider name.
+   *
+   * ## Example
+   * ```ts
+   * // provider registered under 'polkadot' name
+   * apis.promise.polkadot.isReady
+   * ```
+   * @see ApiPromise
+   */
   get promise(): Record<string, ApiPromise> {
     return new Proxy(this.promises, {
       get(target, prop) {
@@ -46,6 +63,17 @@ export class SubstrateApis {
     });
   }
 
+  /**
+   * Returns the rx-based API `isReady` observable for a given provider name.
+   * The observable is shared.
+   *
+   * ## Example
+   * ```ts
+   * // provider registered under 'polkadot' name
+   * apis.rx.polkadot
+   * ```
+   * @see ApiRx.isReady
+   */
   get rx(): Record<string, Observable<ApiRx>> {
     return new Proxy(this.apiRx, {
       get(target, prop) {
@@ -59,6 +87,9 @@ export class SubstrateApis {
     }) as unknown as Record<string, Observable<ApiRx>>;
   }
 
+  /**
+   * Returns a promise of diconnecting all the registered providers.
+   */
   async disconnect() {
     const promises = Object.entries(this.providers).map(
       async ([_, provider]) =>  await provider.disconnect()

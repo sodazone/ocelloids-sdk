@@ -1,3 +1,8 @@
+/**
+ * Main browser exports.
+ *
+ * @module browser
+ */
 export * from './apis/index.js';
 export * from './conf/index.js';
 

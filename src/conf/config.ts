@@ -1,9 +1,9 @@
 export interface Configuration {
-    providers: Map<string, string>
-  }
+  providers: Map<string, string>
+}
 
 export  interface SubstrateConfig {
-    [key: string]: {
-      ws: string
-    }
+  [key: string]: {
+    ws: string
   }
+}
