@@ -1,6 +1,10 @@
-/**
- * Configuration interfaces and implementations.
- *
- * @module config
- */
-export * from './config.js';
+export interface SubstrateConfig {
+  [key: string]: {
+    ws?: string,
+    http?: string
+  }
+}
+
+export interface Configuration {
+  providers: SubstrateConfig
+}

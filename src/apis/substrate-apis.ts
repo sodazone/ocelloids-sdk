@@ -1,7 +1,8 @@
-import { ApiPromise, ApiRx, WsProvider } from '@polkadot/api';
+import { ApiPromise, ApiRx, HttpProvider, WsProvider } from '@polkadot/api';
+import type { Logger } from '@polkadot/util/types';
+
 import { Observable, share } from 'rxjs';
 
-import { logger } from '../log/index.js';
 import { Configuration } from '../conf/index.js';
 
 /**
@@ -9,7 +10,7 @@ import { Configuration } from '../conf/index.js';
  */
 export class SubstrateApis {
   private readonly chains: string[] = [];
-  private readonly providers: Record<string, WsProvider> = {};
+  private readonly providers: Record<string, WsProvider | HttpProvider> = {};
   private readonly apiRx: Record<string, ApiRx> = {};
   private readonly promises: Record<string, ApiPromise> = {};
 
@@ -18,14 +19,19 @@ export class SubstrateApis {
    * @param config The configuration instance
    */
   constructor(
-    config: Configuration
+    config: Configuration,
+    logger: Logger
   ) {
-    logger.info('Initialize Substrate APIs');
+    logger.log('Initialize Substrate APIs');
 
-    config.providers.forEach((ws: string, name: string) => {
-      logger.info('- Register APIs for provider: [%s, %s]', name, ws);
+    Object.entries(config.providers).forEach(([name, endpoint]) => {
+      logger.log('- Register APIs for provider:', name, endpoint);
 
-      const provider = new WsProvider(ws);
+      if (endpoint.ws === undefined && endpoint.http === undefined) {
+        throw new Error('please, provide a ws or http endpoint');
+      }
+
+      const provider = endpoint.ws ? new WsProvider(endpoint.ws) : new HttpProvider(endpoint.http);
       this.providers[name] = provider;
 
       this.apiRx[name] = new ApiRx({

@@ -5,7 +5,6 @@
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
   "types": "index.d.ts",
-  "browser": "./dist/cjs/browser.js",
   "type": "module",
   "typesVersions": {
     ">=0.0.1": {
@@ -21,12 +20,6 @@
       "node": "./dist/cjs/index.js",
       "require": "./dist/cjs/index.js",
       "default": "./dist/esm/index.js"
-    },
-    "./browser": {
-      "types": "./dist/types/browser.d.ts",
-      "node": "./dist/cjs/browser.js",
-      "require": "./dist/cjs/browser.js",
-      "default": "./dist/esm/browser.js"
     }
   },
   "scripts": {
@@ -67,8 +60,7 @@
   ],
   "dependencies": {
     "@polkadot/api": "^10.9.1",
-    "config": "^3.3.9",
-    "pino": "^8.14.1",
+    "@polkadot/util": "^12.3.2",
     "rxjs": "^7.8.1"
   }
 }
