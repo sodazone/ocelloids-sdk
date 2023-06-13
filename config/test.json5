@@ -3,6 +3,9 @@
   "substrate": {
     "polkadot": {
       "ws": "wss://rpc.polkadot.io"
+    },
+    "rococo": {
+      "ws": "wss://rococo-rpc.polkadot.io"
     }
   }
 }
