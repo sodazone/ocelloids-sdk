@@ -19,6 +19,6 @@
  *
  * @module
  */
-export * from './extrinsics';
-export * from './events';
-export * from './blocks';
+export * from './extrinsics.js';
+export * from './events.js';
+export * from './blocks.js';

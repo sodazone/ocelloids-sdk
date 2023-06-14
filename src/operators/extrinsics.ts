@@ -19,7 +19,7 @@ import { logger } from '@polkadot/util';
 
 import { Observable, switchMap, mergeMap, timer, catchError, concatMap, EMPTY } from 'rxjs';
 
-import { blocks } from './blocks';
+import { blocks } from './blocks.js';
 
 const l = logger('oc-ops-extrinsics');
 

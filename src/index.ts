@@ -19,6 +19,6 @@
  *
  * @module
  */
-export * from './apis/';
-export * from './configuration/';
-export * from './operators/';
+export * from './apis/index.js';
+export * from './configuration/index.js';
+export * from './operators/index.js';

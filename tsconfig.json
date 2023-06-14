@@ -8,7 +8,7 @@
       "noImplicitReturns": true,
       // if TS 5.x+
       //"moduleResolution": "bundler",
-      "moduleResolution": "node",
+      "moduleResolution": "nodeNext",
       "moduleDetection": "auto",
       "esModuleInterop": true,
       "stripInternal": true,

@@ -19,4 +19,4 @@
  *
  * @module substrate-apis
  */
-export * from './substrate-apis';
+export * from './substrate-apis.js';

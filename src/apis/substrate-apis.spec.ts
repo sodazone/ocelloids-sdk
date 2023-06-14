@@ -16,7 +16,7 @@
 
 import '../__test__/mocks/polkadot';
 
-import { SubstrateApis } from './substrate-apis';
+import { SubstrateApis } from './substrate-apis.js';
 
 describe('substrate APIs', () => {
   let apis: SubstrateApis;
