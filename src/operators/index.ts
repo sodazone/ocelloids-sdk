@@ -15,9 +15,9 @@
  */
 
 /**
- * Module of reactive operators.
+ * Reactive operators.
  *
- * @module operators
+ * @module
  */
 export * from './extrinsics.js';
 export * from './events.js';
