@@ -14,11 +14,8 @@
  * limitations under the License.
  */
 
-/**
- * Module of reactive operators.
- *
- * @module operators
- */
-export * from './extrinsics.js';
-export * from './events.js';
-export * from './blocks.js';
+export type SBlock= {
+  block: Uint8Array;
+  events: Uint8Array[];
+  author?: Uint8Array;
+}
