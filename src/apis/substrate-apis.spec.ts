@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import '../__test__/mocks/polkadot.js';
+import '../__test__/mocks/polkadot';
 
-import { SubstrateApis } from './substrate-apis.js';
+import { SubstrateApis } from './substrate-apis';
 
 describe('substrate APIs', () => {
   let apis: SubstrateApis;

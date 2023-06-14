@@ -1,7 +1,7 @@
 {
     "extends": "./tsconfig.base.json",
     "compilerOptions": {
-      "moduleResolution": "nodenext",
+      "moduleResolution": "node",
       "module": "commonjs",
       "target": "ES2022",
       "downlevelIteration": true,

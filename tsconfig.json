@@ -7,8 +7,8 @@
       "strict": true,
       "noImplicitReturns": true,
       // if TS 5.x+
-      "moduleResolution": "bundler",
-      // "allowImportingTsExtensions": true,
+      //"moduleResolution": "bundler",
+      "moduleResolution": "node",
       "moduleDetection": "auto",
       "esModuleInterop": true,
       "stripInternal": true,
@@ -24,7 +24,8 @@
       "baseUrl": ".",
       "paths": {
         "ocelloids": ["./src/index"]
-      }
+      },
+      "module": "ESNext"
     },
     "watchOptions": {
       "watchFile": "useFsEvents",

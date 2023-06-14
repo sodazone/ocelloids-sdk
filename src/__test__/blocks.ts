@@ -22,7 +22,7 @@ import { TypeRegistry, Metadata } from '@polkadot/types';
 import { SignedBlock, EventRecord, AccountId } from '@polkadot/types/interfaces';
 import { createSignedBlockExtended } from '@polkadot/api-derive';
 
-import { SBlock } from './types.js';
+import { SBlock } from './types';
 
 const registry = new TypeRegistry();
 const metadata = new Metadata(registry, metadataStatic);

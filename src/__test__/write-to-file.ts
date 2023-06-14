@@ -20,8 +20,8 @@ import { encode } from 'cbor-x';
 
 import { SignedBlockExtended } from '@polkadot/api-derive/types';
 
-import { SubstrateApis, blocksInRange } from '../index.js';
-import { SBlock } from './types.js';
+import { SubstrateApis, blocksInRange } from '../';
+import { SBlock } from './types';
 
 const apis = new SubstrateApis({
   providers: {
