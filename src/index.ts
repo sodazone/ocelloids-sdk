@@ -15,9 +15,10 @@
  */
 
 /**
- * Main exports.
+ * Ocelloids SDK module.
  *
  * @module main
  */
 export * from './apis/index.js';
-export * from './conf/index.js';
+export * from './configuration/index.js';
+export * from './operators/index.js';
