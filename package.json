@@ -30,7 +30,8 @@
     "build:watch": "tsc -b ./src/tsconfig.cjs.json ./src/tsconfig.esm.json ./src/tsconfig.types.json --watch",
     "test": "jest",
     "test:watch": "jest --watch",
-    "docs": "typedoc src/index.ts"
+    "docs": "typedoc src/index.ts",
+    "tool": "npx ts-node-esm"
   },
   "author": "soda <projects@soda.zone>",
   "license": "Apache-2.0",

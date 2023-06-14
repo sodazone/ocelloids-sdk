@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-import { writeFileSync } from 'fs';
+import { writeFileSync } from 'node:fs';
 import { Observer } from 'rxjs';
 import { encode } from 'cbor-x';
 
 import { SignedBlockExtended } from '@polkadot/api-derive/types';
 
-import { SubstrateApis, blocksInRange } from '../index.js';
-import { SBlock } from './types.js';
+import { SubstrateApis, blocksInRange } from '../src/index.js';
+import { SBlock } from '../src/__test__/types.js';
 
 const apis = new SubstrateApis({
   providers: {
