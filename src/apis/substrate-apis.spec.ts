@@ -34,6 +34,12 @@ describe('substrate APIs', () => {
     });
   });
 
+  test('missing provider', () => {
+    expect(() => {
+      const _ = new SubstrateApis({ polkadot: {} });
+    }).toThrowError();
+  });
+
   test('instantiate', () => {
     expect(apis).toBeDefined();
     expect(apis.promise).toBeDefined();

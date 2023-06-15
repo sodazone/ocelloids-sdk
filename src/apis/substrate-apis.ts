@@ -43,7 +43,7 @@ export class SubstrateApis {
     l.log('Initialize Substrate APIs');
 
     Object.entries(config).forEach(([name, options]) => {
-      l.log('- Register APIs for provider:', name, options);
+      l.log('-', name);
 
       const { provider } = options;
 
