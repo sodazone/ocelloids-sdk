@@ -48,7 +48,7 @@ export class SubstrateApis {
       const { provider } = options;
 
       if (provider === undefined) {
-        throw new Error('no provider specified');
+        throw new Error(`no provider specified for "${name}"`);
       }
 
       this.options[name] = options;
@@ -66,11 +66,11 @@ export class SubstrateApis {
   }
 
   /**
-   * Returns the promise-based API instance for a given provider name.
+   * Returns the `ApiPromise` instance for a given chain name.
    *
    * ## Example
    * ```ts
-   * // provider registered under 'polkadot' name
+   * // registered under 'polkadot' name
    * apis.promise.polkadot.isReady
    * ```
    * @see ApiPromise
@@ -83,18 +83,19 @@ export class SubstrateApis {
         if (res) {
           return res;
         }
-        throw new Error(`${key} not found in registered api promise.`);
+        throw new Error(`${key} not found.`);
       }
     });
   }
 
   /**
-   * Returns the rx-based API `isReady` observable for a given provider name.
-   * The observable is shared.
+   * Returns the reactive `ApiRx` observable for a given chain name.
+   *
+   * The returned observable is shared.
    *
    * ## Example
    * ```ts
-   * // provider registered under 'polkadot' name
+   * // registered under 'polkadot' name
    * apis.rx.polkadot
    * ```
    * @see ApiRx.isReady
@@ -107,7 +108,7 @@ export class SubstrateApis {
         if (res) {
           return res.isReady.pipe(share());
         }
-        throw new Error(`${key} not found in registered api rx.`);
+        throw new Error(`${key} not found.`);
       }
     }) as unknown as Record<string, Observable<ApiRx>>;
   }

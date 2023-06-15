@@ -17,7 +17,7 @@
 import { ApiOptions } from '@polkadot/api/types';
 
 /**
- * The configuration properties.
+ * The API configuration properties per chain.
  *
  * ## Example
  * ```ts
