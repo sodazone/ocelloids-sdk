@@ -15,6 +15,8 @@
  */
 
 import { writeFileSync } from 'node:fs';
+import path from 'node:path';
+
 import { Observer } from 'rxjs';
 import { encode } from 'cbor-x';
 
@@ -22,7 +24,7 @@ import { WsProvider } from '@polkadot/api';
 import { SignedBlockExtended } from '@polkadot/api-derive/types';
 
 import { SubstrateApis, blocksInRange } from '../src/index.js';
-import { SBlock } from '../src/__test__/types.js';
+import { BinBlock } from '../src/__test__/types.js';
 
 const apis = new SubstrateApis(
   {
@@ -34,7 +36,7 @@ const apis = new SubstrateApis(
 
 const blocksPipe = blocksInRange(15950017, 10);
 
-const b : SBlock[] = [];
+const b : BinBlock[] = [];
 
 const observer: Observer<SignedBlockExtended> = {
   next: (block: SignedBlockExtended) => {
@@ -49,7 +51,7 @@ const observer: Observer<SignedBlockExtended> = {
   error: (err: unknown) => console.error('Observer got an error: ' + err),
   complete: () => {
     apis.disconnect().then(() => console.log('APIs disconnected'));
-    writeFileSync('./blocks.cbor.bin', encode(b));
+    writeFileSync(path.resolve(__dirname, '../src/__test__/__data__/blocks.cbor.bin'), encode(b));
   },
 };
 

@@ -21,6 +21,9 @@ const jestConfig: JestConfigWithTsJest = {
   clearMocks: true,
   collectCoverage: true,
   coverageDirectory: 'coverage',
+  coveragePathIgnorePatterns: [
+    '<rootDir>/src/__test__/.*'
+  ],
   testMatch: ['<rootDir>/src/**/?(*.)+(spec|test).[jt]s'],
   moduleNameMapper: {
     '^(\\.{1,2}/.*)\\.js$': '$1',

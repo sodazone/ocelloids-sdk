@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 /*
  * Copyright 2023 SO/DA zone - Marc Fornós & Xueying Wang
  *
@@ -14,27 +16,14 @@
  * limitations under the License.
  */
 
-/* istanbul ignore file */
+import { from, of } from 'rxjs';
+
+import { ApiRx } from '@polkadot/api';
+import { DeriveApi, SignedBlockExtended } from '@polkadot/api-derive/types';
+import { AnyNumber } from '@polkadot/types-codec/types';
+
+// Nested packages cannot be mocked by other means.
 // @see https://github.com/jestjs/jest/issues/462
-
-jest.mock('@polkadot/api', () => {
-  const original = jest.requireActual('@polkadot/api');
-
-  return {
-    ...original,
-    WsProvider: jest.fn(() => {
-      return {
-        hasSubscriptions: jest.fn(() => {return true;}),
-        on: jest.fn(),
-        connect: jest.fn(),
-        disconnect: jest.fn(),
-        send: jest.fn(),
-        subscribe: jest.fn(),
-        unsubscribe: jest.fn()
-      }; })
-  };
-});
-
 jest.mock('@polkadot/util', () => {
   const original = jest.requireActual('@polkadot/util');
 
@@ -50,3 +39,50 @@ jest.mock('@polkadot/util', () => {
       }; })
   };
 });
+
+export function mockPolkadotApi({
+  testBlocks
+} : {
+  testBlocks?: SignedBlockExtended[]
+} = {}) {
+  const mockDeriveApi = {
+    derive: {
+      chain: {
+        getBlockByNumber: (blockNumber: AnyNumber) => of(
+          testBlocks?.find(
+            b => b.block.header.number.toNumber() === blockNumber
+          )
+        ),
+      }
+    }
+  } as unknown as DeriveApi;
+
+  const mockRxApi = {
+    isReady: from<Promise<ApiRx>>(
+      new Promise((resolve): void => {
+        resolve(mockDeriveApi as unknown as ApiRx);
+      })
+    ),
+  } as unknown as ApiRx;
+
+  jest.mock('@polkadot/api', () => {
+    const original = jest.requireActual('@polkadot/api');
+
+    return {
+      ...original,
+      ApiRx: jest.fn(() => mockRxApi),
+      WsProvider: jest.fn(() => {
+        return {
+          hasSubscriptions: jest.fn(() => {
+            return true;
+          }),
+          on: jest.fn(),
+          connect: jest.fn(),
+          disconnect: jest.fn(),
+          send: jest.fn(),
+          subscribe: jest.fn(),
+          unsubscribe: jest.fn()
+        }; })
+    };
+  });
+}

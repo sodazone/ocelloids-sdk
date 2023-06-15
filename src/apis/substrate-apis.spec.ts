@@ -14,11 +14,7 @@
  * limitations under the License.
  */
 
-import '../__test__/mocks/polkadot';
-
-import { WsProvider } from '@polkadot/api';
-
-import { SubstrateApis } from './substrate-apis.js';
+import { WsProvider, SubstrateApis } from '../__test__/mocks/_default.js';
 
 describe('substrate APIs', () => {
   let apis: SubstrateApis;

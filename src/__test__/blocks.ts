@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import path from 'path';
-import { readFileSync } from 'fs';
+import path from 'node:path';
+import { readFileSync } from 'node:fs';
+
 import { decode } from 'cbor-x';
 
 import metadataStatic from '@polkadot/types-support/metadata/static-polkadot';
@@ -22,28 +23,28 @@ import { TypeRegistry, Metadata } from '@polkadot/types';
 import { SignedBlock, EventRecord, AccountId } from '@polkadot/types/interfaces';
 import { createSignedBlockExtended } from '@polkadot/api-derive';
 
-import { SBlock } from './types.js';
+import { BinBlock } from './types.js';
 
-const registry = new TypeRegistry();
-const metadata = new Metadata(registry, metadataStatic);
+export function testBlocksFrom(file: string) {
+  const buffer = readFileSync(path.resolve(__dirname, '__data__', file));
+  const blocks: BinBlock[] = decode(buffer);
 
-registry.setMetadata(metadata);
+  const registry = new TypeRegistry();
+  const metadata = new Metadata(registry, metadataStatic);
 
-const blocksFileBuffer = readFileSync(path.resolve(__dirname, '__data__/blocks.cbor.bin'));
-const sBlocks: SBlock[] = decode(blocksFileBuffer);
+  registry.setMetadata(metadata);
 
-const mockBlocks = sBlocks.map(sb => {
-  const sBlock = registry.createType('SignedBlock', sb.block);
-  const records = registry.createType('Vec<EventRecord>', sb.events, true);
-  const author = registry.createType('AccountId', sb.author);
+  return blocks.map(b => {
+    const block = registry.createType('SignedBlock', b.block);
+    const records = registry.createType('Vec<EventRecord>', b.events, true);
+    const author = registry.createType('AccountId', b.author);
 
-  return createSignedBlockExtended(
-    registry,
-    sBlock as SignedBlock,
+    return createSignedBlockExtended(
+      registry,
+    block as SignedBlock,
     records as unknown as EventRecord[],
     null,
     author as AccountId
-  );
-});
-
-export { mockBlocks };
+    );
+  });
+}
