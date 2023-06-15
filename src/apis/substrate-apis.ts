@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { ApiPromise, ApiRx, HttpProvider, WsProvider } from '@polkadot/api';
+import { ApiPromise, ApiRx } from '@polkadot/api';
 import { logger } from '@polkadot/util';
 
 import { Observable, share } from 'rxjs';
