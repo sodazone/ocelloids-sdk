@@ -35,6 +35,10 @@
   },
   "author": "soda <projects@soda.zone>",
   "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sodazone/ocelloids.git"
+  },
   "devDependencies": {
     "@types/config": "^3.3.0",
     "@types/jest": "^29.5.2",
