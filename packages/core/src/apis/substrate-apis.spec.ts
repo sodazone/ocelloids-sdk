@@ -14,22 +14,18 @@
  * limitations under the License.
  */
 
-import { WsProvider, SubstrateApis } from '../__test__/mocks/_default.js';
+import { WsProvider, SubstrateApis } from '../__test__/mocks/mock_default.js';
+
+const apis = new SubstrateApis({
+  polkadot: {
+    provider: new WsProvider('wss://polkadot.local.test')
+  },
+  rococo: {
+    provider: new WsProvider('wss://rococo.local.test')
+  }
+});
 
 describe('substrate APIs', () => {
-  let apis: SubstrateApis;
-
-  beforeAll(() => {
-    apis = new SubstrateApis({
-      polkadot: {
-        provider: new WsProvider('wss://polkadot.local.test')
-      },
-      rococo: {
-        provider: new WsProvider('wss://rococo.local.test')
-      }
-    });
-  });
-
   test('missing provider', () => {
     expect(() => {
       const _ = new SubstrateApis({ polkadot: {} });

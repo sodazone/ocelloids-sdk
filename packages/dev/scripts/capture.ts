@@ -1,3 +1,4 @@
+#!/usr/bin/env ts-node-esm
 /*
  * Copyright 2023 SO/DA zone - Marc Fornós & Xueying Wang
  *
@@ -23,8 +24,8 @@ import { encode } from 'cbor-x';
 import { WsProvider } from '@polkadot/api';
 import { SignedBlockExtended } from '@polkadot/api-derive/types';
 
-import { SubstrateApis, blocksInRange } from '../src/index.js';
-import { BinBlock } from '../src/__test__/types.js';
+import { SubstrateApis, blocksInRange } from '@soda/ocelloids/src/index.js';
+import { BinBlock } from '@soda/ocelloids/src/__test__/types.js';
 
 const apis = new SubstrateApis(
   {
@@ -51,6 +52,7 @@ const observer: Observer<SignedBlockExtended> = {
   error: (err: unknown) => console.error('Observer got an error: ' + err),
   complete: () => {
     apis.disconnect().then(() => console.log('APIs disconnected'));
+    // XXX meow
     writeFileSync(path.resolve(__dirname, '../src/__test__/__data__/blocks.cbor.bin'), encode(b));
   },
 };

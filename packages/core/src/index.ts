@@ -14,28 +14,11 @@
  * limitations under the License.
  */
 
-import type { JestConfigWithTsJest } from 'ts-jest';
-
-const jestConfig: JestConfigWithTsJest = {
-  preset: 'ts-jest/presets/js-with-ts-esm',
-  clearMocks: true,
-  collectCoverage: true,
-  coverageDirectory: 'coverage',
-  coveragePathIgnorePatterns: [
-    '<rootDir>/src/__test__/.*'
-  ],
-  testMatch: ['<rootDir>/src/**/?(*.)+(spec|test).[jt]s'],
-  moduleNameMapper: {
-    '^(\\.{1,2}/.*)\\.js$': '$1',
-  },
-  transform: {
-    '^.+\\.tsx?$': [
-      'ts-jest',
-      {
-        isolatedModules: true,
-      },
-    ],
-  },
-};
-
-export default jestConfig;
+/**
+ * Ocelloids SDK.
+ *
+ * @module bundle
+ */
+export * from './apis/index.js';
+export * from './configuration/index.js';
+export * from './operators/index.js';

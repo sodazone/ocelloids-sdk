@@ -1,0 +1,33 @@
+{
+  "name": "@soda/ocelloids-dev",
+  "version": "0.0.1",
+  "description": "Development support tools.",
+  "sideEffects": false,
+  "private": true,
+  "type": "module",
+  "author": "soda <projects@soda.zone>",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "directory": "packages/dev",
+    "url": "https://github.com/sodazone/ocelloids.git"
+  },
+  "bin": {
+    "capture": "src/capture.ts"
+  },
+  "devDependencies": {
+    "cbor-x": "^1.5.3"
+  },
+  "dependencies": {
+    "@polkadot/api": "^10.9.1",
+    "@polkadot/util": "^12.3.2",
+    "rxjs": "^7.8.1"
+  },
+  "jest": {
+    "globals": {
+      "ts-jest": {
+        "tsConfig": "tsconfig.spec.json"
+      }
+    }
+  }
+}

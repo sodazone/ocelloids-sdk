@@ -1,0 +1,30 @@
+{
+  "name": "@soda/ocelloids",
+  "version": "0.0.1",
+  "description": "Software development kit for building monitoring applications for Substrate networks.",
+  "main": "index.js",
+  "type": "module",
+  "sideEffects": false,
+  "author": "soda <projects@soda.zone>",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "directory": "packages/core",
+    "url": "https://github.com/sodazone/ocelloids.git"
+  },
+  "devDependencies": {
+    "cbor-x": "^1.5.3"
+  },
+  "dependencies": {
+    "@polkadot/api": "^10.9.1",
+    "@polkadot/util": "^12.3.2",
+    "rxjs": "^7.8.1"
+  },
+  "jest": {
+    "globals": {
+      "ts-jest": {
+        "tsConfig": "tsconfig.spec.json"
+      }
+    }
+  }
+}

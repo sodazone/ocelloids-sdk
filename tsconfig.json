@@ -1,37 +1,15 @@
 {
-    "compilerOptions": {
-      "incremental": true,
-      "removeComments": true,
-      "preserveConstEnums": true,
-      "sourceMap": true,
-      "strict": true,
-      "noImplicitReturns": true,
-      // if TS 5.x+
-      //"moduleResolution": "bundler",
-      "moduleResolution": "nodeNext",
-      "moduleDetection": "auto",
-      "esModuleInterop": true,
-      "stripInternal": true,
-      "noEmit": true,
-      "importHelpers": true,
-      "skipLibCheck": true,
-      "allowJs": true,
-      "lib": [
-        "esnext",
-        "dom"
-      ],
-      "target": "ES2022",
-      "baseUrl": ".",
-      "paths": {
-        "ocelloids": ["./src/index"]
-      },
-      "module": "ESNext"
-    },
-    "watchOptions": {
-      "watchFile": "useFsEvents",
-      "watchDirectory": "useFsEvents",
-      "fallbackPolling": "dynamicPriority",
-      "synchronousWatchDirectory": true,
-      "excludeDirectories": ["**/node_modules", "dist"],
-    }
-  }
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": "./packages",
+    "composite": false,
+    "resolveJsonModule": true
+  },
+  "include": [
+    "packages/**/src/**/*",
+    "packages/dev/tools/capture.ts"
+  ],
+  "exclude": [
+    "**/node_modules/**/*"
+  ]
+}

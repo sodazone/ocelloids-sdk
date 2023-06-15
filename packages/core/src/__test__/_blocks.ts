@@ -13,23 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import path from 'node:path';
+import * as path from 'node:path';
 import { readFileSync } from 'node:fs';
 
 import { decode } from 'cbor-x';
 
 import metadataStatic from '@polkadot/types-support/metadata/static-polkadot';
 import { TypeRegistry, Metadata } from '@polkadot/types';
-import { SignedBlock, EventRecord, AccountId } from '@polkadot/types/interfaces';
+import type { SignedBlock, EventRecord, AccountId } from '@polkadot/types/interfaces';
 import { createSignedBlockExtended } from '@polkadot/api-derive';
 
-import { BinBlock } from './types.js';
+import type { BinBlock } from './_types.js';
 
 export function testBlocksFrom(file: string) {
   const buffer = readFileSync(path.resolve(__dirname, '__data__', file));
   const blocks: BinBlock[] = decode(buffer);
 
-  const registry = new TypeRegistry();
+  const registry = new TypeRegistry() as any;
   const metadata = new Metadata(registry, metadataStatic);
 
   registry.setMetadata(metadata);
@@ -41,10 +41,10 @@ export function testBlocksFrom(file: string) {
 
     return createSignedBlockExtended(
       registry,
-    block as SignedBlock,
-    records as unknown as EventRecord[],
-    null,
-    author as AccountId
+       block as SignedBlock,
+      records as unknown as EventRecord[],
+      null,
+      author as AccountId
     );
   });
 }

@@ -1,0 +1,10 @@
+{
+  "exclude": [
+    "**/*+(spec).ts",
+    "**/__test__/**/*"
+  ],
+  "entryPointStrategy": "expand",
+  "entryPoints": [
+    "./src"
+  ]
+}

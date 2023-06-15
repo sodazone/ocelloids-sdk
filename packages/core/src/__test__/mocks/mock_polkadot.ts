@@ -19,8 +19,8 @@
 import { from, of } from 'rxjs';
 
 import { ApiRx } from '@polkadot/api';
-import { DeriveApi, SignedBlockExtended } from '@polkadot/api-derive/types';
-import { AnyNumber } from '@polkadot/types-codec/types';
+import type { DeriveApi, SignedBlockExtended } from '@polkadot/api-derive/types';
+import type { AnyNumber } from '@polkadot/types-codec/types';
 
 // Nested packages cannot be mocked by other means.
 // @see https://github.com/jestjs/jest/issues/462

@@ -1,0 +1,12 @@
+{
+    "extends": "@polkadot/dev/config/tsconfig.json",
+    "compilerOptions": {
+      "composite": true,
+      "noPropertyAccessFromIndexSignature": false,
+      "verbatimModuleSyntax": false,
+      "noUnusedLocals": false,
+      "paths": {
+        "@soda/ocelloids": ["core/src/index.ts"]
+      }
+    }
+   }

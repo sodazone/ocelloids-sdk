@@ -1,0 +1,17 @@
+{
+    "extends": "../../tsconfig.base.json",
+    "compilerOptions": {
+      "baseUrl": "..",
+      "rootDir": "./src",
+      "emitDeclarationOnly": false,
+      "resolveJsonModule": true,
+      "noEmit": true
+    },
+    "include": [
+      "**/*.spec.ts",
+      "**/test/*"
+    ],
+    "references": [
+      { "path": "./tsconfig.build.json" }
+    ]
+  }

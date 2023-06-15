@@ -1,6 +1,6 @@
 /* istanbul ignore file */
 
-import { mockPolkadotApi } from './polkadot.js';
+import { mockPolkadotApi } from './mock_polkadot.js';
 mockPolkadotApi();
 
 export { WsProvider } from '@polkadot/api';

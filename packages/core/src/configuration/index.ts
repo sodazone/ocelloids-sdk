@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { ApiOptions } from '@polkadot/api/types';
+import type { ApiOptions } from '@polkadot/api/types';
 
 /**
  * The API configuration properties per chain.

@@ -1,7 +1,7 @@
 /* istanbul ignore file */
 
-import { testBlocksFrom } from '../blocks.js';
-import { mockPolkadotApi } from './polkadot.js';
+import { testBlocksFrom } from '../_blocks.js';
+import { mockPolkadotApi } from './mock_polkadot.js';
 
 export const testBlocks = testBlocksFrom('blocks.cbor.bin');
 mockPolkadotApi({ testBlocks });

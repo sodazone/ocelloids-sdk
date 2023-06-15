@@ -19,8 +19,8 @@ import { logger } from '@polkadot/util';
 
 import { Observable, share } from 'rxjs';
 
-import { Configuration } from '../configuration/index.js';
-import { ApiOptions } from '@polkadot/api/types';
+import type { Configuration } from '../configuration/index.js';
+import type { ApiOptions } from '@polkadot/api/types';
 
 const l = logger('oc-substrate-apis');
 

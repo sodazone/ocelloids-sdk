@@ -1,21 +1,16 @@
-import { WsProvider, SubstrateApis, testBlocks } from '../__test__/mocks/_blocks.js';
+import { WsProvider, SubstrateApis, testBlocks } from '../__test__/mocks/mock_blocks.js';
 
-import { SignedBlockExtended } from '@polkadot/api-derive/types';
+import type { SignedBlockExtended } from '@polkadot/api-derive/types';
 
-import {blocksInRange } from '../index.js';
+import { blocksInRange } from './blocks.js';
+
+const apis = new SubstrateApis({
+  polkadot: {
+    provider: new WsProvider('wss://polkadot.local.test')
+  }
+});
 
 describe('blocks reactive operator', () => {
-  let apis: SubstrateApis;
-
-  beforeAll(() => {
-    apis = new SubstrateApis({
-      polkadot: {
-        provider: new WsProvider('wss://polkadot.local.test')
-      }
-    },
-    );
-  });
-
   it('should stream new heads', () => {
     // new heads test
   });

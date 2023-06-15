@@ -1,0 +1,14 @@
+{
+"exclude": [
+    "./packages/dev",
+],
+"excludePrivate": true,
+"excludeProtected": true,
+"hideGenerator": true,
+"useTsLinkResolution": true,
+"name": "ocelloids",
+"out": "docs",
+"excludeInternal": true,
+"entryPointStrategy": "packages",
+"theme": "default"
+}

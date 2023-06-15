@@ -16,7 +16,7 @@
 
 import { ApiRx } from '@polkadot/api';
 
-import { Observable, concatMap, map, mergeMap, range, shareReplay, switchMap } from 'rxjs';
+import { Observable, concatMap, mergeMap, range, shareReplay, switchMap } from 'rxjs';
 
 export function blocks() {
   return (source: Observable<ApiRx>) => {
