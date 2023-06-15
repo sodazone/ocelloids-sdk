@@ -32,15 +32,21 @@ export function blocks() {
   };
 }
 
-export function blocksInRange(start: number, count: number) {
+export function blocksInRange(
+  start: number,
+  count: number,
+  sorted = true
+) {
   return (source: Observable<ApiRx>) => {
     return (source.pipe(
       switchMap(api =>
         range(start, count).pipe(
-          // concatMap to preserve order
-          concatMap(number =>
-            api.derive.chain.getBlockByNumber(number)
-          )
+          sorted ?
+            concatMap(number =>
+              api.derive.chain.getBlockByNumber(number)
+            ) :
+            mergeMap(number =>
+              api.derive.chain.getBlockByNumber(number))
         )
       )
     ).pipe(shareReplay()));
