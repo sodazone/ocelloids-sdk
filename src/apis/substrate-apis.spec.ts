@@ -16,6 +16,8 @@
 
 import '../__test__/mocks/polkadot';
 
+import { WsProvider } from '@polkadot/api';
+
 import { SubstrateApis } from './substrate-apis.js';
 
 describe('substrate APIs', () => {
@@ -23,14 +25,12 @@ describe('substrate APIs', () => {
 
   beforeAll(() => {
     apis = new SubstrateApis({
-      providers: {
-        polkadot: {
-          ws: 'wss://polkadot.local.test'
-        },
-        rococo: {
-          ws: 'wss://rococo.local.test'
-        }
+      polkadot: {
+        provider: new WsProvider('wss://polkadot.local.test')
       },
+      rococo: {
+        provider: new WsProvider('wss://polkadot.local.test')
+      }
     });
   });
 
@@ -46,8 +46,9 @@ describe('substrate APIs', () => {
 
   test('disconnect', async () => {
     // Cast as any to access private readonly property
-    const polkadotProvider = (apis as any).providers['polkadot'] as any;
-    const rococoProvider = (apis as any).providers['rococo'] as any;
+    const polkadotProvider = (apis as any).options['polkadot'].provider as any;
+    const rococoProvider = (apis as any).options['rococo'].provider as any;
+
     expect(polkadotProvider).toBeDefined();
     expect(rococoProvider).toBeDefined();
 

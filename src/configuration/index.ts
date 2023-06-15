@@ -14,27 +14,7 @@
  * limitations under the License.
  */
 
-/**
- * Substrate provider configuration.
- *
- * ## Example
- * ```ts
- * {
- *   polkadot: {
- *     ws: 'wss://polkadot.local.test'
- *   },
- *   rococo: {
- *     ws: 'wss://rococo.local.test'
- *   }
- * }
- * ```
- */
-export interface ProviderConfig {
-  [key: string]: {
-    ws?: string,
-    http?: string
-  }
-}
+import { ApiOptions } from '@polkadot/api/types';
 
 /**
  * The configuration properties.
@@ -42,17 +22,15 @@ export interface ProviderConfig {
  * ## Example
  * ```ts
  * {
- *   providers: {
- *     polkadot: {
- *       ws: 'wss://polkadot.local.test'
- *     },
- *     rococo: {
- *       ws: 'wss://rococo.local.test'
- *     }
+ *   polkadot: {
+ *     provider: new WsProvider('wss://polkadot.local.test')
+ *   },
+ *   rococo: {
+ *     provider: new WsProvider('wss://rococo.local.test')
  *   }
  * }
  * ```
  */
 export interface Configuration {
-  providers: ProviderConfig
+  [key: string]:  ApiOptions,
 }

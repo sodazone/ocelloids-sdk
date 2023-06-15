@@ -20,6 +20,7 @@ import { logger } from '@polkadot/util';
 import { Observable, share } from 'rxjs';
 
 import { Configuration } from '../configuration/index.js';
+import { ApiOptions } from '@polkadot/api/types';
 
 const l = logger('oc-substrate-apis');
 
@@ -28,7 +29,7 @@ const l = logger('oc-substrate-apis');
  */
 export class SubstrateApis {
   private readonly chains: string[] = [];
-  private readonly providers: Record<string, WsProvider | HttpProvider> = {};
+  private readonly options: Record<string, ApiOptions> = {};
   private readonly apiRx: Record<string, ApiRx> = {};
   private readonly promises: Record<string, ApiPromise> = {};
 
@@ -41,15 +42,16 @@ export class SubstrateApis {
   ) {
     l.log('Initialize Substrate APIs');
 
-    Object.entries(config.providers).forEach(([name, endpoint]) => {
-      l.log('- Register APIs for provider:', name, endpoint);
+    Object.entries(config).forEach(([name, options]) => {
+      l.log('- Register APIs for provider:', name, options);
 
-      if (endpoint.ws === undefined && endpoint.http === undefined) {
-        throw new Error('please, provide a ws or http endpoint');
+      const { provider } = options;
+
+      if (provider === undefined) {
+        throw new Error('no provider specified');
       }
 
-      const provider = endpoint.ws ? new WsProvider(endpoint.ws) : new HttpProvider(endpoint.http);
-      this.providers[name] = provider;
+      this.options[name] = options;
 
       this.apiRx[name] = new ApiRx({
         provider
@@ -114,8 +116,8 @@ export class SubstrateApis {
    * Returns a promise of diconnecting all the registered providers.
    */
   async disconnect() {
-    const promises = Object.entries(this.providers).map(
-      async ([_, provider]) =>  await provider.disconnect()
+    const promises = Object.entries(this.options).map(
+      async ([_, opt]) =>  await opt.provider?.disconnect()
     );
     return Promise.all(promises).catch(l.error);
   }

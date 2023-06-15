@@ -18,18 +18,19 @@ import { writeFileSync } from 'node:fs';
 import { Observer } from 'rxjs';
 import { encode } from 'cbor-x';
 
+import { WsProvider } from '@polkadot/api';
 import { SignedBlockExtended } from '@polkadot/api-derive/types';
 
 import { SubstrateApis, blocksInRange } from '../src/index.js';
 import { SBlock } from '../src/__test__/types.js';
 
-const apis = new SubstrateApis({
-  providers: {
+const apis = new SubstrateApis(
+  {
     polkadot: {
-      ws: 'wss://rpc.polkadot.io'
+      provider: new WsProvider('wss://rpc.polkadot.io')
     }
-  },
-});
+  }
+);
 
 const blocksPipe = blocksInRange(15950017, 10);
 
