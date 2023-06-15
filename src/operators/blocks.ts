@@ -16,7 +16,7 @@
 
 import { ApiRx } from '@polkadot/api';
 
-import { Observable, concatMap, mergeMap, range, shareReplay, switchMap } from 'rxjs';
+import { Observable, concatMap, map, mergeMap, range, shareReplay, switchMap } from 'rxjs';
 
 export function blocks() {
   return (source: Observable<ApiRx>) => {
@@ -37,9 +37,10 @@ export function blocksInRange(start: number, count: number) {
     return (source.pipe(
       switchMap(api =>
         range(start, count).pipe(
-          mergeMap(number =>
+          // concatMap to preserve order
+          concatMap(number =>
             api.derive.chain.getBlockByNumber(number)
-          ),
+          )
         )
       )
     ).pipe(shareReplay()));

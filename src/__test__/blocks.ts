@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+import path from 'path';
 import { readFileSync } from 'fs';
 import { decode } from 'cbor-x';
 
@@ -29,7 +29,7 @@ const metadata = new Metadata(registry, metadataStatic);
 
 registry.setMetadata(metadata);
 
-const blocksFileBuffer = readFileSync('./src/_testing/blocks.cbor.bin');
+const blocksFileBuffer = readFileSync(path.resolve(__dirname, '__data__/blocks.cbor.bin'));
 const sBlocks: SBlock[] = decode(blocksFileBuffer);
 
 const mockBlocks = sBlocks.map(sb => {
@@ -46,3 +46,4 @@ const mockBlocks = sBlocks.map(sb => {
   );
 });
 
+export { mockBlocks };

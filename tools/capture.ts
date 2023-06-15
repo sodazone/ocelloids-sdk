@@ -43,6 +43,7 @@ const observer: Observer<SignedBlockExtended> = {
       events: block.events.map(ev => ev.toU8a()),
       author: block.author?.toU8a()
     };
+    console.log('capture', block.block.header.number.toNumber());
     b.push(sblock);
   },
   error: (err: unknown) => console.error('Observer got an error: ' + err),
