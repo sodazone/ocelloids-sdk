@@ -6,7 +6,8 @@
       "verbatimModuleSyntax": false,
       "noUnusedLocals": false,
       "paths": {
-        "@soda/ocelloids": ["core/src/index.ts"]
+        "@soda/ocelloids": ["core/src/index.ts"],
+        "@soda/ocelloids-test": ["test/src/index.ts"]
       }
     }
    }

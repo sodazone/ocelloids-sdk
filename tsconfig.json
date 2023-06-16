@@ -7,7 +7,7 @@
   },
   "include": [
     "packages/**/src/**/*",
-    "packages/dev/tools/capture.ts"
+    "packages/dev/tools/**/*"
   ],
   "exclude": [
     "**/node_modules/**/*"
