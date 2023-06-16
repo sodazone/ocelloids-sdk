@@ -12,6 +12,7 @@
   "homepage": "https://github.com/sodazone/ocelloids#readme",
   "jest": {
     "preset": "ts-jest/presets/js-with-ts-esm",
+    "collectCoverage": true,
     "moduleNameMapper": {
       "^(\\.{1,2}/.*)\\.js$": "$1"
     },

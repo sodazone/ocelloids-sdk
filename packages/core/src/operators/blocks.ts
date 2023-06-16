@@ -15,9 +15,23 @@
  */
 
 import { ApiRx } from '@polkadot/api';
+import { logger } from '@polkadot/util';
 
-import { Observable, concatMap, mergeMap, range, shareReplay, switchMap } from 'rxjs';
+import { Observable, catchError, concatMap, mergeMap, range, share, shareReplay, switchMap } from 'rxjs';
 
+const l = logger('oc-ops-blocks');
+
+/**
+ * Returns an Observable that emits the latest new block.
+ *
+ * ## Example
+ * ```ts
+ * // Subscribe to new blocks on Polkadot
+ * apis.rx.polkadot.pipe(
+ *   blocks()
+ * ).subscribe(x => console.log(`New block on Polkadot has hash ${x.block.hash.toHuman()}`))
+ * ```
+ */
 export function blocks() {
   return (source: Observable<ApiRx>) => {
     return (source.pipe(
@@ -27,11 +41,23 @@ export function blocks() {
             api.derive.chain.getBlockByNumber(number.toBigInt())
           )
         )
-      )
-    ));
+      ),
+      catchError((err: Error) => {
+        throw err;
+      })
+    ).pipe(share()));
   };
 }
 
+/**
+ * Returns an Observable that emits blocks within a specified range.
+ * By default, blocks are emitted in order,
+ * but you can configure it to emit blocks in an unsorted order for better performance.
+ *
+ * @param start - The starting block number.
+ * @param count - The number of blocks to emit.
+ * @param sorted - (Optional) Whether to emit blocks in order. Default is `true`.
+ */
 export function blocksInRange(
   start: number,
   count: number,
@@ -48,7 +74,10 @@ export function blocksInRange(
             mergeMap(number =>
               api.derive.chain.getBlockByNumber(number))
         )
-      )
+      ),
+      catchError((err: Error) => {
+        throw err;
+      })
     ).pipe(shareReplay()));
   };
 }
