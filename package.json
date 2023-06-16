@@ -1,5 +1,9 @@
 {
   "author": "soda <projects@soda.zone>",
+  "contributors": [
+    "Marc Fornós <marc@soda.zone>",
+    "Xueying Wang <xueying@soda.zone>"
+  ],
   "bugs": "https://github.com/sodazone/ocelloids/issues",
   "description": "Software development kit for building monitoring applications for Substrate networks.",
   "engines": {

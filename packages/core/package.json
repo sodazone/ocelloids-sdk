@@ -8,6 +8,10 @@
   "type": "module",
   "sideEffects": false,
   "author": "soda <projects@soda.zone>",
+  "contributors": [
+    "Marc Fornós <marc@soda.zone>",
+    "Xueying Wang <xueying@soda.zone>"
+  ],
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
