@@ -22,9 +22,9 @@
     "cbor-x": "^1.5.3"
   },
   "dependencies": {
-    "@soda/ocelloids-test": "*",
     "@polkadot/api": "^10.9.1",
     "@polkadot/util": "^12.3.2",
+    "@soda/ocelloids-test": "*",
     "rxjs": "^7.8.1"
   },
   "jest": {

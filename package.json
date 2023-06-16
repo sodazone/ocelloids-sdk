@@ -38,8 +38,10 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "yarn workspaces run shx rm -rf lib && node build.mjs",
-    "postbuild": "tsc --build tsconfig.build.json && yarn workspaces run shx rm -rf lib/tsconfig*buildinfo",
+    "build:clean": "rimraf packages/*/lib",
+    "build:bundles": "node bundle.mjs",
+    "build:types": "tsc --build tsconfig.build.json && rimraf packages/*/lib/*.tsbuildinfo",
+    "build": "yarn build:clean && yarn build:bundles && yarn build:types",
     "docs": "typedoc packages/**",
     "lint": "eslint --cache --fix \"packages/**/src/**/*.ts\"",
     "test": "jest",
@@ -52,7 +54,7 @@
     "esbuild": "^0.18.3",
     "eslint": "^8.42.0",
     "jest": "^29.5.0",
-    "shx": "^0.3.4",
+    "rimraf": "^5.0.1",
     "ts-jest": "^29.1.0",
     "typedoc": "^0.24.8",
     "typescript": "^5.1.3"
