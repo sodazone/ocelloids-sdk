@@ -21,12 +21,14 @@ import type { ApiOptions } from '@polkadot/api/types';
  *
  * ## Example
  * ```ts
+ * import { WsProvider } from '@polkadot/api';
+ *
  * {
  *   polkadot: {
- *     provider: new WsProvider('wss://polkadot.local.test')
+ *     provider: new WsProvider('wss://rpc.polkadot.io')
  *   },
- *   rococo: {
- *     provider: new WsProvider('wss://rococo.local.test')
+ *   kusama: {
+ *     provider: new WsProvider('wss://kusama-rpc.polkadot.io')
  *   }
  * }
  * ```
