@@ -1,4 +1,4 @@
-# Ocelloids - Monitoring SDK
+# Ocelloids
 
 Ocelloids is an open-source software development kit for building monitoring applications for Substrate-based networks.
 With Ocelloids, you can easily set up complex multi-chain monitoring logic.
