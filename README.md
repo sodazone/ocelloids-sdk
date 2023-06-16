@@ -18,19 +18,19 @@ Install the latest LTS version of [Node.js](https://nodejs.org/en/)[^1].
 
 At the root of the project:
 
-* Enable (Corepack)[https://github.com/nodejs/corepack#how-to-install]
+1. Enable [Corepack](https://github.com/nodejs/corepack#how-to-install)
 
 ```
 corepack enable
 ```
 
-* Install dependencies
+2. Install dependencies
 
 ```
 yarn install
 ```
 
-* Build Ocelloids libraries
+3. Build Ocelloids libraries
 
 ```
 yarn build
