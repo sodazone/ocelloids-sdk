@@ -18,6 +18,7 @@ describe('blocks reactive operator', () => {
       let index = 0;
       const testObserver = {
         next: (mockBlock: SignedBlockExtended) => {
+          expect(mockBlock).toBeDefined();
           expect(mockBlock.block.header.number).toEqual(testBlocks[index].block.header.number);
           index++;
         },

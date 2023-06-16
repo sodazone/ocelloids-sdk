@@ -15,11 +15,10 @@
  */
 
 import { ApiRx } from '@polkadot/api';
-import { logger } from '@polkadot/util';
 
-import { Observable, catchError, concatMap, mergeMap, range, share, shareReplay, switchMap } from 'rxjs';
+import { Observable, catchError, concatMap, mergeMap, share, shareReplay, switchMap } from 'rxjs';
 
-const l = logger('oc-ops-blocks');
+import { AnyBN, bnRange } from './bn';
 
 /**
  * Returns an Observable that emits the latest new block.
@@ -59,14 +58,14 @@ export function blocks() {
  * @param sorted - (Optional) Whether to emit blocks in order. Default is `true`.
  */
 export function blocksInRange(
-  start: number,
-  count: number,
+  start: AnyBN,
+  count: AnyBN,
   sorted = true
 ) {
   return (source: Observable<ApiRx>) => {
     return (source.pipe(
       switchMap(api =>
-        range(start, count).pipe(
+        bnRange(start, count).pipe(
           sorted ?
             concatMap(number =>
               api.derive.chain.getBlockByNumber(number)

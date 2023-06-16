@@ -1,6 +1,6 @@
 /* istanbul ignore file */
 
-import type { AnyNumber } from '@polkadot/types-codec/types';
+import { BN } from '@polkadot/util';
 import { ApiRx } from '@polkadot/api';
 
 import { Observable, from, of } from 'rxjs';
@@ -17,9 +17,9 @@ const apiMock = {
   },
   derive: {
     chain: {
-      getBlockByNumber: (blockNumber: AnyNumber) => of(
+      getBlockByNumber: (blockNumber: BN) =>  of(
         testBlocks.find(
-          b => b.block.header.number.toNumber() === blockNumber
+          b => b.block.header.number.toBn().eq(blockNumber)
         )
       )
     },
