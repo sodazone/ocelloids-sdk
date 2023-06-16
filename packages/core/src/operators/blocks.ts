@@ -18,7 +18,7 @@ import { ApiRx } from '@polkadot/api';
 
 import { Observable, catchError, concatMap, mergeMap, share, shareReplay, switchMap } from 'rxjs';
 
-import { AnyBN, bnRange } from './bn';
+import { AnyBN, bnRange } from './bn.js';
 
 /**
  * Returns an Observable that emits the latest new block.

@@ -42,7 +42,7 @@
   ],
   "scripts": {
     "build": "yarn workspaces foreach run build",
-    "docs": "typedoc packages/**",
+    "docs": "typedoc",
     "lint": "eslint --cache --fix \"packages/**/src/**/*.ts\"",
     "test": "jest",
     "test:watch": "jest --watch"

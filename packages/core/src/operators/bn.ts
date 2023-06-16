@@ -13,17 +13,17 @@ const ONE = new BN(1);
  * @param start
  * @param count
  * @returns
+ *
+ * @see rxjs.range
  */
 export function bnRange(start: AnyBN, count: AnyBN): Observable<BN> {
   const bnStart = new BN(start);
   const bnCount = new BN(count);
 
   if (bnCount <= ZERO) {
-    // No count? We're going nowhere. Return EMPTY.
     return EMPTY;
   }
 
-  // Where the range should stop.
   const end = bnCount.add(bnStart);
 
   return new Observable(

@@ -3,12 +3,12 @@
     "baseUrl": "./packages",
     "target": "ESNext",
     "module": "ESNext",
-    "moduleResolution": "Node",
+    "moduleResolution": "nodenext",
     "esModuleInterop": true,
-    "strict": true
+    "strict": true,
+    "skipLibCheck": true
   },
   "include": [
-    "packages/**/src/**/*",
-    "packages/dev/tools/**/*"
+    "packages/**/src/**/*"
   ]
 }
