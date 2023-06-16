@@ -9,7 +9,7 @@
     },
     "include": [
       "**/*.spec.ts",
-      "**/test/*"
+      "**/__test__/*"
     ],
     "references": [
       { "path": "./tsconfig.build.json" }

@@ -2,12 +2,14 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "baseUrl": "..",
-    "outDir": "./build",
+    "outDir": "./lib/types",
     "rootDir": "./src"
   },
+  "include": [
+    "./src/**/*"
+  ],
   "exclude": [
-    "**/mod.ts",
     "**/*.spec.ts",
-    "**/test/*"
+    "**/__test__/*"
   ]
 }
