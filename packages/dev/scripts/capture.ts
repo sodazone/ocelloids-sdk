@@ -16,49 +16,101 @@
  */
 
 import { writeFileSync } from 'node:fs';
-import path from 'node:path';
 
 import { Observer } from 'rxjs';
 import { encode } from 'cbor-x';
+
+import meow from 'meow';
 
 import { WsProvider } from '@polkadot/api';
 import { SignedBlockExtended } from '@polkadot/api-derive/types';
 
 import { SubstrateApis, blocksInRange } from '@soda/ocelloids/src/index.js';
-import { BinBlock } from '@soda/ocelloids/src/__test__/types.js';
+import { BinBlock } from '@soda/ocelloids/src/__test__/_types.js';
 
-const apis = new SubstrateApis(
-  {
-    polkadot: {
-      provider: new WsProvider('wss://rpc.polkadot.io')
+function observer(outfile: string, apis: SubstrateApis)
+: Observer<SignedBlockExtended> {
+  const b : BinBlock[] = [];
+
+  return {
+    next: (block: SignedBlockExtended) => {
+      const sblock = {
+        block: block.toU8a(),
+        events: block.events.map(ev => ev.toU8a()),
+        author: block.author?.toU8a()
+      };
+      console.log('capture', block.block.header.number.toNumber());
+      b.push(sblock);
+    },
+    error: (err: unknown) => console.error('Observer got an error: ' + err),
+    complete: () => {
+      apis.disconnect().then(() => console.log('APIs disconnected'));
+      writeFileSync(outfile, encode(b));
+    },
+  };
+}
+
+function downloadBlocks(outfile: string, {
+  count,
+  start,
+  endpoint
+}: {
+  count: number,
+  start: number,
+  endpoint: string
+}) {
+  const apis = new SubstrateApis(
+    {
+      polkadot: {
+        provider: new WsProvider(endpoint)
+      }
+    }
+  );
+
+  const blocksPipe = blocksInRange(start, count);
+
+  apis.rx.polkadot.pipe(
+    blocksPipe
+  ).subscribe(
+    observer(outfile, apis)
+  );
+}
+
+const cli = meow(`
+  Usage
+    $ capture.ts <out file>
+
+  Options
+    --endpoint, -e  Websocket endpoint (wss://rpc.polkadot.io)
+    --start, -s  Start block number (15950017)
+    --count, -c  Number of blocks to fetch (10)
+
+  Examples
+    $ capture.ts ./out.bin
+`, {
+  importMeta: import.meta,
+  description: 'Downloads extended signed blocks.',
+  flags: {
+    start: {
+      default: 15950017,
+      type: 'number',
+      shortFlag: 's'
+    },
+    count: {
+      default: 10,
+      type: 'number',
+      shortFlag: 'c'
+    },
+    endpoint: {
+      default: 'wss://rpc.polkadot.io',
+      type: 'string',
+      shortFlag: 'e'
     }
   }
-);
+});
 
-const blocksPipe = blocksInRange(15950017, 10);
+if (cli.input.length === 0) {
+  cli.showHelp(1);
+}
 
-const b : BinBlock[] = [];
-
-const observer: Observer<SignedBlockExtended> = {
-  next: (block: SignedBlockExtended) => {
-    const sblock = {
-      block: block.toU8a(),
-      events: block.events.map(ev => ev.toU8a()),
-      author: block.author?.toU8a()
-    };
-    console.log('capture', block.block.header.number.toNumber());
-    b.push(sblock);
-  },
-  error: (err: unknown) => console.error('Observer got an error: ' + err),
-  complete: () => {
-    apis.disconnect().then(() => console.log('APIs disconnected'));
-    // XXX meow
-    writeFileSync(path.resolve(__dirname, '../src/__test__/__data__/blocks.cbor.bin'), encode(b));
-  },
-};
-
-apis.rx.polkadot.pipe(
-  blocksPipe
-).subscribe(
-  observer
-);
+downloadBlocks(cli.input.at(0)!, cli.flags);
