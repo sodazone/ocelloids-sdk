@@ -58,5 +58,6 @@
     "ts-jest": "^29.1.0",
     "typedoc": "^0.24.8",
     "typescript": "^5.1.3"
-  }
+  },
+  "packageManager": "yarn@3.6.0"
 }
