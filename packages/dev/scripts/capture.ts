@@ -20,7 +20,7 @@ import { writeFileSync } from 'node:fs';
 import { Observer } from 'rxjs';
 import { encode } from 'cbor-x';
 
-import meow from 'meow';
+import { defineCommand, runMain } from 'citty';
 
 import { WsProvider } from '@polkadot/api';
 import { SignedBlockExtended } from '@polkadot/api-derive/types';
@@ -50,14 +50,16 @@ function observer(outfile: string, apis: SubstrateApis)
   };
 }
 
-function downloadBlocks(outfile: string, {
-  count,
+function downloadBlocks({
+  endpoint,
   start,
-  endpoint
+  count,
+  outfile
 }: {
-  count: number,
-  start: number,
-  endpoint: string
+  endpoint: string,
+  start: string,
+  count: string,
+  outfile: string
 }) {
   const apis = new SubstrateApis(
     {
@@ -67,7 +69,7 @@ function downloadBlocks(outfile: string, {
     }
   );
 
-  const blocksPipe = blocksInRange(start, count);
+  const blocksPipe = blocksInRange(parseInt(start), parseInt(count));
 
   apis.rx.polkadot.pipe(
     blocksPipe
@@ -76,41 +78,35 @@ function downloadBlocks(outfile: string, {
   );
 }
 
-const cli = meow(`
-  Usage
-    $ capture.ts <out file>
-
-  Options
-    --endpoint, -e  Websocket endpoint (wss://rpc.polkadot.io)
-    --start, -s  Start block number (15950017)
-    --count, -c  Number of blocks to fetch (10)
-
-  Examples
-    $ capture.ts ./out.bin
-`, {
-  importMeta: import.meta,
-  description: 'Downloads extended signed blocks.',
-  flags: {
+const main = defineCommand({
+  meta: {
+    name: 'capture',
+    version: '0.0.1',
+    description: 'Download extended signed blocks.',
+  },
+  args: {
+    outfile: {
+      type: 'positional',
+      description: 'Output file name',
+      required: true,
+    },
     start: {
-      default: 15950017,
-      type: 'number',
-      shortFlag: 's'
+      default: '15950017',
+      type: 'string'
     },
     count: {
-      default: 10,
-      type: 'number',
-      shortFlag: 'c'
+      default: '10',
+      type: 'string'
     },
     endpoint: {
       default: 'wss://rpc.polkadot.io',
-      type: 'string',
-      shortFlag: 'e'
-    }
-  }
+      type: 'string'
+    },
+  },
+  run({ args }) {
+    downloadBlocks(args);
+  },
 });
 
-if (cli.input.length === 0) {
-  cli.showHelp(1);
-}
+runMain(main as any);
 
-downloadBlocks(cli.input.at(0)!, cli.flags);

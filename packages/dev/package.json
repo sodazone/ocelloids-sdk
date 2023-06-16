@@ -23,7 +23,7 @@
     "@polkadot/util": "^12.3.2",
     "@soda/ocelloids": "*",
     "@soda/ocelloids-test": "*",
-    "meow": "^12.0.1",
+    "citty": "^0.1.1",
     "rxjs": "^7.8.1"
   },
   "jest": {

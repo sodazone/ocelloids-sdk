@@ -1,15 +1,14 @@
 {
-  "extends": "./tsconfig.base.json",
   "compilerOptions": {
     "baseUrl": "./packages",
-    "composite": false,
-    "resolveJsonModule": true
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "esModuleInterop": true,
+    "strict": true
   },
   "include": [
     "packages/**/src/**/*",
     "packages/dev/tools/**/*"
-  ],
-  "exclude": [
-    "**/node_modules/**/*"
   ]
 }
