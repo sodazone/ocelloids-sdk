@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
-import { WsProvider, SubstrateApis } from '../__test__/mocks/mock_default.js';
+import { WsProvider } from '@soda/ocelloids-test';
+
+import { SubstrateApis } from './substrate-apis.js';
 
 const apis = new SubstrateApis({
   polkadot: {

@@ -1,4 +1,4 @@
-import { testBlocks, mockRxApi } from '../__test__/mocks/mock_apiRx.js';
+import { testBlocks, mockRxApi } from '@soda/ocelloids-test';
 
 import type { SignedBlockExtended } from '@polkadot/api-derive/types';
 import { AnyNumber } from '@polkadot/types-codec/types';

@@ -6,8 +6,8 @@ await esbuild.build({
   ],
   bundle: true,
   minify: true,
-  //sourcemap: true,
-  outfile: './packages/core/lib/browser.js',
+  format: 'cjs',
+  outfile: './packages/core/lib/index.js',
   target: 'es2021'
 });
 await esbuild.build({
@@ -16,7 +16,8 @@ await esbuild.build({
   ],
   bundle: true,
   platform: 'node',
+  format: 'esm',
   packages: 'external',
-  outfile: './packages/core/lib/index.js',
+  outfile: './packages/core/lib/index.mjs',
   target: 'es2021'
 });

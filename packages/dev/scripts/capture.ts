@@ -25,8 +25,8 @@ import meow from 'meow';
 import { WsProvider } from '@polkadot/api';
 import { SignedBlockExtended } from '@polkadot/api-derive/types';
 
-import { SubstrateApis, blocksInRange } from '@soda/ocelloids/src/index.js';
-import { BinBlock } from '@soda/ocelloids/src/__test__/_types.js';
+import { SubstrateApis, blocksInRange } from '@soda/ocelloids';
+import { BinBlock } from '@soda/ocelloids-test';
 
 function observer(outfile: string, apis: SubstrateApis)
 : Observer<SignedBlockExtended> {
