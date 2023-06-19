@@ -15,8 +15,8 @@
  */
 
 /**
- * Substrate multi-chain clients.
+ * Multi-chain clients.
  *
- * @module substrate-apis
+ * @module
  */
 export * from './substrate-apis.js';
