@@ -13,15 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import { ApiRx } from '@polkadot/api';
 
-import { Observable, catchError, concatMap, mergeMap, share, shareReplay, switchMap } from 'rxjs';
+import { Observable, concatMap, mergeMap, share, switchMap } from 'rxjs';
 
 import { AnyBN, bnRange } from '../observables/bn.js';
 
+// Copy of https://github.com/polkadot-js/api/blob/master/packages/api-derive/src/chain/subscribeFinalizedBlocks.ts
+// because it is not exposed in the API
+function subscribeFinalizedBlocks(api: ApiRx) {
+  return api.derive.chain.subscribeFinalizedHeads().pipe(
+    switchMap((header) =>
+      api.derive.chain.getBlock(header.createdAtHash || header.hash)
+    )
+  );
+}
+
 /**
- * Returns an Observable that emits the latest new block.
+ * Returns an Observable that emits the latest new block or finalized block.
+ *
+ * @param finalized - (Optional) Whether to subscribe to finalized blocks.
+ * When set to `true`, only finalized new blocks are emitted. When set to `false`, all new blocks are emitted.
+ * Default is `false`.
  *
  * ## Example
  * ```ts
@@ -29,20 +42,20 @@ import { AnyBN, bnRange } from '../observables/bn.js';
  * apis.rx.polkadot.pipe(
  *   blocks()
  * ).subscribe(x => console.log(`New block on Polkadot has hash ${x.block.hash.toHuman()}`))
+ *
+ * // Subscribe to finalized blocks on Polkadot
+ * apis.rx.polkadot.pipe(
+ *   blocks(true)
+ * ).subscribe(x => console.log(`New block on Polkadot has hash ${x.block.hash.toHuman()}`))
  * ```
  */
-export function blocks() {
+export function blocks(finalized = false) {
   return (source: Observable<ApiRx>) => {
     return (source.pipe(
-      switchMap(api =>
-        api.rpc.chain.subscribeNewHeads().pipe(
-          switchMap(({ number }) =>
-            api.derive.chain.getBlockByNumber(number.toBigInt())
-          )
-        )
-      ),
-      catchError((err: Error) => {
-        throw err;
+      switchMap(api => {
+        return finalized ?
+          subscribeFinalizedBlocks(api) :
+          api.derive.chain.subscribeNewBlocks();
       })
     ).pipe(share()));
   };
@@ -73,10 +86,7 @@ export function blocksInRange(
             mergeMap(number =>
               api.derive.chain.getBlockByNumber(number))
         )
-      ),
-      catchError((err: Error) => {
-        throw err;
-      })
-    ).pipe(shareReplay()));
+      )
+    ));
   };
 }

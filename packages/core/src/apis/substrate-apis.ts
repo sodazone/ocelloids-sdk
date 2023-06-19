@@ -17,7 +17,7 @@
 import { ApiPromise, ApiRx } from '@polkadot/api';
 import { logger } from '@polkadot/util';
 
-import { Observable, share } from 'rxjs';
+import { Observable, shareReplay } from 'rxjs';
 
 import type { Configuration } from '../configuration/index.js';
 import type { ApiOptions } from '@polkadot/api/types';
@@ -106,7 +106,7 @@ export class SubstrateApis {
         const key = prop.toString();
         const res = target[key];
         if (res) {
-          return res.isReady.pipe(share());
+          return res.isReady.pipe(shareReplay());
         }
         throw new Error(`${key} not found.`);
       }

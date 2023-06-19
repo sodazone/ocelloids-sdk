@@ -17,19 +17,27 @@
 import { ApiRx } from '@polkadot/api';
 import { Vec } from '@polkadot/types';
 import type { EventRecord } from '@polkadot/types/interfaces';
-import { logger } from '@polkadot/util';
 
-import { EMPTY, Observable, catchError, concatMap, share, switchMap } from 'rxjs';
+import { Observable, catchError, concatMap, share, switchMap } from 'rxjs';
 
-const l = logger('oc-ops-events');
-
+/**
+ * Returns an Observable that emits events from the system.
+ * Errors encountered during event retrieval will be thrown as an error.
+ *
+ * * ## Example
+ * ```ts
+ * // Subscribe to new events on Polkadot
+ * apis.rx.polkadot.pipe(
+ *   events()
+ * ).subscribe(x => console.log(`New event on Polkadot has index ${x.event.index.toHuman()}`))
+ * ```
+ */
 export function events() {
   return (source: Observable<ApiRx>) => {
     return (source.pipe(
       switchMap(api => api.query['system']['events']()),
       catchError((err: Error) => {
-        l.error(`ERROR: ${err}`);
-        return EMPTY; // completes
+        throw err;
       }),
       concatMap((record) => (
         (record as Vec<EventRecord>).toArray()

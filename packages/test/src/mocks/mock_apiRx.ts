@@ -9,10 +9,13 @@ import { testBlocksFrom } from '../_blocks.js';
 
 export const testBlocks = testBlocksFrom('blocks.cbor.bin');
 
+const testHeaders = testBlocks.map(tb => tb.block.header);
+
 const apiMock = {
   rpc: {
     chain: {
-      subscribeNewHeads: () => from(testBlocks)
+      subscribeNewHeads: () => from(testHeaders),
+      subscribeFinalizedHeads: () => from(testHeaders)
     },
   },
   derive: {
@@ -20,6 +23,13 @@ const apiMock = {
       getBlockByNumber: (blockNumber: BN) =>  of(
         testBlocks.find(
           b => b.block.header.number.toBn().eq(blockNumber)
+        )
+      ),
+      subscribeNewBlocks: () => from(testBlocks),
+      subscribeFinalizedHeads: () => from(testHeaders),
+      getBlock: (hash: Uint8Array | string) => of(
+        testBlocks.find(
+          b => b.block.hash.eq(hash)
         )
       )
     },

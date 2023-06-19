@@ -15,23 +15,30 @@
  */
 
 import { ApiRx } from '@polkadot/api';
-import { logger } from '@polkadot/util';
 
-import { Observable, switchMap, mergeMap, timer, catchError, concatMap, EMPTY } from 'rxjs';
+import { Observable, switchMap, mergeMap, timer, catchError, concatMap, EMPTY, share } from 'rxjs';
 
 import { blocks } from './blocks.js';
 
-const l = logger('oc-ops-extrinsics');
-
+/**
+ * Returns an Observable that emits the latest extrinsics.
+ * Retrieves latest new block and extracts extrinsics included in the block.
+ */
 export function extrinsics() {
   return (source: Observable<ApiRx>) => {
     return (source.pipe(
       blocks(),
       concatMap(block => block.extrinsics)
-    ));
+    ).pipe(share()));
   };
 }
 
+/**
+ * Returns an Observable that emits pending extrinsics from the mempool.
+ * The Observable periodically checks the mempool at a specified interval.
+ *
+ * @param interval - (Optional) The interval in milliseconds at which to check for pending extrinsics. Default is 5000ms.
+ */
 export function pendingExtrinsics({ interval } = { interval: 5000 }) {
   return (source: Observable<ApiRx>) => {
     return (source.pipe(
@@ -39,12 +46,11 @@ export function pendingExtrinsics({ interval } = { interval: 5000 }) {
         timer(0, interval).pipe(
           mergeMap(_ => api.rpc.author.pendingExtrinsics()),
           catchError(err => {
-            l.error(`ERROR: ${err}`);
-            return EMPTY;
+            throw err;
           }),
           concatMap(record => record.toArray())
         )
       )
-    ));
+    ).pipe(share()));
   };
 }
