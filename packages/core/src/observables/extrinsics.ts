@@ -28,8 +28,9 @@ export function extrinsics() {
   return (source: Observable<ApiRx>) => {
     return (source.pipe(
       blocks(),
-      concatMap(block => block.extrinsics)
-    ).pipe(share()));
+      concatMap(block => block.extrinsics),
+      share()
+    ));
   };
 }
 
@@ -45,12 +46,10 @@ export function pendingExtrinsics({ interval } = { interval: 5000 }) {
       switchMap((api: ApiRx) =>
         timer(0, interval).pipe(
           mergeMap(_ => api.rpc.author.pendingExtrinsics()),
-          catchError(err => {
-            throw err;
-          }),
           concatMap(record => record.toArray())
         )
-      )
-    ).pipe(share()));
+      ),
+      share()
+    ));
   };
 }
