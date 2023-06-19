@@ -22,12 +22,29 @@ import { blocks } from './blocks.js';
 
 /**
  * Returns an Observable that emits the latest extrinsics.
- * Retrieves latest new block and extracts extrinsics included in the block.
+ * Retrieves the latest new block or finalized block and extracts the extrinsics included in the block.
+ *
+ * @param finalized - (Optional) Whether to retrieve extrinsics from finalized blocks.
+ * When set to `true`, only extrinsics of finalized new blocks are emitted. When set to `false`, extrinsics of all new blocks are emitted.
+ * Default is `false`.
+ *
+ * ## Example
+ * ```ts
+ * // Subscribe to new extrinsics on Polkadot
+ * apis.rx.polkadot.pipe(
+ *   extrinsics()
+ * ).subscribe(x => console.log(`New extrinsic on Polkadot: ${x.toHuman()}`));
+ *
+ * // Subscribe to new extrinsics from finalized blocks on Polkadot
+ * apis.rx.polkadot.pipe(
+ *   extrinsics(true)
+ * ).subscribe(x => console.log(`Extrinsic from finalized block on Polkadot: ${x.toHuman()}`));
+ * ```
  */
-export function extrinsics() {
+export function extrinsics(finalized = false) {
   return (source: Observable<ApiRx>) => {
     return (source.pipe(
-      blocks(),
+      blocks(finalized),
       concatMap(block => block.extrinsics),
       share()
     ));
