@@ -20,3 +20,4 @@
  * @module
  */
 
+export * from './extract.js';

@@ -1,12 +1,12 @@
-import { testBlocks, mockRxApi } from '@soda/ocelloids-test';
-
 import type { SignedBlockExtended } from '@polkadot/api-derive/types';
-import { AnyNumber } from '@polkadot/types-codec/types';
+import type { AnyNumber } from '@polkadot/types-codec/types';
+
+import { testBlocks, mockRxApi } from '@soda/ocelloids-test';
 
 import { blocks, blocksInRange } from './blocks.js';
 import { Observable, map, of } from 'rxjs';
 
-describe('blocks reactive operator', () => {
+describe('blocks reactive observable', () => {
   describe('blocks', () => {
     it('should emit the latest new block', done => {
       const testPipe = blocks()(mockRxApi);
