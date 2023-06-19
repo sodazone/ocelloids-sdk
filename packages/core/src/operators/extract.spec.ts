@@ -5,17 +5,17 @@ import { from } from 'rxjs';
 
 import { testBlocks, testExtrinsics, testEvents } from '@soda/ocelloids-test';
 
-import { extractEvents, extractExtrinsics } from './extract.js';
+import { extractEventRecords, extractTxWithEvents } from './extract.js';
 
 describe('extrinsics reactive observable', () => {
-  describe('extractExtrinsics', () => {
-    it('should emit extrinsics on new blocks', done => {
-      const testPipe = extractExtrinsics()(from(testBlocks));
+  describe('extractTxWithEvents', () => {
+    it('should emit extrinsics with paired events on new blocks', done => {
+      const testPipe = extractTxWithEvents()(from(testBlocks));
       let index = 0;
       testPipe.subscribe({
         next: (result: TxWithEvent) => {
           expect(result).toBeDefined();
-          expect(result.extrinsic.hash).toEqual(testExtrinsics[index].extrinsic.hash);
+          expect(result.extrinsic.method).toEqual(testExtrinsics[index].extrinsic.method);
           expect(result.extrinsic.data).toEqual(testExtrinsics[index].extrinsic.data);
           index++;
         },
@@ -24,9 +24,9 @@ describe('extrinsics reactive observable', () => {
     });
   });
 
-  describe('extractEvents', () => {
-    it('should emit events on new blocks', done => {
-      const testPipe = extractEvents()(from(testBlocks));
+  describe('extractEventRecords', () => {
+    it('should emit event records on new blocks', done => {
+      const testPipe = extractEventRecords()(from(testBlocks));
       let index = 0;
       testPipe.subscribe({
         next: (result: EventRecord) => {

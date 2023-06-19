@@ -23,7 +23,6 @@ import { Observable, concatMap, share, switchMap } from 'rxjs';
 
 /**
  * Returns an Observable that emits events from the system.
- * Errors encountered during event retrieval will be thrown as an error.
  *
  * * ## Example
  * ```ts
