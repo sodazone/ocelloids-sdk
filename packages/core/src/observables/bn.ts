@@ -10,9 +10,9 @@ const ONE = new BN(1);
 /**
  * Emits a sequence of big numbers within a specified range.
  *
- * @param start The value of the first integer in the sequence.
- * @param count The number of sequential integers to generate.
- * @returns An Observable of AnyBN that emits a finite range of sequential integers.
+ * @param start The value of the first number in the sequence.
+ * @param count The number of sequential numbers to generate.
+ * @returns An Observable that emits a finite range of sequential big numbers.
  *
  * @see rxjs.range
  */
