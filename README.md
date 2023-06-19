@@ -12,9 +12,7 @@ With Ocelloids, you can easily set up complex multi-chain monitoring logic.
 
 ### Install
 
-Install the latest LTS version of [Node.js](https://nodejs.org/en/)[^1].
-
-[^1]: For Node.js version management [n](https://github.com/tj/n) works quite well.
+Install the latest LTS version of [Node.js](https://nodejs.org/en/).
 
 At the root of the project:
 
