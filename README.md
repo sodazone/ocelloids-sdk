@@ -1,7 +1,7 @@
 # Ocelloids
 
 Ocelloids is an open-source software development kit that provides a framework for building monitoring applications specifically designed for Substrate-based networks.
-With Ocelloids, you can easily set up and implement complex multi-chain monitoring logic.
+With Ocelloids you can easily set up and implement complex multi-chain monitoring logic.
 
 ## Project Layout
 
