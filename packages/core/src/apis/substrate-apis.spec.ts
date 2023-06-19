@@ -28,13 +28,13 @@ const apis = new SubstrateApis({
 });
 
 describe('substrate APIs', () => {
-  test('missing provider', () => {
+  it('should throw error on missing provider', () => {
     expect(() => {
       const _ = new SubstrateApis({ polkadot: {} });
     }).toThrowError();
   });
 
-  test('instantiate', () => {
+  it('should be instantiated', () => {
     expect(apis).toBeDefined();
     expect(apis.promise).toBeDefined();
     expect(apis.rx).toBeDefined();
@@ -44,7 +44,7 @@ describe('substrate APIs', () => {
     expect(apis.rx.rococo).toBeDefined();
   });
 
-  test('disconnect', async () => {
+  it('should trigger the disconnection of all the providers', async () => {
     // Cast as any to access private readonly property
     const polkadotProvider = (apis as any).options['polkadot'].provider as any;
     const rococoProvider = (apis as any).options['rococo'].provider as any;

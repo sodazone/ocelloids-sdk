@@ -8,11 +8,11 @@ const ZERO = new BN(0);
 const ONE = new BN(1);
 
 /**
- * Big number range.
+ * Emits a sequence of big numbers within a specified range.
  *
- * @param start
- * @param count
- * @returns
+ * @param start The value of the first integer in the sequence.
+ * @param count The number of sequential integers to generate.
+ * @returns An Observable of AnyBN that emits a finite range of sequential integers.
  *
  * @see rxjs.range
  */
@@ -20,7 +20,7 @@ export function bnRange(start: AnyBN, count: AnyBN): Observable<BN> {
   const bnStart = new BN(start);
   const bnCount = new BN(count);
 
-  if (bnCount <= ZERO) {
+  if (bnCount.lte(ZERO)) {
     return EMPTY;
   }
 
@@ -29,7 +29,7 @@ export function bnRange(start: AnyBN, count: AnyBN): Observable<BN> {
   return new Observable(
     (subscriber) => {
       let n = bnStart;
-      while (n < end && !subscriber.closed) {
+      while (n.lt(end) && !subscriber.closed) {
         subscriber.next(n);
         n = n.add(ONE);
       }
