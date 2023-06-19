@@ -1,5 +1,7 @@
 import { ControlQuery } from './query.js';
 
+const testAddress = '1a1LcBX6hGPKg5aQ6DXZpAHCCzWjckhea4sz3P1PvL3oc4F';
+
 describe('control query', () => {
   it('should construct an underlying query', () => {
     const q = ControlQuery.from({
@@ -8,8 +10,8 @@ describe('control query', () => {
         { 'event.method': 'Transfer' },
         {
           $or: [
-            { 'event.data.from': '0x0' },
-            { 'event.data.to': '0x1' }
+            { 'event.data.from': testAddress },
+            { 'event.data.to': testAddress }
           ]
         }
       ]
@@ -20,8 +22,8 @@ describe('control query', () => {
         section: 'balances',
         method: 'Transfer',
         data: {
-          from: '0x0',
-          to: '0x1'
+          from: testAddress,
+          to: '5CdiCGvTEuzut954STAXRfL8Lazs3KCZa5LPpkPeqqJXdTHp'
         }
       }
     })).toBeTruthy();

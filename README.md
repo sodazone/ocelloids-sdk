@@ -52,6 +52,3 @@ yarn install
 ```
 yarn build
 ```
-
-## TBD
-https://mongoplayground.net/
