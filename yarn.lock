@@ -1934,6 +1934,7 @@ __metadata:
     "@polkadot/api": ^10.9.1
     "@polkadot/util": ^12.3.2
     "@soda/ocelloids-test": "*"
+    mingo: ^6.4.1
     rxjs: ^7.8.1
   languageName: unknown
   linkType: soft
@@ -8218,6 +8219,13 @@ __metadata:
   version: 3.1.0
   resolution: "mimic-response@npm:3.1.0"
   checksum: 25739fee32c17f433626bf19f016df9036b75b3d84a3046c7d156e72ec963dd29d7fc8a302f55a3d6c5a4ff24259676b15d915aad6480815a969ff2ec0836867
+  languageName: node
+  linkType: hard
+
+"mingo@npm:^6.4.1":
+  version: 6.4.1
+  resolution: "mingo@npm:6.4.1"
+  checksum: b717194b0d780c6f65e92f8d040ec778db91adbfdc3049be63780f5d81acd9c1e746d30dbf5f983370a5c143551b90cb9ba81b7f0bd9ba43b4b5d9f5e7dd61ca
   languageName: node
   linkType: hard
 

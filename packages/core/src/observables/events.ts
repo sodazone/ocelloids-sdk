@@ -36,7 +36,7 @@ import { Observable, concatMap, share, switchMap } from 'rxjs';
 export function events() {
   return (source: Observable<ApiRx>) => {
     return (source.pipe(
-      switchMap(api => api.query['system']['events']()),
+      switchMap(api => api.query.system.events()),
       concatMap((record) => (
         (record as Vec<EventRecord>).toArray()
       )),

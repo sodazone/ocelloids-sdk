@@ -16,6 +16,7 @@ The Ocelloids repository has the following directory structure:
 │   │   ├── converters      # Chain data type conversions
 │   │   ├── observables     # Reactive emitters
 │   │   └── operators       # Reactive operators
+│   │   └── subjects        # Reactive subjects
 ├── dev                     # Utility scripts for development        
 └── test                    # Chain test data and mocks
 ```
@@ -52,3 +53,5 @@ yarn install
 yarn build
 ```
 
+## TBD
+https://mongoplayground.net/

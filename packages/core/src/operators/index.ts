@@ -21,3 +21,4 @@
  */
 
 export * from './extract.js';
+export * from './mongo-filter.js';
