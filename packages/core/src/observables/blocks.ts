@@ -56,8 +56,9 @@ export function blocks(finalized = false) {
         return finalized ?
           subscribeFinalizedBlocks(api) :
           api.derive.chain.subscribeNewBlocks();
-      })
-    ).pipe(share()));
+      }),
+      share()
+    ));
   };
 }
 
