@@ -41,7 +41,7 @@ jobs:
       - run: yarn install --immutable
       - run: yarn build
       - run: yarn config set npmPublishRegistry https://npm.pkg.github.com/
-      - run: yarn workspace @sodazone/ocelloids npm publish -- --tolerate-republish --tag ${{github.sha}}
+      - run: yarn workspace @sodazone/ocelloids npm publish --tolerate-republish --tag dev
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
           YARN_NPM_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}

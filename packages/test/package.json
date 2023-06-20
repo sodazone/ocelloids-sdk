@@ -1,6 +1,6 @@
 {
   "name": "@sodazone/ocelloids-test",
-  "version": "0.0.1",
+  "version": "0.0.1-dev.1",
   "description": "Ocelloids testing mocks.",
   "sideEffects": true,
   "private": true,

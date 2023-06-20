@@ -1,6 +1,6 @@
 {
   "name": "@sodazone/ocelloids",
-  "version": "0.0.1",
+  "version": "0.0.1-dev.1",
   "description": "Software development kit for building monitoring applications for Substrate networks.",
   "main": "./lib/index.cjs",
   "module": "./lib/index.js",
