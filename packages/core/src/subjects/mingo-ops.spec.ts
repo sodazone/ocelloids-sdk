@@ -1,6 +1,7 @@
 import { Query } from 'mingo';
 
-import './mingo-ops.js';
+import { installOperators } from './mingo-ops.js';
+installOperators();
 
 const data = {
   method: 'transferAllowDeath',

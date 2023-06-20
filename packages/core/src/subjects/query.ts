@@ -4,7 +4,8 @@ import { Query } from 'mingo';
 import { RawObject } from 'mingo/types';
 
 // Installs mingo operators
-import './mingo-ops.js';
+import { installOperators } from './mingo-ops.js';
+installOperators();
 
 export type Criteria = RawObject;
 
