@@ -37,8 +37,8 @@ jobs:
           registry-url: https://npm.pkg.github.com/
       - name: Enable Corepack
         run: corepack enable
-      - run: yarn install --immutable
+      - run: yarn install --immutable --production
       - run: yarn build
-      - run: yarn publish --tag ${{github.sha}}
+      - run: yarn workspace core run npm publish --tag ${{github.sha}}
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
