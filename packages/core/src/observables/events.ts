@@ -14,12 +14,10 @@
  * limitations under the License.
  */
 
-import type { Vec } from '@polkadot/types';
 import type { EventRecord } from '@polkadot/types/interfaces';
-
 import { ApiRx } from '@polkadot/api';
 
-import { Observable, concatMap, share, switchMap } from 'rxjs';
+import { Observable, map, share, switchMap } from 'rxjs';
 
 /**
  * Returns an Observable that emits events from the system.
@@ -33,12 +31,11 @@ import { Observable, concatMap, share, switchMap } from 'rxjs';
  * ```
  */
 export function events() {
-  return (source: Observable<ApiRx>) => {
+  return (source: Observable<ApiRx>)
+  : Observable<EventRecord> => {
     return (source.pipe(
       switchMap(api => api.query.system.events()),
-      concatMap((record) => (
-        (record as Vec<EventRecord>).toArray()
-      )),
+      map(codec => codec as EventRecord),
       share()
     ));
   };
