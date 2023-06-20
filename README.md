@@ -52,3 +52,9 @@ yarn install
 ```
 yarn build
 ```
+
+### TBD Tips
+
+After build test...
+Run Command in VS Code
+TypeScript: Reload project
