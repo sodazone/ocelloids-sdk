@@ -36,6 +36,7 @@ jobs:
           node-version: 18
           cache: yarn
           registry-url: https://npm.pkg.github.com/
+          scope: '@soda'
       - name: Enable Corepack
         run: corepack enable
       - run: yarn install --immutable
