@@ -1904,8 +1904,6 @@ __metadata:
   dependencies:
     "@polkadot/api": ^10.9.1
     "@polkadot/util": ^12.3.2
-    "@sodazone/ocelloids": "*"
-    "@sodazone/ocelloids-test": "*"
     cbor-x: ^1.5.3
     citty: ^0.1.1
     rxjs: ^7.8.1
@@ -1914,26 +1912,24 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@sodazone/ocelloids-test@*, @sodazone/ocelloids-test@workspace:packages/test":
+"@sodazone/ocelloids-test@workspace:packages/test":
   version: 0.0.0-use.local
   resolution: "@sodazone/ocelloids-test@workspace:packages/test"
   dependencies:
     "@polkadot/api": ^10.9.1
     "@polkadot/util": ^12.3.2
-    "@sodazone/ocelloids": "*"
     cbor-x: ^1.5.3
     rxjs: ^7.8.1
     shx: ^0.3.4
   languageName: unknown
   linkType: soft
 
-"@sodazone/ocelloids@*, @sodazone/ocelloids@workspace:packages/core":
+"@sodazone/ocelloids@workspace:packages/core":
   version: 0.0.0-use.local
   resolution: "@sodazone/ocelloids@workspace:packages/core"
   dependencies:
     "@polkadot/api": ^10.9.1
     "@polkadot/util": ^12.3.2
-    "@sodazone/ocelloids-test": "*"
     mingo: ^6.4.1
     rxjs: ^7.8.1
   languageName: unknown
