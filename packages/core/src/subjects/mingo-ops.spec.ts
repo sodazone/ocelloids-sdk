@@ -83,6 +83,22 @@ describe('mingo query ops', () => {
     expect(q.test(data)).toBeFalsy();
   });
 
+  it('should compare neq bn', () => {
+    const q = new Query({
+      'args.value': { $bn_neq: '108515280000000001'}
+    });
+
+    expect(q.test(data)).toBeTruthy();
+  });
+
+  it('should compare neq bn falsy case', () => {
+    const q = new Query({
+      'args.value': { $bn_neq: '108515280000000000'}
+    });
+
+    expect(q.test(data)).toBeFalsy();
+  });
+
   it('should work with numbers', () => {
     const q = new Query({
       'args.value': { $bn_eq: 100 }
@@ -129,5 +145,20 @@ describe('mingo query ops', () => {
         value: '108515280000000000'
       }
     })).toBeFalsy();
+  });
+
+  it('should fail on non big numerish types', () => {
+    const q = new Query({
+      'args.value': { $bn_lt: { obj: true } }
+    });
+
+    expect(() => {
+      q.test({
+        args: {
+          dest: { id: '14NEHDwc5PPQfEjzLVDbVbi4djQLQZ9u7mMU3BPhTFJf4cD6' },
+          value: '108515280000000000'
+        }
+      });
+    }).toThrowError();
   });
 });
