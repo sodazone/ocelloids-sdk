@@ -1,6 +1,6 @@
 import type { EventRecord } from '@polkadot/types/interfaces';
 
-import { mockRxApi, testEvents } from '@soda/ocelloids-test';
+import { mockRxApi, testEvents } from '@sodazone/ocelloids-test';
 
 import { events } from './events.js';
 

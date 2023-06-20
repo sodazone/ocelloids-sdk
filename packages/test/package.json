@@ -1,5 +1,5 @@
 {
-  "name": "@soda/ocelloids-test",
+  "name": "@sodazone/ocelloids-test",
   "version": "0.0.1",
   "description": "Ocelloids testing mocks.",
   "sideEffects": true,
@@ -22,7 +22,7 @@
   "dependencies": {
     "@polkadot/api": "^10.9.1",
     "@polkadot/util": "^12.3.2",
-    "@soda/ocelloids": "*",
+    "@sodazone/ocelloids": "*",
     "rxjs": "^7.8.1"
   },
   "exports": {

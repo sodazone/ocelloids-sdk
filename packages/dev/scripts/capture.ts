@@ -25,8 +25,8 @@ import { defineCommand, runMain } from 'citty';
 import { WsProvider } from '@polkadot/api';
 import { SignedBlockExtended } from '@polkadot/api-derive/types';
 
-import { SubstrateApis, blocksInRange } from '@soda/ocelloids';
-import { BinBlock } from '@soda/ocelloids-test';
+import { SubstrateApis, blocksInRange } from '@sodazone/ocelloids';
+import { BinBlock } from '@sodazone/ocelloids-test';
 
 function observer(outfile: string, apis: SubstrateApis)
 : Observer<SignedBlockExtended> {

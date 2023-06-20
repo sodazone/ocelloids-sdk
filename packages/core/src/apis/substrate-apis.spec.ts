@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { WsProvider } from '@soda/ocelloids-test';
+import { WsProvider } from '@sodazone/ocelloids-test';
 
 import { SubstrateApis } from './substrate-apis.js';
 

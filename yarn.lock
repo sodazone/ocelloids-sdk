@@ -1898,14 +1898,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@soda/ocelloids-dev@workspace:packages/dev":
+"@sodazone/ocelloids-dev@workspace:packages/dev":
   version: 0.0.0-use.local
-  resolution: "@soda/ocelloids-dev@workspace:packages/dev"
+  resolution: "@sodazone/ocelloids-dev@workspace:packages/dev"
   dependencies:
     "@polkadot/api": ^10.9.1
     "@polkadot/util": ^12.3.2
-    "@soda/ocelloids": "*"
-    "@soda/ocelloids-test": "*"
+    "@sodazone/ocelloids": "*"
+    "@sodazone/ocelloids-test": "*"
     cbor-x: ^1.5.3
     citty: ^0.1.1
     rxjs: ^7.8.1
@@ -1914,26 +1914,26 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@soda/ocelloids-test@*, @soda/ocelloids-test@workspace:packages/test":
+"@sodazone/ocelloids-test@*, @sodazone/ocelloids-test@workspace:packages/test":
   version: 0.0.0-use.local
-  resolution: "@soda/ocelloids-test@workspace:packages/test"
+  resolution: "@sodazone/ocelloids-test@workspace:packages/test"
   dependencies:
     "@polkadot/api": ^10.9.1
     "@polkadot/util": ^12.3.2
-    "@soda/ocelloids": "*"
+    "@sodazone/ocelloids": "*"
     cbor-x: ^1.5.3
     rxjs: ^7.8.1
     shx: ^0.3.4
   languageName: unknown
   linkType: soft
 
-"@soda/ocelloids@*, @soda/ocelloids@workspace:packages/core":
+"@sodazone/ocelloids@*, @sodazone/ocelloids@workspace:packages/core":
   version: 0.0.0-use.local
-  resolution: "@soda/ocelloids@workspace:packages/core"
+  resolution: "@sodazone/ocelloids@workspace:packages/core"
   dependencies:
     "@polkadot/api": ^10.9.1
     "@polkadot/util": ^12.3.2
-    "@soda/ocelloids-test": "*"
+    "@sodazone/ocelloids-test": "*"
     mingo: ^6.4.1
     rxjs: ^7.8.1
   languageName: unknown

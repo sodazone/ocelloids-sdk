@@ -1,4 +1,4 @@
-import { mockRxApi } from '@soda/ocelloids-test';
+import { mockRxApi } from '@sodazone/ocelloids-test';
 import { blocks } from '../index.js';
 import { mongoFilter, mongoFilterFrom } from './mongo-filter.js';
 import { ControlQuery } from '../subjects/query.js';

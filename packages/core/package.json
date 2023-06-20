@@ -1,5 +1,5 @@
 {
-  "name": "@soda/ocelloids",
+  "name": "@sodazone/ocelloids",
   "version": "0.0.1",
   "description": "Software development kit for building monitoring applications for Substrate networks.",
   "main": "./lib/index.cjs",
@@ -19,7 +19,7 @@
     "url": "https://github.com/sodazone/ocelloids.git"
   },
   "devDependencies": {
-    "@soda/ocelloids-test": "*"
+    "@sodazone/ocelloids-test": "*"
   },
   "dependencies": {
     "@polkadot/api": "^10.9.1",

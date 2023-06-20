@@ -25,7 +25,7 @@ export interface Control<T, S> extends Subject<S> {
  * Extends the `BehaviorSubject` class.
  * ## Example
  * ```ts
- * import { ControlQuery } from '@soda/ocelloids';
+ * import { ControlQuery } from '@sodazone/ocelloids';
  *
  * // Filter all balance transfer from an EventRecord for an address
  * ControlQuery.from({

@@ -1,7 +1,7 @@
 import type { SignedBlockExtended } from '@polkadot/api-derive/types';
 import type { AnyNumber } from '@polkadot/types-codec/types';
 
-import { testBlocks, mockRxApi } from '@soda/ocelloids-test';
+import { testBlocks, mockRxApi } from '@sodazone/ocelloids-test';
 
 import { blocks, blocksInRange } from './blocks.js';
 import { Observable, map, of } from 'rxjs';

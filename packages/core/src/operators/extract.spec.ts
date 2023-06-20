@@ -3,7 +3,7 @@ import type { EventRecord } from '@polkadot/types/interfaces';
 
 import { from } from 'rxjs';
 
-import { testBlocks, testExtrinsics, testEvents } from '@soda/ocelloids-test';
+import { testBlocks, testExtrinsics, testEvents } from '@sodazone/ocelloids-test';
 
 import { extractEventRecords, extractTxWithEvents } from './extract.js';
 

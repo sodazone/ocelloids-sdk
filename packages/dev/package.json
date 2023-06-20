@@ -1,5 +1,5 @@
 {
-  "name": "@soda/ocelloids-dev",
+  "name": "@sodazone/ocelloids-dev",
   "version": "0.0.1",
   "description": "Development support tools.",
   "sideEffects": false,
@@ -21,8 +21,8 @@
   "dependencies": {
     "@polkadot/api": "^10.9.1",
     "@polkadot/util": "^12.3.2",
-    "@soda/ocelloids": "*",
-    "@soda/ocelloids-test": "*",
+    "@sodazone/ocelloids": "*",
+    "@sodazone/ocelloids-test": "*",
     "citty": "^0.1.1",
     "rxjs": "^7.8.1"
   },

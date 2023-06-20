@@ -1,4 +1,4 @@
-import { testBlocks, testBlocksFrom } from '@soda/ocelloids-test';
+import { testBlocks, testBlocksFrom } from '@sodazone/ocelloids-test';
 
 import { toNamedPrimitive, toNamedPrimitives } from './substrate-converters.js';
 

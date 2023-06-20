@@ -36,14 +36,13 @@ jobs:
           node-version: 18
           cache: yarn
           registry-url: https://npm.pkg.github.com/
-          scope: '@soda'
       - name: Enable Corepack
         run: corepack enable
       - run: yarn install --immutable
       - run: yarn build
       # - run: yarn npm login --scope sodazone --publish
       - run: yarn config set npmPublishRegistry https://npm.pkg.github.com/
-      - run: yarn workspace @soda/ocelloids npm publish --tag ${{github.sha}}
+      - run: yarn workspace @sodazone/ocelloids npm publish --tag ${{github.sha}}
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
           YARN_NPM_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
