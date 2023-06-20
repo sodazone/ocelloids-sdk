@@ -36,14 +36,13 @@ jobs:
           node-version: 18
           cache: yarn
           registry-url: https://npm.pkg.github.com/
-          scope: '@soda'
       - name: Enable Corepack
         run: corepack enable
       - run: yarn install --immutable
       - run: yarn build
       - run: |
           echo 'npmScopes:' >> .yarnrc
-          echo '  soda:' >> .yarnrc
+          echo '  sodazone:' >> .yarnrc
           echo '    npmPublishRegistry: https://npm.pkg.github.com' >> .yarnrc
           echo '    npmAlwaysAuth: true' >> .yarnrc
           echo '    npmAuthToken: ${NODE_AUTH_TOKEN}' >> .yarnrc
