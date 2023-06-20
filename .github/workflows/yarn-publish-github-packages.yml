@@ -43,7 +43,7 @@ jobs:
       - run: yarn build
       - run: |
           echo 'npmScopes:' >> .yarnrc
-          echo '  soda:" >> .yarnrc
+          echo '  soda:' >> .yarnrc
           echo '    npmPublishRegistry: https://npm.pkg.github.com' >> .yarnrc
           echo '    npmAlwaysAuth: true' >> .yarnrc
           echo '    npmAuthToken: ${NODE_AUTH_TOKEN}' >> .yarnrc
