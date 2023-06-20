@@ -16,9 +16,11 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 18
+          cache: yarn
       - name: Enable Corepack
         run: corepack enable
       - run: yarn install --immutable
+      - run: yarn build
       - run: yarn test
 
   publish-gpr:
@@ -36,6 +38,7 @@ jobs:
       - name: Enable Corepack
         run: corepack enable
       - run: yarn install --immutable
+      - run: yarn build
       - run: yarn publish --tag ${{github.sha}}
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
