@@ -95,7 +95,7 @@ const main = defineCommand({
       type: 'string'
     },
     count: {
-      default: '10',
+      default: '1',
       type: 'string'
     },
     endpoint: {
