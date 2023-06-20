@@ -12,6 +12,27 @@ describe('substrate converters', () => {
       .toBe('0x382951a7547ec688051e1d95c0589eb8bd247bd4451cf66af35cdfee0f674692');
   });
 
+  it('should convert a block with justifications', () => {
+    const b = {
+      block: testBlocks[0].block,
+      justifications: testBlocks[0].justifications
+    };
+    const c = toNamedPrimitive(b) as any;
+
+    expect(c).toBeDefined();
+    expect(c.block.header.extrinsicsRoot)
+      .toBe('0x382951a7547ec688051e1d95c0589eb8bd247bd4451cf66af35cdfee0f674692');
+  });
+
+  it('should convert a block', () => {
+    const b = testBlocks[0].block;
+    const c = toNamedPrimitive(b) as any;
+
+    expect(c).toBeDefined();
+    expect(c.header.extrinsicsRoot)
+      .toBe('0x382951a7547ec688051e1d95c0589eb8bd247bd4451cf66af35cdfee0f674692');
+  });
+
   it('should convert all the test blocks', () => {
     for (let i = 0; i < testBlocks.length; i++) {
       const b = toNamedPrimitive(testBlocks[i]) as any;
