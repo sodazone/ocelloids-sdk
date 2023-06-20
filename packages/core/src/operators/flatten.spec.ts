@@ -2,8 +2,9 @@ import type { TxWithEvent } from '@polkadot/api-derive/types';
 
 import { of } from 'rxjs';
 
+import { testExtrinsics, testBatchExtrinsic, testBatchCalls } from '@sodazone/ocelloids-test';
+
 import { flattenBatch } from './flatten.js';
-import { testExtrinsics, testBatchExtrinsic, testBatchCalls } from '@soda/ocelloids-test';
 
 describe('flatten batch call operator', () => {
   describe('flattenBatch', () => {

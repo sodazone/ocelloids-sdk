@@ -67,7 +67,7 @@ function flattenBatchCalls(batchTx: TxWithEvent): TxWithEvent[] {
  * Operator to flatten batch transactions into individual transactions.
  * Takes an `Observable<TxWithEvent>` as input and emits an array of individual transactions with corresponding events.
  *
- * @returns An Observable that emits transactions with corresponding events.
+ * @returns An Observable that emits flattened transactions with corresponding events.
  */
 export function flattenBatch() {
   return (source: Observable<TxWithEvent>) => {
