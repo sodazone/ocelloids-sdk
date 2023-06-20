@@ -1,4 +1,4 @@
-import { testBlocks } from '@soda/ocelloids-test';
+import { testBlocks, testBlocksFrom } from '@soda/ocelloids-test';
 
 import { toNamedPrimitive, toNamedPrimitives } from './substrate-converters.js';
 
@@ -64,5 +64,12 @@ describe('substrate converters', () => {
         some: 1
       });
     }).toThrowError();
+  });
+
+  it('should convert big numbers to strings', () => {
+    const b = testBlocksFrom('pk14435209.cbor.bin')[0];
+    const c = toNamedPrimitive(b) as any;
+
+    expect(typeof c.extrinsics[2].extrinsic.call.args.value).toBe('string');
   });
 });

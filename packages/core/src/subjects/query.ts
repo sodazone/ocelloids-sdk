@@ -1,8 +1,11 @@
 import { BehaviorSubject, Subject } from 'rxjs';
-import { Query } from 'mingo';
 
-export type AnyVal = unknown;
-export type RawObject = Record<string, AnyVal>;
+import { Query } from 'mingo';
+import { RawObject } from 'mingo/types';
+
+// Installs mingo operators
+import './mingo-ops.js';
+
 export type Criteria = RawObject;
 
 /**
