@@ -18,7 +18,7 @@ jobs:
           node-version: 18
       - name: Enable Corepack
         run: corepack enable
-      - run: yarn install --immutable --immutable-cache --check-cache
+      - run: yarn install --immutable
       - run: yarn test
 
   publish-gpr:
@@ -35,7 +35,7 @@ jobs:
           registry-url: https://npm.pkg.github.com/
       - name: Enable Corepack
         run: corepack enable
-      - run: yarn install --immutable --immutable-cache --check-cache
+      - run: yarn install --immutable
       - run: yarn publish --tag ${{github.sha}}
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
