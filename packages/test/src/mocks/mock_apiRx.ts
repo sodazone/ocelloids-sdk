@@ -24,6 +24,11 @@ const apiMock = {
       subscribeFinalizedHeads: () => from(testHeaders)
     },
   },
+  query: {
+    system: {
+      events: () => from(testEvents)
+    }
+  },
   derive: {
     chain: {
       getBlockByNumber: (blockNumber: BN) =>  of(
