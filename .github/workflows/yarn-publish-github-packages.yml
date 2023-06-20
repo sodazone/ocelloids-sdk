@@ -41,6 +41,12 @@ jobs:
         run: corepack enable
       - run: yarn install --immutable
       - run: yarn build
+      - run: |
+          echo 'npmScopes:' >> .yarnrc
+          echo '  soda:" >> .yarnrc
+          echo '    npmPublishRegistry: https://npm.pkg.github.com' >> .yarnrc
+          echo '    npmAlwaysAuth: true' >> .yarnrc
+          echo '    npmAuthToken: ${NODE_AUTH_TOKEN}' >> .yarnrc
       - run: yarn workspace @soda/ocelloids npm publish --tag ${{github.sha}}
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
