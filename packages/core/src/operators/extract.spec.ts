@@ -7,7 +7,7 @@ import { testBlocks, testExtrinsics, testEvents } from '@sodazone/ocelloids-test
 
 import { extractEventRecords, extractTxWithEvents } from './extract.js';
 
-describe('extrinsics reactive observable', () => {
+describe('extractors over extended signed blocks', () => {
   describe('extractTxWithEvents', () => {
     it('should emit extrinsics with paired events on new blocks', done => {
       const testPipe = extractTxWithEvents()(from(testBlocks));

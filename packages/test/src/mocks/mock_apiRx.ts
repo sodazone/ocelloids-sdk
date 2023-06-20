@@ -2,6 +2,9 @@
 
 import type { TxWithEvent } from '@polkadot/api-derive/types';
 import type { EventRecord } from '@polkadot/types/interfaces';
+import type { FunctionMetadataLatest } from '@polkadot/types/interfaces';
+import type { CallBase, AnyTuple } from '@polkadot/types-codec/types';
+import { GenericCall, GenericExtrinsic } from '@polkadot/types';
 import { BN } from '@polkadot/util';
 import { ApiRx } from '@polkadot/api';
 
@@ -16,6 +19,18 @@ export const testHeaders = testBlocks.map(tb => tb.block.header);
 export const testExtrinsics = testBlocks.reduce((acc: TxWithEvent[], tb) => acc.concat(tb.extrinsics), []);
 
 export const testEvents = testBlocks.reduce((acc: EventRecord[], tb) => acc.concat(tb.events), []);
+
+export const testBatchExtrinsic = testExtrinsics[5];
+
+export const testBatchCalls = testBatchExtrinsic.extrinsic.args.reduce((flattedTxWithEvent: GenericCall[], arg) => {
+  const calls = arg as unknown as CallBase<AnyTuple, FunctionMetadataLatest>[];
+
+  const flatted = calls.map(call => {
+    return new GenericCall(testBatchExtrinsic.extrinsic.registry, call);
+  });
+
+  return flattedTxWithEvent.concat(flatted);
+}, []);
 
 const apiMock = {
   rpc: {

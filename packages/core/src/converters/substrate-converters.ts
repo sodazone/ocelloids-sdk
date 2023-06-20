@@ -69,7 +69,7 @@ function eventRecordToNamedPrimitive(
 /**
  * Converts the arguments of a `Call` object to a primitive representation with named fields.
  */
-function callBaseToPrimitive({ argsDef, args, registry }: CallBase<AnyTuple, FunctionMetadataLatest>) {
+export function callBaseToPrimitive({ argsDef, args, registry }: CallBase<AnyTuple, FunctionMetadataLatest>) {
   const json: Record<string, AnyJson> = {};
   const keys = Object.keys(argsDef);
 
