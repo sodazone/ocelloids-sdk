@@ -42,7 +42,7 @@ describe('mingo query ops', () => {
 
     expect(q.test(data)).toBeFalsy();
   });
-  /*
+
   it('should compare gt bn', () => {
     const q = new Query({
       'args.value': { $bn_gt: '108515270000000000'}
@@ -58,7 +58,7 @@ describe('mingo query ops', () => {
 
     expect(q.test(data)).toBeFalsy();
   });
-*/
+
   it('should compare gte bn', () => {
     const q = new Query({
       'args.value': { $bn_gte: '108515280000000000'}
