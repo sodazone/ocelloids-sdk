@@ -1,0 +1,26 @@
+{
+  "name": "@sodazone/ocelloids-apps",
+  "version": "0.0.1-dev.1",
+  "description": "Ocelloids applications.",
+  "sideEffects": false,
+  "private": true,
+  "type": "module",
+  "author": "soda <projects@soda.zone>",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "directory": "apps",
+    "url": "https://github.com/sodazone/ocelloids.git"
+  },
+  "bin": {
+    "capture": "dev/capture.ts",
+    "xtwatch": "demo/xtwatch.ts"
+  },
+  "dependencies": {
+    "cbor-x": "^1.5.3",
+    "citty": "^0.1.1",
+    "hjson": "^3.2.2",
+    "rxjs": "^7.8.1",
+    "yargs": "^17.7.2"
+  }
+}

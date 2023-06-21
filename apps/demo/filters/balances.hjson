@@ -1,0 +1,11 @@
+{
+  // Filter balance related extrinsics
+  call.section: balances
+  call.method: { $in: [
+      transferAllowDeath
+      transferKeepAlive
+    ]
+  }
+  // call.args.dest.id: 1odhHWsddwRnDQLpyKypBSNhqQbFi43RuHxVaCgeTVEcQv7
+  // signer.id: 158ehshkqqopCuXqbdK7vQ6nmBMc9JGwDtR61nnJB3t29fYX
+}
