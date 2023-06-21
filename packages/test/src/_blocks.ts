@@ -18,19 +18,19 @@ import { readFileSync } from 'node:fs';
 
 import { decode } from 'cbor-x';
 
-import metadataStatic from '@polkadot/types-support/metadata/static-polkadot';
 import { TypeRegistry, Metadata } from '@polkadot/types';
+import metadataStatic from '@polkadot/types-support/metadata/static-polkadot';
 import type { SignedBlock, EventRecord, AccountId } from '@polkadot/types/interfaces';
 import { createSignedBlockExtended } from '@polkadot/api-derive';
 
 import type { BinBlock } from './_types.js';
 
-export function testBlocksFrom(file: string) {
+export function testBlocksFrom(file: string, mds: `0x${string}` = metadataStatic) {
   const buffer = readFileSync(path.resolve(__dirname, '__data__', file));
   const blocks: BinBlock[] = decode(buffer);
 
   const registry = new TypeRegistry() as any;
-  const metadata = new Metadata(registry, metadataStatic);
+  const metadata = new Metadata(registry, mds);
 
   registry.setMetadata(metadata);
 
@@ -41,7 +41,7 @@ export function testBlocksFrom(file: string) {
 
     return createSignedBlockExtended(
       registry,
-       block as SignedBlock,
+      block as SignedBlock,
       records as unknown as EventRecord[],
       null,
       author as AccountId
