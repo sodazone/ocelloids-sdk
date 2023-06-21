@@ -1,7 +1,7 @@
 node_modules/
 coverage/
 lib/
-.yarn/cache
-.yarn/*.gz
+**/.yarn/cache
+**/.yarn/*.gz
 .eslintcache
 tsconfig*buildinfo
