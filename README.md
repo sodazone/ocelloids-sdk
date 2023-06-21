@@ -10,14 +10,14 @@ The Ocelloids repository has the following directory structure:
 ```
 ./packages
 ├── core                    # Ocelloids SDK implementation
-│   ├── src
-│   │   ├── apis            # Multi-chain APIs
-│   │   ├── configuration   # Configuration
-│   │   ├── converters      # Chain data type conversions
-│   │   ├── observables     # Reactive emitters
-│   │   └── operators       # Reactive operators
-│   │   └── subjects        # Reactive subjects
-├── dev                     # Utility scripts for development        
+│   └── src
+│       ├── apis            # Multi-chain APIs
+│       ├── configuration   # Configuration
+│       ├── converters      # Chain data type conversions
+│       ├── observables     # Reactive emitters
+│       ├── operators       # Reactive operators
+│       ├── subjects        # Reactive subjects
+│       └── types           # Extended types
 └── test                    # Chain test data and mocks
 ```
 
