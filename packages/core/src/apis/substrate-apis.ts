@@ -40,16 +40,16 @@ export class SubstrateApis {
   constructor(
     config: Configuration
   ) {
-    l.log('Initialize Substrate APIs');
+    l.debug('Initialize Substrate APIs');
 
     Object.entries(config).forEach(([name, options]) => {
-      l.log('-', name);
-
       const { provider } = options;
 
       if (provider === undefined) {
         throw new Error(`no provider specified for "${name}"`);
       }
+
+      l.debug('-', name);
 
       this.options[name] = options;
 
