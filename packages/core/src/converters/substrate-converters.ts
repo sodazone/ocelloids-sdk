@@ -9,6 +9,12 @@ function isTxWithEvent(object: any): object is TxWithEvent {
   return object.extrinsic !== undefined && object.events !== undefined;
 }
 
+function isExtrinsic(object: any): object is Extrinsic {
+  return object.signature !== undefined
+          && object.method !== undefined
+          && object.era !== undefined;
+}
+
 function isEventRecord(object: any): object is EventRecord {
   return object.event !== undefined && object.topics !== undefined;
 }
@@ -94,10 +100,23 @@ export function callBaseToPrimitive({ argsDef, args, registry }: CallBase<AnyTup
  * Converts an `Extrinsic` object to a primitive representation with named fields.
  */
 function extrinsicToNamedPrimitive(
-  { hash, signature, isSigned, isEmpty, signer, method }: Extrinsic
+  {
+    hash,
+    signature,
+    isSigned,
+    isEmpty,
+    signer,
+    method,
+    era,
+    nonce,
+    tip
+  }: Extrinsic
 ) : Record<string, AnyJson> {
   return {
     hash: hash.toPrimitive(),
+    era: era.toHuman(),
+    nonce: nonce.toPrimitive(),
+    tip: tip.toPrimitive(),
     signature: signature.toPrimitive(),
     signer: signer.toPrimitive(),
     isSigned,
@@ -159,6 +178,8 @@ export function toNamedPrimitive<T>(data: T): Record<string, AnyJson> {
     return eventRecordToNamedPrimitive(data as EventRecord);
   case isTxWithEvent(data):
     return txWithEventToNamedPrimitive(data as TxWithEvent);
+  case isExtrinsic(data):
+    return extrinsicToNamedPrimitive(data as Extrinsic);
   case isSignedBlockExtended(data):
     return {
       author: (data as SignedBlockExtended).author?.toPrimitive(),
