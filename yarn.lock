@@ -1898,17 +1898,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sodazone/ocelloids-dev@workspace:packages/dev":
+"@sodazone/ocelloids-apps@workspace:apps":
   version: 0.0.0-use.local
-  resolution: "@sodazone/ocelloids-dev@workspace:packages/dev"
+  resolution: "@sodazone/ocelloids-apps@workspace:apps"
   dependencies:
-    "@polkadot/api": ^10.9.1
-    "@polkadot/util": ^12.3.2
     cbor-x: ^1.5.3
     citty: ^0.1.1
+    hjson: ^3.2.2
     rxjs: ^7.8.1
+    yargs: ^17.7.2
   bin:
-    capture: src/capture.ts
+    capture: dev/capture.ts
+    xtwatch: demo/xtwatch.ts
   languageName: unknown
   linkType: soft
 
@@ -6267,6 +6268,15 @@ __metadata:
   dependencies:
     function-bind: ^1.1.1
   checksum: b9ad53d53be4af90ce5d1c38331e712522417d017d5ef1ebd0507e07c2fbad8686fffb8e12ddecd4c39ca9b9b47431afbb975b8abf7f3c3b82c98e9aad052792
+  languageName: node
+  linkType: hard
+
+"hjson@npm:^3.2.2":
+  version: 3.2.2
+  resolution: "hjson@npm:3.2.2"
+  bin:
+    hjson: bin/hjson
+  checksum: 556086424f719c82fc8ae880d388e617e88f38213f69a6c380704fa6808790c68f9233ef480cdb22d6f24549b2edfc19aea67ab2c40013b231001f8168d56e33
   languageName: node
   linkType: hard
 
