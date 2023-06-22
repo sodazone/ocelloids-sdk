@@ -53,8 +53,14 @@ yarn install
 yarn build
 ```
 
-### TBD Tips
+### Tips
 
-After build test...
-Run Command in VS Code
-TypeScript: Reload project
+### VS Code
+
+If you encounter the issue of `@sodazone/ocelloids-test` being marked as unresolved 
+in the `spec` test files after building the project, you can resolve it by following these steps:
+
+* Open any typescript file of the project.
+* Run the command "TypeScript: Reload project" to reload the TypeScript project configuration.
+
+
