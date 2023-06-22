@@ -1,5 +1,3 @@
-import { DecodedMessage } from '@polkadot/api-contract/types';
-
 import {
   testContractAbi,
   testContractAddress,

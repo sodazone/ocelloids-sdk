@@ -1,10 +1,4 @@
-import type { AnyJson, ArgsDef, AnyTuple, Codec } from '@polkadot/types-codec/types';
-import type { TxWithEvent } from '@polkadot/api-derive/types';
-
-import { stringToU8a } from '@polkadot/util';
-
 import { Abi } from '@polkadot/api-contract';
-import { AbiParam } from '@polkadot/api-contract/types';
 
 import { Observable, map, share } from 'rxjs';
 
