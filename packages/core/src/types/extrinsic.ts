@@ -1,6 +1,7 @@
 import { Extrinsic, BlockNumber } from '@polkadot/types/interfaces';
 import { Compact, GenericExtrinsic } from '@polkadot/types';
-import { AnyJson } from '@polkadot/types-codec/types';
+import type { SignedBlockExtended, TxWithEvent } from '@polkadot/api-derive/types';
+import type { AnyJson } from '@polkadot/types-codec/types';
 
 /**
  *
@@ -9,6 +10,13 @@ export interface ExtrinsicWithId extends Extrinsic {
   blockNumber: Compact<BlockNumber>,
   position: number,
   extrinsicId: string
+}
+
+/**
+ *
+ */
+export interface TxIdWithEvent extends TxWithEvent {
+  extrinsic: ExtrinsicWithId;
 }
 
 /**
@@ -44,4 +52,19 @@ export class GenericExtrinsicWithId extends GenericExtrinsic
       ...(super.toHuman(isExpanded) as any)
     };
   }
+}
+
+/**
+ *
+ * @param blockNumber
+ * @param position
+ * @param tx
+ */
+export function enhanceTxWithId(
+  blockNumber: Compact<BlockNumber>,
+  position: number,
+  tx: TxWithEvent
+) : TxIdWithEvent {
+  tx.extrinsic = new GenericExtrinsicWithId(blockNumber, position, tx.extrinsic);
+  return tx as TxIdWithEvent;
 }
