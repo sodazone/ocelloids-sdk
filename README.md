@@ -9,7 +9,7 @@ The Ocelloids repository utilizes workspaces for modularization and organization
 
 The repository contains two main folders: `packages` and `apps`.
 
-In the `packages` folder, you'll find the Ocelloids SDK implementation, which is further divided into core, test, and use case packages.
+In the `packages` folder, you'll find the Ocelloids SDK implementation, which is further divided into core, test, and use case modules.
 
 Here is the high-level structure of the `packages` directory:
 
