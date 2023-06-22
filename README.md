@@ -5,22 +5,27 @@ With Ocelloids you can easily set up and implement complex multi-chain monitorin
 
 ## Project Layout
 
-The Ocelloids repository has the following directory structure:
+The Ocelloids repository utilizes workspaces for modularization and organization.
 
-```shell
-./packages
-├── core                    # Ocelloids SDK implementation
-│   └── src
-│       ├── apis            # Multi-chain APIs
-│       ├── configuration   # Configuration
-│       ├── converters      # Chain data type conversions
-│       ├── observables     # Reactive emitters
-│       ├── operators       # Reactive operators
-│       ├── subjects        # Reactive subjects
-│       └── types           # Extended types
-└── test                    # Chain test data and mocks
-```
+The repository contains two main folders: `packages` and `apps`.
 
+In the `packages` folder, you'll find the Ocelloids SDK implementation, which is further divided into core, test, and use case packages.
+
+Here is the high-level structure of the `packages` directory:
+
+| Directory                             | Description                               |
+|---------------------------------------|-------------------------------------------|
+| `./packages/core`                     | Ocelloids SDK implementation              |
+| `./packages/core/src/apis`            | Multi-chain APIs                          |
+| `./packages/core/src/configuration`   | Configuration                             |
+| `./packages/core/src/converters`      | Chain data type conversions               |
+| `./packages/core/src/observables`     | Reactive emitters                         |
+| `./packages/core/src/operators`       | Reactive operators                        |
+| `./packages/core/src/subjects`        | Reactive subjects                         |
+| `./packages/core/src/types`           | Extended types                            |
+| `./packages/test`                     | Chain test data and mocks                 |
+
+Additionally, the `apps` folder contains demonstration applications and development support tools, such as chain data capture.
 
 ## Development
 
