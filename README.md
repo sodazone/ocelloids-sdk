@@ -7,7 +7,7 @@ With Ocelloids you can easily set up and implement complex multi-chain monitorin
 
 The Ocelloids repository has the following directory structure:
 
-```
+```shell
 ./packages
 ├── core                    # Ocelloids SDK implementation
 │   └── src
