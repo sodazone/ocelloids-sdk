@@ -13,17 +13,17 @@ In the `packages` folder, you'll find the Ocelloids SDK implementation, which is
 
 Here is the high-level structure of the `packages` directory:
 
-| Directory                             | Description                               |
-|---------------------------------------|-------------------------------------------|
-| *packages/core*                       | Ocelloids SDK implementation              |
-| *packages/core/src/apis*              | Multi-chain APIs                          |
-| *packages/core/src/configuration*     | Configuration                             |
-| *packages/core/src/converters*        | Chain data type conversions               |
-| *packages/core/src/observables*       | Reactive emitters                         |
-| *packages/core/src/operators*         | Reactive operators                        |
-| *packages/core/src/subjects*          | Reactive subjects                         |
-| *packages/core/src/types*             | Extended types                            |
-| *packages/test*                       | Chain test data and mocks                 |
+| Directory                    | Description                               |
+|------------------------------|-------------------------------------------|
+| *core*                       | Ocelloids SDK implementation              |
+| *core/src/apis*              | Multi-chain APIs                          |
+| *core/src/configuration*     | Configuration                             |
+| *core/src/converters*        | Chain data type conversions               |
+| *core/src/observables*       | Reactive emitters                         |
+| *core/src/operators*         | Reactive operators                        |
+| *core/src/subjects*          | Reactive subjects                         |
+| *core/src/types*             | Extended types                            |
+| *test*                       | Chain test data and mocks                 |
 
 Additionally, the `apps` folder contains demonstration applications and development support tools, such as chain data capture.
 
