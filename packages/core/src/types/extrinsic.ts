@@ -15,7 +15,7 @@ export interface ExtrinsicWithId extends Extrinsic {
 /**
  *
  */
-export interface TxIdWithEvent extends TxWithEvent {
+export interface TxWithIdAndEvent extends TxWithEvent {
   extrinsic: ExtrinsicWithId;
 }
 
@@ -64,7 +64,7 @@ export function enhanceTxWithId(
   blockNumber: Compact<BlockNumber>,
   position: number,
   tx: TxWithEvent
-) : TxIdWithEvent {
+) : TxWithIdAndEvent {
   tx.extrinsic = new GenericExtrinsicWithId(blockNumber, position, tx.extrinsic);
-  return tx as TxIdWithEvent;
+  return tx as TxWithIdAndEvent;
 }
