@@ -1,8 +1,8 @@
 import type { SignedBlock, EventRecord } from '@polkadot/types/interfaces';
-import type { SignedBlockExtended } from '@polkadot/api-derive/types';
+import type { SignedBlockExtended, TxWithEvent } from '@polkadot/api-derive/types';
 
 import { Observable, concatMap, share } from 'rxjs';
-import { GenericExtrinsicWithId } from '../types/extrinsic.js';
+import { ExtrinsicWithId, GenericExtrinsicWithId, TxIdWithEvent, enhanceTxWithId } from '../types/extrinsic.js';
 
 /**
  * Operator to extract extrinsics with paired events from blocks.
@@ -18,9 +18,18 @@ import { GenericExtrinsicWithId } from '../types/extrinsic.js';
  * ```
  */
 export function extractTxWithEvents() {
-  return (source: Observable<SignedBlockExtended>) => {
+  return (source: Observable<SignedBlockExtended>)
+  : Observable<TxIdWithEvent> => {
     return (source.pipe(
-      concatMap(block => block.extrinsics),
+      concatMap(({block, extrinsics}) => {
+        const blockNumber = block.header.number;
+        return extrinsics.map(
+          (xt, index) => enhanceTxWithId(
+            blockNumber,
+            index,
+            xt
+          ));
+      }),
       share()
     ));
   };
@@ -43,7 +52,7 @@ export function extractTxWithEvents() {
  */
 export function extractExtrinsics() {
   return (source: Observable<SignedBlock>)
-  : Observable<GenericExtrinsicWithId> => {
+  : Observable<ExtrinsicWithId> => {
     return (source.pipe(
       concatMap(({block}) => {
         const blockNumber = block.header.number;
