@@ -13,16 +13,11 @@ import { Observable, from, of } from 'rxjs';
 
 import { testBlocksFrom } from '../_blocks.js';
 
-export const testBlocks = testBlocksFrom('blocks.cbor.bin');
-
+export const testBlocks = testBlocksFrom('blocks.cbor.bin').slice(0, 3);
 export const testHeaders = testBlocks.map(tb => tb.block.header);
-
 export const testExtrinsics = testBlocks.reduce((acc: TxWithEvent[], tb) => acc.concat(tb.extrinsics), []);
-
 export const testEvents = testBlocks.reduce((acc: EventRecord[], tb) => acc.concat(tb.events), []);
-
 export const testBatchExtrinsic = testExtrinsics[5];
-
 export const testBatchCalls = testBatchExtrinsic.extrinsic.args.reduce((flattedTxWithEvent: GenericCall[], arg) => {
   const calls = arg as unknown as CallBase<AnyTuple, FunctionMetadataLatest>[];
 

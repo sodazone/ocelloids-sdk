@@ -8,12 +8,10 @@ import { testBlocks, testExtrinsics, testEvents } from '@sodazone/ocelloids-test
 import { extractEventRecords, extractExtrinsics, extractTxWithEvents } from './extract.js';
 import { ExtrinsicWithId, TxWithIdAndEvent } from '../types/extrinsic.js';
 
-const blocks = testBlocks.slice(0, 3);
-
 describe('extractors over extended signed blocks', () => {
   describe('extractTxWithEvents', () => {
     it('should emit extrinsics with paired events on new blocks', done => {
-      const testPipe = extractTxWithEvents()(from(blocks));
+      const testPipe = extractTxWithEvents()(from(testBlocks));
       let index = 0;
       testPipe.subscribe({
         next: (result: TxWithEvent) => {
@@ -27,7 +25,7 @@ describe('extractors over extended signed blocks', () => {
       });
     });
     it('should emit extrinsics with id and paired events on new blocks', done => {
-      const testPipe = extractTxWithEvents()(from(blocks));
+      const testPipe = extractTxWithEvents()(from(testBlocks));
       let index = 0;
       testPipe.subscribe({
         next: (result: TxWithIdAndEvent) => {
@@ -45,7 +43,7 @@ describe('extractors over extended signed blocks', () => {
 
   describe('extractExtrinsics', () => {
     it('should emit extrinsics with id on new blocks', done => {
-      const testPipe = extractExtrinsics()(from(blocks));
+      const testPipe = extractExtrinsics()(from(testBlocks));
       let index = 0;
       testPipe.subscribe({
         next: (extrinsic: ExtrinsicWithId) => {
@@ -63,7 +61,7 @@ describe('extractors over extended signed blocks', () => {
 
   describe('extractEventRecords', () => {
     it('should emit event records on new blocks', done => {
-      const testPipe = extractEventRecords()(from(blocks));
+      const testPipe = extractEventRecords()(from(testBlocks));
       let index = 0;
       testPipe.subscribe({
         next: (result: EventRecord) => {
