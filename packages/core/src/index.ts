@@ -15,7 +15,7 @@
  */
 
 /**
- * Ocelloids SDK.
+ * Ocelloids SDK core.
  *
  * @module bundle
  */
@@ -25,4 +25,5 @@ export * from './observables/index.js';
 export * from './operators/index.js';
 export * from './subjects/index.js';
 export * from './converters/index.js';
+export * from './types/index.js';
 
