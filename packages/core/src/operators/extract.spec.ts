@@ -6,7 +6,7 @@ import { from } from 'rxjs';
 import { testBlocks, testExtrinsics, testEvents } from '@sodazone/ocelloids-test';
 
 import { extractEventRecords, extractExtrinsics, extractTxWithEvents } from './extract.js';
-import { ExtrinsicWithId, TxIdWithEvent as TxWithIdAndEvent } from '../types/extrinsic.js';
+import { ExtrinsicWithId, TxWithIdAndEvent } from '../types/extrinsic.js';
 
 const blocks = testBlocks.slice(0, 3);
 
