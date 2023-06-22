@@ -2,7 +2,10 @@ import type { SignedBlock, EventRecord } from '@polkadot/types/interfaces';
 import type { SignedBlockExtended } from '@polkadot/api-derive/types';
 
 import { Observable, concatMap, share } from 'rxjs';
-import { ExtrinsicWithId, GenericExtrinsicWithId, TxWithIdAndEvent, enhanceTxWithId } from '../types/extrinsic.js';
+
+import { GenericExtrinsicWithId, enhanceTxWithId } from '../types/extrinsic.js';
+import { GenericEventWithId } from '../types/event.js';
+import { EventWithId, ExtrinsicWithId, TxWithIdAndEvent } from '../types/interfaces.js';
 
 /**
  * Operator to extract extrinsics with paired events from blocks.
@@ -27,9 +30,11 @@ export function extractTxWithEvents() {
       concatMap(({block, extrinsics}) => {
         const blockNumber = block.header.number;
         return extrinsics.map(
-          (xt, index) => enhanceTxWithId(
-            blockNumber,
-            index,
+          (xt, blockPosition) => enhanceTxWithId(
+            {
+              blockNumber,
+              blockPosition
+            },
             xt
           ));
       }),
@@ -60,10 +65,12 @@ export function extractExtrinsics() {
       concatMap(({block}) => {
         const blockNumber = block.header.number;
         return block.extrinsics.map(
-          (xt, index) => new GenericExtrinsicWithId(
-            blockNumber,
-            index,
-            xt
+          (xt, blockPosition) => new GenericExtrinsicWithId(
+            xt,
+            {
+              blockNumber,
+              blockPosition
+            }
           ));
       }),
       share()
@@ -84,11 +91,26 @@ export function extractExtrinsics() {
  * ).subscribe(record => console.log(`New event on Polkadot: ${record.event.method.toHuman()}`));
  * ```
  */
-export function extractEventRecords() {
+export function extractEventRecordsWithId() {
   return (source: Observable<SignedBlockExtended>)
-  : Observable<EventRecord> => {
+  : Observable<EventWithId> => {
     return (source.pipe(
-      concatMap(block => block.events),
+      concatMap(({ block, extrinsics }) => {
+        const blockNumber = block.header.number;
+        let blockPosition = -1;
+        return extrinsics.reduce((eventsWithId: EventWithId[], xt, i) => {
+          const extrinsicId = `${blockNumber.toString()}-${i}`;
+          return eventsWithId.concat(
+            xt.events.map(
+              (e, extrinsicPosition) => {
+                blockPosition++;
+                return new GenericEventWithId(e, {
+                  blockNumber, blockPosition, extrinsicPosition, extrinsicId
+                });
+              }
+            ));
+        }, []);
+      }),
       share()
     ));
   };

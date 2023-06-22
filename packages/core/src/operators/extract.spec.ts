@@ -5,8 +5,8 @@ import { from } from 'rxjs';
 
 import { testBlocks, testExtrinsics, testEvents } from '@sodazone/ocelloids-test';
 
-import { extractEventRecords, extractExtrinsics, extractTxWithEvents } from './extract.js';
-import { ExtrinsicWithId, TxWithIdAndEvent } from '../types/extrinsic.js';
+import { extractEventRecordsWithId, extractExtrinsics, extractTxWithEvents } from './extract.js';
+import { EventWithId, ExtrinsicWithId, TxWithIdAndEvent } from '../types/interfaces.js';
 
 describe('extractors over extended signed blocks', () => {
   describe('extractTxWithEvents', () => {
@@ -61,14 +61,14 @@ describe('extractors over extended signed blocks', () => {
 
   describe('extractEventRecords', () => {
     it('should emit event records on new blocks', done => {
-      const testPipe = extractEventRecords()(from(testBlocks));
-      let index = 0;
+      const testPipe = extractEventRecordsWithId()(from(testBlocks));
       testPipe.subscribe({
-        next: (result: EventRecord) => {
-          expect(result).toBeDefined();
-          expect(result.event.method).toEqual(testEvents[index].event.method);
-          expect(result.event.data).toEqual(testEvents[index].event.data);
-          index++;
+        next: (event: EventWithId) => {
+          expect(event).toBeDefined();
+          expect(event.method).toBeDefined();
+          expect(event.data).toBeDefined();
+          expect(event.toHuman).toBeDefined();
+          expect(event.eventId).toBeDefined();
         },
         complete: done,
       });

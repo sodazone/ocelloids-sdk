@@ -1,6 +1,6 @@
 import { DecodedMessage } from '@polkadot/api-contract/types';
 
-import { TxWithIdAndEvent } from './extrinsic.js';
+import { TxWithIdAndEvent } from './interfaces.js';
 
 export interface ContractMessageWithTx
 extends TxWithIdAndEvent, DecodedMessage {

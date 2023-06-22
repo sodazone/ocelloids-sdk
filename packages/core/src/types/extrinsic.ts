@@ -2,22 +2,7 @@ import { Extrinsic, BlockNumber } from '@polkadot/types/interfaces';
 import { Compact, GenericExtrinsic } from '@polkadot/types';
 import type { SignedBlockExtended, TxWithEvent } from '@polkadot/api-derive/types';
 import type { AnyJson } from '@polkadot/types-codec/types';
-
-/**
- * Represents an extrinsic with additional identifier information.
- */
-export interface ExtrinsicWithId extends Extrinsic {
-  blockNumber: Compact<BlockNumber>,
-  position: number,
-  extrinsicId: string
-}
-
-/**
- * Represents a transaction with an additional identifier and event information.
- */
-export interface TxWithIdAndEvent extends TxWithEvent {
-  extrinsic: ExtrinsicWithId;
-}
+import { BlockContext, ExtrinsicWithId, TxWithIdAndEvent } from './interfaces.js';
 
 /**
  * A subclass of GenericExtrinsic that includes identifier information.
@@ -25,16 +10,18 @@ export interface TxWithIdAndEvent extends TxWithEvent {
 export class GenericExtrinsicWithId extends GenericExtrinsic
   implements ExtrinsicWithId {
   blockNumber: Compact<BlockNumber>;
-  position: number;
+  blockPosition: number;
 
   constructor(
-    blockNumber: Compact<BlockNumber>,
-    position: number,
-    value: GenericExtrinsic
+    value: GenericExtrinsic,
+    {
+      blockNumber,
+      blockPosition
+    } : BlockContext
   ) {
     super(value.registry, value.toU8a());
     this.blockNumber = blockNumber;
-    this.position = position;
+    this.blockPosition = blockPosition;
   }
 
   /**
@@ -45,7 +32,7 @@ export class GenericExtrinsicWithId extends GenericExtrinsic
    * - `<position>` is the positional index of the extrinsic within the block, starting from 0.
    */
   get extrinsicId() {
-    return `${this.blockNumber.toString()}-${this.position}`;
+    return `${this.blockNumber.toString()}-${this.blockPosition}`;
   }
 
   /**
@@ -55,7 +42,7 @@ export class GenericExtrinsicWithId extends GenericExtrinsic
     return {
       extrinsicId: this.extrinsicId,
       blockNumber: this.blockNumber.toHuman(),
-      position: this.position,
+      position: this.blockPosition,
       ...(super.toHuman(isExpanded) as any)
     };
   }
@@ -64,15 +51,14 @@ export class GenericExtrinsicWithId extends GenericExtrinsic
 /**
  * Enhances a transaction object with identifier information by wrapping the extrinsic with the GenericExtrinsicWithId class.
  * @param blockNumber The compact block number of the transaction.
- * @param position The position of the transaction within the block.
+ * @param blockPosition The position of the transaction within the block.
  * @param tx The transaction object to enhance.
  * @returns The enhanced transaction object with identifier information.
  */
 export function enhanceTxWithId(
-  blockNumber: Compact<BlockNumber>,
-  position: number,
+  context: BlockContext,
   tx: TxWithEvent
 ) : TxWithIdAndEvent {
-  tx.extrinsic = new GenericExtrinsicWithId(blockNumber, position, tx.extrinsic);
+  tx.extrinsic = new GenericExtrinsicWithId(tx.extrinsic, context);
   return tx as TxWithIdAndEvent;
 }
