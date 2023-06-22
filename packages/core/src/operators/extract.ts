@@ -1,12 +1,13 @@
 import type { SignedBlock, EventRecord } from '@polkadot/types/interfaces';
-import type { SignedBlockExtended, TxWithEvent } from '@polkadot/api-derive/types';
+import type { SignedBlockExtended } from '@polkadot/api-derive/types';
 
 import { Observable, concatMap, share } from 'rxjs';
-import { ExtrinsicWithId, GenericExtrinsicWithId, TxIdWithEvent, enhanceTxWithId } from '../types/extrinsic.js';
+import { ExtrinsicWithId, GenericExtrinsicWithId, TxWithIdAndEvent, enhanceTxWithId } from '../types/extrinsic.js';
 
 /**
  * Operator to extract extrinsics with paired events from blocks.
  * Takes an `Observable<SignedBlockExtended>` as input and emits each `TxWithEvents` included in the block.
+ * Additionally, expands the extrinsic data with a generated identifier.
  *
  * ## Example
  * ```ts
@@ -16,10 +17,12 @@ import { ExtrinsicWithId, GenericExtrinsicWithId, TxIdWithEvent, enhanceTxWithId
  *   extractTxWithEvents()
  * ).subscribe(tx => console.log(`New extrinsic on Polkadot: ${tx.extrinsic.method.toHuman()}`));
  * ```
+ *
+ * @see {@link TxWithIdAndEvent}
  */
 export function extractTxWithEvents() {
   return (source: Observable<SignedBlockExtended>)
-  : Observable<TxIdWithEvent> => {
+  : Observable<TxWithIdAndEvent> => {
     return (source.pipe(
       concatMap(({block, extrinsics}) => {
         const blockNumber = block.header.number;
@@ -48,7 +51,7 @@ export function extractTxWithEvents() {
  *   extractExtrinsics()
  * ).subscribe(xt => console.log(`New extrinsic on Polkadot: ${xt.toHuman()}`));
  * ```
- * @see {@link GenericExtrinsicWithId}
+ * @see {@link ExtrinsicWithId}
  */
 export function extractExtrinsics() {
   return (source: Observable<SignedBlock>)
