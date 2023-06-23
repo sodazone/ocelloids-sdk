@@ -7,7 +7,7 @@ The demo applications have shebangs to be executed with [ts-node-esm](https://ty
 `xtwatch` is a demo application that allows you to filter out extrinsics from Substrate networks.
 It utilizes the [mongo query language](https://www.mongodb.com/docs/manual/tutorial/query-documents/) filters, defined using [hjson](https://github.com/hjson).
 You can find examples of filters in the [filters/](./filters/) directory.
-The application expects the filter to be provided in stdin.
+The application expects the filter to be provided from stdin.
 
 ### Usage
 
