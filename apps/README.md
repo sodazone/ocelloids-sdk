@@ -1,6 +1,6 @@
 # Ocelloids Applications
 
-The `apps/` folder contains various demo applications and development support tools for the Ocelloids project.
+The `apps` folder contains various demo applications and development support tools for the Ocelloids project.
 
 ## Demo Applications
 
