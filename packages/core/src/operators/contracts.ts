@@ -2,7 +2,9 @@ import { Abi } from '@polkadot/api-contract';
 
 import { Observable, map, share } from 'rxjs';
 
-import { ContractMessageWithTx, TxWithIdAndEvent, callBaseToCodec, mongoFilterFrom } from '../index.js';
+import { mongoFilterFrom } from './mongo-filter.js';
+import { ContractMessageWithTx, TxWithIdAndEvent } from '../types/index.js';
+import { callBaseToCodec } from '../converters/index.js';
 
 export function contractCalls(abiJson: Record<string, unknown> | string, address: string ) {
   return (source: Observable<TxWithIdAndEvent>)

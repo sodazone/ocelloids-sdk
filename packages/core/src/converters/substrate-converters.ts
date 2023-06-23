@@ -2,7 +2,8 @@ import { EventRecord, Event, Extrinsic, SignedBlock, Block, FunctionMetadataLate
 import { AnyJson, CallBase, AnyTuple, Codec } from '@polkadot/types-codec/types';
 import { TxWithEvent, SignedBlockExtended } from '@polkadot/api-derive/types';
 import { AbiParam, DecodedMessage } from '@polkadot/api-contract/types';
-import { ContractMessageWithTx, ExtrinsicWithId } from '../index.js';
+
+import { ContractMessageWithTx, ExtrinsicWithId } from '../types/index.js';
 
 /**
  * Type guards for identifying specific objects.

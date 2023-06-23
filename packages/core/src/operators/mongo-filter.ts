@@ -1,7 +1,8 @@
 import { Observable, Subject, filter, switchMap } from 'rxjs';
 import { Query } from 'mingo';
 
-import { ControlQuery, Criteria, toNamedPrimitive } from '../index.js';
+import { ControlQuery, Criteria } from '../index.js';
+import { toNamedPrimitive } from '../converters/index.js';
 
 /**
  * Applies a MongoDB query language filter to an observable stream of data.
