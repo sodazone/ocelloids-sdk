@@ -17,6 +17,8 @@ Get timestamp extrinsics from Polkadot and Kusama:
 ```shell
 ❯ ./demo/xtwatch.ts -v -u wss://rpc.polkadot.io -u wss://kusama-rpc.polkadot.io < demo/filters/timestamp.hjson
 ```
+<details>
+<summary>output - click to expand</summary>
 ```
 > Endpoints: [ 'wss://rpc.polkadot.io', 'wss://kusama-rpc.polkadot.io' ]
 > Using filter: {
@@ -29,12 +31,15 @@ Get timestamp extrinsics from Polkadot and Kusama:
 {"network":1,"extrinsicId":"18481138-0","blockNumber":"18,481,138","position":0,"isSigned":false,"method":{"args":{"now":"1,687,514,484,000"},"method":"set","section":"timestamp"}}
 {"network":0,"extrinsicId":"16091933-0","blockNumber":"16,091,933","position":0,"isSigned":false,"method":{"args":{"now":"1,687,514,484,001"},"method":"set","section":"timestamp"}}
 ```
+</details>
 
 Get balances extrinsics and pipe to jq:
 
 ```shell
 ❯ bunx xtwatch < demo/filters/balances.hjson | jq .
 ```
+<details>
+<summary>output - click to expand</summary>
 ```
 {
   "network": 0,
@@ -94,5 +99,7 @@ Get balances extrinsics and pipe to jq:
   },
   "tip": "0"
 }
-...
+...omitted
 ```
+</details>
+
