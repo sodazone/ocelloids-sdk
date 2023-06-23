@@ -1,4 +1,4 @@
-import type { BlockNumber, EventRecord } from '@polkadot/types/interfaces';
+import type { BlockNumber } from '@polkadot/types/interfaces';
 import type { AnyJson } from '@polkadot/types-codec/types';
 import { Compact, GenericEvent } from '@polkadot/types';
 

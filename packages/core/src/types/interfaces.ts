@@ -1,7 +1,6 @@
-import type { BlockNumber, Event, EventRecord, Extrinsic, Header, SignedBlock } from '@polkadot/types/interfaces';
+import type { BlockNumber, Event, Extrinsic } from '@polkadot/types/interfaces';
 import type { TxWithEvent } from '@polkadot/api-derive/types';
-import type { AnyJson } from '@polkadot/types-codec/types';
-import { Compact, GenericEvent } from '@polkadot/types';
+import { Compact } from '@polkadot/types';
 
 /**
  * Represents an extrinsic with additional identifier information.
