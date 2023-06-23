@@ -5,16 +5,19 @@ import { parse } from 'hjson';
 import yargs from 'yargs/yargs';
 import { hideBin } from 'yargs/helpers';
 
+import { merge, map, Observable } from 'rxjs';
+
 import { WsProvider } from '@polkadot/api';
 
 import {
   SubstrateApis,
   blocks,
   mongoFilterFrom,
-  extractExtrinsics
+  extractExtrinsics,
+  types
 } from '@sodazone/ocelloids';
 
-function watcher({ endpoint, verbose }) {
+function watcher({ urls, verbose }) {
   process.stdin.setEncoding('utf-8');
   process.stdin.on('readable', () => {
     var text = process.stdin.read();
@@ -22,26 +25,32 @@ function watcher({ endpoint, verbose }) {
       const parsed = parse(text);
 
       if (verbose) {
-        console.log('> Endpoint:', endpoint);
+        console.log('> Endpoints:', urls);
         console.log('> Using filter:', JSON.stringify(parsed, null, 2));
       }
 
-      const apis = new SubstrateApis(
-        {
-          polkadot: {
-            provider: new WsProvider(endpoint)
-          }
-        }
-      );
-      apis.rx.polkadot.pipe(
-        blocks(),
-        extractExtrinsics(),
-        mongoFilterFrom(parsed)
-      ).subscribe(x => console.log(
-        JSON.stringify(
-          x.toHuman()
-        )
-      ));
+      const conf = {};
+      for (let i = 0; i < urls.length; i++) {
+        conf[i] = {
+          provider: new WsProvider(urls[i])
+        };
+      }
+      const apis = new SubstrateApis(conf);
+
+      const pipes : Observable<types.ExtrinsicWithId>[] = [];
+      for (let i = 0; i < urls.length; i++) {
+        pipes.push(apis.rx[i].pipe(
+          blocks(),
+          extractExtrinsics(),
+          mongoFilterFrom(parsed),
+          map((x: any) => ({ network: i, ...x.toHuman() }))
+        ));
+      }
+
+      merge(...pipes)
+        .subscribe(x => console.log(
+          JSON.stringify(x)
+        ));
     }
   });
 }
@@ -50,17 +59,19 @@ const argv = yargs(hideBin(process.argv))
   .usage('Usage: xtwatch <url> [options]')
   .example('xtwatch < filters/balances.hjson', 'use balances.hjson filter')
   .example('xtwatch < filters/balances.hjson | jq .', 'pipe out to jq')
-  .default('u', 'wss://rpc.polkadot.io')
-  .alias('u', 'url')
-  .nargs('u', 1)
-  .describe('u', 'RPC endpoint')
-  .demandOption(['u'])
+  .option('u', {
+    type: 'array',
+    alias: 'url',
+    default: 'wss://rpc.polkadot.io',
+    describe: 'RPC endpoint',
+    requiresArg: true,
+  })
   .help('h')
   .alias('h', 'help')
   .alias('v', 'verbose')
   .argv as any;
 
 watcher({
-  endpoint: argv.url,
+  urls: argv.url,
   verbose: argv.verbose
 });
