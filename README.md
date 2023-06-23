@@ -1,5 +1,7 @@
 <div align="center">
-<h1>Ocelloids</h1>
+
+# Ocelloids
+
 <img src="./.github/assets/ocesp_250-min.png"
   width="250"
   height="auto"
@@ -8,7 +10,6 @@
 
 ![npm](https://img.shields.io/npm/v/sodazone/ocelloids?style=for-the-badge)
 ![GitHub](https://img.shields.io/github/license/sodazone/ocelloids?style=for-the-badge)
-![Polkadot](https://img.shields.io/badge/polkadot-E6007A?style=for-the-badge&logo=polkadot&logoColor=white)
 
 </div>
 
@@ -96,5 +97,9 @@ in the `spec` test files after building the project, you can resolve it by follo
 
 * Open any typescript file of the project.
 * Run the command "TypeScript: Reload project" to reload the TypeScript project configuration.
+
+---
+
+![Polkadot](https://img.shields.io/badge/polkadot-E6007A?style=for-the-badge&logo=polkadot&logoColor=white)
 
 
