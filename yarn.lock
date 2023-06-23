@@ -1926,6 +1926,7 @@ __metadata:
     yargs: ^17.7.2
   bin:
     capture: dev/capture.ts
+    cdump: dev/cdump.ts
     xtwatch: demo/xtwatch.ts
   languageName: unknown
   linkType: soft
