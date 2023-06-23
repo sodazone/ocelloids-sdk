@@ -1,6 +1,6 @@
 {
 "entryPointStrategy": "expand",
-"tsconfig": "../../tsconfig.spec.json",
+"tsconfig": "../../tsconfig.docs.json",
 "exclude": [
     "**/*+(spec).ts",
     "**/lib/*"
