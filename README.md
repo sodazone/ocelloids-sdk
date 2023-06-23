@@ -9,23 +9,29 @@ The Ocelloids repository utilizes workspaces for modularization and organization
 
 The repository contains two main folders: `packages` and `apps`.
 
-In the `packages` folder, you'll find the Ocelloids SDK implementation, which is further divided into core, test, and use case modules.
+### Packages
 
-Here is the high-level structure of the `packages` directory:
+The `packages` folder contains the Ocelloids SDK implementation, which is further divided into core, test, and use case modules.
+
+Here is the high-level structure of the `packages/core` module source folder:
 
 | Directory                    | Description                               |
 |------------------------------|-------------------------------------------|
-| *core*                       | Ocelloids SDK implementation              |
-| *core/src/apis*              | Multi-chain APIs                          |
-| *core/src/configuration*     | Configuration                             |
-| *core/src/converters*        | Chain data type conversions               |
-| *core/src/observables*       | Reactive emitters                         |
-| *core/src/operators*         | Reactive operators                        |
-| *core/src/subjects*          | Reactive subjects                         |
-| *core/src/types*             | Extended types                            |
-| *test*                       | Chain test data and mocks                 |
+| `apis`                       | Multi-chain APIs                          |
+| `configuration`              | Configuration                             |
+| `converters`                 | Chain data type conversions               |
+| `observables`                | Reactive emitters                         |
+| `operators`                  | Reactive operators                        |
+| `subjects`                   | Reactive subjects                         |
+| `types`                      | Extended types                            |
 
-Additionally, the `apps` folder contains demonstration applications and development support tools, such as chain data capture.
+The `packages/test` module includes network captured test data and mocks.
+
+### Apps
+
+The `apps` folder contains demonstration applications in the `apps/demo` directory and development support tools in the `apps/dev` directory.
+
+These applications include functionalities such as chain data capture, providing useful features for development and showcasing the capabilities of the Ocelloids framework.
 
 ## Development
 
