@@ -4,7 +4,9 @@
 "hideGenerator": true,
 "name": "Ocelloids SDK",
 "out": "docs",
-"tsconfig": "tsconfig.spec.json",
+"tsconfig": "./tsconfig.spec.json",
+"darkHighlightTheme": "dracula",
+"lightHighlightTheme": "dracula-soft",
 "entryPointStrategy": "packages",
 "entryPoints": [
     "packages/core"
