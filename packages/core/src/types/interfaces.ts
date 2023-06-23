@@ -1,6 +1,7 @@
 import type { BlockNumber, Event, Extrinsic } from '@polkadot/types/interfaces';
 import type { TxWithEvent } from '@polkadot/api-derive/types';
 import { Compact } from '@polkadot/types';
+import { DecodedEvent, DecodedMessage } from '@polkadot/api-contract/types';
 
 /**
  * Represents an extrinsic with additional identifier information.
@@ -44,4 +45,14 @@ export interface BlockContext {
 export interface EventBlockContext extends BlockContext {
   extrinsicPosition: number,
   extrinsicId: string
+}
+
+export interface ContractMessageWithTx
+extends TxWithIdAndEvent, DecodedMessage {
+  // empty impl.
+}
+
+export interface ContractEventWithBlockEvent
+extends DecodedEvent {
+  blockEvent: EventWithId
 }
