@@ -2,7 +2,7 @@
 "excludePrivate": true,
 "excludeProtected": true,
 "hideGenerator": true,
-"name": "ocelloids",
+"name": "Ocelloids SDK",
 "out": "docs",
 "entryPointStrategy": "packages",
 "entryPoints": [
