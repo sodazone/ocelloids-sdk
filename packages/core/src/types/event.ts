@@ -2,7 +2,7 @@ import type { BlockNumber, EventRecord } from '@polkadot/types/interfaces';
 import type { AnyJson } from '@polkadot/types-codec/types';
 import { Compact, GenericEvent } from '@polkadot/types';
 
-import { EventBlockContext, EventRecordWithId, EventWithId } from './interfaces.js';
+import { EventBlockContext, EventWithId } from './interfaces.js';
 
 /**
  * A subclass of GenericEvent that includes identifier information.
@@ -10,8 +10,8 @@ import { EventBlockContext, EventRecordWithId, EventWithId } from './interfaces.
 export class GenericEventWithId extends GenericEvent
   implements EventWithId {
   blockNumber: Compact<BlockNumber>;
-  blockPos: number;
-  extrinsicPos: number;
+  blockPosition: number;
+  extrinsicPosition: number;
   extrinsicId: string;
 
   constructor(
@@ -26,8 +26,8 @@ export class GenericEventWithId extends GenericEvent
   ) {
     super(value.registry, value.toU8a());
     this.blockNumber = blockNumber;
-    this.blockPos = blockPos;
-    this.extrinsicPos = extrinsicPos;
+    this.blockPosition = blockPos;
+    this.extrinsicPosition = extrinsicPos;
     this.extrinsicId = extrinsicId;
   }
 
@@ -40,7 +40,7 @@ export class GenericEventWithId extends GenericEvent
    * - `<event-position>` is the positional index of the event within the extrinsic, starting from 0.
    */
   get eventId() {
-    return `${this.blockNumber.toString()}-${this.blockPos}`;
+    return `${this.blockNumber.toString()}-${this.blockPosition}`;
   }
 
   /**
@@ -50,27 +50,10 @@ export class GenericEventWithId extends GenericEvent
     return {
       eventId: this.eventId,
       extrinsicId: this.extrinsicId,
-      extrinsicPos: this.extrinsicPos,
+      extrinsicPos: this.extrinsicPosition,
       blockNumber: this.blockNumber.toHuman(),
-      blockPos: this.blockPos,
+      blockPos: this.blockPosition,
       ...(super.toHuman(isExpanded) as any)
     };
   }
-}
-
-/**
- * Enhances a transaction object with identifier information by wrapping the extrinsic with the GenericExtrinsicWithId class.
- * @param blockNumber The compact block number of the transaction.
- * @param position The position of the transaction within the block.
- * @param tx The transaction object to enhance.
- * @returns The enhanced transaction object with identifier information.
- */
-export function enhanceEventRecordWithId(
-  blockContext: EventBlockContext,
-  record: EventRecord
-) : EventRecordWithId {
-  (record as unknown as any).event = new GenericEventWithId(
-    record.event, blockContext
-  );
-  return record as EventRecordWithId;
 }

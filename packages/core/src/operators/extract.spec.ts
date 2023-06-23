@@ -1,11 +1,11 @@
 import type { TxWithEvent } from '@polkadot/api-derive/types';
 
-import { from } from 'rxjs';
+import { from, of } from 'rxjs';
 
 import { testBlocks, testExtrinsics, testEvents } from '@sodazone/ocelloids-test';
 
-import { extractEvents, extractExtrinsics, extractTxWithEvents } from './extract.js';
-import { EventWithId, ExtrinsicWithId, TxWithIdAndEvent } from '../types/interfaces.js';
+import { extractEventsWithTx, extractEvents, extractExtrinsics, extractTxWithEvents } from './extract.js';
+import { EventWithId, EventWithIdAndTx, ExtrinsicWithId, TxWithIdAndEvent } from '../types/interfaces.js';
 
 describe('extractors over extended signed blocks', () => {
   describe('extractTxWithEvents', () => {
@@ -65,9 +65,28 @@ describe('extractors over extended signed blocks', () => {
       testPipe.subscribe({
         next: (event: EventWithId) => {
           expect(event).toBeDefined();
-          expect(event.method.toString()).toEqual(testEvents[index].method.toString());
+          expect(event.method).toEqual(testEvents[index].method);
           expect(event.data.toString()).toEqual(testEvents[index].data.toString());
           expect(event.eventId).toBeDefined();
+          index++;
+        },
+        complete: done,
+      });
+    });
+  });
+
+  describe('extractEventRecordsWithTx', () => {
+    it('should emit event with id on new blocks', done => {
+      const testPipe = extractEventsWithTx()(of(testBlocks[0]));
+      let index = 0;
+      testPipe.subscribe({
+        next: (record: EventWithIdAndTx) => {
+          expect(record).toBeDefined();
+          expect(record.extrinsicPosition).toBeDefined();
+          expect(record.extrinsic).toBeDefined();
+          expect(record.eventId).toBeDefined();
+          expect(record.extrinsic.extrinsicId).toBeDefined();
+          expect(record.blockNumber.toString()).toEqual(record.extrinsic.blockNumber.toString());
           index++;
         },
         complete: done,

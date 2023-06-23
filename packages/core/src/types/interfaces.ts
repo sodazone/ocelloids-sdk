@@ -4,24 +4,6 @@ import type { AnyJson } from '@polkadot/types-codec/types';
 import { Compact, GenericEvent } from '@polkadot/types';
 
 /**
- * Represents an event with additional identifier information.
- */
-export interface EventWithId extends Event {
-  blockNumber: Compact<BlockNumber>,
-  blockPos: number,
-  extrinsicPos: number,
-  extrinsicId: string,
-  eventId: string
-}
-
-/**
- * Represents an event record with an additional identifier.
- */
-export interface EventRecordWithId extends EventRecord {
-  event: EventWithId;
-}
-
-/**
  * Represents an extrinsic with additional identifier information.
  */
 export interface ExtrinsicWithId extends Extrinsic {
@@ -35,6 +17,24 @@ export interface ExtrinsicWithId extends Extrinsic {
  */
 export interface TxWithIdAndEvent extends TxWithEvent {
   extrinsic: ExtrinsicWithId;
+}
+
+/**
+ * Represents an event with additional identifier information.
+ */
+export interface EventWithId extends Event {
+  blockNumber: Compact<BlockNumber>,
+  blockPosition: number,
+  extrinsicPosition: number,
+  extrinsicId: string,
+  eventId: string
+}
+
+/**
+ * Represents an event with additional block context and extrinsic information
+ */
+export interface EventWithIdAndTx extends EventWithId {
+  extrinsic: ExtrinsicWithId
 }
 
 export interface BlockContext {
