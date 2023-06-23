@@ -1,7 +1,26 @@
-# Ocelloids
+<div align="center">
+<h1>Ocelloids</h1>
+<img src="./.github/assets/ocesp_250-min.png"
+  width="250"
+  height="auto"
+  alt=""
+/>
+<hr/>
+
+![GitHub](https://img.shields.io/github/license/sodazone/ocelloids)
+
+<hr/>
+</div>
+
+**Etymology** _ocellus_ + _-oid_
+
+**Noun** ocelloid (_plural_ ocelloids)
+
+    (microbiology) a cellular structure found in unicellular microorganisms that is analogous in structure and function to eyes, which focus, process and detect light.
 
 Ocelloids is an open-source software development kit that provides a framework for building monitoring applications specifically designed for Substrate-based networks.
 With Ocelloids you can easily set up and implement complex multi-chain monitoring logic.
+
 
 ## Project Layout
 
