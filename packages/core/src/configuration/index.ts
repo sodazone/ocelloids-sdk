@@ -14,48 +14,12 @@
  * limitations under the License.
  */
 
-import { HttpProvider, WsProvider } from '@polkadot/api';
-import { ProviderInterface } from '@polkadot/rpc-provider/types';
-import type { ApiOptions } from '@polkadot/api/types';
-
 /**
- * The API configuration properties per chain.
+ * Configuration related types and utilities.
  *
- * ## Example
- * ```ts
- * import { WsProvider } from '@polkadot/api';
- *
- * {
- *   polkadot: {
- *     provider: new WsProvider('wss://rpc.polkadot.io')
- *   },
- *   kusama: {
- *     provider: new WsProvider('wss://kusama-rpc.polkadot.io')
- *   }
- * }
- * ```
+ * @module
  */
-export interface Configuration {
-  [key: string]:  ApiOptions,
-}
-
-/**
- * Creates a provider based on the given endpoint URL.
- *
- * @param endpoint - The endpoint URL or an array of endpoint URLs.
- * @returns A provider instance.
- * @throws Error if the endpoint URL has an unknown URI scheme.
- */
-export function providerFromUrl(endpoint: string | string[]) : ProviderInterface {
-  const ep = Array.isArray(endpoint) ? endpoint[0] : endpoint;
-  if (ep.startsWith('ws')) {
-    // WS Supports multiple endpoints
-    return new WsProvider(endpoint);
-  } else if (ep.startsWith('http')) {
-    // For HTTP take the first URL
-    return new HttpProvider(ep);
-  }
-  throw new Error(`Unknown URI scheme ${endpoint}`);
-}
-
+export * from './interfaces.js';
+export * from './utils.js';
 export * from './networks.js';
+
