@@ -35,7 +35,7 @@ describe('substrate APIs', () => {
   });
 
   it('should throw error on missing apis', () => {
-    expect(apis.promise.polkadot.isConnected).toBeDefined();
+    expect(apis.promise.polkadot.isConnected).toBeFalsy();
     expect(apis.rx.polkadot.pipe).toBeDefined();
 
     expect(() => {
