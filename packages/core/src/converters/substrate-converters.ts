@@ -1,9 +1,9 @@
 import { EventRecord, Event, Extrinsic, SignedBlock, Block, FunctionMetadataLatest } from '@polkadot/types/interfaces';
-import { AnyJson, CallBase, AnyTuple, Codec } from '@polkadot/types-codec/types';
-import { TxWithEvent, SignedBlockExtended } from '@polkadot/api-derive/types';
-import { AbiParam, DecodedMessage } from '@polkadot/api-contract/types';
+import type { AnyJson, CallBase, AnyTuple, Codec } from '@polkadot/types-codec/types';
+import type { TxWithEvent, SignedBlockExtended } from '@polkadot/api-derive/types';
+import { AbiParam, DecodedEvent, DecodedMessage } from '@polkadot/api-contract/types';
 
-import { ContractMessageWithTx, ExtrinsicWithId } from '../types/index.js';
+import { ContractEventWithBlockEvent, ContractMessageWithTx, ExtrinsicWithId } from '../types/index.js';
 
 /**
  * Type guards for identifying specific objects.
@@ -28,6 +28,10 @@ function isEventRecord(object: any): object is EventRecord {
   return object.event !== undefined && object.topics !== undefined;
 }
 
+function isEvent(object: any): object is Event {
+  return object.data !== undefined && object.index !== undefined && object.meta !== undefined;
+}
+
 function isSignedBlockExtended(object: any): object is SignedBlockExtended {
   return object.events !== undefined && object.extrinsics !== undefined;
 }
@@ -45,7 +49,15 @@ function isContractMessage(object: any): object is DecodedMessage {
 }
 
 function isContractMessageWithTx(object: any): object is ContractMessageWithTx {
-  return  isExtrinsicWithId(object) && isContractMessage(object);
+  return isExtrinsicWithId(object) && isContractMessage(object);
+}
+
+function isContractEvent(object: any): object is DecodedEvent {
+  return object.args !== undefined && object.event !== undefined;
+}
+
+function isContractEventWithBlockEvent(object: any): object is ContractEventWithBlockEvent {
+  return object.blockEvent !== undefined && isContractEvent(object);
 }
 
 /**
@@ -114,14 +126,32 @@ export function callBaseToPrimitive({ argsDef, args, registry }: CallBase<AnyTup
 }
 
 /**
- * Converts the arguments of a `Call` object to its SCALE-codec representation with named fields.
+ * Converts the arguments of a `Call` object to its Uint8Array representation with named fields.
  */
-export function callBaseToCodec({ argsDef, args }: CallBase<AnyTuple, FunctionMetadataLatest>) {
-  const json: Record<string, Codec> = {};
+export function callBaseToU8a({ argsDef, args }: CallBase<AnyTuple, FunctionMetadataLatest>) {
+  const json: Record<string, Uint8Array> = {};
   const keys = Object.keys(argsDef);
 
   for (let i = 0; i < keys.length; i++) {
-    json[keys[i]] = args[i];
+    json[keys[i]] = args[i].toU8a();
+  }
+
+  return json;
+}
+
+/**
+ * Maps the `Event` data names to its corresponding Uint8Array representations.
+ * We pass the parameter `isBare=true` to get the Uint8Array without type-specific prefixes.
+ */
+export function eventNamesToU8aBare({ data }: Event) {
+  if (data.names === null) {
+    return data.toU8a(true);
+  }
+
+  const json: Record<string, Uint8Array> = {};
+
+  for (let i = 0; i < data.names.length; i++) {
+    json[data.names[i]] = data[i].toU8a(true);
   }
 
   return json;
@@ -204,7 +234,7 @@ function contractMessageToNamedPrimitive(data: DecodedMessage) {
   // Pick only the properties in AbiMessage that satisfy Record<string, AnyJson> type
   // We are leaving out:
   // returnType: TypeDef -> has type Enum that does not comply with AnyJson
-  // args: AbiParan[] -> contains TypeDef, see above
+  // args: AbiParam[] -> contains TypeDef, see above
   // fromU8a: Function
   // toU8a: Function
   // selector: to be transformed to primitive type
@@ -229,6 +259,29 @@ function contractMessageWithTxToNamedPrimitive(data: ContractMessageWithTx) {
   };
 }
 
+function contractEventToNamedPrimitive(data: DecodedEvent) {
+  // Pick only the properties in AbiEvent that satisfy Record<string, AnyJson> type
+  // We are leaving out:
+  // args: AbiParam[] -> contains type Enum that does not comply with AnyJson
+  // fromU8a: Function
+  const picked = (
+    ({ docs, identifier, index }) =>
+      ({ docs, identifier, index })
+  )(data.event);
+
+  return {
+    event: picked,
+    args: contractParamsToNamedPrimitive(data.event.args, data.args),
+  };
+}
+
+function contractEventWithBlockEventToNamePrimitive(data: ContractEventWithBlockEvent) {
+  return {
+    blockEvent: eventToNamedPrimitive(data.blockEvent),
+    ...contractEventToNamedPrimitive(data)
+  };
+}
+
 /**
  * Converts an object to a primitive representation with named fields based on its type.
  *
@@ -250,6 +303,10 @@ export function toNamedPrimitive<T>(data: T): Record<string, AnyJson> {
     return contractMessageWithTxToNamedPrimitive(data as ContractMessageWithTx);
   case isContractMessage(data):
     return contractMessageToNamedPrimitive(data as DecodedMessage);
+  case isContractEventWithBlockEvent(data):
+    return contractEventWithBlockEventToNamePrimitive(data as ContractEventWithBlockEvent);
+  case isEvent(data):
+    return eventToNamedPrimitive(data as Event);
   case isTxWithEvent(data):
     return txWithEventToNamedPrimitive(data as TxWithEvent);
   case isExtrinsic(data):

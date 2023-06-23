@@ -1,4 +1,4 @@
-import type { SignedBlock, EventRecord } from '@polkadot/types/interfaces';
+import type { SignedBlock } from '@polkadot/types/interfaces';
 import type { SignedBlockExtended } from '@polkadot/api-derive/types';
 
 import { Observable, concatMap, share } from 'rxjs';
@@ -79,39 +79,49 @@ export function extractExtrinsics() {
 }
 
 /**
- * Operator to extract event records from blocks.
- * Takes an `Observable<SignedBlockExtended>` as input and emits each `EventRecord` included in the block.
+ * Operator to extract events from blocks and provide additional contextual information.
+ * Takes an `Observable<SignedBlockExtended>` as input and emits each `Event` included in the block.
+ * The emitted events are expanded with the block context, including block number, position in block,
+ * extrinsic ID, and position in extrinsic.
+ *
+ * @returns An operator function that transforms an Observable of `SignedBlockExtended` into an Observable of `EventWithId`.
  *
  * ## Example
  * ```ts
  * // Subscribe to new events on Polkadot
  * apis.rx.polkadot.pipe(
  *   blocks(),
- *   extractEventRecords()
+ *   extractEvents()
  * ).subscribe(record => console.log(`New event on Polkadot: ${record.event.method.toHuman()}`));
  * ```
+ *
+ * @see {@link EventWithId}
  */
-export function extractEventRecordsWithId() {
-  return (source: Observable<SignedBlockExtended>)
-  : Observable<EventWithId> => {
-    return (source.pipe(
+export function extractEvents() {
+  return (source: Observable<SignedBlockExtended>): Observable<EventWithId> => {
+    return source.pipe(
       concatMap(({ block, extrinsics }) => {
         const blockNumber = block.header.number;
         let blockPosition = -1;
+
         return extrinsics.reduce((eventsWithId: EventWithId[], xt, i) => {
           const extrinsicId = `${blockNumber.toString()}-${i}`;
+
           return eventsWithId.concat(
-            xt.events.map(
-              (e, extrinsicPosition) => {
-                blockPosition++;
-                return new GenericEventWithId(e, {
-                  blockNumber, blockPosition, extrinsicPosition, extrinsicId
-                });
-              }
-            ));
+            xt.events.map((e, extrinsicPosition) => {
+              blockPosition++;
+
+              return new GenericEventWithId(e, {
+                blockNumber,
+                blockPosition,
+                extrinsicPosition,
+                extrinsicId
+              });
+            })
+          );
         }, []);
       }),
       share()
-    ));
+    );
   };
 }

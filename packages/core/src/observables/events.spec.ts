@@ -1,6 +1,6 @@
 import type { EventRecord } from '@polkadot/types/interfaces';
 
-import { mockRxApi, testEvents } from '@sodazone/ocelloids-test';
+import { mockRxApi, testEventRecords } from '@sodazone/ocelloids-test';
 
 import { events } from './events.js';
 
@@ -12,12 +12,12 @@ describe('events reactive observable', () => {
       const next = jest.fn().mockImplementation((result: EventRecord) => {
         expect(result).toBeDefined();
         expect(result.event).toBeDefined();
-        expect(result.event.section).toEqual(testEvents[index].event.section);
-        expect(result.event.hash).toEqual(testEvents[index].event.hash);
+        expect(result.event.section).toEqual(testEventRecords[index].event.section);
+        expect(result.event.hash).toEqual(testEventRecords[index].event.hash);
         index++;
       });
       const complete = jest.fn().mockImplementation(() => {
-        expect(index).toBe(testEvents.length);
+        expect(index).toBe(testEventRecords.length);
         done();
       });
 
@@ -26,7 +26,7 @@ describe('events reactive observable', () => {
         complete,
       });
 
-      expect(next).toBeCalledTimes(testEvents.length);
+      expect(next).toBeCalledTimes(testEventRecords.length);
       expect(complete).toBeCalledTimes(1);
     });
   });
