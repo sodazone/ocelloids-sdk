@@ -1,4 +1,4 @@
-name: 'Deploy Ocelloids docs to Pages'
+name: 'Publish docs'
 on:
   #release:
   #  types: [created]
