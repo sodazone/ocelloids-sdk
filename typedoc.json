@@ -4,6 +4,7 @@
 "hideGenerator": true,
 "name": "Ocelloids SDK",
 "out": "docs",
+"tsconfig": "tsconfig.spec.json",
 "entryPointStrategy": "packages",
 "entryPoints": [
     "packages/core"
