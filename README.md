@@ -7,13 +7,13 @@ With Ocelloids you can easily set up and implement complex multi-chain monitorin
 
 The Ocelloids repository utilizes workspaces for modularization and organization.
 
-The repository contains two main folders: `packages` and `apps`.
+The repository contains two main folders: `packages/` and `apps/`.
 
 ### Packages
 
 The `packages` folder contains the Ocelloids SDK implementation, which is further divided into core, test, and use case modules.
 
-Here is the high-level structure of the `packages/core` module source folder:
+Here is the high-level structure of the `packages/core/` module source folder:
 
 | Directory                    | Description                               |
 |------------------------------|-------------------------------------------|
@@ -25,13 +25,13 @@ Here is the high-level structure of the `packages/core` module source folder:
 | `subjects`                   | Reactive subjects                         |
 | `types`                      | Extended types                            |
 
-The `packages/test` module includes network captured test data and mocks.
+The `packages/test/` module includes network captured test data and mocks.
 
 ### Apps
 
-The `apps` folder contains demonstration applications in the `apps/demo` directory and development support tools in the `apps/dev` directory.
+The `apps/` folder contains demonstration applications in the `apps/demo/` directory and development support tools in the `apps/dev/` directory.
 
-These applications include functionalities such as chain data capture, providing useful features for development and showcasing the capabilities of the Ocelloids framework.
+These applications include functionalities such as chain data capture, providing useful features for development and showcasing the capabilities of the Ocelloids SDK.
 
 ## Development
 

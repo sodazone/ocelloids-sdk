@@ -1,60 +1,96 @@
-TBD
+# Demo Applications
 
+The demo applications have shebangs to be executed with [ts-node-esm](https://typestrong.org/ts-node/) or using [bun](https://bun.sh) to execute the npm bins.
+
+## XT Watch
+
+`xtwatch` is a demo application that allows you to filter out extrinsics from Substrate networks.
+It utilizes the [mongo query language](https://www.mongodb.com/docs/manual/tutorial/query-documents/) filters, defined using [hjson](https://github.com/hjson).
+You can find examples of filters in the [filters/](./filters/) directory.
+The application expects the filter to be provided in stdin.
+
+### Usage
+
+To execute `xtwatch`, navigate to the `ocelloids/apps` folder.
+
+Get timestamp extrinsics from Polkadot and Kusama:
+```shell
+❯ ./demo/xtwatch.ts -v -u wss://rpc.polkadot.io -u wss://kusama-rpc.polkadot.io < demo/filters/timestamp.hjson
 ```
+```
+> Endpoints: [ 'wss://rpc.polkadot.io', 'wss://kusama-rpc.polkadot.io' ]
+> Using filter: {
+  "call.section": "timestamp"
+}
+{"network":0,"extrinsicId":"16091931-0","blockNumber":"16,091,931","position":0,"isSigned":false,"method":{"args":{"now":"1,687,514,472,000"},"method":"set","section":"timestamp"}}
+{"network":1,"extrinsicId":"18481136-0","blockNumber":"18,481,136","position":0,"isSigned":false,"method":{"args":{"now":"1,687,514,472,000"},"method":"set","section":"timestamp"}}
+{"network":1,"extrinsicId":"18481137-0","blockNumber":"18,481,137","position":0,"isSigned":false,"method":{"args":{"now":"1,687,514,478,000"},"method":"set","section":"timestamp"}}
+{"network":0,"extrinsicId":"16091932-0","blockNumber":"16,091,932","position":0,"isSigned":false,"method":{"args":{"now":"1,687,514,478,001"},"method":"set","section":"timestamp"}}
+{"network":1,"extrinsicId":"18481138-0","blockNumber":"18,481,138","position":0,"isSigned":false,"method":{"args":{"now":"1,687,514,484,000"},"method":"set","section":"timestamp"}}
+{"network":0,"extrinsicId":"16091933-0","blockNumber":"16,091,933","position":0,"isSigned":false,"method":{"args":{"now":"1,687,514,484,001"},"method":"set","section":"timestamp"}}
+```
+
+Get balances extrinsics and pipe to jq:
+
+```shell
 ❯ bunx xtwatch < demo/filters/balances.hjson | jq .
+```
+```
 {
-  "extrinsicId": "16066813-2",
-  "blockNumber": "16,066,813",
+  "network": 0,
+  "extrinsicId": "16091979-2",
+  "blockNumber": "16,091,979",
   "position": 2,
   "isSigned": true,
   "method": {
     "args": {
       "dest": {
-        "Id": "158FWgHvrKofccBRtxbxzyZZsAiGanBBCwJnSy1uZZTy6bVr"
+        "Id": "1NZDpVCCVvpJDMgwktmD5skfKvaPpHMWJ8sSzxmtD6jQ7wC"
       },
-      "value": "120,309,708,100"
+      "value": "8,000,000,000,000"
     },
     "method": "transferKeepAlive",
     "section": "balances"
   },
   "era": {
     "MortalEra": {
-      "period": "1,024",
-      "phase": "248"
+      "period": "64",
+      "phase": "6"
     }
   },
-  "nonce": "52,543",
-  "signature": "0x2143c42008b5e9fd860aedaa465ed602bc73df6b3985e021d95724c7a3ead1b741413213492899c33b174b34da5ad34f58e6e9dccaa803e2f48290fbd4cc5503",
+  "nonce": "196",
+  "signature": "0xaa861acfedadbce2344016f0f2b19a9059d434cd10a5d81d7cea282eaca5cf5831d53838b9149797d511b601609b6856b658566ceae9a7f6c2b49b6a0046228f",
   "signer": {
-    "Id": "12nr7GiDrYHzAYT9L8HdeXnMfWcBuYfAXpgfzf3upujeCciz"
+    "Id": "16SjNu775Bo3obUFzBCph7zYB8eYiRwH9LNzfyTucq4J2vbk"
   },
   "tip": "0"
 }
 {
-  "extrinsicId": "16066821-2",
-  "blockNumber": "16,066,821",
+  "network": 0,
+  "extrinsicId": "16091981-2",
+  "blockNumber": "16,091,981",
   "position": 2,
   "isSigned": true,
   "method": {
     "args": {
       "dest": {
-        "Id": "15QFBQY6TF6Abr6vA1r6opRh6RbRSMWgBC1PcCMDDzRSEXf5"
+        "Id": "15e9GEhrbmTJeBw8PQypexhvyMpkhB42D67HBW7AU6mXP6xX"
       },
-      "value": "49,993,540,000,000"
+      "value": "611,739,634,000"
     },
     "method": "transferAllowDeath",
     "section": "balances"
   },
   "era": {
     "MortalEra": {
-      "period": "512",
-      "phase": "249"
+      "period": "64",
+      "phase": "8"
     }
   },
-  "nonce": "0",
-  "signature": "0x8d978d67bd0c58a52a8710c1a6d520086a7cb86ebba7ecec8f512e6d2c05c4b91d8761f1adbecad43ae611e3ca2019a963e98f7e697dc673039a787968a44803",
+  "nonce": "314,589",
+  "signature": "0x2608d6fbfb05b3f540d5b42be5ea68247d36060a24304342205c2d27a9ecf2e98ea7cc6c13b1fb172571b201e3d27d6a9cacf662a7f447338ee77661e55c290f",
   "signer": {
-    "Id": "146oJYKZtDhEpuHsNeXW6zuneSDpFFv2BPkvc9gNWhKWN9Ra"
+    "Id": "1qnJN7FViy3HZaxZK9tGAA71zxHSBeUweirKqCaox4t8GT7"
   },
   "tip": "0"
 }
