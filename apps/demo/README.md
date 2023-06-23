@@ -19,6 +19,7 @@ Get timestamp extrinsics from Polkadot and Kusama:
 ```
 <details>
 <summary>output - click to expand</summary>
+
 ```
 > Endpoints: [ 'wss://rpc.polkadot.io', 'wss://kusama-rpc.polkadot.io' ]
 > Using filter: {
@@ -40,6 +41,7 @@ Get balances extrinsics and pipe to jq:
 ```
 <details>
 <summary>output - click to expand</summary>
+
 ```
 {
   "network": 0,
