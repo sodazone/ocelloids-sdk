@@ -1,6 +1,7 @@
 node_modules/
 coverage/
 lib/
+docs/
 **/.yarn/cache
 **/.yarn/*.gz
 .eslintcache
