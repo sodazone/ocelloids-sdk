@@ -37,21 +37,35 @@ export interface EventWithIdAndTx extends EventWithId {
   extrinsic: ExtrinsicWithId
 }
 
+/**
+ * Represents the context of an item in a block,
+ * including the block number and the position of the item in the block.
+ */
 export interface BlockContext {
   blockNumber: Compact<BlockNumber>;
   blockPosition: number;
 }
 
+/**
+ * Represents the context of an event within a block, including the event's position within an extrinsic,
+ * the ID of the extrinsic, the block number and the position of the event in the block.
+ */
 export interface EventBlockContext extends BlockContext {
   extrinsicPosition: number,
   extrinsicId: string
 }
 
+/**
+ * Represents a decoded contract message with associated extrinsic.
+ */
 export interface ContractMessageWithTx
 extends TxWithIdAndEvent, DecodedMessage {
   // empty impl.
 }
 
+/**
+ * Represents a decoded contract event with the associated block event.
+ */
 export interface ContractEventWithBlockEvent
 extends DecodedEvent {
   blockEvent: EventWithId
