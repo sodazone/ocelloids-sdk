@@ -34,6 +34,18 @@ describe('substrate APIs', () => {
     }).toThrowError();
   });
 
+  it('should throw error on missing apis', () => {
+    expect(apis.promise.polkadot.isConnected).toBeDefined();
+    expect(apis.rx.polkadot.pipe).toBeDefined();
+
+    expect(() => {
+      apis.promise.none.isConnected;
+    }).toThrowError();
+    expect(() => {
+      apis.rx.none.pipe();
+    }).toThrowError();
+  });
+
   it('should be instantiated', () => {
     expect(apis).toBeDefined();
     expect(apis.promise).toBeDefined();
