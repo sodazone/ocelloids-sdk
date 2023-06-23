@@ -9,7 +9,7 @@ import { contractCalls } from './contracts.js';
 import { from } from 'rxjs';
 import {mongoFilterFrom } from './mongo-filter.js';
 import { enhanceTxWithId } from '../types/extrinsic.js';
-import { ContractMessageWithTx } from '../index.js';
+import { ContractMessageWithTx } from '../types/index.js';
 
 const blockNumber = testContractBlocks[0].block.header.number;
 const extrinsics = testContractExtrinsics.map(
