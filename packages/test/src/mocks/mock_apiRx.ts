@@ -4,7 +4,7 @@ import type { TxWithEvent } from '@polkadot/api-derive/types';
 import type { EventRecord } from '@polkadot/types/interfaces';
 import type { FunctionMetadataLatest } from '@polkadot/types/interfaces';
 import type { CallBase, AnyTuple } from '@polkadot/types-codec/types';
-import { GenericCall, GenericExtrinsic } from '@polkadot/types';
+import { GenericCall } from '@polkadot/types';
 
 import { BN } from '@polkadot/util';
 import { ApiRx } from '@polkadot/api';
