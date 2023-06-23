@@ -29,7 +29,7 @@ The `packages/test` module includes network captured test data and mocks.
 
 ### Apps
 
-The `apps` folder contains demonstration applications in the `apps/demo/` directory and development support tools in the `apps/dev` directory.
+The `apps` folder contains demonstration applications in the `apps/demo` directory and development support tools in the `apps/dev` directory.
 
 These applications include functionalities such as chain data capture, providing useful features for development and showcasing the capabilities of the Ocelloids SDK.
 
