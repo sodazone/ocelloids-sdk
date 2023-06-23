@@ -14,6 +14,7 @@
   },
   "bin": {
     "capture": "dev/capture.ts",
+    "cdump": "dev/cdump.ts",
     "xtwatch": "demo/xtwatch.ts"
   },
   "dependencies": {
