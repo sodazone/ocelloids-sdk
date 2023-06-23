@@ -66,7 +66,7 @@ yarn build
 
 ### Tips
 
-### VS Code
+#### VS Code
 
 If you encounter the issue of `@sodazone/ocelloids-test` being marked as unresolved 
 in the `spec` test files after building the project, you can resolve it by following these steps:
