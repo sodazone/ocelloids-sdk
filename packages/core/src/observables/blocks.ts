@@ -18,6 +18,7 @@ import { ApiRx } from '@polkadot/api';
 import { Observable, concatMap, mergeMap, share, switchMap } from 'rxjs';
 
 import { AnyBN, bnRange } from '../observables/bn.js';
+import { BN } from '@polkadot/util';
 
 // Copy of https://github.com/polkadot-js/api/blob/master/packages/api-derive/src/chain/subscribeFinalizedBlocks.ts
 // because it is not exposed in the API
@@ -91,3 +92,22 @@ export function blocksInRange(
     ));
   };
 }
+
+/**
+ * Returns an observable that emits the block with the specified block number.
+ *
+ * @param blockNumber - The block number.
+ * @returns An observable that emits the block with the specified block number.
+*/
+export function blockAt(
+  blockNumber: AnyBN,
+) {
+  return (source: Observable<ApiRx>) => {
+    return (source.pipe(
+      switchMap(api =>
+        api.derive.chain.getBlockByNumber(new BN(blockNumber))
+      )
+    ));
+  };
+}
+
