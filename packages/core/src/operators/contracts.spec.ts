@@ -1,5 +1,5 @@
 import {
-  testContractAbi,
+  testContractMetadata,
   testContractAddress,
   testContractExtrinsics,
   testContractBlocks,
@@ -11,6 +11,7 @@ import { from } from 'rxjs';
 import { contractEvents, contractMessages } from './contracts.js';
 import { mongoFilterFrom } from './mongo-filter.js';
 import { ContractMessageWithTx, GenericEventWithId, enhanceTxWithId } from '../types/index.js';
+import { Abi } from '@polkadot/api-contract';
 
 const blockNumber = testContractBlocks[0].block.header.number;
 const extrinsics = testContractExtrinsics.map(
@@ -32,6 +33,12 @@ const events = testContractEvents.map((ev, blockPosition) => new GenericEventWit
 }));
 
 describe('Wasm contracts operator', () => {
+  let testAbi: Abi;
+
+  beforeAll(() => {
+    testAbi = new Abi(testContractMetadata);
+  });
+
   describe('contractMessages', () => {
     it('should emit decoded contract calls', () => {
       const expectedContractMessages = [
@@ -44,7 +51,7 @@ describe('Wasm contracts operator', () => {
           selector: '0x681266a0'
         }
       ];
-      const testPipe = contractMessages(testContractAbi, testContractAddress)(from(extrinsics));
+      const testPipe = contractMessages(testAbi, testContractAddress)(from(extrinsics));
       let index = 0;
 
       testPipe.subscribe((result: ContractMessageWithTx) => {
@@ -57,7 +64,7 @@ describe('Wasm contracts operator', () => {
 
     it('should work with mongoFilter', () => {
       const found = jest.fn();
-      const testPipe = contractMessages(testContractAbi, testContractAddress)(from(extrinsics));
+      const testPipe = contractMessages(testAbi, testContractAddress)(from(extrinsics));
 
       testPipe.pipe(
         mongoFilterFrom({
@@ -86,7 +93,7 @@ describe('Wasm contracts operator', () => {
           index: 1
         }
       ];
-      const testPipe = contractEvents(testContractAbi, testContractAddress)(from(events));
+      const testPipe = contractEvents(testAbi, testContractAddress)(from(events));
       let index = 0;
 
       testPipe.subscribe((result) => {
@@ -100,7 +107,7 @@ describe('Wasm contracts operator', () => {
 
     it('should work with mongoFilter', () => {
       const found = jest.fn();
-      const testPipe = contractEvents(testContractAbi, testContractAddress)(from(events));
+      const testPipe = contractEvents(testAbi, testContractAddress)(from(events));
 
       testPipe.pipe(
         mongoFilterFrom({

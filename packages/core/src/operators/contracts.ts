@@ -5,7 +5,7 @@ import { Abi } from '@polkadot/api-contract';
 import { Observable, map, share } from 'rxjs';
 
 import { mongoFilterFrom } from './mongo-filter.js';
-import { ContractEventWithBlockEvent, ContractMessageWithTx, EventWithId, TxWithIdAndEvent } from '../types/index.js';
+import { ContractEventWithBlockEvent, ContractMessageWithTx, EventWithId, EventWithIdAndTx, TxWithIdAndEvent } from '../types/index.js';
 import { callBaseToU8a, eventNamesToU8aBare } from '../converters/index.js';
 
 /**
@@ -16,7 +16,7 @@ import { callBaseToU8a, eventNamesToU8aBare } from '../converters/index.js';
  * @param address - The address of the contract.
  * @returns An Observable that emits ContractMessageWithTx objects.
  */
-export function contractMessages(abiJson: Record<string, unknown> | string, address: string ) {
+export function contractMessages(abi: Abi, address: string ) {
   return (source: Observable<TxWithIdAndEvent>)
   : Observable<ContractMessageWithTx> => {
     return (source.pipe(
@@ -31,7 +31,7 @@ export function contractMessages(abiJson: Record<string, unknown> | string, addr
         const { data } = callBaseToU8a(tx.extrinsic.method);
         return {
           ...tx,
-          ...new Abi(abiJson).decodeMessage(data)
+          ...abi.decodeMessage(data)
         };
       }),
       share()
@@ -47,7 +47,7 @@ export function contractMessages(abiJson: Record<string, unknown> | string, addr
  * @returns An Observable that emits ContractEventWithBlockEvent objects.
  */
 export function contractEvents(
-  abiJson: Record<string, unknown> | string,
+  abi: Abi,
   address: string
 ) {
   return (source: Observable<EventWithId>): Observable<ContractEventWithBlockEvent> => {
@@ -63,8 +63,8 @@ export function contractEvents(
         const eventData = eventNamesToU8aBare(blockEvent);
 
         const decodedEvent = isU8a(eventData)
-          ? new Abi(abiJson).decodeEvent(eventData)
-          : new Abi(abiJson).decodeEvent(eventData.data);
+          ? abi.decodeEvent(eventData)
+          : abi.decodeEvent(eventData.data);
 
         return {
           blockEvent,
