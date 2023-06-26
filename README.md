@@ -1,8 +1,10 @@
 <div align="center">
 
 # Ocelloids
+Substrate monitoring SDK
 
-<img src="./.github/assets/ocesp_250-min.png"
+<img
+  src="https://github.com/sodazone/ocelloids/blob/main/.github/assets/ocesp_250-min.png?raw=true"
   width="250"
   height="auto"
   alt=""
@@ -24,38 +26,16 @@
 ---
 
 Ocelloids is an open-source software development kit that provides a framework for building monitoring applications specifically designed for Substrate-based networks.
-With Ocelloids you can easily set up and implement complex multi-chain monitoring logic.
+With Ocelloids you can easily implement sophisticated multi-chain monitoring logic.
 
+## Features
 
-## Project Layout
-
-The Ocelloids repository utilizes workspaces for modularization and organization.
-
-The repository contains two main folders: `packages` and `apps`.
-
-### Packages
-
-The `packages` folder contains the Ocelloids SDK implementation, which is further divided into core, test, and use case modules.
-
-Here is the high-level structure of the `packages/core` module source folder:
-
-| Directory                    | Description                               |
-|------------------------------|-------------------------------------------|
-| `apis`                       | Multi-chain APIs                          |
-| `configuration`              | Configuration                             |
-| `converters`                 | Chain data type conversions               |
-| `observables`                | Reactive emitters                         |
-| `operators`                  | Reactive operators                        |
-| `subjects`                   | Reactive subjects                         |
-| `types`                      | Extended types                            |
-
-The `packages/test` module includes network captured test data and mocks.
-
-### Apps
-
-The `apps` folder contains demonstration applications in the `apps/demo` directory and development support tools in the `apps/dev` directory.
-
-These applications include functionalities such as chain data capture, providing useful features for development and showcasing the capabilities of the Ocelloids SDK.
+* **Composable Reactive Streams** — Easily source, transform, and react to blockchain data using composable reactive streams.
+* **Powerful Query Operators** — Simplify data filtering with integrated operators that support complex queries in the Mongo query language, including support for big numbers.
+* **Flexible Type Conversions** — Seamlessly convert data into a terse queryable format.
+* **Abstraction of Common Patterns** — Simplify development and reduce boilerplate code by abstracting common patterns such as utility batch calls.
+* **Multi-Chain Support** — Interact with multiple networks.
+* **Pallet Use Cases** — Components designed for specific pallet use cases, such as the contracts pallet.
 
 ## Development
 
@@ -88,7 +68,37 @@ yarn install
 yarn build
 ```
 
-### Tips
+### Project Layout
+
+The Ocelloids repository utilizes workspaces for modularization and organization.
+
+The repository contains two main folders: `packages` and `apps`.
+
+#### Packages
+
+The `packages` folder contains the Ocelloids SDK implementation, which is further divided into core, test, and use case modules.
+
+Here is the high-level structure of the `packages/core` module source folder:
+
+| Directory                    | Description                               |
+|------------------------------|-------------------------------------------|
+| `apis`                       | Multi-chain APIs                          |
+| `configuration`              | Configuration                             |
+| `converters`                 | Chain data type conversions               |
+| `observables`                | Reactive emitters                         |
+| `operators`                  | Reactive operators                        |
+| `subjects`                   | Reactive subjects                         |
+| `types`                      | Extended types                            |
+
+The `packages/test` module includes network captured test data and mocks.
+
+#### Apps
+
+The `apps` folder contains demonstration applications in the `apps/demo` directory and development support tools in the `apps/dev` directory.
+
+These applications include functionalities such as chain data capture, providing useful features for development and showcasing the capabilities of the Ocelloids SDK.
+
+### Troubleshooting
 
 #### VS Code
 
@@ -97,9 +107,5 @@ in the `spec` test files after building the project, you can resolve it by follo
 
 * Open any typescript file of the project.
 * Run the command "TypeScript: Reload project" to reload the TypeScript project configuration.
-
----
-
-![Polkadot](https://img.shields.io/badge/polkadot-E6007A?style=for-the-badge&logo=polkadot&logoColor=white)
 
 
