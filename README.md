@@ -35,7 +35,7 @@ With Ocelloids you can easily implement sophisticated multi-chain monitoring log
 * **Flexible Type Conversions** — Seamlessly convert data into a terse queryable format.
 * **Abstraction of Common Patterns** — Simplify development and reduce boilerplate code by abstracting common patterns such as utility batch calls.
 * **Multi-Chain Support** — Interact with multiple networks.
-* **Pallet Use Cases** — Components designed for specific pallet use cases, such as the contracts pallet.
+* **Pallet Use Cases** — Components designed for specific pallet use cases, such as tracking calls and events from the contracts pallet.
 
 ## Development
 
