@@ -9,7 +9,8 @@ import { ContractEventWithBlockEvent, ContractMessageWithTx, ExtrinsicWithId } f
  * Type guards for identifying specific objects.
  */
 function isTxWithEvent(object: any): object is TxWithEvent {
-  return object.extrinsic !== undefined && object.events !== undefined;
+  // Note that the rest of fields could be undefined
+  return object.extrinsic !== undefined;
 }
 
 function isExtrinsic(object: any): object is Extrinsic {
@@ -196,7 +197,7 @@ function extrinsicToNamedPrimitive(
 function txWithEventToNamedPrimitive(data: TxWithEvent) {
   return {
     extrinsic: extrinsicToNamedPrimitive(data.extrinsic as Extrinsic),
-    events: data.events.map(eventToNamedPrimitive)
+    events: data.events?.map(eventToNamedPrimitive) || []
   };
 }
 
@@ -323,7 +324,7 @@ export function toNamedPrimitive<T>(data: T): Record<string, AnyJson> {
   case isBlock(data):
     return blockToNamedPrimitive(data as Block);
   default:
-    throw new Error(`No converter found for ${data}`);
+    throw new Error(`No converter found for ${JSON.stringify(data)}`);
   }
 }
 
