@@ -1,4 +1,4 @@
-import { Observable, Subject, filter, switchMap } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, filter, switchMap } from 'rxjs';
 import { Query } from 'mingo';
 
 import { ControlQuery, Criteria } from '../index.js';
@@ -28,22 +28,23 @@ import { toNamedPrimitive } from '../converters/index.js';
  * @see {@link ControlQuery}
  * @see {@link [Mongo Documentation](https://www.mongodb.com/docs/manual/tutorial/query-documents/)}
  */
-export function mongoFilter<T>(query: Subject<Query>) {
+export function mongoFilter<T>(query: BehaviorSubject<Query>) {
   /**
    * Returns a filtered observable stream based on the provided query.
    * @param source The observable source to be filtered.
    * @returns A filtered observable stream based on the query.
    */
   return (source: Observable<T>) => {
-    return query.pipe(switchMap(q =>
-      source.pipe(
-        filter(
-          record => q.test(
-            toNamedPrimitive(record)
-          )
+    // NOTE that we are not piping a subscription since
+    // we do not want to reset the outter observables.
+    // So, we just use the current value from the behavior subject.
+    return source.pipe(
+      filter(
+        record => query.value.test(
+          toNamedPrimitive(record)
         )
       )
-    ));
+    );
   };
 }
 
