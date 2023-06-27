@@ -3,6 +3,7 @@
  *
  * @module
  */
-export * from './bn.js';
+// Exclude BN range
+// export * from './bn.js';
 export * from './events.js';
 export * from './blocks.js';
