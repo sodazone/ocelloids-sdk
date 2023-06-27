@@ -33,6 +33,7 @@ With Ocelloids you can easily implement sophisticated multi-chain monitoring log
 * **Composable Reactive Streams** — Easily source, transform, and react to blockchain data using composable reactive streams.
 * **Powerful Query Operators** — Data filtering with integrated operators that support complex queries in the Mongo query language, including support for big numbers and advanced features such as dynamic queries.
 * **Flexible Type Conversions** — Seamlessly convert data into a terse queryable format.
+* **Extended Context Types** — Extends the base generic events and existrincs with contextual information such as position in block, block number, position in extrinsic, &c.
 * **Abstraction of Common Patterns** — Simplify development and reduce boilerplate code by abstracting common patterns such as utility batch calls.
 * **Multi-Chain Support** — Interact with multiple networks.
 * **Pallet Use Cases** — Components designed for specific pallet use cases, such as tracking calls and events from the contracts pallet.
@@ -72,23 +73,24 @@ In the above example, the `filterEvents` operator is composed of the following s
 
 ```typescript
 source.pipe(
-  // Extract extrinsics with events
+  // Extracts extrinsics with events
   extractTxWithEvents(),
   
-  // Flatten batches if needed
+  // Flattens batches if needed
   flattenBatch(),
   
-  // Filter at extrinsic level
+  // Filters at the extrinsic level
   // mainly for success or failure
   mongoFilterFrom(extrinsicsCriteria),
   
-  // Map the related events
-  mergeMap(x => x.events || []),
+  // Maps the events with
+  // block and extrinsic context
+  mapEventsWithContext(),
   
-  // Filter over the events
-  mongoFilter(eventsCriteria),
+  // Filters over the events
+  mongoFilter(eventsQuery),
   
-  // Multicast
+  // Share multicast
   share()
 )
 ```
@@ -206,13 +208,13 @@ Here is the high-level structure of the `packages/core` module source folder:
 
 | Directory                    | Description                               |
 |------------------------------|-------------------------------------------|
-| `apis`                       | Multi-chain APIs                          |
-| `configuration`              | Configuration                             |
-| `converters`                 | Chain data type conversions               |
-| `observables`                | Reactive emitters                         |
-| `operators`                  | Reactive operators                        |
-| `subjects`                   | Reactive subjects                         |
-| `types`                      | Extended types                            |
+|  apis                        | Multi-chain APIs                          |
+|  configuration               | Configuration                             |
+|  converters                  | Chain data type conversions               |
+|  observables                 | Reactive emitters                         |
+|  operators                   | Reactive operators                        |
+|  subjects                    | Reactive subjects                         |
+|  types                       | Extended types                            |
 
 The `packages/test` module includes network captured test data and mocks.
 
