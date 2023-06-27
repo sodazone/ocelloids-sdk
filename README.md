@@ -39,7 +39,7 @@ With Ocelloids you can easily implement sophisticated multi-chain monitoring log
 
 ## Usage
 
-Here's an example showcasing the usage of Ocelloids to filter out balance transfer event above a certain amount:
+Here's an example showcasing the usage of Ocelloids to filter out balance transfer events above a certain amount:
 
 ```typescript
 import { WsProvider } from '@polkadot/api';
@@ -92,6 +92,8 @@ source.pipe(
   share()
 )
 ```
+
+### Dynamic Query Example
 
 Now let's explore a more advanced example with a dynamic query that collects seen addresses, starting from ALICE:
 
