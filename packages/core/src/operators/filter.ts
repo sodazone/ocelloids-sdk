@@ -26,8 +26,6 @@ function mapEventsWithContext() {
         (event, extrinsicPosition) => {
           return new GenericEventWithId(event, {
             blockNumber,
-            // TODO review block pos in event id, remove?
-            blockPosition,
             extrinsicId,
             extrinsicPosition
           });

@@ -24,7 +24,6 @@ export interface TxWithIdAndEvent extends TxWithEvent {
  */
 export interface EventWithId extends Event {
   blockNumber: Compact<BlockNumber>,
-  blockPosition: number,
   extrinsicPosition: number,
   extrinsicId: string,
   eventId: string
@@ -38,10 +37,10 @@ export interface EventWithIdAndTx extends EventWithId {
 }
 
 /**
- * Represents the context of an item in a block,
- * including the block number and the position of the item in the block.
+ * Represents the context of an extrinsic in a block,
+ * including the block number and the position of the extrinsic in the block.
  */
-export interface BlockContext {
+export interface ExtrinsicBlockContext {
   blockNumber: Compact<BlockNumber>;
   blockPosition: number;
 }
@@ -50,7 +49,8 @@ export interface BlockContext {
  * Represents the context of an event within a block, including the event's position within an extrinsic,
  * the ID of the extrinsic, the block number and the position of the event in the block.
  */
-export interface EventBlockContext extends BlockContext {
+export interface EventBlockContext {
+  blockNumber: Compact<BlockNumber>;
   extrinsicPosition: number,
   extrinsicId: string
 }

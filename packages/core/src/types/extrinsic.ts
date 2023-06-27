@@ -3,7 +3,7 @@ import { Compact, GenericExtrinsic } from '@polkadot/types';
 import type { TxWithEvent } from '@polkadot/api-derive/types';
 import type { AnyJson } from '@polkadot/types-codec/types';
 
-import { BlockContext, ExtrinsicWithId, TxWithIdAndEvent } from './interfaces.js';
+import { ExtrinsicBlockContext, ExtrinsicWithId, TxWithIdAndEvent } from './interfaces.js';
 
 /**
  * A subclass of GenericExtrinsic that includes identifier information.
@@ -18,7 +18,7 @@ export class GenericExtrinsicWithId extends GenericExtrinsic
     {
       blockNumber,
       blockPosition
-    } : BlockContext
+    } : ExtrinsicBlockContext
   ) {
     super(value.registry, value.toU8a());
     this.blockNumber = blockNumber;
@@ -57,7 +57,7 @@ export class GenericExtrinsicWithId extends GenericExtrinsic
  * @returns The enhanced transaction object with identifier information.
  */
 export function enhanceTxWithId(
-  context: BlockContext,
+  context: ExtrinsicBlockContext,
   tx: TxWithEvent
 ) : TxWithIdAndEvent {
   tx.extrinsic = new GenericExtrinsicWithId(tx.extrinsic, context);

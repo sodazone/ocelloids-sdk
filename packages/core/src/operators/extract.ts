@@ -113,7 +113,6 @@ export function extractEvents() {
 
               return new GenericEventWithId(e, {
                 blockNumber,
-                blockPosition,
                 extrinsicPosition,
                 extrinsicId
               });
@@ -163,7 +162,6 @@ export function extractEventsWithTx() {
 
             const eventWithIdAndTx = new GenericEventWithId(event, {
               blockNumber,
-              blockPosition,
               extrinsicPosition,
               extrinsicId
             }) as EventWithIdAndTx;
