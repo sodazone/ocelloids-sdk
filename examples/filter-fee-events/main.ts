@@ -30,7 +30,7 @@ function watcher({ url, blockHeight, blockCount, verbose }) {
     blocksInRange(blockHeight, blockCount, false),
     filterEvents({
       section: 'balances',
-      method: 'Transfer'
+      method: { $in: ['Withdraw', 'Deposit']}
     })
   ).subscribe({
     next: x => console.log(x.toHuman()),
@@ -39,8 +39,8 @@ function watcher({ url, blockHeight, blockCount, verbose }) {
 }
 
 const argv = yargs(hideBin(process.argv))
-  .usage('Usage: filter-transfers <url> <block height> <block count> [options]')
-  .example('filter-transfers ', 'watches transfers above amount')
+  .usage('Usage: filter-fees <url> <block height> <block count> [options]')
+  .example('filter-fees', 'filters balance fee events for a block range')
   .option('b', {
     type: 'string',
     alias: 'block-height',

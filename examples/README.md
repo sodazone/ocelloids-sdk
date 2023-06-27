@@ -1,21 +1,22 @@
 # Ocelloids SDK Examples
 
 The demo applications have shebangs to be executed with [ts-node-esm](https://typestrong.org/ts-node/).
-Alternatively, you can execute them with [bun](https://bun.sh).
+
+Alternatively, you can run them with [bun](https://bun.sh).
 
 ## Examples
 
-| Application      | Command                      |
-| ---------------- | ---------------------------- |
-| filter-xt        | ./filter-exstrinsics/main.ts |
-| filter-transfers | ./filter-transfers/main.ts   |
-| watch-transfers  | ./balance-transfers/main.ts  |
-| follow-transfers | ./follow-transfers/main.ts   |
+| Application            | Command                          |
+| ---------------------- | -------------------------------- |
+| filter-extrinstics     | ./filter-exstrinsics/main.ts     |
+| filter-fee-events      | ./filter-fee-events/main.ts      |
+| watch-transfer-events  | ./watch-transfer-events/main.ts  |
+| follow-transfer-events | ./follow-transfer-events/main.ts |
 
-For example, you can run `filter-transfers` as:
+For example, you can run `filter-fee-events` as:
 
 ```shell
-./filter-transfers/main.ts
+./filter-fee-events/main.ts
 ```
 <details>
 <summary>output - click to expand</summary>
@@ -23,23 +24,45 @@ For example, you can run `filter-transfers` as:
 ```javascript
 // ...omitted...
 {
-  method: 'Transfer',
+  eventId: '16134448-2',
+  extrinsicId: '16134448-2',
+  extrinsicPos: 6,
+  blockNumber: '16,134,448',
+  blockPos: 2,
+  method: 'Deposit',
   section: 'balances',
-  index: '0x0502',
+  index: '0x0507',
   data: {
-    from: '14GuP6QAfK9uwo3MQ9LrcmEqttcrtoNfDaSHn2BVaYcJJBg6',
-    to: '12But7r26e2UwZkSYC8bU5nQdyfqWXswZEwS1tbH9nD8CXvK',
-    amount: '54,719,854,400'
+    who: '12MgK2Sc8Rrh6DXS2gDrt7fWJ24eGeVb23NALbZLMw1grnkL',
+    amount: '31,863,304'
   }
 }
 {
-  method: 'Transfer',
+  eventId: '16134538-2',
+  extrinsicId: '16134538-2',
+  extrinsicPos: 0,
+  blockNumber: '16,134,538',
+  blockPos: 2,
+  method: 'Withdraw',
   section: 'balances',
-  index: '0x0502',
+  index: '0x0508',
   data: {
-    from: '15QFBQY6TF6Abr6vA1r6opRh6RbRSMWgBC1PcCMDDzRSEXf5',
-    to: '1kQ9eipxazLU1UCtiVrvqwArMP2f1mEPnWdW7T95rxkgc4T',
-    amount: '354,400,060,800'
+    who: '15iLWC7Gqt2z5a9Vq2hjaw3VXkarkY5gAVdAkknV1khVhLck',
+    amount: '157,316,518'
+  }
+}
+{
+  eventId: '16134538-2',
+  extrinsicId: '16134538-2',
+  extrinsicPos: 4,
+  blockNumber: '16,134,538',
+  blockPos: 2,
+  method: 'Deposit',
+  section: 'balances',
+  index: '0x0507',
+  data: {
+    who: '13UVJyLnbVp9RBZYFwFGyDvVd1y27Tt8tkntv6Q7JVPhFsTB',
+    amount: '125,853,214'
   }
 }
 // ...omitted...
