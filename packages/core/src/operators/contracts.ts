@@ -1,11 +1,18 @@
 import { isU8a } from '@polkadot/util';
-
+import { ApiPromise } from '@polkadot/api';
 import { Abi } from '@polkadot/api-contract';
 
-import { Observable, map, share } from 'rxjs';
+import { Observable, concatMap, filter, map, share } from 'rxjs';
 
 import { mongoFilterFrom } from './mongo-filter.js';
-import { ContractEventWithBlockEvent, ContractMessageWithTx, EventWithId, EventWithIdAndTx, TxWithIdAndEvent } from '../types/index.js';
+import {
+  ContractConstructorWithEventAndTx,
+  ContractEventWithBlockEvent,
+  ContractMessageWithTx,
+  EventWithId,
+  EventWithIdAndTx,
+  TxWithIdAndEvent
+} from '../types/index.js';
 import { callBaseToU8a, eventNamesToU8aBare } from '../converters/index.js';
 
 /**
@@ -32,6 +39,47 @@ export function contractMessages(abi: Abi, address: string ) {
         return {
           ...tx,
           ...abi.decodeMessage(data)
+        };
+      }),
+      share()
+    ));
+  };
+}
+
+export function contractConstructors(api: ApiPromise, abi: Abi, codeHash: string ) {
+  return (source: Observable<EventWithIdAndTx>)
+  : Observable<ContractConstructorWithEventAndTx> => {
+    return (source.pipe(
+      // Filter contract instantiated events
+      mongoFilterFrom({
+        'section': 'contracts',
+        'method': 'Instantiated'
+      }),
+      concatMap(async (blockEvent: EventWithIdAndTx) => {
+        let contractCodeHash = null;
+        if (api.events.contracts.Instantiated.is(blockEvent)) {
+          // We cast as any here to avoid importing `@polkadotjs/api-augment`
+          // as we want to keep the library side-effects-free
+          const { contract } = blockEvent.data as any;
+
+          const contractInfo = ((await api.query.contracts.contractInfoOf(contract)) as any).unwrapOr(null);
+
+          if (contractInfo !== null) {
+            contractCodeHash = contractInfo.codeHash.toString();
+          }
+        }
+        return {
+          blockEvent,
+          contractCodeHash
+        };
+      }),
+      filter(({ contractCodeHash }) => contractCodeHash === codeHash),
+      map(({ blockEvent, contractCodeHash }) => {
+        const { data } = callBaseToU8a(blockEvent.extrinsic.method);
+        return {
+          blockEvent,
+          codeHash: contractCodeHash,
+          ...abi.decodeConstructor(data)
         };
       }),
       share()

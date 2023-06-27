@@ -75,8 +75,8 @@ describe('extractors over extended signed blocks', () => {
     });
   });
 
-  describe('extractEventRecordsWithTx', () => {
-    it('should emit event with id on new blocks', done => {
+  describe('extractEventsWithTx', () => {
+    it('should emit event with id and extrinsic on new blocks', done => {
       const testPipe = extractEventsWithTx()(of(testBlocks[0]));
       let index = 0;
       testPipe.subscribe({

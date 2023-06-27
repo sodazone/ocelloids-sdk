@@ -63,6 +63,12 @@ extends TxWithIdAndEvent, DecodedMessage {
   // empty impl.
 }
 
+export interface ContractConstructorWithEventAndTx
+extends DecodedMessage {
+  blockEvent: EventWithIdAndTx
+  codeHash: string | null
+}
+
 /**
  * Represents a decoded contract event with the associated block event.
  */

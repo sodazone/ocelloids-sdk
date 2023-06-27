@@ -153,10 +153,10 @@ export function extractEventsWithTx() {
         const eventRecords: EventWithIdAndTx[] = [];
 
         for (const [blockPosition, record] of events.entries()) {
-          const { phase: { isApplyExtrinsic, asApplyExtrinsic }, event } = record;
+          const { phase, event } = record;
 
-          if (isApplyExtrinsic) {
-            const extrinsicPositionInBlock = asApplyExtrinsic.toNumber();
+          if (phase.isApplyExtrinsic) {
+            const extrinsicPositionInBlock = phase.asApplyExtrinsic.toNumber();
             const xt = extrinsics[extrinsicPositionInBlock];
             const extrinsicPosition = xt.events.findIndex(e => e.eq(event));
             const extrinsicId = `${blockNumber}-${extrinsicPositionInBlock}`;

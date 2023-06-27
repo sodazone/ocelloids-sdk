@@ -1,4 +1,5 @@
 import {
+  mockPromiseApi,
   testContractMetadata,
   testContractAddress,
   testContractExtrinsics,
@@ -6,12 +7,13 @@ import {
   testContractEvents
 } from '@sodazone/ocelloids-test';
 
+import { Abi } from '@polkadot/api-contract';
+
 import { from } from 'rxjs';
 
-import { contractEvents, contractMessages } from './contracts.js';
+import { contractConstructors, contractEvents, contractMessages } from './contracts.js';
 import { mongoFilterFrom } from './mongo-filter.js';
-import { ContractMessageWithTx, GenericEventWithId, enhanceTxWithId } from '../types/index.js';
-import { Abi } from '@polkadot/api-contract';
+import { ContractMessageWithTx, EventWithIdAndTx, GenericEventWithId, enhanceTxWithId } from '../types/index.js';
 
 const blockNumber = testContractBlocks[0].block.header.number;
 const extrinsics = testContractExtrinsics.map(
@@ -31,6 +33,12 @@ const events = testContractEvents.map((ev, blockPosition) => new GenericEventWit
   extrinsicPosition: blockPosition,
   extrinsicId
 }));
+const instantiateTx = extrinsics[2];
+const eventsFromInstantiateTx = events.splice(0, 13);
+const testEventsWithIdAndTx = eventsFromInstantiateTx.map(ev => {
+  (ev as EventWithIdAndTx).extrinsic = instantiateTx.extrinsic;
+  return ev as EventWithIdAndTx;
+});
 
 describe('Wasm contracts operator', () => {
   let testAbi: Abi;
@@ -77,13 +85,37 @@ describe('Wasm contracts operator', () => {
     });
   });
 
+  describe('contractConstructors', () => {
+    it('should emit decoded contract constructors', () => {
+      const found = jest.fn();
+      const codeHash = '0xb1fc0d2c3df7250059748b65eb7ac72611bcaff728cc44b7aa8a27cd22a95417';
+
+      jest.spyOn(mockPromiseApi.query.contracts, 'contractInfoOf')
+        .mockResolvedValue({
+          unwrapOr: () => ({
+            codeHash
+          })
+        } as any);
+
+      const testPipe = contractConstructors(mockPromiseApi, testAbi, codeHash)(from(testEventsWithIdAndTx));
+
+      testPipe.subscribe({
+        next: constructor => {
+          found();
+          expect(constructor).toBeDefined();
+          expect(constructor.message.identifier).toBe('new');
+          expect(constructor.codeHash).toBe(codeHash);
+        },
+        complete: () => {
+          expect(found).toBeCalledTimes(1);
+        }
+      });
+    });
+  });
+
   describe('contractEvents', () => {
     it('should emit decoded contract events', () => {
       const expectedContractEvents = [
-        {
-          identifier: 'Transfer',
-          index: 0
-        },
         {
           identifier: 'Transfer',
           index: 0
@@ -96,12 +128,17 @@ describe('Wasm contracts operator', () => {
       const testPipe = contractEvents(testAbi, testContractAddress)(from(events));
       let index = 0;
 
-      testPipe.subscribe((result) => {
-        expect(result.blockEvent).toBeDefined();
-        expect(result.blockEvent.eventId).toBeDefined();
-        expect(result.event.identifier).toBe(expectedContractEvents[index].identifier);
-        expect(result.event.index).toBe(expectedContractEvents[index].index);
-        index++;
+      testPipe.subscribe({
+        next: (result) => {
+          expect(result.blockEvent).toBeDefined();
+          expect(result.blockEvent.eventId).toBeDefined();
+          expect(result.event.identifier).toBe(expectedContractEvents[index].identifier);
+          expect(result.event.index).toBe(expectedContractEvents[index].index);
+          index++;
+        },
+        complete: () => {
+          expect(index).toBe(2);
+        }
       });
     });
 
@@ -114,9 +151,12 @@ describe('Wasm contracts operator', () => {
           'args.value': { $bn_gt: 800000000 },
           'event.identifier': 'Transfer'
         })
-      ).subscribe(found);
-
-      expect(found).toBeCalledTimes(2);
+      ).subscribe({
+        next: found,
+        complete: () => {
+          expect(found).toBeCalledTimes(1);
+        }
+      });
     });
   });
 });
