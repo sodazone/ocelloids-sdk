@@ -201,15 +201,19 @@ To contribute to the development of Ocelloids, ensure that you have the followin
 To set up the development environment, follow these steps:
 
 1. Install the latest LTS version of [Node.js](https://nodejs.org/en/).
+
 2. Enable [Corepack](https://github.com/nodejs/corepack#how-to-install) at the root of the project:
+
 ```shell
 corepack enable
 ```
 3. Install dependencies:
+
 ```shell
 yarn install
 ```
 4. Build Ocelloids libraries:
+
 ```shell
 yarn build
 ```
