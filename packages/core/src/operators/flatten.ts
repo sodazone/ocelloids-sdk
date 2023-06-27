@@ -1,9 +1,11 @@
-import type { TxWithEvent } from '@polkadot/api-derive/types';
 import type { FunctionMetadataLatest, Event } from '@polkadot/types/interfaces';
 import type { CallBase, AnyTuple } from '@polkadot/types-codec/types';
 import { GenericCall, GenericExtrinsic } from '@polkadot/types';
 
 import { Observable, concatMap, share } from 'rxjs';
+
+import { TxWithIdAndEvent } from '../types/interfaces.js';
+import { GenericExtrinsicWithId } from '../types/extrinsic.js';
 
 type BatchEvents = Event[];
 
@@ -42,20 +44,27 @@ function groupBatchEvents(events: Event[]): BatchEvents[] {
  * @param batchTx - An extrinsic that makes either a `utility.batch` or `utility.batchAll` call.
  * @returns An array of individual transactions with corresponding events.
  */
-function flattenBatchCalls(batchTx: TxWithEvent): TxWithEvent[] {
+function flattenBatchCalls(batchTx: TxWithIdAndEvent): TxWithIdAndEvent[] {
   const { extrinsic, events } = batchTx;
   const batchEvents = groupBatchEvents(events);
 
-  return batchTx.extrinsic.args.reduce((flattedTxWithEvent: TxWithEvent[], arg) => {
+  return batchTx.extrinsic.args.reduce((flattedTxWithEvent: TxWithIdAndEvent[], arg) => {
     const calls = arg as unknown as CallBase<AnyTuple, FunctionMetadataLatest>[];
 
     const flatted = calls.map((call, index) => {
       const flatCall = new GenericCall(extrinsic.registry, call);
-      const flatExtrinsic = new GenericExtrinsic(extrinsic.registry, { method: flatCall, signature: extrinsic.inner.signature });
+      const { blockNumber, blockPosition } = extrinsic;
+      const flatExtrinsic = new GenericExtrinsic(extrinsic.registry, {
+        method: flatCall,
+        signature: extrinsic.inner.signature
+      });
       return {
         ...batchTx,
         events: batchEvents[index],
-        extrinsic: flatExtrinsic
+        extrinsic: new GenericExtrinsicWithId(flatExtrinsic, {
+          blockNumber,
+          blockPosition
+        })
       };
     });
 
@@ -70,7 +79,8 @@ function flattenBatchCalls(batchTx: TxWithEvent): TxWithEvent[] {
  * @returns An Observable that emits flattened transactions with corresponding events.
  */
 export function flattenBatch() {
-  return (source: Observable<TxWithEvent>) => {
+  return (source: Observable<TxWithIdAndEvent>)
+  : Observable<TxWithIdAndEvent> => {
     return (source.pipe(
       concatMap(tx => {
         const { method } = tx.extrinsic;
