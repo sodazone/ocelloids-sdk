@@ -90,7 +90,8 @@ Output with contextual information:
 }
 ```
 
-The event identifier follows the format `<block number>-<extrinsic position in block>-<event position in extrinsic>`. 
+The event identifier `eventId` consists of the block number, the position of the extrinsic within the block,
+and the position of the event within the extrinsic.
 
 The `filterEvents` operator used in the example is composed of the following stack:
 
