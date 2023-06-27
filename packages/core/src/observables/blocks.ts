@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 import { ApiRx } from '@polkadot/api';
+import { BN } from '@polkadot/util';
+import type { SignedBlockExtended } from '@polkadot/api-derive/types';
 
 import { Observable, concatMap, mergeMap, share, switchMap } from 'rxjs';
 
 import { AnyBN, bnRange } from '../observables/bn.js';
-import { BN } from '@polkadot/util';
 
 // Copy of https://github.com/polkadot-js/api/blob/master/packages/api-derive/src/chain/subscribeFinalizedBlocks.ts
 // because it is not exposed in the API
@@ -51,7 +52,8 @@ function subscribeFinalizedBlocks(api: ApiRx) {
  * ```
  */
 export function blocks(finalized = false) {
-  return (source: Observable<ApiRx>) => {
+  return (source: Observable<ApiRx>)
+  : Observable<SignedBlockExtended> => {
     return (source.pipe(
       switchMap(api => {
         return finalized ?
@@ -61,6 +63,13 @@ export function blocks(finalized = false) {
       share()
     ));
   };
+}
+
+/**
+ * Returns an Observable that emits the latest finalized blocks.
+ */
+export function finalizedBlocks() {
+  return blocks(true);
 }
 
 /**
@@ -77,7 +86,8 @@ export function blocksInRange(
   count: AnyBN,
   sorted = true
 ) {
-  return (source: Observable<ApiRx>) => {
+  return (source: Observable<ApiRx>)
+  : Observable<SignedBlockExtended> => {
     return (source.pipe(
       switchMap(api =>
         bnRange(start, count).pipe(
