@@ -222,7 +222,7 @@ The development support tools include functionalities such as chain data capture
 
 #### Examples
 
-The [examples/]('./examples) folder contains example applications.
+The [examples/](./examples) folder contains example applications.
 
 ### Troubleshooting
 
