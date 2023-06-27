@@ -7,9 +7,34 @@ import { extractTxWithEvents } from './extract.js';
 import { flattenBatch } from './flatten.js';
 import { mongoFilter, mongoFilterFrom } from './mongo-filter.js';
 import { ControlQuery, Criteria } from '../index.js';
+import { EventWithId, TxWithIdAndEvent } from '../types/interfaces.js';
+import { GenericEventWithId } from '../types/event.js';
 
 function isControlQuery(obj: ControlQuery | Criteria): obj is ControlQuery {
   return obj.change !== undefined;
+}
+
+function mapEventsWithContext() {
+  return (source: Observable<TxWithIdAndEvent>)
+  : Observable<EventWithId> => {
+    return source.pipe(mergeMap(x => {
+      const {
+        extrinsicId, blockNumber, blockPosition
+      } = (x as TxWithIdAndEvent).extrinsic;
+
+      return (x.events || []).map(
+        (event, extrinsicPosition) => {
+          return new GenericEventWithId(event, {
+            blockNumber,
+            // TODO review block pos in event id, remove?
+            blockPosition,
+            extrinsicId,
+            extrinsicPosition
+          });
+        }
+      );
+    }));
+  };
 }
 
 /**
@@ -31,20 +56,21 @@ export function filterEvents(
 
   return (source: Observable<SignedBlockExtended>)
     : Observable<Event> => {
-    return (source.pipe(
-      // Extract extrinsics with events
+    return source.pipe(
+      // Extracts extrinsics with events
       extractTxWithEvents(),
-      // Flatten batches if needed
+      // Flattens batches if needed
       flattenBatch(),
-      // Filter at extrinsic level
+      // Filters at the extrinsic level
       // mainly for success or failure
       mongoFilterFrom(extrinsicsCriteria),
-      // Map the related events
-      mergeMap(x => x.events || []),
-      // Filter over the events
+      // Maps the events with
+      // block and extrinsic context
+      mapEventsWithContext(),
+      // Filters over the events
       mongoFilter(eventsQuery),
-      // Multicast
+      // Share multicast
       share()
-    ));
+    );
   };
 }
