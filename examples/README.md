@@ -22,49 +22,45 @@ For example, you can run `filter-fee-events` as:
 <summary>output - click to expand</summary>
 
 ```javascript
-// ...omitted...
+// ...skip...
 {
-  eventId: '16134448-2',
-  extrinsicId: '16134448-2',
-  extrinsicPos: 6,
-  blockNumber: '16,134,448',
-  blockPos: 2,
-  method: 'Deposit',
-  section: 'balances',
-  index: '0x0507',
-  data: {
-    who: '12MgK2Sc8Rrh6DXS2gDrt7fWJ24eGeVb23NALbZLMw1grnkL',
-    amount: '31,863,304'
-  }
-}
-{
-  eventId: '16134538-2',
-  extrinsicId: '16134538-2',
-  extrinsicPos: 0,
-  blockNumber: '16,134,538',
-  blockPos: 2,
+  eventId: '16134446-2-0',
+  extrinsicId: '16134446-2',
+  extrinsicPosition: 0,
+  blockNumber: '16,134,446',
   method: 'Withdraw',
   section: 'balances',
   index: '0x0508',
   data: {
-    who: '15iLWC7Gqt2z5a9Vq2hjaw3VXkarkY5gAVdAkknV1khVhLck',
-    amount: '157,316,518'
+    who: '12xtAYsRUrmbniiWQqJtECiBQrMn8AypQcXhnQAc6RB6XkLW',
+    amount: '161,430,964'
   }
 }
 {
-  eventId: '16134538-2',
-  extrinsicId: '16134538-2',
-  extrinsicPos: 4,
-  blockNumber: '16,134,538',
-  blockPos: 2,
+  eventId: '16134446-2-4',
+  extrinsicId: '16134446-2',
+  extrinsicPosition: 4,
+  blockNumber: '16,134,446',
   method: 'Deposit',
   section: 'balances',
   index: '0x0507',
   data: {
     who: '13UVJyLnbVp9RBZYFwFGyDvVd1y27Tt8tkntv6Q7JVPhFsTB',
-    amount: '125,853,214'
+    amount: '129,144,771'
   }
 }
-// ...omitted...
+{
+  eventId: '16134446-2-6',
+  extrinsicId: '16134446-2',
+  extrinsicPosition: 6,
+  blockNumber: '16,134,446',
+  method: 'Deposit',
+  section: 'balances',
+  index: '0x0507',
+  data: {
+    who: '12YVhYTtGpTCSXRvPHyNjDK7y5p4J52ppBVJGjWh2PGrUe9r',
+    amount: '32,286,193'
+  }
+}
 ```
 </details>
