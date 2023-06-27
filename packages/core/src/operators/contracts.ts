@@ -46,28 +46,40 @@ export function contractMessages(abi: Abi, address: string ) {
   };
 }
 
+/**
+ * Returns an Observable that filters for contract instantiations based on the given code hash
+ * and decodes the contract constructor based on the provided ABI.
+ *
+ * @param api - The ApiPromise instance for the network.
+ * @param abi - The contract ABI.
+ * @param codeHash - The contract code hash.
+ *
+ * @returns An observable that emits the decoded contract constructor with associated block event and transaction.
+ */
 export function contractConstructors(api: ApiPromise, abi: Abi, codeHash: string ) {
   return (source: Observable<EventWithIdAndTx>)
   : Observable<ContractConstructorWithEventAndTx> => {
     return (source.pipe(
       // Filter contract instantiated events
-      mongoFilterFrom({
-        'section': 'contracts',
-        'method': 'Instantiated'
-      }),
+      filter((blockEvent: EventWithIdAndTx) =>
+        api.events.contracts.Instantiated.is(blockEvent)
+      ),
+      // Use concatMap to allow for async call to promise API to get contract code hash
+      // Map to contractCodeHash property to be used for filtering in the next step
+      // This is necessary as we cannot make an async call in rxjs `filter` operator
       concatMap(async (blockEvent: EventWithIdAndTx) => {
         let contractCodeHash = null;
-        if (api.events.contracts.Instantiated.is(blockEvent)) {
-          // We cast as any here to avoid importing `@polkadotjs/api-augment`
-          // as we want to keep the library side-effects-free
-          const { contract } = blockEvent.data as any;
+        // We cast as any below to avoid importing `@polkadotjs/api-augment`
+        // as we want to keep the library side-effects-free
+        const { contract } = blockEvent.data as any;
 
-          const contractInfo = ((await api.query.contracts.contractInfoOf(contract)) as any).unwrapOr(null);
+        // contractInfo is of type Option<PalletContractsStorageContractInfo>
+        const contractInfo = (await api.query.contracts.contractInfoOf(contract)) as any;
 
-          if (contractInfo !== null) {
-            contractCodeHash = contractInfo.codeHash.toString();
-          }
+        if (contractInfo.isSome) {
+          contractCodeHash = contractInfo.unwrap().codeHash.toString();
         }
+
         return {
           blockEvent,
           contractCodeHash
