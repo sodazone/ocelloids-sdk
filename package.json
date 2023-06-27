@@ -39,7 +39,8 @@
   },
   "workspaces": [
     "packages/*",
-    "apps"
+    "tools",
+    "examples"
   ],
   "scripts": {
     "build": "yarn workspaces foreach run build",
