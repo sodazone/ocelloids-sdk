@@ -31,11 +31,133 @@ With Ocelloids you can easily implement sophisticated multi-chain monitoring log
 ## Features
 
 * **Composable Reactive Streams** — Easily source, transform, and react to blockchain data using composable reactive streams.
-* **Powerful Query Operators** — Simplify data filtering with integrated operators that support complex queries in the Mongo query language, including support for big numbers.
+* **Powerful Query Operators** — Data filtering with integrated operators that support complex queries in the Mongo query language, including support for big numbers and advanced features such as dynamic queries.
 * **Flexible Type Conversions** — Seamlessly convert data into a terse queryable format.
 * **Abstraction of Common Patterns** — Simplify development and reduce boilerplate code by abstracting common patterns such as utility batch calls.
 * **Multi-Chain Support** — Interact with multiple networks.
 * **Pallet Use Cases** — Components designed for specific pallet use cases, such as tracking calls and events from the contracts pallet.
+
+## Usage
+
+Here's an example showcasing the usage of Ocelloids to filter out balance transfer event above a certain amount:
+
+```typescript
+import { WsProvider } from '@polkadot/api';
+
+import {
+  SubstrateApis,
+  blocksInRange,
+  filterEvents
+} from '@sodazone/ocelloids';
+
+const apis = new SubstrateApis({
+  polkadot: {
+    provider: new WsProvider('wss://rpc.polkadot.io')
+  }
+});
+
+apis.rx.polkadot.pipe(
+  blocksInRange(16134439, 100, false),
+  filterEvents({
+    section: 'balances',
+    method: 'Transfer',
+    'data.amount': { $bn_gte: '2000000000000' }
+  })
+).subscribe(
+  x => console.log(x.toHuman())
+);
+```
+
+In the above example, the filterEvents operator is composed of the following stack:
+
+```typescript
+source.pipe(
+  // Extract extrinsics with events
+  extractTxWithEvents(),
+  
+  // Flatten batches if needed
+  flattenBatch(),
+  
+  // Filter at extrinsic level
+  // mainly for success or failure
+  mongoFilterFrom(extrinsicsCriteria),
+  
+  // Map the related events
+  mergeMap(x => x.events || []),
+  
+  // Filter over the events
+  mongoFilter(eventsCriteria),
+  
+  // Multicast
+  share()
+)
+```
+
+Now let's explore a more advanced example with a dynamic query that collects seen addresses, starting from ALICE:
+
+<details>
+<summary>Dynamic query example - click to expand</summary>
+
+```typescript
+import { WsProvider } from '@polkadot/api';
+import '@polkadot/api-augment';
+
+import {
+  SubstrateApis,
+  blocksInRange,
+  filterEvents,
+  ControlQuery
+} from '@sodazone/ocelloids';
+
+function transfersOf(addresses: string[]) {
+  return ControlQuery.from({
+    $and: [
+      { section: 'balances' },
+      { method: 'Transfer' },
+      {
+        $or: [
+          { 'data.from': { $in: addresses } },
+          { 'data.to': { $in: addresses } }
+        ]
+      }
+    ]
+  });
+}
+
+const apis = new SubstrateApis({
+  polkadot: {
+    provider: new WsProvider('wss://rpc.polkadot.io')
+  }
+});
+
+const seenAddresses = new Set<string>([ALICE]);
+let dynamicQuery = transfersOf([...seenAddresses]);
+
+apis.rx.polkadot.pipe(
+  blocksInRange(16134439, 100),
+  filterEvents(dynamicQuery)
+).subscribe(event => {
+  console.log('Event: ', event.toHuman());
+
+  if (apis.promise.polkadot.events.balances.Transfer.is(event) ) {
+    const transfer = event.data;
+    const from = transfer.from.toPrimitive();
+    const to = transfer.to.toPrimitive();
+
+    seenAddresses.add(from);
+    seenAddresses.add(to);
+
+    // Updates dynamic query, probably you want
+    // to update it only for new seen addresses
+    dynamicQuery.change(transfersOf([...seenAddresses]));
+  }
+});
+```
+</details>
+
+In this advanced example, we introduce the concept of a dynamic query.
+We initialize `seenAddresses` with `ALICE`, and the `dynamicQuery` with the initial filter.
+As new addresses are encountered, the dynamic query is updated.
 
 ## Development
 
@@ -72,7 +194,7 @@ yarn build
 
 The Ocelloids repository utilizes workspaces for modularization and organization.
 
-The repository contains two main folders: `packages` and `apps`.
+The repository contains two main folders: `packages`, `examples` and `tools`.
 
 #### Packages
 
@@ -92,11 +214,13 @@ Here is the high-level structure of the `packages/core` module source folder:
 
 The `packages/test` module includes network captured test data and mocks.
 
-#### Apps
+#### Tools
 
-The `apps` folder contains demonstration applications in the `apps/demo` directory and development support tools in the `apps/dev` directory.
+The development support tools include functionalities such as chain data capture to assist in the development of the SDK.
 
-These applications include functionalities such as chain data capture, providing useful features for development and showcasing the capabilities of the Ocelloids SDK.
+#### Examples
+
+The [examples/]('./examples) folder contains example applications.
 
 ### Troubleshooting
 
