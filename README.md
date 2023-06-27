@@ -46,7 +46,7 @@ import { WsProvider } from '@polkadot/api';
 
 import {
   SubstrateApis,
-  blocksInRange,
+  finalizedBlocks,
   filterEvents
 } from '@sodazone/ocelloids';
 
@@ -57,7 +57,7 @@ const apis = new SubstrateApis({
 });
 
 apis.rx.polkadot.pipe(
-  blocksInRange(16134439, 100, false),
+  finalizedBlocks(),
   filterEvents({
     section: 'balances',
     method: 'Transfer',
