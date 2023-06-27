@@ -21,11 +21,11 @@ Substrate monitoring SDK
 
 **Noun** ocelloid (_plural_ ocelloids)
 
-> (microbiology) a cellular structure found in unicellular microorganisms that is analogous in structure and function to eyes, which focus, process and detect light.
+>  “(microbiology) a cellular structure found in unicellular microorganisms that is analogous in structure and function to eyes, which focus, process and detect light.”
 
 ---
 
-Ocelloids is an open-source software development kit that provides a framework for building monitoring applications specifically designed for Substrate-based networks.
+Ocelloids is an open-source software development kit (SDK) that provides a framework for building monitoring applications specifically designed for Substrate-based networks.
 With Ocelloids you can easily implement sophisticated multi-chain monitoring logic.
 
 ## Features
@@ -33,12 +33,14 @@ With Ocelloids you can easily implement sophisticated multi-chain monitoring log
 * **Composable Reactive Streams** — Easily source, transform, and react to blockchain data using composable reactive streams.
 * **Powerful Query Operators** — Data filtering with integrated operators that support complex queries in the Mongo query language, including support for big numbers and advanced features such as dynamic queries.
 * **Flexible Type Conversions** — Seamlessly convert data into a terse queryable format.
-* **Extended Context Types** — Extends the base generic events and existrincs with contextual information such as position in block, block number, position in extrinsic, &c.
+* **Extended Context Types** — Extends the base generic events and existrincs with contextual information such as position in block, block number, position in extrinsic, etc.
 * **Abstraction of Common Patterns** — Simplify development and reduce boilerplate code by abstracting common patterns such as utility batch calls.
 * **Multi-Chain Support** — Interact with multiple networks.
 * **Pallet Use Cases** — Components designed for specific pallet use cases, such as tracking calls and events from the contracts pallet.
 
 ## Usage
+
+### Example: Filtering Balance Transfer Events
 
 Here's an example showcasing the usage of Ocelloids to filter out balance transfer events above a certain amount:
 
@@ -62,14 +64,35 @@ apis.rx.polkadot.pipe(
   filterEvents({
     section: 'balances',
     method: 'Transfer',
-    'data.amount': { $bn_gte: '2000000000000' }
+    'data.amount': { $bn_gte: '50000000000' }
   })
 ).subscribe(
   x => console.log(x.toHuman())
 );
 ```
 
-In the above example, the `filterEvents` operator is composed of the following stack:
+Output with contextual information:
+
+```javascript
+{
+  eventId: '16134479-5-1',
+  extrinsicId: '16134479-5',
+  extrinsicPosition: 1,
+  blockNumber: '16,134,479',
+  method: 'Transfer',
+  section: 'balances',
+  index: '0x0502',
+  data: {
+    from: '14GuP6QAfK9uwo3MQ9LrcmEqttcrtoNfDaSHn2BVaYcJJBg6',
+    to: '12But7r26e2UwZkSYC8bU5nQdyfqWXswZEwS1tbH9nD8CXvK',
+    amount: '54,719,854,400'
+  }
+}
+```
+
+The event identifier follows the format `<block number>-<extrinsic position in block>-<event position in extrinsic>`. 
+
+The `filterEvents` operator used in the example is composed of the following stack:
 
 ```typescript
 source.pipe(
@@ -95,7 +118,7 @@ source.pipe(
 )
 ```
 
-### Dynamic Query Example
+### Example: Dynamic Query
 
 Now let's explore a more advanced example with a dynamic query that collects seen addresses, starting from ALICE address:
 
@@ -167,30 +190,26 @@ As new addresses are encountered, the dynamic query is updated.
 
 ### Requirements
 
+To contribute to the development of Ocelloids, ensure that you have the following requirements installed:
+
 * [Node.js](https://nodejs.org/en/) >=18.14
 * [yarn](https://yarnpkg.com/getting-started/install) >=3.x.x
 
 ### Install
 
-Install the latest LTS version of [Node.js](https://nodejs.org/en/).
+To set up the development environment, follow these steps:
 
-At the root of the project:
-
-1. Enable [Corepack](https://github.com/nodejs/corepack#how-to-install)
-
-```
+1. Install the latest LTS version of [Node.js](https://nodejs.org/en/).
+2. Enable [Corepack](https://github.com/nodejs/corepack#how-to-install) at the root of the project:
+```shell
 corepack enable
 ```
-
-2. Install dependencies
-
-```
+3. Install dependencies:
+```shell
 yarn install
 ```
-
-3. Build Ocelloids libraries
-
-```
+4. Build Ocelloids libraries:
+```shell
 yarn build
 ```
 
@@ -228,7 +247,7 @@ The [examples/](https://github.com/sodazone/ocelloids/tree/main/examples) folder
 
 ### Troubleshooting
 
-#### VS Code
+#### Visual Studio Code
 
 If you encounter the issue of `@sodazone/ocelloids-test` being marked as unresolved 
 in the `spec` test files after building the project, you can resolve it by following these steps:
@@ -236,4 +255,5 @@ in the `spec` test files after building the project, you can resolve it by follo
 * Open any typescript file of the project.
 * Run the command "TypeScript: Reload project" to reload the TypeScript project configuration.
 
+For further assistance or troubleshooting, please consult the project's documentation or reach out to the Ocelloids community.
 
