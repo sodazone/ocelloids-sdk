@@ -1,30 +1,28 @@
-# Demo Applications
+## Filter Extrinsics
 
-The demo applications have shebangs to be executed with [ts-node-esm](https://typestrong.org/ts-node/) or using [bun](https://bun.sh) to execute the npm bins.
-
-## XT Watch
-
-`xtwatch` is a demo application that allows you to filter out extrinsics from Substrate networks.
+This is a demo application that allows you to filter out extrinsics from Substrate networks.
 It utilizes [mongo query language](https://www.mongodb.com/docs/manual/tutorial/query-documents/) filters, defined using [hjson](https://github.com/hjson).
 You can find examples of filters in the [filters/](./filters/) directory.
 The application expects the filter to be provided from standard input.
 
 ### Usage
 
-To execute `xtwatch`, navigate to the `ocelloids/apps` folder.
+To execute the example, navigate to the `ocelloids/examples/filter-extrinsics` folder.
 
 Get timestamp extrinsics from Polkadot and Kusama:
 ```shell
-❯ ./demo/xtwatch.ts -v -u wss://rpc.polkadot.io -u wss://kusama-rpc.polkadot.io < demo/filters/timestamp.hjson
+❯ ./main.ts -v -u wss://rpc.polkadot.io -u wss://kusama-rpc.polkadot.io < filters/timestamp.hjson
 ```
 <details>
 <summary>output - click to expand</summary>
 
-```
+```shell
 > Endpoints: [ 'wss://rpc.polkadot.io', 'wss://kusama-rpc.polkadot.io' ]
 > Using filter: {
   "call.section": "timestamp"
 }
+```
+```json
 {"network":0,"extrinsicId":"16091931-0","blockNumber":"16,091,931","position":0,"isSigned":false,"method":{"args":{"now":"1,687,514,472,000"},"method":"set","section":"timestamp"}}
 {"network":1,"extrinsicId":"18481136-0","blockNumber":"18,481,136","position":0,"isSigned":false,"method":{"args":{"now":"1,687,514,472,000"},"method":"set","section":"timestamp"}}
 {"network":1,"extrinsicId":"18481137-0","blockNumber":"18,481,137","position":0,"isSigned":false,"method":{"args":{"now":"1,687,514,478,000"},"method":"set","section":"timestamp"}}
@@ -34,15 +32,15 @@ Get timestamp extrinsics from Polkadot and Kusama:
 ```
 </details>
 
-Get balances extrinsics and pipe to jq:
+Get balances extrinsics and pipe to jq, from `ocelloids/examples` execute:
 
 ```shell
-❯ bunx xtwatch < demo/filters/balances.hjson | jq .
+❯ bun run filter-extrinsics/main.ts < filter-extrinsics/filters/balances.hjson | jq .
 ```
 <details>
 <summary>output - click to expand</summary>
 
-```
+```json
 {
   "network": 0,
   "extrinsicId": "16091979-2",
@@ -101,7 +99,6 @@ Get balances extrinsics and pipe to jq:
   },
   "tip": "0"
 }
-...omitted
+# ...omitted
 ```
 </details>
-

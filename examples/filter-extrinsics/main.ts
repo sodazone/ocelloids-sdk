@@ -56,9 +56,9 @@ function watcher({ urls, verbose }) {
 }
 
 const argv = yargs(hideBin(process.argv))
-  .usage('Usage: xtwatch <url> [options]')
-  .example('xtwatch < filters/balances.hjson', 'use balances.hjson filter')
-  .example('xtwatch < filters/balances.hjson | jq .', 'pipe out to jq')
+  .usage('Usage: filter-xt <url> [options]')
+  .example('filter-xt < filters/balances.hjson', 'use balances.hjson filter')
+  .example('filter-xt < filters/balances.hjson | jq .', 'pipe out to jq')
   .option('u', {
     type: 'array',
     alias: 'url',

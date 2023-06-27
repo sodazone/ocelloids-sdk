@@ -1,0 +1,26 @@
+{
+  "name": "@sodazone/ocelloids-examples",
+  "version": "0.0.1-dev.1",
+  "description": "Ocelloids examples.",
+  "private": true,
+  "type": "module",
+  "author": "soda <projects@soda.zone>",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "directory": "examples",
+    "url": "https://github.com/sodazone/ocelloids.git"
+  },
+  "bin": {
+    "filter-xt": "filter-exstrinsics/main.ts",
+    "filter-transfers": "filter-transfers/main.ts",
+    "follow-transfers": "follow-transfers/main.ts",
+    "watch-transfers": "balance-transfers/main.ts"
+  },
+  "dependencies": {
+    "graph-data-structure": "^3.3.0",
+    "hjson": "^3.2.2",
+    "rxjs": "^7.8.1",
+    "yargs": "^17.7.2"
+  }
+}
