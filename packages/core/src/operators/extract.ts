@@ -126,18 +126,20 @@ export function extractEvents() {
 }
 
 /**
- * Operator to extract events with associated extrinsic from blocks.
- * Takes an `Observable<SignedBlockExtended>` as input and emits each event along with its associated extrinsic.
- * The emitted events are expanded with additional contextual information, including block number, position in block,
+ * Operator to extract events with associated extrinsic from extrinsics with id.
+ * Takes an `Observable<TxWithIdAndEvent>` as input and emits each event along with its associated extrinsic.
+ * The emitted events are expanded with additional contextual information, including block number,
  * extrinsic ID, and position in extrinsic.
  *
- * @returns An operator function that transforms an Observable of `SignedBlockExtended` into an Observable of `EventWithIdAndTx`.
+ * @returns An operator function that transforms an Observable of `TxWithIdAndEvent` into an Observable of `EventWithIdAndTx`.
  *
  * * ## Example
  * ```ts
  * // Subscribe to new events on Polkadot
  * apis.rx.polkadot.pipe(
  *   blocks(),
+ *   extractTxWithEvents(),
+ *   flattenBatch(),
  *   extractEventsWithTx()
  * ).subscribe(record => console.log(`New event on Polkadot: ${record.data.toHuman()}`));
  * ```
@@ -145,34 +147,22 @@ export function extractEvents() {
  * @see {@link EventWithIdAndTx}
  */
 export function extractEventsWithTx() {
-  return (source: Observable<SignedBlockExtended>): Observable<EventWithIdAndTx> => {
+  return (source: Observable<TxWithIdAndEvent>): Observable<EventWithIdAndTx> => {
     return source.pipe(
-      concatMap(({ block, extrinsics, events }) => {
-        const blockNumber = block.header.number;
+      concatMap(({ extrinsic, events }) => {
+        const blockNumber = extrinsic.blockNumber;
         const eventRecords: EventWithIdAndTx[] = [];
 
-        for (const [blockPosition, record] of events.entries()) {
-          const { phase, event } = record;
+        for (const [extrinsicPosition, event] of events.entries()) {
+          const eventWithIdAndTx = new GenericEventWithId(event, {
+            blockNumber,
+            extrinsicPosition,
+            extrinsicId: extrinsic.extrinsicId
+          }) as EventWithIdAndTx;
 
-          if (phase.isApplyExtrinsic) {
-            const extrinsicPositionInBlock = phase.asApplyExtrinsic.toNumber();
-            const xt = extrinsics[extrinsicPositionInBlock];
-            const extrinsicPosition = xt.events.findIndex(e => e.eq(event));
-            const extrinsicId = `${blockNumber}-${extrinsicPositionInBlock}`;
+          eventWithIdAndTx.extrinsic = extrinsic;
 
-            const eventWithIdAndTx = new GenericEventWithId(event, {
-              blockNumber,
-              extrinsicPosition,
-              extrinsicId
-            }) as EventWithIdAndTx;
-
-            eventWithIdAndTx.extrinsic = new GenericExtrinsicWithId(xt.extrinsic, {
-              blockNumber,
-              blockPosition: extrinsicPositionInBlock
-            });
-
-            eventRecords.push(eventWithIdAndTx);
-          }
+          eventRecords.push(eventWithIdAndTx);
         }
 
         return eventRecords;
