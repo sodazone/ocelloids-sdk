@@ -29,7 +29,6 @@ const extrinsics = testContractExtrinsics.map(
 const extrinsicId = `${blockNumber.toString()}-0`;
 const events = testContractEvents.map((ev, blockPosition) => new GenericEventWithId(ev, {
   blockNumber,
-  blockPosition,
   extrinsicPosition: blockPosition,
   extrinsicId
 }));
