@@ -222,7 +222,7 @@ The development support tools include functionalities such as chain data capture
 
 #### Examples
 
-The [examples/](./examples) folder contains example applications.
+The [examples/](https://github.com/sodazone/ocelloids/tree/main/examples) folder contains example applications.
 
 ### Troubleshooting
 
