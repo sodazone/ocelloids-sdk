@@ -68,7 +68,7 @@ apis.rx.polkadot.pipe(
 );
 ```
 
-In the above example, the filterEvents operator is composed of the following stack:
+In the above example, the `filterEvents` operator is composed of the following stack:
 
 ```typescript
 source.pipe(
@@ -95,7 +95,7 @@ source.pipe(
 
 ### Dynamic Query Example
 
-Now let's explore a more advanced example with a dynamic query that collects seen addresses, starting from ALICE:
+Now let's explore a more advanced example with a dynamic query that collects seen addresses, starting from ALICE address:
 
 <details>
 <summary>Dynamic query example - click to expand</summary>
@@ -158,7 +158,7 @@ apis.rx.polkadot.pipe(
 </details>
 
 In this advanced example, we introduce the concept of a dynamic query.
-We initialize `seenAddresses` with `ALICE`, and the `dynamicQuery` with the initial filter.
+We initialize `seenAddresses` with ALICE, and the `dynamicQuery` with the initial filter.
 As new addresses are encountered, the dynamic query is updated.
 
 ## Development
