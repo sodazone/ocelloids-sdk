@@ -19,7 +19,7 @@ function mapEventsWithContext() {
   : Observable<EventWithId> => {
     return source.pipe(mergeMap(x => {
       const {
-        extrinsicId, blockNumber, blockPosition
+        extrinsicId, blockNumber
       } = (x as TxWithIdAndEvent).extrinsic;
 
       return (x.events || []).map(
