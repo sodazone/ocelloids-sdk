@@ -47,29 +47,38 @@ function groupBatchEvents(events: Event[]): BatchEvents[] {
 function flattenBatchCalls(batchTx: TxWithIdAndEvent): TxWithIdAndEvent[] {
   const { extrinsic, events } = batchTx;
   const batchEvents = groupBatchEvents(events);
+  // We assume that batch events are always emitted first
+  const batchCompleteIndex = events.findIndex(
+    e => e.method.toLowerCase() === 'batchcompleted'
+  );
+  const outerTxEvents = events.slice(batchCompleteIndex);
 
-  return batchTx.extrinsic.args.reduce((flattedTxWithEvent: TxWithIdAndEvent[], arg) => {
-    const calls = arg as unknown as CallBase<AnyTuple, FunctionMetadataLatest>[];
+  return batchTx.extrinsic.args.reduce(
+    (flattedTxWithEvent: TxWithIdAndEvent[], arg) => {
+      const calls = arg as unknown as CallBase<AnyTuple, FunctionMetadataLatest>[];
 
-    const flatted = calls.map((call, index) => {
-      const flatCall = new GenericCall(extrinsic.registry, call);
-      const { blockNumber, blockPosition } = extrinsic;
-      const flatExtrinsic = new GenericExtrinsic(extrinsic.registry, {
-        method: flatCall,
-        signature: extrinsic.inner.signature
+      const flatted = calls.map((call, index) => {
+        const flatCall = new GenericCall(extrinsic.registry, call);
+        const { blockNumber, blockPosition } = extrinsic;
+        const flatExtrinsic = new GenericExtrinsic(extrinsic.registry, {
+          method: flatCall,
+          signature: extrinsic.inner.signature
+        });
+        return {
+          ...batchTx,
+          events: batchEvents[index],
+          extrinsic: new GenericExtrinsicWithId(flatExtrinsic, {
+            blockNumber,
+            blockPosition
+          })
+        };
       });
-      return {
-        ...batchTx,
-        events: batchEvents[index],
-        extrinsic: new GenericExtrinsicWithId(flatExtrinsic, {
-          blockNumber,
-          blockPosition
-        })
-      };
-    });
 
-    return flattedTxWithEvent.concat(flatted);
-  }, [batchTx]);
+      return flattedTxWithEvent.concat(flatted);
+    }, [{
+      extrinsic,
+      events: outerTxEvents
+    }]);
 }
 
 /**
