@@ -1915,19 +1915,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sodazone/ocelloids-apps@workspace:apps":
+"@sodazone/ocelloids-examples@workspace:examples":
   version: 0.0.0-use.local
-  resolution: "@sodazone/ocelloids-apps@workspace:apps"
+  resolution: "@sodazone/ocelloids-examples@workspace:examples"
   dependencies:
-    cbor-x: ^1.5.3
-    citty: ^0.1.1
+    graph-data-structure: ^3.3.0
     hjson: ^3.2.2
     rxjs: ^7.8.1
     yargs: ^17.7.2
   bin:
-    capture: dev/capture.ts
-    cdump: dev/cdump.ts
-    xtwatch: demo/xtwatch.ts
+    filter-xt: filter-exstrinsics/main.ts
+    follow-transfers: follow-transfers/main.ts
+    watch-transfers: balance-transfers/main.ts
   languageName: unknown
   linkType: soft
 
@@ -1940,6 +1939,18 @@ __metadata:
     cbor-x: ^1.5.3
     rxjs: ^7.8.1
     shx: ^0.3.4
+  languageName: unknown
+  linkType: soft
+
+"@sodazone/ocelloids-tools@workspace:tools":
+  version: 0.0.0-use.local
+  resolution: "@sodazone/ocelloids-tools@workspace:tools"
+  dependencies:
+    cbor-x: ^1.5.3
+    citty: ^0.1.1
+  bin:
+    capture: src/capture.ts
+    cdump: src/cdump.ts
   languageName: unknown
   linkType: soft
 
@@ -6190,6 +6201,13 @@ __metadata:
   version: 4.2.11
   resolution: "graceful-fs@npm:4.2.11"
   checksum: ac85f94da92d8eb6b7f5a8b20ce65e43d66761c55ce85ac96df6865308390da45a8d3f0296dd3a663de65d30ba497bd46c696cc1e248c72b13d6d567138a4fc7
+  languageName: node
+  linkType: hard
+
+"graph-data-structure@npm:^3.3.0":
+  version: 3.3.0
+  resolution: "graph-data-structure@npm:3.3.0"
+  checksum: b6721b7a53a673c1d839427b2336ab6ef85db582cf8ed2099e2a7ab3650a6d64530d502f06fa3fd0cbd2e19412ba6043650411e89d0e817b64490e224c2c5e15
   languageName: node
   linkType: hard
 
