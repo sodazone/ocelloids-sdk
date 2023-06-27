@@ -12,8 +12,8 @@
     "url": "https://github.com/sodazone/ocelloids.git"
   },
   "bin": {
-    "filter-xt": "filter-exstrinsics/main.ts",
     "filter-transfers": "filter-transfers/main.ts",
+    "filter-xt": "filter-exstrinsics/main.ts",
     "follow-transfers": "follow-transfers/main.ts",
     "watch-transfers": "balance-transfers/main.ts"
   },
