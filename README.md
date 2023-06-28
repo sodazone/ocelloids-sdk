@@ -36,7 +36,7 @@ With Ocelloids you can easily implement sophisticated multi-chain monitoring log
 * **Extended Context Types** — Extends the base generic events and existrincs with contextual information such as position in block, block number, position in extrinsic, etc.
 * **Abstraction of Common Patterns** — Simplify development and reduce boilerplate code by abstracting common patterns such as utility batch calls.
 * **Multi-Chain Support** — Interact with multiple networks.
-* **Pallet Specific Modules** — Components designed for specific pallet use cases, such as tracking calls and events from the contracts pallet.
+* **Pallet-Specific Modules** — Modules designed to handle use cases related to a particular pallet, such as tracking calls and events from the contracts pallet.
 
 ## Usage
 
