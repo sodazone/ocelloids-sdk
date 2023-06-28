@@ -1915,6 +1915,14 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@sodazone/ocelloids-contracts@workspace:packages/pallets/contracts":
+  version: 0.0.0-use.local
+  resolution: "@sodazone/ocelloids-contracts@workspace:packages/pallets/contracts"
+  dependencies:
+    "@polkadot/api-contract": ^10.9.1
+  languageName: unknown
+  linkType: soft
+
 "@sodazone/ocelloids-examples@workspace:examples":
   version: 0.0.0-use.local
   resolution: "@sodazone/ocelloids-examples@workspace:examples"
@@ -1929,6 +1937,7 @@ __metadata:
     filter-exstrinsics: filter-exstrinsics/main.ts
     filter-fee-events: filter-fee-events/main.ts
     follow-transfer-events: follow-transfer-events/main.ts
+    watch-contracts: watch-contracts/main.ts
     watch-transfer-events: watch-transfer-events/main.ts
   languageName: unknown
   linkType: soft
@@ -1962,7 +1971,6 @@ __metadata:
   resolution: "@sodazone/ocelloids@workspace:packages/core"
   dependencies:
     "@polkadot/api": ^10.9.1
-    "@polkadot/api-contract": ^10.9.1
     "@polkadot/util": ^12.3.2
     mingo: ^6.4.1
     rxjs: ^7.8.1

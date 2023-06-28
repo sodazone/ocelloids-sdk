@@ -11,13 +11,15 @@ import { Abi } from '@polkadot/api-contract';
 
 import { from } from 'rxjs';
 
+import { types, mongoFilterFrom } from '@sodazone/ocelloids';
+
 import { contractConstructors, contractEvents, contractMessages } from './contracts.js';
-import { mongoFilterFrom } from './mongo-filter.js';
-import { ContractMessageWithTx, EventWithIdAndTx, GenericEventWithId, enhanceTxWithId } from '../types/index.js';
+import { ContractMessageWithTx } from '../types/interfaces.js';
+import { contracts } from '../converters/contracts.js';
 
 const blockNumber = testContractBlocks[0].block.header.number;
 const extrinsics = testContractExtrinsics.map(
-  (xt, blockPosition) => enhanceTxWithId(
+  (xt, blockPosition) => types.enhanceTxWithId(
     {
       blockNumber,
       blockPosition
@@ -27,17 +29,18 @@ const extrinsics = testContractExtrinsics.map(
 );
 
 const extrinsicId = `${blockNumber.toString()}-0`;
-const events = testContractEvents.map((ev, blockPosition) => new GenericEventWithId(ev, {
+const events = testContractEvents.map((ev, blockPosition) => new types.GenericEventWithId(ev, {
   blockNumber,
   extrinsicPosition: blockPosition,
   extrinsicId
 }));
 const instantiateTx = extrinsics[2];
-const eventsFromInstantiateTx = events.splice(0, 13);
+const eventsFromInstantiateTx = events.splice(2, 14);
 const testEventsWithIdAndTx = eventsFromInstantiateTx.map(ev => {
-  (ev as EventWithIdAndTx).extrinsic = instantiateTx.extrinsic;
-  return ev as EventWithIdAndTx;
+  (ev as types.EventWithIdAndTx).extrinsic = instantiateTx.extrinsic;
+  return ev as types.EventWithIdAndTx;
 });
+// console.log('test events with tx -> ', testEventsWithIdAndTx.map(ev => ev.toHuman()));
 
 describe('Wasm contracts operator', () => {
   let testAbi: Abi;
@@ -74,13 +77,19 @@ describe('Wasm contracts operator', () => {
       const testPipe = contractMessages(testAbi, testContractAddress)(from(extrinsics));
 
       testPipe.pipe(
-        mongoFilterFrom({
-          'args.value': { $bn_gt: 800000000 },
-          'message.identifier': 'transfer'
-        })
-      ).subscribe(found);
-
-      expect(found).toBeCalledTimes(1);
+        mongoFilterFrom(
+          {
+            'args.value': { $bn_gt: 800000000 },
+            'message.identifier': 'transfer'
+          },
+          contracts
+        )
+      ).subscribe({
+        next: found,
+        complete: () => {
+          expect(found).toBeCalledTimes(1);
+        }
+      });
     });
   });
 
@@ -91,7 +100,8 @@ describe('Wasm contracts operator', () => {
 
       jest.spyOn(mockPromiseApi.query.contracts, 'contractInfoOf')
         .mockResolvedValue({
-          unwrapOr: () => ({
+          isSome: () => true,
+          unwrap: () => ({
             codeHash
           })
         } as any);
@@ -114,42 +124,39 @@ describe('Wasm contracts operator', () => {
 
   describe('contractEvents', () => {
     it('should emit decoded contract events', () => {
-      const expectedContractEvents = [
-        {
-          identifier: 'Transfer',
-          index: 0
-        },
-        {
-          identifier: 'Approval',
-          index: 1
-        }
-      ];
-      const testPipe = contractEvents(testAbi, testContractAddress)(from(events));
+      const found = jest.fn();
+
+      const testPipe = contractEvents(testAbi, testContractAddress)(from(testEventsWithIdAndTx));
       let index = 0;
 
       testPipe.subscribe({
         next: (result) => {
+          found();
           expect(result.blockEvent).toBeDefined();
           expect(result.blockEvent.eventId).toBeDefined();
-          expect(result.event.identifier).toBe(expectedContractEvents[index].identifier);
-          expect(result.event.index).toBe(expectedContractEvents[index].index);
+          expect(result.blockEvent.eventId).toBe('2841323-0-9');
+          expect(result.event.identifier).toBe('Transfer');
+          expect(result.event.index).toBe(0);
           index++;
         },
         complete: () => {
-          expect(index).toBe(2);
+          expect(found).toBeCalledTimes(1);
         }
       });
     });
 
     it('should work with mongoFilter', () => {
       const found = jest.fn();
-      const testPipe = contractEvents(testAbi, testContractAddress)(from(events));
+      const testPipe = contractEvents(testAbi, testContractAddress)(from(testEventsWithIdAndTx));
 
       testPipe.pipe(
-        mongoFilterFrom({
-          'args.value': { $bn_gt: 800000000 },
-          'event.identifier': 'Transfer'
-        })
+        mongoFilterFrom(
+          {
+            'args.value': { $bn_gt: 800000000 },
+            'event.identifier': 'Transfer'
+          },
+          contracts
+        )
       ).subscribe({
         next: found,
         complete: () => {

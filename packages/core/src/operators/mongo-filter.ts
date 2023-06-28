@@ -1,8 +1,8 @@
-import { BehaviorSubject, Observable, Subject, filter, switchMap } from 'rxjs';
+import { BehaviorSubject, Observable, filter, tap } from 'rxjs';
 import { Query } from 'mingo';
 
 import { ControlQuery, Criteria } from '../index.js';
-import { toNamedPrimitive } from '../converters/index.js';
+import { Converter, base } from '../converters/index.js';
 
 /**
  * Applies a MongoDB query language filter to an observable stream of data.
@@ -28,7 +28,10 @@ import { toNamedPrimitive } from '../converters/index.js';
  * @see {@link ControlQuery}
  * @see {@link [Mongo Documentation](https://www.mongodb.com/docs/manual/tutorial/query-documents/)}
  */
-export function mongoFilter<T>(query: BehaviorSubject<Query>) {
+export function mongoFilter<T>(
+  query: BehaviorSubject<Query>,
+  converter: Converter = base
+) {
   /**
    * Returns a filtered observable stream based on the provided query.
    * @param source The observable source to be filtered.
@@ -39,9 +42,10 @@ export function mongoFilter<T>(query: BehaviorSubject<Query>) {
     // we do not want to reset the outter observables.
     // So, we just use the current value from the behavior subject.
     return source.pipe(
+      // tap(x => console.log('MONGO FILTER: ', converter.toNamedPrimitive(x))),
       filter(
         record => query.value.test(
-          toNamedPrimitive(record)
+          converter.toNamedPrimitive(record)
         )
       )
     );
@@ -55,6 +59,9 @@ export function mongoFilter<T>(query: BehaviorSubject<Query>) {
  * @returns A function that takes an observable source and returns a filtered observable stream.
  * @see {@link mongoFilter}
  */
-export function mongoFilterFrom<T>(criteria: Criteria) {
-  return mongoFilter<T>(ControlQuery.from(criteria));
+export function mongoFilterFrom<T>(
+  criteria: Criteria,
+  converter: Converter = base
+) {
+  return mongoFilter<T>(ControlQuery.from(criteria), converter);
 }

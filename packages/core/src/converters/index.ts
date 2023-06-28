@@ -1,6 +1,7 @@
 /**
- * Chain data types converters.
+ * Chain data types base converters.
+ * Only for...
  *
  * @module
  */
-export * from './substrate-converters.js';
+export * from './base.js';

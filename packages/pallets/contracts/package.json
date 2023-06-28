@@ -1,7 +1,7 @@
 {
-  "name": "@sodazone/ocelloids",
+  "name": "@sodazone/ocelloids-contracts",
   "version": "0.0.1-dev.1",
-  "description": "Software development kit for building monitoring applications for Substrate networks.",
+  "description": "Contracts pallet support.",
   "main": "./lib/index.cjs",
   "module": "./lib/index.js",
   "types": "./lib/index.d.ts",
@@ -15,14 +15,11 @@
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "directory": "packages/core",
+    "directory": "packages/pallets/contracts",
     "url": "https://github.com/sodazone/ocelloids.git"
   },
   "dependencies": {
-    "@polkadot/api": "^10.9.1",
-    "@polkadot/util": "^12.3.2",
-    "mingo": "^6.4.1",
-    "rxjs": "^7.8.1"
+    "@polkadot/api-contract": "^10.9.1"
   },
   "files": [
     "lib",

@@ -38,7 +38,7 @@
     "url": "https://github.com/sodazone/ocelloids.git"
   },
   "workspaces": [
-    "packages/*",
+    "packages/**/*",
     "tools",
     "examples"
   ],

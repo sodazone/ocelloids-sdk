@@ -19,7 +19,6 @@
  *
  * @module
  */
-export * from './contracts.js';
 export * from './flatten.js';
 export * from './extract.js';
 export * from './filter.js';

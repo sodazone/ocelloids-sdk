@@ -9,6 +9,7 @@
 "lightHighlightTheme": "github-light",
 "entryPointStrategy": "packages",
 "entryPoints": [
-    "packages/core"
+    "packages/core",
+    "packages/pallets/*"
 ]
 }

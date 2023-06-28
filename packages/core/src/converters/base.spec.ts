@@ -1,11 +1,11 @@
 import { testBlocks, testBlocksFrom } from '@sodazone/ocelloids-test';
 
-import { toNamedPrimitive, toNamedPrimitives } from './substrate-converters.js';
+import { base } from './base.js';
 
 describe('substrate converters', () => {
   it('should convert an extended signed block', () => {
     const b = testBlocks[0];
-    const c = toNamedPrimitive(b) as any;
+    const c = base.toNamedPrimitive(b) as any;
 
     expect(c).toBeDefined();
     expect(c.block.header.extrinsicsRoot)
@@ -17,7 +17,7 @@ describe('substrate converters', () => {
       block: testBlocks[0].block,
       justifications: testBlocks[0].justifications
     };
-    const c = toNamedPrimitive(b) as any;
+    const c = base.toNamedPrimitive(b) as any;
 
     expect(c).toBeDefined();
     expect(c.block.header.extrinsicsRoot)
@@ -26,7 +26,7 @@ describe('substrate converters', () => {
 
   it('should convert a block', () => {
     const b = testBlocks[0].block;
-    const c = toNamedPrimitive(b) as any;
+    const c = base.toNamedPrimitive(b) as any;
 
     expect(c).toBeDefined();
     expect(c.header.extrinsicsRoot)
@@ -35,14 +35,14 @@ describe('substrate converters', () => {
 
   it('should convert all the test blocks', () => {
     for (let i = 0; i < testBlocks.length; i++) {
-      const b = toNamedPrimitive(testBlocks[i]) as any;
+      const b = base.toNamedPrimitive(testBlocks[i]) as any;
       expect(b.block.hash).toBeDefined();
     }
   });
 
   it('should convert an array of events', () => {
     const b = testBlocks[0];
-    const c = toNamedPrimitives(b.events)[0] as any;
+    const c = base.toNamedPrimitives(b.events)[0] as any;
     const { section, method, data: {
       dispatchInfo: { weight, paysFee }
     }} = c.event;
@@ -55,7 +55,7 @@ describe('substrate converters', () => {
 
   it('should convert an array of events passing a single value', () => {
     const b = testBlocks[0];
-    const c = toNamedPrimitives(b.events[0])[0];
+    const c = base.toNamedPrimitives(b.events[0])[0];
 
     expect(c).toBeDefined();
     expect(c.event).toBeDefined();
@@ -63,7 +63,7 @@ describe('substrate converters', () => {
 
   it('should convert batch calls', () => {
     const batchCall = testBlocks[1].extrinsics[2];
-    const xt = toNamedPrimitive(batchCall) as any;
+    const xt = base.toNamedPrimitive(batchCall) as any;
     const { call: {
       method, section, args
     }} = xt.extrinsic;
@@ -80,7 +80,7 @@ describe('substrate converters', () => {
 
   it('should throw error for types without converters', () => {
     expect(() => {
-      const _ = toNamedPrimitive({
+      const _ = base.toNamedPrimitive({
         yes: true,
         some: 1
       });
@@ -89,7 +89,7 @@ describe('substrate converters', () => {
 
   it('should convert big numbers to strings', () => {
     const b = testBlocksFrom('pk14435209.cbor.bin')[0];
-    const c = toNamedPrimitive(b) as any;
+    const c = base.toNamedPrimitive(b) as any;
 
     expect(typeof c.extrinsics[2].extrinsic.call.args.value).toBe('string');
   });

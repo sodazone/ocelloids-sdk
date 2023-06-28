@@ -1,9 +1,8 @@
 import { EventRecord, Event, Extrinsic, SignedBlock, Block, FunctionMetadataLatest } from '@polkadot/types/interfaces';
-import type { AnyJson, CallBase, AnyTuple, Codec } from '@polkadot/types-codec/types';
+import type { AnyJson, CallBase, AnyTuple } from '@polkadot/types-codec/types';
 import type { TxWithEvent, SignedBlockExtended } from '@polkadot/api-derive/types';
-import { AbiParam, DecodedEvent, DecodedMessage } from '@polkadot/api-contract/types';
 
-import { ContractEventWithBlockEvent, ContractMessageWithTx, ExtrinsicWithId } from '../types/index.js';
+import { ExtrinsicWithId } from '../types/index.js';
 
 /**
  * Type guards for identifying specific objects.
@@ -45,22 +44,6 @@ function isBlock(object: any): object is Block {
   return object.header !== undefined && object.extrinsics !== undefined;
 }
 
-function isContractMessage(object: any): object is DecodedMessage {
-  return object.args !== undefined && object.message !== undefined;
-}
-
-function isContractMessageWithTx(object: any): object is ContractMessageWithTx {
-  return isExtrinsicWithId(object) && isContractMessage(object);
-}
-
-function isContractEvent(object: any): object is DecodedEvent {
-  return object.args !== undefined && object.event !== undefined;
-}
-
-function isContractEventWithBlockEvent(object: any): object is ContractEventWithBlockEvent {
-  return object.blockEvent !== undefined && isContractEvent(object);
-}
-
 /**
  * Maps the `Event` data names to its corresponding values.
  */
@@ -81,7 +64,7 @@ function eventNamesToPrimitive({ data }: Event) {
 /**
  * Converts an `Event` object to a primitive representation with named fields.
  */
-function eventToNamedPrimitive(event: Event) {
+export function eventToNamedPrimitive(event: Event) {
   return {
     section: event.section,
     method: event.method,
@@ -105,7 +88,7 @@ function eventRecordToNamedPrimitive(
 /**
  * Converts the arguments of a `Call` object to a primitive representation with named fields.
  */
-export function callBaseToPrimitive({ argsDef, args, registry }: CallBase<AnyTuple, FunctionMetadataLatest>) {
+function callBaseToPrimitive({ argsDef, args, registry }: CallBase<AnyTuple, FunctionMetadataLatest>) {
   const json: Record<string, AnyJson> = {};
   const keys = Object.keys(argsDef);
 
@@ -121,38 +104,6 @@ export function callBaseToPrimitive({ argsDef, args, registry }: CallBase<AnyTup
     } else {
       json[argName] = args[i].toPrimitive();
     }
-  }
-
-  return json;
-}
-
-/**
- * Converts the arguments of a `Call` object to its Uint8Array representation with named fields.
- */
-export function callBaseToU8a({ argsDef, args }: CallBase<AnyTuple, FunctionMetadataLatest>) {
-  const json: Record<string, Uint8Array> = {};
-  const keys = Object.keys(argsDef);
-
-  for (let i = 0; i < keys.length; i++) {
-    json[keys[i]] = args[i].toU8a();
-  }
-
-  return json;
-}
-
-/**
- * Maps the `Event` data names to its corresponding Uint8Array representations.
- * We pass the parameter `isBare=true` to get the Uint8Array without type-specific prefixes.
- */
-export function eventNamesToU8aBare({ data }: Event) {
-  if (data.names === null) {
-    return data.toU8a(true);
-  }
-
-  const json: Record<string, Uint8Array> = {};
-
-  for (let i = 0; i < data.names.length; i++) {
-    json[data.names[i]] = data[i].toU8a(true);
   }
 
   return json;
@@ -194,7 +145,7 @@ function extrinsicToNamedPrimitive(
 /**
  * Converts a `TxWithEvent` object to a primitive representation with named fields.
  */
-function txWithEventToNamedPrimitive(data: TxWithEvent) {
+export function txWithEventToNamedPrimitive(data: TxWithEvent) {
   return {
     extrinsic: extrinsicToNamedPrimitive(data.extrinsic as Extrinsic),
     events: data.events?.map(eventToNamedPrimitive) || []
@@ -223,66 +174,6 @@ function signedBlockToNamedPrimitive(data: SignedBlock) {
   };
 }
 
-function contractParamsToNamedPrimitive(abiParams: AbiParam[], args: Codec[]) {
-  const params: Record<string, AnyJson> = {};
-  abiParams.forEach((param, i) => {
-    params[param.name] = args[i].toPrimitive();
-  });
-  return params;
-}
-
-function contractMessageToNamedPrimitive(data: DecodedMessage) {
-  // Pick only the properties in AbiMessage that satisfy Record<string, AnyJson> type
-  // We are leaving out:
-  // returnType: TypeDef -> has type Enum that does not comply with AnyJson
-  // args: AbiParam[] -> contains TypeDef, see above
-  // fromU8a: Function
-  // toU8a: Function
-  // selector: to be transformed to primitive type
-  const picked = (
-    ({ isDefault, isMutating, isPayable, docs, identifier, index, method, path }) =>
-      ({ isDefault, isMutating, isPayable, docs, identifier, index, method, path })
-  )(data.message);
-
-  return {
-    args: contractParamsToNamedPrimitive(data.message.args, data.args),
-    message: {
-      ...picked,
-      selector: data.message.selector.toPrimitive()
-    }
-  };
-}
-
-function contractMessageWithTxToNamedPrimitive(data: ContractMessageWithTx) {
-  return {
-    ...txWithEventToNamedPrimitive(data),
-    ...contractMessageToNamedPrimitive(data)
-  };
-}
-
-function contractEventToNamedPrimitive(data: DecodedEvent) {
-  // Pick only the properties in AbiEvent that satisfy Record<string, AnyJson> type
-  // We are leaving out:
-  // args: AbiParam[] -> contains type Enum that does not comply with AnyJson
-  // fromU8a: Function
-  const picked = (
-    ({ docs, identifier, index }) =>
-      ({ docs, identifier, index })
-  )(data.event);
-
-  return {
-    event: picked,
-    args: contractParamsToNamedPrimitive(data.event.args, data.args),
-  };
-}
-
-function contractEventWithBlockEventToNamePrimitive(data: ContractEventWithBlockEvent) {
-  return {
-    blockEvent: eventToNamedPrimitive(data.blockEvent),
-    ...contractEventToNamedPrimitive(data)
-  };
-}
-
 /**
  * Converts an object to a primitive representation with named fields based on its type.
  *
@@ -296,16 +187,10 @@ function contractEventWithBlockEventToNamePrimitive(data: ContractEventWithBlock
  */
 // We are leveraging on guards for type inference.
 // eslint-disable-next-line complexity
-export function toNamedPrimitive<T>(data: T): Record<string, AnyJson> {
+function toNamedPrimitive<T>(data: T): Record<string, AnyJson> {
   switch (true) {
   case isEventRecord(data):
     return eventRecordToNamedPrimitive(data as EventRecord);
-  case isContractMessageWithTx(data):
-    return contractMessageWithTxToNamedPrimitive(data as ContractMessageWithTx);
-  case isContractMessage(data):
-    return contractMessageToNamedPrimitive(data as DecodedMessage);
-  case isContractEventWithBlockEvent(data):
-    return contractEventWithBlockEventToNamePrimitive(data as ContractEventWithBlockEvent);
   case isEvent(data):
     return eventToNamedPrimitive(data as Event);
   case isTxWithEvent(data):
@@ -335,7 +220,25 @@ export function toNamedPrimitive<T>(data: T): Record<string, AnyJson> {
  * @returns An array of objects in a primitive representation with named fields.
  * @see toNamedPrimitive
  */
-export function toNamedPrimitives<T>(data: T): Record<string, AnyJson>[] {
+function toNamedPrimitives<T>(data: T): Record<string, AnyJson>[] {
   return Array.isArray(data) ? data.map(toNamedPrimitive) : [toNamedPrimitive(data)];
 }
 
+export interface Converter {
+  toNamedPrimitive: <T>(data: T) => Record<string, AnyJson>;
+  toNamedPrimitives: <T>(data: T) => Record<string, AnyJson>[];
+}
+
+export const base : Converter = {
+  toNamedPrimitive,
+  toNamedPrimitives
+};
+
+export const guards = {
+  isExtrinsicWithId
+};
+
+export const helpers = {
+  txWithEventToNamedPrimitive,
+  eventToNamedPrimitive
+};
