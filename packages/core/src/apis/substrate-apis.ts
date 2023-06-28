@@ -26,6 +26,35 @@ const l = logger('oc-substrate-apis');
 
 /**
  * Substrate APIs wrapper with multi-chain support.
+ *
+ * ## Examples
+ *
+ * Websocket Provider
+ * ```typescript
+ * import { WsProvider } from '@polkadot/api';
+ *
+ * const apis = new SubstrateApis({
+ *   polkadot: {
+ *     provider: new WsProvider('wss://rpc.polkadot.io')
+ *   }
+ * });
+ * ```
+ *
+ * Substrate Connect Provider
+ * ```typescript
+ * import { ScProvider } from '@polkadot/rpc-provider/substrate-connect';
+ * import * as Sc from '@substrate/connect';
+ *
+ * const provider = new ScProvider(Sc, Sc.WellKnownChain.polkadot);
+ *
+ * // Smoldot requires to manually connect,
+ * // the promise is implicitly awaited by the rx pipe
+ * provider.connect().catch(console.error);
+ *
+ * const apis = new SubstrateApis({
+ *  polkadot: { provider }
+ * });
+ * ```
  */
 export class SubstrateApis {
   private readonly chains: string[] = [];
