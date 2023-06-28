@@ -1,4 +1,3 @@
-import type { Event } from '@polkadot/types/interfaces';
 import type { SignedBlockExtended } from '@polkadot/api-derive/types';
 
 import { Observable, mergeMap, share } from 'rxjs';
@@ -40,11 +39,11 @@ function mapEventsWithContext() {
  *
  * @param eventsCriteria - Criteria for filtering events.
  * @param extrinsicsCriteria - (Optional) Criteria for filtering extrinsics. Defaults to `{ dispatchError: { $exists: false } }`.
- * @returns An Observable that emits Event objects that meet the filtering criteria.
+ * @returns An Observable that emits EventWithId objects that meet the filtering criteria.
  */
 export function filterEvents(
   eventsCriteria: ControlQuery | Criteria,
-  extrinsicsCriteria = {
+  extrinsicsCriteria : Criteria = {
     dispatchError: { $exists: false }
   }
 ) {
@@ -53,7 +52,7 @@ export function filterEvents(
     : ControlQuery.from(eventsCriteria);
 
   return (source: Observable<SignedBlockExtended>)
-    : Observable<Event> => {
+    : Observable<EventWithId> => {
     return source.pipe(
       // Extracts extrinsics with events
       extractTxWithEvents(),
