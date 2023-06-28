@@ -23,4 +23,4 @@ export * from './flatten.js';
 export * from './extract.js';
 export * from './filter.js';
 export * from './mongo-filter.js';
-export * from './map-to-primitive.js';
+export * from './convert.js';
