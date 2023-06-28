@@ -3,7 +3,7 @@ import type { AnyNumber } from '@polkadot/types-codec/types';
 
 import { testBlocks, mockRxApi } from '@sodazone/ocelloids-test';
 
-import { blocks, blocksInRange } from './blocks.js';
+import { blockAt, blocks, blocksInRange, finalizedBlocks } from './blocks.js';
 import { Observable, map, of } from 'rxjs';
 
 function observerForBlocks(done: jest.DoneCallback) {
@@ -31,8 +31,22 @@ describe('blocks reactive observable', () => {
       expect(o.complete).toBeCalledTimes(1);
     });
 
+    it('should emit the block at given height', done => {
+      const testPipe = blockAt(15950017)(mockRxApi);
+      const calls = jest.fn();
+      testPipe.subscribe({
+        next: ({ block: { header } }) => {
+          expect(header.number.toNumber())
+            .toBe(15950017);
+          calls();
+        },
+        complete: done
+      });
+      expect(calls).toBeCalledTimes(1);
+    });
+
     it('should emit the latest finalized block', done => {
-      const testPipe = blocks(true)(mockRxApi);
+      const testPipe = finalizedBlocks()(mockRxApi);
       const o = observerForBlocks(done);
       testPipe.subscribe(o);
 
@@ -42,13 +56,24 @@ describe('blocks reactive observable', () => {
   });
 
   describe('blocksInRange', () => {
-    it('should stream blocks in defined range', (done) => {
+    it('should stream blocks in defined range in sequence', (done) => {
       const testPipe = blocksInRange(15950017, 3)(mockRxApi);
       const o = observerForBlocks(done);
       testPipe.subscribe(o);
 
       expect(o.next).toBeCalledTimes(3);
       expect(o.complete).toBeCalledTimes(1);
+    });
+
+    it('should stream blocks in defined range', (done) => {
+      const testPipe = blocksInRange(15950017, 3, false)(mockRxApi);
+      const calls = jest.fn();
+      testPipe.subscribe({
+        next: calls,
+        complete: done
+      });
+
+      expect(calls).toBeCalledTimes(3);
     });
 
     it('should catch error from API', (done) => {
