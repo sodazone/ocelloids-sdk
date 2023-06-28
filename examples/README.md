@@ -10,8 +10,9 @@ Alternatively, you can run them with [bun](https://bun.sh).
 | ---------------------- | -------------------------------- |
 | filter-extrinstics     | ./filter-exstrinsics/main.ts     |
 | filter-fee-events      | ./filter-fee-events/main.ts      |
-| watch-transfer-events  | ./watch-transfer-events/main.ts  |
 | follow-transfer-events | ./follow-transfer-events/main.ts |
+| light-client           | ./light-client/main.ts           |
+| watch-transfer-events  | ./watch-transfer-events/main.ts  |
 
 For example, you can run `filter-fee-events` as:
 

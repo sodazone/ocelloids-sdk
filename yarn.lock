@@ -1474,7 +1474,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@polkadot/rpc-provider@npm:10.9.1":
+"@polkadot/rpc-provider@npm:10.9.1, @polkadot/rpc-provider@npm:^10.9.1":
   version: 10.9.1
   resolution: "@polkadot/rpc-provider@npm:10.9.1"
   dependencies:
@@ -1919,6 +1919,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@sodazone/ocelloids-examples@workspace:examples"
   dependencies:
+    "@polkadot/rpc-provider": ^10.9.1
+    "@substrate/connect": ^0.7.29
     graph-data-structure: ^3.3.0
     hjson: ^3.2.2
     rxjs: ^7.8.1
@@ -1982,6 +1984,17 @@ __metadata:
     eventemitter3: ^4.0.7
     smoldot: 1.0.4
   checksum: 3179d241f073318d5973deb61c9c8d9b89ae28909a594b6b9fbcdfffd030a70ba58e8428eaa9d72484810bad10c93de1ad9c440b878d0fcfaaf4559d2e6f4502
+  languageName: node
+  linkType: hard
+
+"@substrate/connect@npm:^0.7.29":
+  version: 0.7.29
+  resolution: "@substrate/connect@npm:0.7.29"
+  dependencies:
+    "@substrate/connect-extension-protocol": ^1.0.1
+    eventemitter3: ^4.0.7
+    smoldot: 1.0.9
+  checksum: 60511199ef96c84b193ad9d3e166c6689135bffbb384a376a75bcc7ba26f28e1b3b5e3ff06bbeb2a73a5e237d17aacb2f3d0bb2d19f8c2253c01ccaeac1d7aee
   languageName: node
   linkType: hard
 
@@ -10264,6 +10277,15 @@ __metadata:
     pako: ^2.0.4
     ws: ^8.8.1
   checksum: 81ecc38b98f7ac4dd093753e85956262608dca3c8a288c20a25fe1762a6afcdbe6f3622ea30a346df3f4145e0900ef0595e56e96e9e0de83c59f0649d1ab4786
+  languageName: node
+  linkType: hard
+
+"smoldot@npm:1.0.9":
+  version: 1.0.9
+  resolution: "smoldot@npm:1.0.9"
+  dependencies:
+    ws: ^8.8.1
+  checksum: 7dff98c8d5e7ea14b60a1eaaa1dcb68d47e6bcf01fe004e387676041a0f1c65b079ee94aebd068c81a7899329d9c69c6b442a86c8e6acd0801996a4af5facff0
   languageName: node
   linkType: hard
 
