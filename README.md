@@ -36,7 +36,7 @@ With Ocelloids you can easily implement sophisticated multi-chain monitoring log
 * **Extended Context Types** — Extends the base generic events and existrincs with contextual information such as position in block, block number, position in extrinsic, etc.
 * **Abstraction of Common Patterns** — Simplify development and reduce boilerplate code by abstracting common patterns such as utility batch calls.
 * **Multi-Chain Support** — Interact with multiple networks.
-* **Pallet Use Cases** — Components designed for specific pallet use cases, such as tracking calls and events from the contracts pallet.
+* **Pallet Specific Modules** — Components designed for specific pallet use cases, such as tracking calls and events from the contracts pallet.
 
 ## Usage
 
@@ -226,7 +226,9 @@ The repository contains two main folders: `packages`, `examples` and `tools`.
 
 #### Packages
 
-The `packages` folder contains the Ocelloids SDK implementation, which is further divided into core, test, and use case modules.
+The `packages` folder contains the Ocelloids SDK implementation, which is further divided into core, test, and pallets modules.
+
+### Core
 
 Here is the high-level structure of the `packages/core` module source folder:
 
@@ -239,6 +241,20 @@ Here is the high-level structure of the `packages/core` module source folder:
 |  operators                   | Reactive operators                        |
 |  subjects                    | Reactive subjects                         |
 |  types                       | Extended types                            |
+
+The core module is published as the `@sodazone/ocelloids` package.
+
+### Pallets
+
+The `packages/pallets` folder includes a module for each supported pallet:
+
+| Directory                    | Description                               |
+|------------------------------|-------------------------------------------|
+|  contracts                   | Contracts pallet support                  |
+
+The pallet modules are published following the naming convention `@sodazone/ocelloids-<pallet name>`.
+
+### Test Support
 
 The `packages/test` module includes network captured test data and mocks.
 
