@@ -1,6 +1,6 @@
 # Ocelloids Core Module
 
-Base abstractions, reactive operators and pallet independent functionality.
+The Ocelloids Core Module provides base abstractions, reactive operators, and pallet-independent functionality.
 
 ## Layout
 

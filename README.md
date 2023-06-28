@@ -228,8 +228,8 @@ The repository contains two main folders: `packages`, `examples` and `tools`.
 
 The `packages` folder contains the Ocelloids SDK implementation, which is further divided into core, pallets, and test modules.
 
-* [Core](https://github.com/sodazone/ocelloids/tree/main/packages/core): Base abstractions, reactive operators and pallet independent functionality.
-* [Pallets / Contracts](https://github.com/sodazone/ocelloids/tree/main/packages/pallets/contracts): Support for the contracts pallet.
+* [Core](https://github.com/sodazone/ocelloids/tree/main/packages/core): Contains essential abstractions, reactive operators, and pallet-independent functionality.
+* [Pallets / Contracts](https://github.com/sodazone/ocelloids/tree/main/packages/pallets/contracts): Provides support for the contracts pallet.
 
 The `packages/test` module includes network captured test data and mocks.
 
