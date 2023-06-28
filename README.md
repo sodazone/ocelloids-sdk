@@ -226,35 +226,10 @@ The repository contains two main folders: `packages`, `examples` and `tools`.
 
 #### Packages
 
-The `packages` folder contains the Ocelloids SDK implementation, which is further divided into core, test, and pallets modules.
+The `packages` folder contains the Ocelloids SDK implementation, which is further divided into core, pallets, and test modules.
 
-### Core
-
-Here is the high-level structure of the `packages/core` module source folder:
-
-| Directory                    | Description                               |
-|------------------------------|-------------------------------------------|
-|  apis                        | Multi-chain APIs                          |
-|  configuration               | Configuration                             |
-|  converters                  | Chain data type conversions               |
-|  observables                 | Reactive emitters                         |
-|  operators                   | Reactive operators                        |
-|  subjects                    | Reactive subjects                         |
-|  types                       | Extended types                            |
-
-The core module is published as the `@sodazone/ocelloids` package.
-
-### Pallets
-
-The `packages/pallets` folder includes a module for each supported pallet:
-
-| Directory                    | Description                               |
-|------------------------------|-------------------------------------------|
-|  contracts                   | Contracts pallet support                  |
-
-The pallet modules are published following the naming convention `@sodazone/ocelloids-<pallet name>`.
-
-### Test Support
+* [Core](https://github.com/sodazone/ocelloids/tree/main/packages/core): Base abstractions, reactive operators and pallet independent functionality.
+* [Pallets / Contracts](https://github.com/sodazone/ocelloids/tree/main/packages/pallets/contracts): Support for the contracts pallet.
 
 The `packages/test` module includes network captured test data and mocks.
 

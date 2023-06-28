@@ -17,6 +17,8 @@
     "cdump": "src/cdump.ts"
   },
   "dependencies": {
+    "@sodazone/ocelloids": "file:../packages/core",
+    "@sodazone/ocelloids-test": "file:../packages/test",
     "cbor-x": "^1.5.3",
     "citty": "^0.1.1"
   }

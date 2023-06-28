@@ -19,7 +19,11 @@
     "url": "https://github.com/sodazone/ocelloids.git"
   },
   "dependencies": {
-    "@polkadot/api-contract": "^10.9.1"
+    "@polkadot/api-contract": "^10.9.1",
+    "@sodazone/ocelloids": "file:../../core"
+  },
+  "devDependencies": {
+    "@sodazone/ocelloids-test": "file:../../test"
   },
   "files": [
     "lib",

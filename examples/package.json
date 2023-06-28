@@ -20,6 +20,8 @@
   },
   "dependencies": {
     "@polkadot/rpc-provider": "^10.9.1",
+    "@sodazone/ocelloids": "file:../packages/core",
+    "@sodazone/ocelloids-test": "file:../packages/test",
     "@substrate/connect": "^0.7.29",
     "graph-data-structure": "^3.3.0",
     "hjson": "^3.2.2",
