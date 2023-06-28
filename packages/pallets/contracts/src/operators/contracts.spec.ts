@@ -94,7 +94,7 @@ describe('Wasm contracts operator', () => {
   });
 
   describe('contractConstructors', () => {
-    it.only('should emit decoded contract constructors', () => {
+    it('should emit decoded contract constructors', () => {
       const found = jest.fn();
       const codeHash = '0xb1fc0d2c3df7250059748b65eb7ac72611bcaff728cc44b7aa8a27cd22a95417';
 
