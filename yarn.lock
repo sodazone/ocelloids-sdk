@@ -1920,8 +1920,8 @@ __metadata:
   resolution: "@sodazone/ocelloids-contracts@workspace:packages/pallets/contracts"
   dependencies:
     "@polkadot/api-contract": ^10.9.1
-    "@sodazone/ocelloids": "file:../../core"
-    "@sodazone/ocelloids-test": "file:../../test"
+    "@sodazone/ocelloids": 0.0.1-dev.1
+    "@sodazone/ocelloids-test": 0.0.1-dev.1
   languageName: unknown
   linkType: soft
 
@@ -1930,8 +1930,7 @@ __metadata:
   resolution: "@sodazone/ocelloids-examples@workspace:examples"
   dependencies:
     "@polkadot/rpc-provider": ^10.9.1
-    "@sodazone/ocelloids": "file:../packages/core"
-    "@sodazone/ocelloids-test": "file:../packages/test"
+    "@sodazone/ocelloids": 0.0.1-dev.1
     "@substrate/connect": ^0.7.29
     graph-data-structure: ^3.3.0
     hjson: ^3.2.2
@@ -1946,51 +1945,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@sodazone/ocelloids-test@file:../../test::locator=%40sodazone%2Focelloids-contracts%40workspace%3Apackages%2Fpallets%2Fcontracts":
-  version: 0.0.1-dev.1
-  resolution: "@sodazone/ocelloids-test@file:../../test#../../test::hash=de1752&locator=%40sodazone%2Focelloids-contracts%40workspace%3Apackages%2Fpallets%2Fcontracts"
-  dependencies:
-    "@polkadot/api": ^10.9.1
-    "@polkadot/util": ^12.3.2
-    rxjs: ^7.8.1
-  checksum: dbc89a6e0c4083b9e883f87278328c9446041974a7d0ca43ef3feccbf79d531c4e5a65f09e2dfe75cac6b3ad306d55e10b2f1177c5613b64cb9207df2cc3ff60
-  languageName: node
-  linkType: hard
-
-"@sodazone/ocelloids-test@file:../packages/test::locator=%40sodazone%2Focelloids-examples%40workspace%3Aexamples":
-  version: 0.0.1-dev.1
-  resolution: "@sodazone/ocelloids-test@file:../packages/test#../packages/test::hash=de1752&locator=%40sodazone%2Focelloids-examples%40workspace%3Aexamples"
-  dependencies:
-    "@polkadot/api": ^10.9.1
-    "@polkadot/util": ^12.3.2
-    rxjs: ^7.8.1
-  checksum: dbc89a6e0c4083b9e883f87278328c9446041974a7d0ca43ef3feccbf79d531c4e5a65f09e2dfe75cac6b3ad306d55e10b2f1177c5613b64cb9207df2cc3ff60
-  languageName: node
-  linkType: hard
-
-"@sodazone/ocelloids-test@file:../packages/test::locator=%40sodazone%2Focelloids-tools%40workspace%3Atools":
-  version: 0.0.1-dev.1
-  resolution: "@sodazone/ocelloids-test@file:../packages/test#../packages/test::hash=de1752&locator=%40sodazone%2Focelloids-tools%40workspace%3Atools"
-  dependencies:
-    "@polkadot/api": ^10.9.1
-    "@polkadot/util": ^12.3.2
-    rxjs: ^7.8.1
-  checksum: dbc89a6e0c4083b9e883f87278328c9446041974a7d0ca43ef3feccbf79d531c4e5a65f09e2dfe75cac6b3ad306d55e10b2f1177c5613b64cb9207df2cc3ff60
-  languageName: node
-  linkType: hard
-
-"@sodazone/ocelloids-test@file:../test::locator=%40sodazone%2Focelloids%40workspace%3Apackages%2Fcore":
-  version: 0.0.1-dev.1
-  resolution: "@sodazone/ocelloids-test@file:../test#../test::hash=de1752&locator=%40sodazone%2Focelloids%40workspace%3Apackages%2Fcore"
-  dependencies:
-    "@polkadot/api": ^10.9.1
-    "@polkadot/util": ^12.3.2
-    rxjs: ^7.8.1
-  checksum: dbc89a6e0c4083b9e883f87278328c9446041974a7d0ca43ef3feccbf79d531c4e5a65f09e2dfe75cac6b3ad306d55e10b2f1177c5613b64cb9207df2cc3ff60
-  languageName: node
-  linkType: hard
-
-"@sodazone/ocelloids-test@workspace:packages/test":
+"@sodazone/ocelloids-test@0.0.1-dev.1, @sodazone/ocelloids-test@workspace:packages/test":
   version: 0.0.0-use.local
   resolution: "@sodazone/ocelloids-test@workspace:packages/test"
   dependencies:
@@ -2006,8 +1961,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@sodazone/ocelloids-tools@workspace:tools"
   dependencies:
-    "@sodazone/ocelloids": "file:../packages/core"
-    "@sodazone/ocelloids-test": "file:../packages/test"
+    "@sodazone/ocelloids": 0.0.1-dev.1
+    "@sodazone/ocelloids-test": 0.0.1-dev.1
     cbor-x: ^1.5.3
     citty: ^0.1.1
   bin:
@@ -2016,49 +1971,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@sodazone/ocelloids@file:../../core::locator=%40sodazone%2Focelloids-contracts%40workspace%3Apackages%2Fpallets%2Fcontracts":
-  version: 0.0.1-dev.1
-  resolution: "@sodazone/ocelloids@file:../../core#../../core::hash=da8815&locator=%40sodazone%2Focelloids-contracts%40workspace%3Apackages%2Fpallets%2Fcontracts"
-  dependencies:
-    "@polkadot/api": ^10.9.1
-    "@polkadot/util": ^12.3.2
-    mingo: ^6.4.1
-    rxjs: ^7.8.1
-  checksum: cfdb4ea77badfc8dc8a24309acaf5d231550991d0d905280462f272a611f76fd132d484910ff3bc7ae0c0576e79810e4f6510af5bd50dcc42f454a8aa221f6e7
-  languageName: node
-  linkType: hard
-
-"@sodazone/ocelloids@file:../packages/core::locator=%40sodazone%2Focelloids-examples%40workspace%3Aexamples":
-  version: 0.0.1-dev.1
-  resolution: "@sodazone/ocelloids@file:../packages/core#../packages/core::hash=da8815&locator=%40sodazone%2Focelloids-examples%40workspace%3Aexamples"
-  dependencies:
-    "@polkadot/api": ^10.9.1
-    "@polkadot/util": ^12.3.2
-    mingo: ^6.4.1
-    rxjs: ^7.8.1
-  checksum: cfdb4ea77badfc8dc8a24309acaf5d231550991d0d905280462f272a611f76fd132d484910ff3bc7ae0c0576e79810e4f6510af5bd50dcc42f454a8aa221f6e7
-  languageName: node
-  linkType: hard
-
-"@sodazone/ocelloids@file:../packages/core::locator=%40sodazone%2Focelloids-tools%40workspace%3Atools":
-  version: 0.0.1-dev.1
-  resolution: "@sodazone/ocelloids@file:../packages/core#../packages/core::hash=da8815&locator=%40sodazone%2Focelloids-tools%40workspace%3Atools"
-  dependencies:
-    "@polkadot/api": ^10.9.1
-    "@polkadot/util": ^12.3.2
-    mingo: ^6.4.1
-    rxjs: ^7.8.1
-  checksum: cfdb4ea77badfc8dc8a24309acaf5d231550991d0d905280462f272a611f76fd132d484910ff3bc7ae0c0576e79810e4f6510af5bd50dcc42f454a8aa221f6e7
-  languageName: node
-  linkType: hard
-
-"@sodazone/ocelloids@workspace:packages/core":
+"@sodazone/ocelloids@0.0.1-dev.1, @sodazone/ocelloids@workspace:packages/core":
   version: 0.0.0-use.local
   resolution: "@sodazone/ocelloids@workspace:packages/core"
   dependencies:
     "@polkadot/api": ^10.9.1
     "@polkadot/util": ^12.3.2
-    "@sodazone/ocelloids-test": "file:../test"
+    "@sodazone/ocelloids-test": 0.0.1-dev.1
     mingo: ^6.4.1
     rxjs: ^7.8.1
   languageName: unknown

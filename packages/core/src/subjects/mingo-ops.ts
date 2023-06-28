@@ -1,8 +1,8 @@
-import { BN, bnToBn } from '@polkadot/util';
+import { bnToBn } from '@polkadot/util';
 
-import { OperatorType, useOperators, QueryOperator, Options } from 'mingo/core';
+import { OperatorType, useOperators, QueryOperator, Options, getOperator } from 'mingo/core';
 import { AnyVal, Predicate, RawObject } from 'mingo/types';
-import { ensureArray, getType, resolve } from 'mingo/util';
+import { ensureArray, resolve } from 'mingo/util';
 
 function bn(x: AnyVal) {
   switch (typeof x) {
@@ -60,13 +60,15 @@ function createQueryOperator(
 }
 
 export function installOperators() {
-// Register query operators
-  useOperators(OperatorType.QUERY, {
-    '$bn_lt': createQueryOperator($bn_lt),
-    '$bn_lte': createQueryOperator($bn_lte),
-    '$bn_gt': createQueryOperator($bn_gt),
-    '$bn_gte': createQueryOperator($bn_gte),
-    '$bn_eq': createQueryOperator($bn_eq),
-    '$bn_neq': createQueryOperator($bn_neq)
-  });
+  // Register query operators
+  if (getOperator(OperatorType.QUERY, '$bn_lt') === undefined) {
+    useOperators(OperatorType.QUERY, {
+      '$bn_lt': createQueryOperator($bn_lt),
+      '$bn_lte': createQueryOperator($bn_lte),
+      '$bn_gt': createQueryOperator($bn_gt),
+      '$bn_gte': createQueryOperator($bn_gte),
+      '$bn_eq': createQueryOperator($bn_eq),
+      '$bn_neq': createQueryOperator($bn_neq)
+    });
+  }
 }

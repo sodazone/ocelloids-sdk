@@ -10,9 +10,8 @@ extends types.TxWithIdAndEvent, DecodedMessage {
   // empty impl.
 }
 
-export interface ContractConstructorWithEventAndTx
-extends DecodedMessage {
-  blockEvent: types.EventWithIdAndTx
+export interface ContractConstructorWithTxAndEvents
+extends ContractMessageWithTx {
   codeHash: string | null
 }
 

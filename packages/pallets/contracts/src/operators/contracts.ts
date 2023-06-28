@@ -5,7 +5,7 @@ import { Observable, concatMap, filter, map, share } from 'rxjs';
 
 import { mongoFilterFrom, types } from '@sodazone/ocelloids';
 
-import { ContractConstructorWithEventAndTx, ContractEventWithBlockEvent, ContractMessageWithTx } from '../types/interfaces.js';
+import { ContractConstructorWithTxAndEvents, ContractEventWithBlockEvent, ContractMessageWithTx } from '../types/interfaces.js';
 
 // Note: We will extract this helper function along with the contracts pallet module
 // when we add more pallet support
@@ -58,44 +58,57 @@ export function contractMessages(abi: Abi, address: string ) {
  * @returns An observable that emits the decoded contract constructor with associated block event and transaction.
  */
 export function contractConstructors(api: ApiPromise, abi: Abi, codeHash: string ) {
-  return (source: Observable<types.EventWithIdAndTx>)
-  : Observable<ContractConstructorWithEventAndTx> => {
+  return (source: Observable<types.TxWithIdAndEvent>)
+  : Observable<ContractConstructorWithTxAndEvents> => {
     return (source.pipe(
-      filter((blockEvent: types.EventWithIdAndTx) =>
-        api.events.contracts.Instantiated.is(blockEvent)
+      mongoFilterFrom(
+        {
+          'extrinsic.call.section': 'contracts',
+          'extrinsic.call.method': {
+            $in: [
+              'instantiate',
+              'instantiateWithCode'
+            ]
+          },
+        }
       ),
       // Use concatMap to allow for async call to promise API to get contract code hash,
       // map to contractCodeHash property to be used for filtering in the next step.
       // This is necessary as we cannot make an async call in rxjs `filter` operator
-      concatMap(async (blockEvent: types.EventWithIdAndTx) => {
-        let contractCodeHash: string | null = null;
-        // We cast as any below to avoid importing `@polkadotjs/api-augment`
-        // as we want to keep the library side-effects-free.
-        // Since we have filtered for contracts.Instantiated events,
-        // we can assume that the block event data has the structure:
-        // {
-        //   deployer: 'AccountId32',
-        //   contract: 'AccountId32',
-        // }
-        const { contract } = blockEvent.data as any;
-        // contractInfo is of type Option<PalletContractsStorageContractInfo>
-        const contractInfo = (await api.query.contracts.contractInfoOf(contract)) as any;
+      concatMap(async (tx: types.TxWithIdAndEvent) => {
+        const instantiatedEvent = tx.events.find(ev => api.events.contracts.Instantiated.is(ev));
 
-        if (contractInfo.isSome) {
-          contractCodeHash = contractInfo.unwrap().codeHash.toString();
+        let contractCodeHash: string | null = null;
+
+        if (instantiatedEvent !== undefined) {
+          // We cast as any below to avoid importing `@polkadotjs/api-augment`
+          // as we want to keep the library side-effects-free.
+          // Since we have filtered for contracts.Instantiated events,
+          // we can assume that the block event data has the structure:
+          // {
+          //   deployer: 'AccountId32',
+          //   contract: 'AccountId32',
+          // }
+          const { contract } = instantiatedEvent.data as any;
+          // contractInfo is of type Option<PalletContractsStorageContractInfo>
+          const contractInfo = (await api.query.contracts.contractInfoOf(contract)) as any;
+
+          if (contractInfo.isSome) {
+            contractCodeHash = contractInfo.unwrap().codeHash.toString();
+          }
         }
 
         return {
-          blockEvent,
+          ...tx,
           contractCodeHash
         };
       }),
       filter(({ contractCodeHash }) => contractCodeHash === codeHash),
-      map(({ blockEvent, contractCodeHash }) => {
-        const data = getArgValueFromTx(blockEvent.extrinsic, 'data');
+      map(tx => {
+        const data = getArgValueFromTx(tx.extrinsic, 'data');
         return {
-          blockEvent,
-          codeHash: contractCodeHash,
+          ...tx,
+          codeHash: tx.contractCodeHash,
           ...abi.decodeConstructor(data.toU8a())
         };
       }),

@@ -25,7 +25,7 @@
     "rxjs": "^7.8.1"
   },
   "devDependencies": {
-    "@sodazone/ocelloids-test": "file:../test"
+    "@sodazone/ocelloids-test": "0.0.1-dev.1"
   },
   "files": [
     "lib",

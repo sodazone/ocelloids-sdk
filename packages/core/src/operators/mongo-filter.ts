@@ -42,7 +42,6 @@ export function mongoFilter<T>(
     // we do not want to reset the outter observables.
     // So, we just use the current value from the behavior subject.
     return source.pipe(
-      // tap(x => console.log('MONGO FILTER: ', converter.toNamedPrimitive(x))),
       filter(
         record => query.value.test(
           converter.toNamedPrimitive(record)

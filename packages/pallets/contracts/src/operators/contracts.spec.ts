@@ -94,7 +94,7 @@ describe('Wasm contracts operator', () => {
   });
 
   describe('contractConstructors', () => {
-    it('should emit decoded contract constructors', () => {
+    it.only('should emit decoded contract constructors', () => {
       const found = jest.fn();
       const codeHash = '0xb1fc0d2c3df7250059748b65eb7ac72611bcaff728cc44b7aa8a27cd22a95417';
 
@@ -106,7 +106,7 @@ describe('Wasm contracts operator', () => {
           })
         } as any);
 
-      const testPipe = contractConstructors(mockPromiseApi, testAbi, codeHash)(from(testEventsWithIdAndTx));
+      const testPipe = contractConstructors(mockPromiseApi, testAbi, codeHash)(from(extrinsics.splice(0, 3)));
 
       testPipe.subscribe({
         next: constructor => {

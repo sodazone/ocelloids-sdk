@@ -20,10 +20,10 @@
   },
   "dependencies": {
     "@polkadot/api-contract": "^10.9.1",
-    "@sodazone/ocelloids": "file:../../core"
+    "@sodazone/ocelloids": "0.0.1-dev.1"
   },
   "devDependencies": {
-    "@sodazone/ocelloids-test": "file:../../test"
+    "@sodazone/ocelloids-test": "0.0.1-dev.1"
   },
   "files": [
     "lib",
