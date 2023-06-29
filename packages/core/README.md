@@ -1,6 +1,6 @@
 # Ocelloids Core Module
 
-![npm](https://img.shields.io/npm/v/sodazone/ocelloids?colorA=f6f8fa&colorB=f6f8fa&style=flat)
+![npm](https://img.shields.io/npm/v/sodazone/ocelloids?color=f6f8fa&labelColor=f6f8fa&style=flat-square)
 
 The Ocelloids Core Module provides base abstractions, reactive operators, and pallet-independent functionality.
 
