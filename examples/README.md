@@ -1,10 +1,14 @@
 # Ocelloids SDK Examples
 
-The demo applications have shebangs to be executed with [ts-node-esm](https://typestrong.org/ts-node/).
+The Ocelloids SDK Examples provide demonstrations of the various functionalities offered by Ocelloids.
+They serve as a reference for integrating Ocelloids into your own projects.
 
-Alternatively, you can run them with [bun](https://bun.sh).
+## Running the Examples
 
-## Examples
+The demo applications have shebangs to be executed with [ts-node-esm](https://typestrong.org/ts-node/) 
+or can run with [bun](https://bun.sh).
+
+Here are the available examples and their corresponding commands:
 
 | Application            | Command                          |
 | ---------------------- | -------------------------------- |
@@ -14,7 +18,7 @@ Alternatively, you can run them with [bun](https://bun.sh).
 | light-client           | ./light-client/main.ts           |
 | watch-transfer-events  | ./watch-transfer-events/main.ts  |
 
-For example, you can run `filter-fee-events` as:
+For example, to run the `filter-fee-events` application, use the following command:
 
 ```shell
 ./filter-fee-events/main.ts
@@ -65,3 +69,5 @@ For example, you can run `filter-fee-events` as:
 }
 ```
 </details>
+
+These examples serve as practical illustrations of how to utilize the Ocelloids SDK and can be customized to fit your specific use cases.
