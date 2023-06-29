@@ -26,8 +26,9 @@ bun cdump -u wss://rococo-contracts-rpc.polkadot.io | jq .
 <details>
 <summary>output - click to expand</summary>
 
+> Most of the output has been skipped for brevity.
+
 ```json
-// ...skip
 {
   "extrinsic": {
     "hash": "0xd9e54c3631456638e90d1703d3a4a9a42914569b9846e1cd342a2f21d217d432",
