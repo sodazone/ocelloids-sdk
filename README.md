@@ -10,8 +10,8 @@ Substrate monitoring SDK
   alt=""
 />
 
-![GitHub CI](https://img.shields.io/github/actions/workflow/status/sodazone/ocelloids/ci.yml?branch=main&style=for-the-badge)
-![GitHub](https://img.shields.io/github/license/sodazone/ocelloids?style=for-the-badge)
+![GitHub CI](https://img.shields.io/github/actions/workflow/status/sodazone/ocelloids/ci.yml?branch=main&colorA=f6f8fa&colorB=f6f8fa&style=flat)
+![GitHub](https://img.shields.io/github/license/sodazone/ocelloids?colorA=f6f8fa&colorB=f6f8fa&style=flat)
 
 </div>
 
@@ -38,29 +38,25 @@ With Ocelloids you can easily implement sophisticated multi-chain monitoring log
 * **Multi-Chain Support** — Interact with multiple networks.
 * **Pallet-Specific Modules** — Modules designed to handle use cases related to a particular pallet, such as tracking calls and events from the contracts pallet.
 
-## Install
+## Installation
 
 ### Ocelloids Core
-
-![npm](https://img.shields.io/npm/v/sodazone/ocelloids?style=for-the-badge)
-
-Essential abstractions, reactive operators, base type converters, and pallet-independent functionality.
 
 ```shell
 npm i @sodazone/ocelloids
 ```
 
+Essential abstractions, reactive operators, base type converters, and pallet-independent functionality.
+
 Source code [packages/core](https://github.com/sodazone/ocelloids/tree/main/packages/core).
 
 ### Ocelloids Contracts
 
-![npm](https://img.shields.io/npm/v/sodazone/ocelloids-contracts?style=for-the-badge)
-
-Operators and type converters for the contracts pallet.
-
 ```shell
 npm i @sodazone/ocelloids-contracts
 ```
+
+Operators and type converters for the contracts pallet.
 
 Source code [packages/pallets/contracts](https://github.com/sodazone/ocelloids/tree/main/packages/pallets/contracts).
 
