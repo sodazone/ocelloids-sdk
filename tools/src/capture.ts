@@ -51,12 +51,12 @@ function observer(outfile: string, apis: SubstrateApis)
 }
 
 function downloadBlocks({
-  endpoint,
+  url,
   start,
   count,
   outfile
 }: {
-  endpoint: string,
+  url: string,
   start: string,
   count: string,
   outfile: string
@@ -64,7 +64,7 @@ function downloadBlocks({
   const apis = new SubstrateApis(
     {
       polkadot: {
-        provider: new WsProvider(endpoint)
+        provider: new WsProvider(url)
       }
     }
   );
@@ -98,7 +98,7 @@ const main = defineCommand({
       default: '1',
       type: 'string'
     },
-    endpoint: {
+    url: {
       default: 'wss://rpc.polkadot.io',
       type: 'string'
     },

@@ -25,7 +25,11 @@ const extractors : Record<ExtractType, any> = {
   txWithEvents: extractTxWithEvents
 };
 
-function cdump({ url, type, blockHeight }) {
+function cdump({ url, type, blockHeight }: {
+  url: string,
+  type: string,
+  blockHeight: string
+}) {
   const apis = new SubstrateApis(
     {
       polkadot: {
@@ -61,7 +65,7 @@ function cdump({ url, type, blockHeight }) {
     }
   });
 }
-
+const typeNames = Object.entries(ExtractType).map(([_, v]) => v.toString()).join(', ');
 const main = defineCommand({
   meta: {
     name: 'cdump',
@@ -71,12 +75,14 @@ const main = defineCommand({
   args: {
     blockHeight: {
       type: 'string',
-      alias: 'b'
+      alias: 'b',
+      description: 'The block height to dump. Defaults to latest.'
     },
     type: {
       default: ExtractType.TxWithEvents,
       type: 'string',
-      alias: 't'
+      alias: 't',
+      description: `The extract type. ${typeNames}`
     },
     url: {
       default: 'wss://rpc.polkadot.io',
