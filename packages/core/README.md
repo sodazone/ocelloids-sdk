@@ -16,4 +16,3 @@ The `packages/core` module source folder is structured as follows:
 |  subjects                    | Reactive subjects                         |
 |  types                       | Extended types                            |
 
-Feel free to explore each directory to gain a better understanding of the specific features and components provided by the Ocelloids Core Module.
