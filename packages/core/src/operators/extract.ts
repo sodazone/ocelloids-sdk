@@ -102,21 +102,18 @@ export function extractEvents() {
     return source.pipe(
       concatMap(({ block, extrinsics }) => {
         const blockNumber = block.header.number;
-        let blockPosition = -1;
 
         return extrinsics.reduce((eventsWithId: EventWithId[], xt, i) => {
           const extrinsicId = `${blockNumber.toString()}-${i}`;
 
           return eventsWithId.concat(
-            xt.events.map((e, extrinsicPosition) => {
-              blockPosition++;
-
-              return new GenericEventWithId(e, {
+            xt.events.map((e, extrinsicPosition) => (
+              new GenericEventWithId(e, {
                 blockNumber,
                 extrinsicPosition,
                 extrinsicId
-              });
-            })
+              })
+            ))
           );
         }, []);
       }),

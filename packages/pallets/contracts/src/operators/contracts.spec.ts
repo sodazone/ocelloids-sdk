@@ -127,7 +127,6 @@ describe('Wasm contracts operator', () => {
       const found = jest.fn();
 
       const testPipe = contractEvents(testAbi, testContractAddress)(from(testEventsWithIdAndTx));
-      let index = 0;
 
       testPipe.subscribe({
         next: (result) => {
@@ -137,7 +136,6 @@ describe('Wasm contracts operator', () => {
           expect(result.blockEvent.eventId).toBe('2841323-0-9');
           expect(result.event.identifier).toBe('Transfer');
           expect(result.event.index).toBe(0);
-          index++;
         },
         complete: () => {
           expect(found).toBeCalledTimes(1);

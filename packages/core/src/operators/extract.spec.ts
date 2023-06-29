@@ -80,7 +80,6 @@ describe('extractors over extended signed blocks', () => {
       const testPipe = extractTxWithEvents()(of(testBlocks[0])).pipe(
         extractEventsWithTx()
       );
-      let index = 0;
       testPipe.subscribe({
         next: (record: EventWithIdAndTx) => {
           expect(record).toBeDefined();
@@ -89,7 +88,6 @@ describe('extractors over extended signed blocks', () => {
           expect(record.eventId).toBeDefined();
           expect(record.extrinsic.extrinsicId).toBeDefined();
           expect(record.blockNumber.toString()).toEqual(record.extrinsic.blockNumber.toString());
-          index++;
         },
         complete: done,
       });

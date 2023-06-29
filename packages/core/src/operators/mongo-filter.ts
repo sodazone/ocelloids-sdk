@@ -1,4 +1,4 @@
-import { BehaviorSubject, Observable, filter, tap } from 'rxjs';
+import { BehaviorSubject, Observable, filter } from 'rxjs';
 import { Query } from 'mingo';
 
 import { ControlQuery, Criteria } from '../index.js';

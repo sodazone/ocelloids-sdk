@@ -2,7 +2,7 @@ import { from } from 'rxjs';
 
 import { filterEvents } from './filter.js';
 
-import { testBlocks, testExtrinsics, testEvents } from '@sodazone/ocelloids-test';
+import { testBlocks } from '@sodazone/ocelloids-test';
 import { EventWithId } from '../types/interfaces.js';
 
 describe('filterEvents', () => {
