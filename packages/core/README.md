@@ -4,7 +4,7 @@ The Ocelloids Core Module provides base abstractions, reactive operators, and pa
 
 ## Layout
 
-Here is the high-level structure of the `packages/core` module source folder:
+The `packages/core` module source folder is structured as follows:
 
 | Directory                    | Description                               |
 |------------------------------|-------------------------------------------|
@@ -16,3 +16,4 @@ Here is the high-level structure of the `packages/core` module source folder:
 |  subjects                    | Reactive subjects                         |
 |  types                       | Extended types                            |
 
+Feel free to explore each directory to gain a better understanding of the specific features and components provided by the Ocelloids Core Module.
