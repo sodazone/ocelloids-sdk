@@ -10,8 +10,8 @@ Substrate monitoring SDK
   alt=""
 />
 
-![GitHub CI](https://img.shields.io/github/actions/workflow/status/sodazone/ocelloids/ci.yml?branch=main&color=f6f8fa&labelColor=f6f8fa&style=flat-square)
-![GitHub](https://img.shields.io/github/license/sodazone/ocelloids?color=f6f8fa&labelColor=f6f8fa&style=flat-square)
+![GitHub CI](https://img.shields.io/github/actions/workflow/status/sodazone/ocelloids/ci.yml?branch=main&style=flat-square)
+![GitHub](https://img.shields.io/github/license/sodazone/ocelloids?style=flat-square)
 
 </div>
 
