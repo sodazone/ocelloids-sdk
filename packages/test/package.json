@@ -1,6 +1,6 @@
 {
   "name": "@sodazone/ocelloids-test",
-  "version": "0.0.1-dev.1",
+  "version": "1.0.0-dev.0",
   "description": "Ocelloids testing mocks.",
   "sideEffects": true,
   "private": true,
@@ -34,5 +34,6 @@
   "scripts": {
     "build": "tsup src/index.ts --format cjs,esm --dts --clean -d lib/ && yarn cp:data",
     "cp:data": "shx rm -rf lib/__data__ && shx cp -r src/__data__ lib/"
-  }
+  },
+  "stableVersion": "1.0.0"
 }

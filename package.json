@@ -1,7 +1,7 @@
 {
   "sideEffects": false,
   "type": "module",
-  "version": "0.0.1-dev.1",
+  "version": "1.0.0-dev.0",
   "author": "soda <projects@soda.zone>",
   "contributors": [
     "Marc Fornós <marc@soda.zone>",
@@ -60,5 +60,6 @@
     "typedoc": "^0.24.8",
     "typescript": "^5.1.3"
   },
-  "packageManager": "yarn@3.6.0"
+  "packageManager": "yarn@3.6.0",
+  "stableVersion": "1.0.0"
 }

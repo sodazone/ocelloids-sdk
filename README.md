@@ -10,7 +10,6 @@ Substrate monitoring SDK
   alt=""
 />
 
-![npm](https://img.shields.io/npm/v/sodazone/ocelloids?style=for-the-badge)
 ![GitHub](https://img.shields.io/github/license/sodazone/ocelloids?style=for-the-badge)
 
 </div>
@@ -37,6 +36,32 @@ With Ocelloids you can easily implement sophisticated multi-chain monitoring log
 * **Abstraction of Common Patterns** — Simplify development and reduce boilerplate code by abstracting common patterns such as utility batch calls.
 * **Multi-Chain Support** — Interact with multiple networks.
 * **Pallet-Specific Modules** — Modules designed to handle use cases related to a particular pallet, such as tracking calls and events from the contracts pallet.
+
+## Install
+
+### Ocelloids Core
+
+Essential abstractions, reactive operators, and pallet-independent functionality.
+
+![npm](https://img.shields.io/npm/v/sodazone/ocelloids?style=for-the-badge)
+
+```shell
+npm i @sodazone/ocelloids
+```
+
+Source code [packages/core](https://github.com/sodazone/ocelloids/tree/main/packages/core).
+
+### Ocelloids Contracts
+
+Provides support for the contracts pallet.
+
+![npm](https://img.shields.io/npm/v/sodazone/ocelloids-contracts?style=for-the-badge)
+
+```shell
+npm i @sodazone/ocelloids-contracts
+```
+
+Source code [packages/pallets/contracts](https://github.com/sodazone/ocelloids/tree/main/packages/pallets/contracts).
 
 ## Usage
 
@@ -226,10 +251,7 @@ The repository contains two main folders: `packages`, `examples` and `tools`.
 
 #### Packages
 
-The `packages` folder contains the Ocelloids SDK implementation, which is further divided into core, pallets, and test modules.
-
-* [Core](https://github.com/sodazone/ocelloids/tree/main/packages/core): Contains essential abstractions, reactive operators, and pallet-independent functionality.
-* [Pallets / Contracts](https://github.com/sodazone/ocelloids/tree/main/packages/pallets/contracts): Provides support for the contracts pallet.
+The `packages` folder contains the Ocelloids SDK implementation, which is further divided into `core`, `pallets`, and `test` modules.
 
 The `packages/test` module includes network captured test data and mocks.
 
