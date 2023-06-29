@@ -26,7 +26,7 @@ bun cdump -u wss://rococo-contracts-rpc.polkadot.io | jq .
 <details>
 <summary>output - click to expand</summary>
 
-> Most of the output has been skipped for brevity.
+> Some output has been skipped for brevity.
 
 ```json
 {

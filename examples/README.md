@@ -26,8 +26,9 @@ For example, to run the `filter-fee-events` application, use the following comma
 <details>
 <summary>output - click to expand</summary>
 
+> Some output has been skipped for brevity.
+
 ```javascript
-// ...skip...
 {
   eventId: '16134446-2-0',
   extrinsicId: '16134446-2',
