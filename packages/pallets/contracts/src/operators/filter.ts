@@ -16,7 +16,13 @@ import { ContractEventWithBlockEvent, ContractMessageWithTx } from '../types/int
 import { AddressParam } from '../types/types.js';
 
 /**
+ * Filters contract calls based on the provided criteria.
  *
+ * @param abi The ABI of the contract as a JSON object or string.
+ * @param address The contract address or an array of addresses.
+ * @param callsCriteria The criteria to filter contract calls.
+ * @param extrinsicsCriteria - (Optional) Criteria for filtering extrinsics. Defaults to `{ dispatchError: { $exists: false } }`.
+ * @returns An observable that emits filtered contract calls.
  */
 export function filterContractCalls(
   abi: Abi,
@@ -43,12 +49,13 @@ export function filterContractCalls(
 }
 
 /**
+ * Filters contract events based on the provided criteria.
  *
- * @param abi
- * @param address
- * @param eventsCriteria
- * @param extrinsicsCriteria
- * @returns
+ * @param abi The ABI of the contract as a JSON object or string.
+ * @param address The contract address or an array of addresses.
+ * @param eventsCriteria The criteria to filter contract events.
+ * @param extrinsicsCriteria - (Optional) Criteria for filtering extrinsics. Defaults to `{ dispatchError: { $exists: false } }`.
+ * @returns An observable that emits filtered contract events.
  */
 export function filterContractEvents(
   abi: Abi,

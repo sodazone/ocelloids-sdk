@@ -21,8 +21,8 @@ function getArgValueFromTx(extrinsic: types.ExtrinsicWithId, name: string) {
  * Returns an Observable that filters for contract call extrinsics based on the given address
  * and decodes the contract message based on the provided ABI.
  *
- * @param abiJson - The ABI of the contract as a JSON object or string.
- * @param address - The address of the contract.
+ * @param abi The ABI of the contract as a JSON object or string.
+ * @param address The contract address or an array of addresses.
  * @returns An Observable that emits ContractMessageWithTx objects.
  */
 export function contractMessages(abi: Abi, address: AddressParam ) {
@@ -54,9 +54,9 @@ export function contractMessages(abi: Abi, address: AddressParam ) {
  * Returns an Observable that filters for contract instantiations based on the given code hash
  * and decodes the contract constructor based on the provided ABI.
  *
- * @param api - The ApiPromise instance for the network.
- * @param abi - The contract ABI.
- * @param codeHash - The contract code hash.
+ * @param api The ApiPromise instance for the network.
+ * @param abi The contract ABI.
+ * @param codeHash The contract code hash.
  *
  * @returns An observable that emits the decoded contract constructor with associated block event and transaction.
  */
@@ -123,8 +123,8 @@ export function contractConstructors(api: ApiPromise, abi: Abi, codeHash: string
 /**
  * Returns an Observable that filters and maps contract events based on the given ABI and address.
  *
- * @param abiJson - The ABI of the contract as a JSON object or string.
- * @param address - The address of the contract.
+ * @param abi The ABI of the contract as a JSON object or string.
+ * @param address The contract address or an array of addresses.
  * @returns An Observable that emits ContractEventWithBlockEvent objects.
  */
 export function contractEvents(

@@ -131,7 +131,7 @@ source.pipe(
   
   // Maps the events with
   // block and extrinsic context
-  mapEventsWithContext(),
+  extractEventsWithTx(),
   
   // Filters over the events
   mongoFilter(eventsQuery),

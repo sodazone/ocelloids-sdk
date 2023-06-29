@@ -9,14 +9,16 @@ import { ControlQuery, Criteria } from '../index.js';
 import { EventWithId, TxWithIdAndEvent } from '../types/interfaces.js';
 
 /**
+ * Filters extrinsics based on the provided criteria.
  *
- * @param extrinsicsCriteria
- * @returns
+ * It extracts extrinsics with events from the given block,
+ * flattens batch calls if needed and applies the filter criteria.
+ *
+ * @param extrinsicsCriteria The criteria to filter extrinsics.
+ * @returns An observable that emits filtered extrinsics with identifier and event information.
  */
 export function filterExtrinsics(
-  extrinsicsCriteria : Criteria = {
-    dispatchError: { $exists: false }
-  }
+  extrinsicsCriteria: Criteria
 ) {
   return (source: Observable<SignedBlockExtended>)
     : Observable<TxWithIdAndEvent> => {

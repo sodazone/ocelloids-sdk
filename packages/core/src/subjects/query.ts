@@ -62,9 +62,9 @@ export class ControlQuery
   }
 
   /**
-   *
-   * @param obj
-   * @returns
+   * Checks if an object is an instance of `ControlQuery`.
+   * @param obj The object to check.
+   * @returns `true` if the object is an instance of `ControlQuery`, `false` otherwise.
    */
   static isControlQuery(obj: ControlQuery | Criteria): obj is ControlQuery {
     return obj.change !== undefined;
