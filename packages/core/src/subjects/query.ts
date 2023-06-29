@@ -62,11 +62,22 @@ export class ControlQuery
   }
 
   /**
+   *
+   * @param obj
+   * @returns
+   */
+  static isControlQuery(obj: ControlQuery | Criteria): obj is ControlQuery {
+    return obj.change !== undefined;
+  }
+
+  /**
    * Creates a `ControlQuery` instance.
    * @param criteria The initial criteria for the query.
    */
-  static from(criteria: Criteria) : ControlQuery {
-    return new ControlQuery(criteria);
+  static from(criteria: ControlQuery | Criteria) : ControlQuery {
+    return ControlQuery.isControlQuery(criteria)
+      ? criteria
+      : new ControlQuery(criteria);
   }
 }
 

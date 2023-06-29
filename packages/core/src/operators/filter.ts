@@ -1,36 +1,34 @@
 import type { SignedBlockExtended } from '@polkadot/api-derive/types';
 
-import { Observable, mergeMap, share } from 'rxjs';
+import { Observable, share } from 'rxjs';
 
-import { extractTxWithEvents } from './extract.js';
+import { extractEventsWithTx, extractTxWithEvents } from './extract.js';
 import { flattenBatch } from './flatten.js';
 import { mongoFilter, mongoFilterFrom } from './mongo-filter.js';
 import { ControlQuery, Criteria } from '../index.js';
 import { EventWithId, TxWithIdAndEvent } from '../types/interfaces.js';
-import { GenericEventWithId } from '../types/event.js';
 
-function isControlQuery(obj: ControlQuery | Criteria): obj is ControlQuery {
-  return obj.change !== undefined;
-}
-
-function mapEventsWithContext() {
-  return (source: Observable<TxWithIdAndEvent>)
-  : Observable<EventWithId> => {
-    return source.pipe(mergeMap(x => {
-      const {
-        extrinsicId, blockNumber
-      } = (x as TxWithIdAndEvent).extrinsic;
-
-      return (x.events || []).map(
-        (event, extrinsicPosition) => {
-          return new GenericEventWithId(event, {
-            blockNumber,
-            extrinsicId,
-            extrinsicPosition
-          });
-        }
-      );
-    }));
+/**
+ *
+ * @param extrinsicsCriteria
+ * @returns
+ */
+export function filterExtrinsics(
+  extrinsicsCriteria : Criteria = {
+    dispatchError: { $exists: false }
+  }
+) {
+  return (source: Observable<SignedBlockExtended>)
+    : Observable<TxWithIdAndEvent> => {
+    return source.pipe(
+      // Extracts extrinsics with events
+      extractTxWithEvents(),
+      // Flattens batches if needed
+      flattenBatch(),
+      // Filters at the extrinsic level
+      // mainly for success or failure
+      mongoFilterFrom(extrinsicsCriteria)
+    );
   };
 }
 
@@ -47,23 +45,15 @@ export function filterEvents(
     dispatchError: { $exists: false }
   }
 ) {
-  const eventsQuery = isControlQuery(eventsCriteria)
-    ? eventsCriteria
-    : ControlQuery.from(eventsCriteria);
+  const eventsQuery = ControlQuery.from(eventsCriteria);
 
   return (source: Observable<SignedBlockExtended>)
     : Observable<EventWithId> => {
     return source.pipe(
-      // Extracts extrinsics with events
-      extractTxWithEvents(),
-      // Flattens batches if needed
-      flattenBatch(),
-      // Filters at the extrinsic level
-      // mainly for success or failure
-      mongoFilterFrom(extrinsicsCriteria),
+      filterExtrinsics(extrinsicsCriteria),
       // Maps the events with
       // block and extrinsic context
-      mapEventsWithContext(),
+      extractEventsWithTx(),
       // Filters over the events
       mongoFilter(eventsQuery),
       // Share multicast

@@ -1,7 +1,7 @@
 import type { SignedBlock } from '@polkadot/types/interfaces';
 import type { SignedBlockExtended } from '@polkadot/api-derive/types';
 
-import { Observable, concatMap, share } from 'rxjs';
+import { Observable, mergeMap, share } from 'rxjs';
 
 import { GenericExtrinsicWithId, enhanceTxWithId } from '../types/extrinsic.js';
 import { GenericEventWithId } from '../types/event.js';
@@ -27,7 +27,7 @@ export function extractTxWithEvents() {
   return (source: Observable<SignedBlockExtended>)
   : Observable<TxWithIdAndEvent> => {
     return (source.pipe(
-      concatMap(({block, extrinsics}) => {
+      mergeMap(({block, extrinsics}) => {
         const blockNumber = block.header.number;
         return extrinsics.map(
           (xt, blockPosition) => enhanceTxWithId(
@@ -62,7 +62,7 @@ export function extractExtrinsics() {
   return (source: Observable<SignedBlock>)
   : Observable<ExtrinsicWithId> => {
     return (source.pipe(
-      concatMap(({block}) => {
+      mergeMap(({block}) => {
         const blockNumber = block.header.number;
         return block.extrinsics.map(
           (xt, blockPosition) => new GenericExtrinsicWithId(
@@ -100,7 +100,7 @@ export function extractExtrinsics() {
 export function extractEvents() {
   return (source: Observable<SignedBlockExtended>): Observable<EventWithId> => {
     return source.pipe(
-      concatMap(({ block, extrinsics }) => {
+      mergeMap(({ block, extrinsics }) => {
         const blockNumber = block.header.number;
 
         return extrinsics.reduce((eventsWithId: EventWithId[], xt, i) => {
@@ -146,7 +146,7 @@ export function extractEvents() {
 export function extractEventsWithTx() {
   return (source: Observable<TxWithIdAndEvent>): Observable<EventWithIdAndTx> => {
     return source.pipe(
-      concatMap(({ extrinsic, events }) => {
+      mergeMap(({ extrinsic, events }) => {
         const blockNumber = extrinsic.blockNumber;
         const eventRecords: EventWithIdAndTx[] = [];
 
