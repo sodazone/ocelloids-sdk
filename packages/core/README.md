@@ -5,7 +5,8 @@ The Ocelloids Core Module provides base abstractions, reactive operators, and pa
 ## Usage
 
 Please, refer to the main README document for usage snippets.
-Additionally, check out the [examples/](https://github.com/sodazone/ocelloids/tree/main/) folder for demonstration applications.
+
+Additionally, check out the [examples/](https://github.com/sodazone/ocelloids/tree/main/examples) folder for demonstration applications.
 
 ## Layout
 
