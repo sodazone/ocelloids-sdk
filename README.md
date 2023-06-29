@@ -3,12 +3,14 @@
 # Ocelloids
 Substrate monitoring SDK
 
+<div style="display:flex;width:100%;align-items:center;justify-content:center;background-color:var(--color-workflow-card-header-shadow);">
 <img
   src="https://github.com/sodazone/ocelloids/blob/main/.github/assets/ocesp_250-min.png?raw=true"
   width="250"
   height="auto"
   alt=""
 />
+</div>
 
 ![GitHub CI](https://img.shields.io/github/actions/workflow/status/sodazone/ocelloids/ci.yml?branch=main&style=flat-square)
 ![GitHub](https://img.shields.io/github/license/sodazone/ocelloids?style=flat-square)
