@@ -6,6 +6,7 @@ import { Observable, concatMap, filter, map, share } from 'rxjs';
 import { mongoFilterFrom, types } from '@sodazone/ocelloids';
 
 import { ContractConstructorWithTxAndEvents, ContractEventWithBlockEvent, ContractMessageWithTx } from '../types/interfaces.js';
+import { AddressParam } from '../types/types.js';
 
 // Note: We will extract this helper function along with the contracts pallet module
 // when we add more pallet support
@@ -24,17 +25,19 @@ function getArgValueFromTx(extrinsic: types.ExtrinsicWithId, name: string) {
  * @param address - The address of the contract.
  * @returns An Observable that emits ContractMessageWithTx objects.
  */
-export function contractMessages(abi: Abi, address: string ) {
+export function contractMessages(abi: Abi, address: AddressParam ) {
+  const criteria = {
+    'extrinsic.call.section': 'contracts',
+    'extrinsic.call.method': 'call',
+    'extrinsic.call.args.dest.id': Array.isArray(address)
+      ? { $in: address }
+      : address
+  };
+
   return (source: Observable<types.TxWithIdAndEvent>)
   : Observable<ContractMessageWithTx> => {
     return (source.pipe(
-      mongoFilterFrom(
-        {
-          'extrinsic.call.section': 'contracts',
-          'extrinsic.call.method': 'call',
-          'extrinsic.call.args.dest.id': address
-        }
-      ),
+      mongoFilterFrom(criteria),
       map(tx => {
         const data = getArgValueFromTx(tx.extrinsic, 'data');
         return {
@@ -58,20 +61,20 @@ export function contractMessages(abi: Abi, address: string ) {
  * @returns An observable that emits the decoded contract constructor with associated block event and transaction.
  */
 export function contractConstructors(api: ApiPromise, abi: Abi, codeHash: string ) {
+  const criteria = {
+    'extrinsic.call.section': 'contracts',
+    'extrinsic.call.method': {
+      $in: [
+        'instantiate',
+        'instantiateWithCode'
+      ]
+    },
+  };
+
   return (source: Observable<types.TxWithIdAndEvent>)
   : Observable<ContractConstructorWithTxAndEvents> => {
     return (source.pipe(
-      mongoFilterFrom(
-        {
-          'extrinsic.call.section': 'contracts',
-          'extrinsic.call.method': {
-            $in: [
-              'instantiate',
-              'instantiateWithCode'
-            ]
-          },
-        }
-      ),
+      mongoFilterFrom(criteria),
       // Use concatMap to allow for async call to promise API to get contract code hash,
       // map to contractCodeHash property to be used for filtering in the next step.
       // This is necessary as we cannot make an async call in rxjs `filter` operator
@@ -126,17 +129,20 @@ export function contractConstructors(api: ApiPromise, abi: Abi, codeHash: string
  */
 export function contractEvents(
   abi: Abi,
-  address: string
+  address: AddressParam
 ) {
-  return (source: Observable<types.EventWithIdAndTx>): Observable<ContractEventWithBlockEvent> => {
+  const criteria = {
+    'section': 'contracts',
+    'method': 'ContractEmitted',
+    'data.contract': Array.isArray(address)
+      ? { $in: address }
+      : address
+  };
+
+  return (source: Observable<types.EventWithIdAndTx>)
+  : Observable<ContractEventWithBlockEvent> => {
     return source.pipe(
-      mongoFilterFrom(
-        {
-          'section': 'contracts',
-          'method': 'ContractEmitted',
-          'data.contract': address
-        }
-      ),
+      mongoFilterFrom(criteria),
       map(blockEvent => {
         // We cast as any below to avoid importing `@polkadotjs/api-augment`
         // as we want to keep the library side-effects-free.
