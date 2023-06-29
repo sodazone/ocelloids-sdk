@@ -2,6 +2,11 @@
 
 The Ocelloids Core Module provides base abstractions, reactive operators, and pallet-independent functionality.
 
+## Usage
+
+Please, refer to the main README document for usage snippets.
+Additionally, check out the [examples/](https://github.com/sodazone/ocelloids/tree/main/) folder for demonstration applications.
+
 ## Layout
 
 The `packages/core` module source folder is structured as follows:
