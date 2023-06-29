@@ -10,7 +10,7 @@ function isContractMessage(object: any): object is DecodedMessage {
 }
 
 function isContractMessageWithTx(object: any): object is ContractMessageWithTx {
-  return converters.guards.isExtrinsicWithId(object) && isContractMessage(object);
+  return converters.guards.isTxWithEvent(object) && isContractMessage(object);
 }
 
 function isContractEvent(object: any): object is DecodedEvent {
@@ -57,8 +57,8 @@ function contractMessageToNamedPrimitive(data: DecodedMessage) {
 
 function contractMessageWithTxToNamedPrimitive(data: ContractMessageWithTx) {
   return {
-    ...converters.helpers.txWithEventToNamedPrimitive(data),
-    ...contractMessageToNamedPrimitive(data)
+    ...contractMessageToNamedPrimitive(data),
+    ...converters.helpers.txWithEventToNamedPrimitive(data)
   };
 }
 

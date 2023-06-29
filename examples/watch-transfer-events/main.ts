@@ -32,7 +32,7 @@ function watcher({ url, threshold, verbose }) {
       'data.amount': { $bn_gte: threshold }
     }))
   ).subscribe(
-    x => console.log(x.toHuman())
+    x => console.log(JSON.stringify(x.toHuman()))
   );
 }
 

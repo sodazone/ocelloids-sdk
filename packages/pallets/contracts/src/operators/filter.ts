@@ -14,6 +14,7 @@ import {
 import { contractEvents, contractMessages } from './index.js';
 import { ContractEventWithBlockEvent, ContractMessageWithTx } from '../types/interfaces.js';
 import { AddressParam } from '../types/types.js';
+import { contracts } from '../converters/contracts.js';
 
 /**
  * Filters contract calls based on the provided criteria.
@@ -39,9 +40,10 @@ export function filterContractCalls(
     return source.pipe(
       filterExtrinsics(extrinsicsCriteria),
       contractMessages(abi, address),
+      // tap(x => console.log(x.extrinsic.toHuman(), x.message)),
       // Filters over the decoded message,
       // tx or event
-      mongoFilter(callsQuery),
+      mongoFilter(callsQuery, contracts),
       // Share multicast
       share()
     );
@@ -74,7 +76,7 @@ export function filterContractEvents(
       extractEventsWithTx(),
       contractEvents(abi, address),
       // Filters over the decoded event
-      mongoFilter(eventsQuery),
+      mongoFilter(eventsQuery, contracts),
       // Share multicast
       share()
     );

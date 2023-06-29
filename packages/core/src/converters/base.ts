@@ -2,15 +2,9 @@ import { EventRecord, Event, Extrinsic, SignedBlock, Block, FunctionMetadataLate
 import type { AnyJson, CallBase, AnyTuple } from '@polkadot/types-codec/types';
 import type { TxWithEvent, SignedBlockExtended } from '@polkadot/api-derive/types';
 
-import { ExtrinsicWithId } from '../types/index.js';
-
-/**
- * Type guards for identifying specific objects.
- */
-function isTxWithEvent(object: any): object is TxWithEvent {
-  // Note that the rest of fields could be undefined
-  return object.extrinsic !== undefined;
-}
+/* ================================================================
+   Type guards for identifying specific objects.
+   ================================================================ */
 
 function isExtrinsic(object: any): object is Extrinsic {
   return object.signature !== undefined
@@ -18,10 +12,10 @@ function isExtrinsic(object: any): object is Extrinsic {
     && object.era !== undefined;
 }
 
-function isExtrinsicWithId(object: any): object is ExtrinsicWithId {
-  return object.extrinsic !== undefined
-    && object.extrinsic.extrinsicId !== undefined
-    &&  isExtrinsic(object);
+function isTxWithEvent(object: any): object is TxWithEvent {
+  // Note that the rest of fields could be undefined
+  // so.. order carefully your guard checks
+  return object.extrinsic !== undefined && isExtrinsic(object.extrinsic);
 }
 
 function isEventRecord(object: any): object is EventRecord {
@@ -235,7 +229,7 @@ export const base : Converter = {
 };
 
 export const guards = {
-  isExtrinsicWithId
+  isTxWithEvent
 };
 
 export const helpers = {
