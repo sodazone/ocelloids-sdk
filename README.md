@@ -44,7 +44,7 @@ With Ocelloids you can easily implement sophisticated multi-chain monitoring log
 
 ![npm](https://img.shields.io/npm/v/sodazone/ocelloids?style=for-the-badge)
 
-Essential abstractions, reactive operators, and pallet-independent functionality.
+Essential abstractions, reactive operators, base type converters, and pallet-independent functionality.
 
 ```shell
 npm i @sodazone/ocelloids
@@ -56,7 +56,7 @@ Source code [packages/core](https://github.com/sodazone/ocelloids/tree/main/pack
 
 ![npm](https://img.shields.io/npm/v/sodazone/ocelloids-contracts?style=for-the-badge)
 
-Provides support for the contracts pallet.
+Operators and type converters for the contracts pallet.
 
 ```shell
 npm i @sodazone/ocelloids-contracts

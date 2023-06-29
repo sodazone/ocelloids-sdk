@@ -16,4 +16,3 @@ Here is the high-level structure of the `packages/core` module source folder:
 |  subjects                    | Reactive subjects                         |
 |  types                       | Extended types                            |
 
-The core module is published as the `@sodazone/ocelloids` package.
