@@ -7,9 +7,9 @@ import { defineCommand, runMain } from 'citty';
 
 import {
   SubstrateApis,
+  convert,
   blocks,
   blockAt,
-  mapToNamedPrimitive,
   extractExtrinsics,
   extractTxWithEvents
 } from '@sodazone/ocelloids';
@@ -48,7 +48,7 @@ function cdump({ url, type, blockHeight }) {
   apis.rx.polkadot.pipe(
     sourceBlocks,
     extractor(),
-    mapToNamedPrimitive()
+    convert()
   ).subscribe({
     next: value => {
       console.log(JSON.stringify(value));
