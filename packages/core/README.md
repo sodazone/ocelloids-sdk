@@ -6,9 +6,16 @@ The Ocelloids Core Module provides base abstractions, reactive operators, and pa
 
 ## Usage
 
-Please, refer to the main README document for usage snippets.
+Please, refer to the main README document for basic snippets.
 
 Additionally, check out the [examples/](https://github.com/sodazone/ocelloids/tree/main/examples) folder for demonstration applications.
+
+## Queries and Types
+
+TBD
+
+DEBUG=oc-ops-mongo-filter bun filter-fee-events
+
 
 ## Layout
 

@@ -1,3 +1,4 @@
+import { logger } from '@polkadot/util';
 import type { FunctionMetadataLatest, Event } from '@polkadot/types/interfaces';
 import type { CallBase, AnyTuple } from '@polkadot/types-codec/types';
 import { GenericCall, GenericExtrinsic } from '@polkadot/types';
@@ -8,6 +9,8 @@ import { TxWithIdAndEvent } from '../types/interfaces.js';
 import { GenericExtrinsicWithId } from '../types/extrinsic.js';
 
 type BatchEvents = Event[];
+
+const l = logger('oc-ops-flatten');
 
 /**
  * Groups events into batches based on utility events.
@@ -57,6 +60,8 @@ function flattenBatchCalls(batchTx: TxWithIdAndEvent): TxWithIdAndEvent[] {
     (flattedTxWithEvent: TxWithIdAndEvent[], arg) => {
       const calls = arg as unknown as CallBase<AnyTuple, FunctionMetadataLatest>[];
 
+      l.debug('calls in batch', calls.length);
+
       const flatted = calls.map((call, index) => {
         const flatCall = new GenericCall(extrinsic.registry, call);
         const { blockNumber, blockPosition } = extrinsic;
@@ -99,6 +104,8 @@ export function flattenBatch() {
         if (!isBatch) {
           return [tx];
         }
+
+        l.debug('flatten batch calls');
 
         return flattenBatchCalls(tx);
       }),

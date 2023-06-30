@@ -1,8 +1,13 @@
+import { logger } from '@polkadot/util';
+
 import { BehaviorSubject, Observable, filter } from 'rxjs';
 import { Query } from 'mingo';
 
 import { ControlQuery, Criteria } from '../index.js';
 import { Converter, base } from '../converters/index.js';
+import { debugOnly } from './debug.js';
+
+const l = logger('oc-ops-mongo-filter');
 
 /**
  * Applies a MongoDB query language filter to an observable stream of data.
@@ -43,9 +48,11 @@ export function mongoFilter<T>(
     // So, we just use the current value from the behavior subject.
     return source.pipe(
       filter(
-        record => query.value.test(
-          converter.toNamedPrimitive(record)
-        )
+        record => {
+          const converted = converter.toNamedPrimitive(record);
+          debugOnly(l, x => JSON.stringify(x, null, 2))(converted);
+          return query.value.test(converted);
+        }
       )
     );
   };

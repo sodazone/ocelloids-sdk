@@ -1,4 +1,7 @@
+import type { AnyJson } from '@polkadot/types-codec/types';
+
 import { Observable, map } from 'rxjs';
+
 import { Converter, base } from '../converters/index.js';
 
 /**
@@ -6,11 +9,12 @@ import { Converter, base } from '../converters/index.js';
  *
  * @typeparam T The type of values emitted by the source observable.
  * @param converter The converter to use, defaults to the base converter.
- * @returns A function that takes an observable source and returns an observable that emits the named primitive values.
+ * @returns A function that takes an observable source and returns an observable emitting the named primitive values as AnyJson.
  * @see {@link Converter}
  */
 export function convert<T>(converter: Converter = base) {
-  return (source: Observable<T>) => {
+  return (source: Observable<T>)
+  : Observable<AnyJson> => {
     return source.pipe(
       map(record => converter.toNamedPrimitive(record))
     );

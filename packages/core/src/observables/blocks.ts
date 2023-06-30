@@ -14,12 +14,15 @@
  * limitations under the License.
  */
 import { ApiRx } from '@polkadot/api';
-import { BN } from '@polkadot/util';
+import { BN, logger } from '@polkadot/util';
 import type { SignedBlockExtended } from '@polkadot/api-derive/types';
 
 import { Observable, concatMap, mergeMap, share, switchMap } from 'rxjs';
 
 import { AnyBN, bnRange } from '../observables/bn.js';
+import { debug } from '../operators/debug.js';
+
+const l = logger('oc-blocks');
 
 // Copy of https://github.com/polkadot-js/api/blob/master/packages/api-derive/src/chain/subscribeFinalizedBlocks.ts
 // because it is not exposed in the API
@@ -60,6 +63,7 @@ export function blocks(finalized = false) {
           subscribeFinalizedBlocks(api) :
           api.derive.chain.subscribeNewBlocks();
       }),
+      debug(l, b => b.block.header.number.toHuman()),
       share()
     ));
   };
