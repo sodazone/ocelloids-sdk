@@ -1,0 +1,47 @@
+{
+  // Contract address.
+  address: 5HfQopC1yQSoG83auWgRLTxhWWFxiVQWT74LLXeXMLJDFBvP
+  // Path to contract metadata file.
+  // Path could be either absolute or relative to current directory.
+  metadata: azns_registry.json
+  network: wss://ws.test.azero.dev
+  getBlocksInRange: true
+  startBlock: 34870110
+  range: 30
+  filter: {
+    'message.identifier': register
+  }
+  apiOptions: {
+    types: {
+      "minmax": [
+          0,
+          null
+      ],
+      "types": {
+        AlephKeyPair: ed25519::Signature
+      }
+    }
+    rpc: {
+      alephNode: {
+        emergencyFinalize: {
+          description: Finalize the block with given hash and number using attached signature.
+          params: [
+            {
+              name: number
+              type: BlockNumber
+            },
+            {
+              name: hash
+              type: BlockHash
+            },
+            {
+              name: key_pair
+              type: AlephKeyPair
+            }
+          ],
+          type: Result<()>
+        }
+      }
+    }
+  }
+}

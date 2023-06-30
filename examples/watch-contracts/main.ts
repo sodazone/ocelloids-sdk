@@ -5,6 +5,8 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { exit } from 'node:process';
 
+import { parse } from 'hjson';
+
 import yargs from 'yargs/yargs';
 import { hideBin } from 'yargs/helpers';
 
@@ -13,7 +15,8 @@ import { Abi } from '@polkadot/api-contract';
 
 import {
   SubstrateApis,
-  blocksInRange
+  blocksInRange,
+  blocks
 } from '@sodazone/ocelloids';
 
 import {
@@ -21,88 +24,74 @@ import {
   converters
 } from '@sodazone/ocelloids-contracts';
 
-interface ContractDetails {
-  address: string,
-  metadata: string,
-  network: string,
-  startBlock: number,
-  range: number,
-  filter: string
-}
-
-const contracts: Record<string, ContractDetails> = {
-  magink: {
-    address: 'apJNVQJ5T4C5gZ1XRPw2MAHcUFxbuHch7BPGQuTyT8DHjeX',
-    metadata: 'magink.json',
-    network: 'wss://rpc.shibuya.astar.network',
-    startBlock: 3944050,
-    range: 20,
-    filter: JSON.stringify({
-      'message.identifier': { $in: ['start', 'claim'] }
-    })
-  },
-  azns_registry: {
-    address: '5HfQopC1yQSoG83auWgRLTxhWWFxiVQWT74LLXeXMLJDFBvP',
-    metadata: 'azns_registry.json',
-    network: 'wss://ws.test.azero.dev',
-    startBlock: 34870110,
-    range: 30,
-    filter: JSON.stringify({
-      'message.identifier': 'register'
-    })
-  }
-};
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const hr = [...Array(60)].map(() => '=').join('');
 
-function watcher({ name, verbose }) {
-  const names = Object.keys(contracts);
-  if (!names.includes(name)) {
-    throw new Error(`Contract details not found for ${name}`);
-  }
-  const {
-    address,
-    metadata,
-    network,
-    startBlock,
-    range,
-    filter
-  }: ContractDetails = contracts[name];
+function printHeader(text, char, length) {
+  const sep = `> ${char.repeat(length)}`;
+  console.log(sep);
+  console.log(text);
+  console.log(sep);
+}
 
-  if (verbose) {
-    console.log('> Contract name:', name);
-    console.log('> Contract address:', address);
-    console.log('> Network:', network);
+function objectToStructuredString(data, level = 0): string {
+  if (data === undefined || data === null) {
+    return 'null';
   }
-  const contractMetadataJson = readFileSync(path.resolve(path.resolve(__dirname, 'metadata', metadata))).toString();
+  if (typeof data === 'string' || Object.keys(data).length === 0) {
+    return data;
+  }
+  return Object.keys(data).map(k => `\n>${' '.repeat(level * 2)} - ${k}: ${objectToStructuredString(data[k], level + 1)}`).join('');
+}
+
+function watcher({ configPath, verbose }) {
+  const c = readFileSync(path.resolve(__dirname, configPath)).toString();
+  const config = parse(c);
+
+  if (config.getBlocksInRange && (config.startBlock === undefined || config.range === undefined)) {
+    throw new Error('startBlock and range needs to be configured when getBlockInRange is set to true.');
+  }
 
   const apis = new SubstrateApis({
     network: {
-      provider: new WsProvider(network)
+      ...config.apiOptions,
+      provider: new WsProvider(config.network)
     }
   });
+
+  if (verbose) {
+    console.log('> Contract address:', config.address);
+    console.log('> Network:', config.network);
+    console.log(
+      config.getBlocksInRange ?
+        `> Scanning blocks from ${config.startBlock} to ${config.startBlock + config.range}` :
+        '> Scanning new blocks'
+    );
+  }
+
+  const contractMetadataJson = readFileSync((path.resolve(__dirname, configPath, '../', config.metadata))).toString();
 
   const abi = new Abi(contractMetadataJson);
 
   apis.rx.network.pipe(
-    blocksInRange(startBlock, range, false),
+    config.getBlocksInRange ?
+      blocksInRange(config.startBlock, config.range, false) :
+      blocks({
+        finalized: false,
+        debug: verbose ? true : false
+      }),
     filterContractCalls(
       abi,
-      address,
-      JSON.parse(filter)
+      config.address,
+      config.filter
     )
   ).subscribe({
     next: x => {
       if (verbose) {
         const call = converters.contracts.toNamedPrimitive(x);
-        console.log('>', hr);
-        console.log('> 💬 Contract Message');
-        console.log('>', hr);
+        printHeader('> 💬 Contract Message', '=', 60);
         console.log('> Identifier:', x.message.identifier);
-        console.log('> Arguments');
-        console.log(Object.entries(call.args as any).map(([k, v]) => `> - ${k}: ${v}`).join('\n'));
+        console.log('> Arguments:', objectToStructuredString(call.args));
         console.log('> JSON:');
       }
       console.log(JSON.stringify({
@@ -113,9 +102,7 @@ function watcher({ name, verbose }) {
     },
     complete: () => {
       if (verbose) {
-        console.log('>', hr);
-        console.log('> 🙌 Scan complete');
-        console.log('>', hr);
+        printHeader('> 🙌 Scan complete', '=', 60);
       }
       exit(0);
     }
@@ -124,12 +111,12 @@ function watcher({ name, verbose }) {
 
 const argv = yargs(hideBin(process.argv))
   .usage('Usage: watch-contracts [options]')
-  .example('watch-contracts -n magink', 'watches contract messages of magink contract deployed on Shibuya')
-  .option('n', {
+  .example('watch-contracts -p ./link/config.hjson', 'watches contract messages of link contract deployed on Rococo')
+  .option('p', {
     type: 'string',
-    alias: 'name',
-    default: 'magink',
-    describe: 'The contract name',
+    alias: 'path',
+    default: './contracts/link/config.hjson',
+    describe: 'The path to the configuration file for the contract to watch',
     requiresArg: true
   })
   .help('h')
@@ -138,7 +125,7 @@ const argv = yargs(hideBin(process.argv))
   .argv as any;
 
 watcher({
-  name: argv.name,
+  configPath: argv.path,
   verbose: argv.verbose
 });
 

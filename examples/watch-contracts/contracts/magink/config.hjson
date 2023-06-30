@@ -1,0 +1,15 @@
+{
+  address: apJNVQJ5T4C5gZ1XRPw2MAHcUFxbuHch7BPGQuTyT8DHjeX
+  metadata: magink.json
+  network: wss://rpc.shibuya.astar.network
+  getBlocksInRange: true
+  startBlock: 3944050
+  range: 10
+  filter: {
+    message.identifier: { $in: [
+        start
+        claim
+      ]
+    }
+  }
+}
