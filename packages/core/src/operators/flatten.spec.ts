@@ -2,14 +2,30 @@ import type { TxWithEvent } from '@polkadot/api-derive/types';
 
 import { of } from 'rxjs';
 
-import { testExtrinsics, testBatchExtrinsic, testBatchCalls } from '@sodazone/ocelloids-test';
+import {
+  testBlocks,
+  testExtrinsics,
+  testBatchExtrinsic,
+  testBatchCalls
+} from '@sodazone/ocelloids-test';
 
 import { flattenBatch } from './flatten.js';
+import { types } from '../index.js';
+
+const blockNumber = testBlocks[0].block.header.number;
+const testBatchTxWithId = types.enhanceTxWithId({
+  blockNumber,
+  blockPosition: 0
+}, testBatchExtrinsic);
+const testNonBatchTxWithId = types.enhanceTxWithId({
+  blockNumber,
+  blockPosition: 0
+}, testExtrinsics[2]);
 
 describe('flatten batch call operator', () => {
   describe('flattenBatch', () => {
     it('should flatten `utility.batchAll` extrinsics', done => {
-      const testPipe = flattenBatch()(of(testBatchExtrinsic));
+      const testPipe = flattenBatch()(of(testBatchTxWithId));
       let index = 0;
 
       testPipe.subscribe({
@@ -37,7 +53,7 @@ describe('flatten batch call operator', () => {
 
     it('should work with non-batched extrinsics', done => {
       let index = 0;
-      const testPipe = flattenBatch()(of(testExtrinsics[2]));
+      const testPipe = flattenBatch()(of(testNonBatchTxWithId));
       testPipe.subscribe({
         next: (result: TxWithEvent) => {
           index++;
