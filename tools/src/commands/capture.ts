@@ -80,7 +80,6 @@ function downloadBlocks({
 export default defineCommand({
   meta: {
     name: 'capture',
-    version: '0.0.1',
     description: 'Download extended signed blocks.',
   },
   args: {
