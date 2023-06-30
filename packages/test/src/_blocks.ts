@@ -18,10 +18,12 @@ import { readFileSync } from 'node:fs';
 
 import { decode } from 'cbor-x';
 
-import { TypeRegistry, Metadata } from '@polkadot/types';
+import { TypeRegistry, Metadata, GenericCall } from '@polkadot/types';
 import metadataStatic from '@polkadot/types-support/metadata/static-polkadot';
-import type { SignedBlock, EventRecord, AccountId } from '@polkadot/types/interfaces';
+import type { SignedBlock, EventRecord, Event, AccountId, FunctionMetadataLatest } from '@polkadot/types/interfaces';
 import { createSignedBlockExtended } from '@polkadot/api-derive';
+import type { TxWithEvent } from '@polkadot/api-derive/types';
+import type { CallBase, AnyTuple } from '@polkadot/types-codec/types';
 
 import type { BinBlock } from './_types.js';
 
@@ -48,3 +50,20 @@ export function testBlocksFrom(file: string, mds: `0x${string}` = metadataStatic
     );
   });
 }
+
+export const testBlocks = testBlocksFrom('blocks.cbor.bin').slice(0, 3);
+export const testHeaders = testBlocks.map(tb => tb.block.header);
+export const testExtrinsics = testBlocks.reduce((acc: TxWithEvent[], tb) => acc.concat(tb.extrinsics), []);
+export const testEventRecords = testBlocks.reduce((acc: EventRecord[], tb) => acc.concat(tb.events), []);
+export const testEvents = testExtrinsics.reduce((acc: Event[], txt) => acc.concat(txt.events), []);
+export const testBatchExtrinsic = testExtrinsics[5];
+export const testBatchCalls = testBatchExtrinsic.extrinsic.args.reduce((flattedTxWithEvent: GenericCall[], arg) => {
+  const calls = arg as unknown as CallBase<AnyTuple, FunctionMetadataLatest>[];
+
+  const flatted = calls.map(call => {
+    return new GenericCall(testBatchExtrinsic.extrinsic.registry, call);
+  });
+
+  return flattedTxWithEvent.concat(flatted);
+}, []);
+

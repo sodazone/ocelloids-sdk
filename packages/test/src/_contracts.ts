@@ -2,10 +2,10 @@
 
 import type { TxWithEvent } from '@polkadot/api-derive/types';
 import type { EventRecord, Event } from '@polkadot/types/interfaces';
-import metadataStatic from '../__data__/metadata/rococoContracts-hex.js';
+import metadataStatic from './__data__/metadata/rococoContracts-hex.js';
 
-import { testBlocksFrom } from '../_blocks.js';
-import { testMetadataFrom } from '../_abi.js';
+import { testBlocksFrom } from './_blocks.js';
+import { testMetadataFrom } from './_abi.js';
 
 export const testContractBlocks = testBlocksFrom('contracts2841323.cbor.bin', metadataStatic);
 export const testContractExtrinsics = testContractBlocks.reduce((acc: TxWithEvent[], tb) => acc.concat(tb.extrinsics), []);

@@ -12,7 +12,7 @@ export const mockPromiseApi = {
   },
   query: {
     contracts: {
-      contractInfoOf: jest.fn()
+      contractInfoOf: () => {}
     }
   }
 } as unknown as ApiPromise;

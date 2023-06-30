@@ -34,6 +34,10 @@
       "import": "./lib/index.js"
     }
   },
+  "files": [
+    "lib",
+    "src"
+  ],
   "scripts": {
     "build": "tsup src/index.ts --format cjs,esm --dts --clean -d lib/ && yarn cp:data",
     "cp:data": "shx rm -rf lib/__data__ && shx cp -r src/__data__ lib/"
