@@ -82,13 +82,9 @@ export class SubstrateApis {
 
       this.options[name] = options;
 
-      this.apiRx[name] = new ApiRx({
-        provider
-      });
+      this.apiRx[name] = new ApiRx(options);
 
-      this.promises[name] = new ApiPromise({
-        provider
-      });
+      this.promises[name] = new ApiPromise(options);
 
       this.chains.push(name);
     });
