@@ -21,29 +21,35 @@ import { contracts } from '../converters/contracts.js';
  *
  * @param abi The ABI of the contract as a JSON object or string.
  * @param address The contract address or an array of addresses.
- * @param callsCriteria The criteria to filter contract calls.
+ * @param callsCriteria - (Optional) The criteria to filter contract calls.
  * @param extrinsicsCriteria - (Optional) Criteria for filtering extrinsics. Defaults to `{ dispatchError: { $exists: false } }`.
  * @returns An observable that emits filtered contract calls.
  */
 export function filterContractCalls(
   abi: Abi,
   address: AddressParam,
-  callsCriteria: ControlQuery | Criteria,
+  callsCriteria?: ControlQuery | Criteria,
   extrinsicsCriteria : Criteria = {
     dispatchError: { $exists: false }
   }
 ) {
-  const callsQuery = ControlQuery.from(callsCriteria);
+  let callsQuery: ControlQuery | undefined;
+
+  if (callsCriteria) {
+    callsQuery = ControlQuery.from(callsCriteria);
+  }
 
   return (source: Observable<SignedBlockExtended>)
       : Observable<ContractMessageWithTx> => {
     return source.pipe(
       filterExtrinsics(extrinsicsCriteria),
       contractMessages(abi, address),
-      // tap(x => console.log(x.extrinsic.toHuman(), x.message)),
-      // Filters over the decoded message,
-      // tx or event
-      mongoFilter(callsQuery, contracts),
+      // If callsCriteria is defined,
+      // filters over the decoded message, tx or event.
+      // Else, pass through all contract messages.
+      callsQuery ?
+        mongoFilter(callsQuery, contracts) :
+        x => x,
       // Share multicast
       share()
     );
@@ -55,19 +61,23 @@ export function filterContractCalls(
  *
  * @param abi The ABI of the contract as a JSON object or string.
  * @param address The contract address or an array of addresses.
- * @param eventsCriteria The criteria to filter contract events.
+ * @param eventsCriteria - (Optional) The criteria to filter contract events.
  * @param extrinsicsCriteria - (Optional) Criteria for filtering extrinsics. Defaults to `{ dispatchError: { $exists: false } }`.
  * @returns An observable that emits filtered contract events.
  */
 export function filterContractEvents(
   abi: Abi,
   address: AddressParam,
-  eventsCriteria: ControlQuery | Criteria,
+  eventsCriteria?: ControlQuery | Criteria,
   extrinsicsCriteria : Criteria = {
     dispatchError: { $exists: false }
   }
 ) {
-  const eventsQuery = ControlQuery.from(eventsCriteria);
+  let eventsQuery: ControlQuery | undefined;
+
+  if (eventsCriteria) {
+    eventsQuery = ControlQuery.from(eventsCriteria);
+  }
 
   return (source: Observable<SignedBlockExtended>)
         : Observable<ContractEventWithBlockEvent> => {
@@ -76,7 +86,10 @@ export function filterContractEvents(
       extractEventsWithTx(),
       contractEvents(abi, address),
       // Filters over the decoded event
-      mongoFilter(eventsQuery, contracts),
+      // if query or criteria is provided
+      eventsQuery ?
+        mongoFilter(eventsQuery, contracts) :
+        x => x,
       // Share multicast
       share()
     );
