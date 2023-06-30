@@ -1,4 +1,3 @@
-#!/usr/bin/env ts-node-esm
 /*
  * Copyright 2023 SO/DA zone - Marc Fornós & Xueying Wang
  *
@@ -20,7 +19,7 @@ import { writeFileSync } from 'node:fs';
 import { Observer } from 'rxjs';
 import { encode } from 'cbor-x';
 
-import { defineCommand, runMain } from 'citty';
+import { defineCommand } from 'citty';
 
 import { WsProvider } from '@polkadot/api';
 import { SignedBlockExtended } from '@polkadot/api-derive/types';
@@ -78,7 +77,7 @@ function downloadBlocks({
   );
 }
 
-const main = defineCommand({
+export default defineCommand({
   meta: {
     name: 'capture',
     version: '0.0.1',
@@ -107,5 +106,3 @@ const main = defineCommand({
     downloadBlocks(args);
   },
 });
-
-runMain(main as any);

@@ -13,14 +13,19 @@
     "url": "https://github.com/sodazone/ocelloids.git"
   },
   "bin": {
-    "capture": "src/capture.ts",
-    "cdump": "src/cdump.ts"
+    "octools": "lib/main.cjs"
   },
   "dependencies": {
     "@sodazone/ocelloids": "1.0.0-dev.0",
     "@sodazone/ocelloids-test": "1.0.0-dev.0",
     "cbor-x": "^1.5.3",
     "citty": "^0.1.1"
+  },
+  "tsup": {
+    "shims": true
+  },
+  "scripts": {
+    "build": "tsup src/main.ts --clean --minify -d lib/"
   },
   "stableVersion": "1.0.0"
 }
