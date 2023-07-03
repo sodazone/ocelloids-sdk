@@ -43,7 +43,9 @@
     "examples"
   ],
   "scripts": {
-    "build": "yarn workspaces foreach run build",
+    "build": "yarn workspaces foreach -p --exclude tools --exclude examples run build",
+    "build:tools": "yarn workspace @sodazone/ocelloids-tools run build",
+    "build:examples": "yarn workspace @sodazone/ocelloids-examples run build",
     "docs": "typedoc",
     "lint": "eslint --cache --fix \"packages/**/src/**/*.ts\"",
     "test": "jest",
