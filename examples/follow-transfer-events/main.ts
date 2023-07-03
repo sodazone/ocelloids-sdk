@@ -1,9 +1,9 @@
-#!/usr/bin/env ts-node-esm
+#!/usr/bin/env node
 
 import { WsProvider } from '@polkadot/api';
 import type { SignedBlockExtended } from '@polkadot/api-derive/types';
 
-import '@polkadot/api-augment';
+import type { } from '@polkadot/api-augment';
 
 import { tap } from 'rxjs';
 import { exit } from 'process';
@@ -47,14 +47,30 @@ const apis = new SubstrateApis({
   }
 });
 
+const startBlock = 16134439;
+const blockCount = 80;
+
+console.log('='.repeat(80));
+console.log('🛸 Ocelloids Follow Transfer Demo');
+console.log('='.repeat(80));
+console.log(`Address: ${KRAKEN}
+Network: Polkadot
+Start Block: ${startBlock}
+Block Count: ${blockCount}`);
+console.log('-'.repeat(80));
+
 apis.rx.polkadot.pipe(
   // We need sequential blocks since the order of discovery matters
-  blocksInRange(16134439, 100),
-  tap((x: SignedBlockExtended) => console.log(x.block.header.number.toHuman())),
+  blocksInRange(startBlock, blockCount),
+  tap((x: SignedBlockExtended) => console.log(
+    'Block Height',
+    x.block.header.number.toHuman()
+  )),
   filterEvents(dynamicQuery)
 ).subscribe({
   next: event => {
-    console.log(event.toHuman());
+    console.log('Event', event.toHuman());
+
     if (apis.promise.polkadot.events.balances.Transfer.is(event) ) {
       const transfer = event.data;
       const from = transfer.from.toPrimitive();
@@ -72,13 +88,14 @@ apis.rx.polkadot.pipe(
     const nodes = graph.nodes();
 
     if (nodes.length > prevLen) {
-      console.log(`Monitoring: ${nodes}`);
+      console.log('Monitoring', nodes);
       dynamicQuery.change(transfersOf(nodes));
     }
   },
   complete: () => {
     console.log(
-      `Complete w/ Graph: ${JSON.stringify(graph.serialize(), null, 2)}`
+      'Graph',
+      JSON.stringify(graph.serialize(), null, 2)
     );
     exit(0);
   }

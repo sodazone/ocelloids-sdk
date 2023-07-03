@@ -1524,14 +1524,15 @@ __metadata:
     graph-data-structure: ^3.3.0
     hjson: ^3.2.2
     rxjs: ^7.8.1
+    tsup: ^7.1.0
     yargs: ^17.7.2
   bin:
-    filter-exstrinsics: filter-exstrinsics/main.ts
-    filter-fee-events: filter-fee-events/main.ts
-    follow-transfer-events: follow-transfer-events/main.ts
-    light-client: light-client/main.ts
-    watch-contracts: watch-contracts/main.ts
-    watch-transfer-events: watch-transfer-events/main.ts
+    filter-extrinsics: ./dist/filter-extrinsics/main.cjs
+    filter-fee-events: ./dist/filter-fee-events/main.cjs
+    follow-transfer-events: ./dist/follow-transfer-events/main.cjs
+    light-client: ./dist/light-client/main.cjs
+    watch-contracts: ./dist/watch-contracts/main.cjs
+    watch-transfer-events: ./dist/watch-transfer-events/main.cjs
   languageName: unknown
   linkType: soft
 
@@ -5699,6 +5700,42 @@ __metadata:
     tsup: dist/cli-default.js
     tsup-node: dist/cli-node.js
   checksum: 25dda9ca37ab1763986dc34a8eabf2c3d3184834b33b2026907b7bbcf1cea3a4841e645cc3cdd1011eb8aaf9ce9959ddfb9cfeeee8efee0e485f3bae232aacf5
+  languageName: node
+  linkType: hard
+
+"tsup@npm:^7.1.0":
+  version: 7.1.0
+  resolution: "tsup@npm:7.1.0"
+  dependencies:
+    bundle-require: ^4.0.0
+    cac: ^6.7.12
+    chokidar: ^3.5.1
+    debug: ^4.3.1
+    esbuild: ^0.18.2
+    execa: ^5.0.0
+    globby: ^11.0.3
+    joycon: ^3.0.1
+    postcss-load-config: ^4.0.1
+    resolve-from: ^5.0.0
+    rollup: ^3.2.5
+    source-map: 0.8.0-beta.0
+    sucrase: ^3.20.3
+    tree-kill: ^1.2.2
+  peerDependencies:
+    "@swc/core": ^1
+    postcss: ^8.4.12
+    typescript: ">=4.1.0"
+  peerDependenciesMeta:
+    "@swc/core":
+      optional: true
+    postcss:
+      optional: true
+    typescript:
+      optional: true
+  bin:
+    tsup: dist/cli-default.js
+    tsup-node: dist/cli-node.js
+  checksum: 5639c0f4990a89de6e55f9d77f53b8c3706e6d24700e37dd1fc696abda83017b02be7f514f4e7ce655b1e443b8f4d09ca0aca398b5767cad23466a18bd6e06b2
   languageName: node
   linkType: hard
 

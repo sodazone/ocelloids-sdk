@@ -1,5 +1,7 @@
 {
   "extends": "../tsconfig.json",
+  "compilerOptions": {
+  },
   "ts-node": {
     "transpileOnly": true,
     "files": true

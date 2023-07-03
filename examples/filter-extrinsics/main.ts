@@ -1,4 +1,4 @@
-#!/usr/bin/env ts-node-esm
+#!/usr/bin/env node
 
 import { parse } from 'hjson';
 

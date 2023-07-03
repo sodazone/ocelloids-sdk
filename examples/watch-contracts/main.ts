@@ -1,4 +1,4 @@
-#!/usr/bin/env ts-node-esm
+#!/usr/bin/env node
 
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
@@ -76,10 +76,7 @@ function watcher({ configPath, verbose }) {
   apis.rx.network.pipe(
     config.getBlocksInRange ?
       blocksInRange(config.startBlock, config.range, false) :
-      blocks({
-        finalized: false,
-        debug: verbose ? true : false
-      }),
+      blocks(false),
     filterContractCalls(
       abi,
       config.address,

@@ -1,4 +1,4 @@
-#!/usr/bin/env ts-node-esm
+#!/usr/bin/env node
 
 import { ScProvider } from '@polkadot/rpc-provider/substrate-connect';
 import * as Sc from '@substrate/connect';
