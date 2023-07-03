@@ -2,6 +2,8 @@
 
 This is a demo application that allows you to watch contract messages of a specific contract deployed on a Substrate network.
 
+The main monitoring logic of the application can be found in `watcher.ts`.
+
 ## Configuration
 
 To configure the application, create a `config.hjson` file with the following structure:
