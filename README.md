@@ -250,7 +250,7 @@ yarn build
 
 The Ocelloids repository utilizes workspaces for modularization and organization.
 
-The repository contains two main folders: `packages`, `examples` and `tools`.
+The repository contains three main folders: `packages`, `examples` and `tools`.
 
 #### Packages
 
@@ -265,6 +265,18 @@ The development support tools include functionalities such as chain data capture
 #### Examples
 
 The [examples/](https://github.com/sodazone/ocelloids/tree/main/examples) folder contains example applications.
+
+### Testing
+
+To run unit tests, use the following command:
+
+```shell
+yarn test
+```
+
+When adding new tests, you can take advantage of the existing test data and mocks available in `packages/test/`.
+
+If the provided test data does not meet your specific requirements, you can utilize the development support tools located in `tools/` to capture the necessary data for your tests.
 
 ### Troubleshooting
 
