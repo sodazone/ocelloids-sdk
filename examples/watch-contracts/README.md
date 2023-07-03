@@ -61,10 +61,18 @@ From anywhere within the `ocelloids/examples/` directory, execute the following 
 ❯ yarn watch-contracts -v -p ./config.hjson
 ```
 
-Alternatively, if you want to execute Typescript directly, you can use [ts-node-esm](https://github.com/TypeStrong/ts-node). Example running from the `/ocelloids/examples/` directory:
+Alternatively, if you want to execute Typescript directly, you can use [ts-node-esm](https://github.com/TypeStrong/ts-node).
+
+Example running from the `/ocelloids/examples/` directory:
 
 ```shell
-❯ ts-node-esm watch-contracts/main.ts -v -p ./config.hjson
+❯ ./watch-contracts/main.ts -v -p ./config.hjson
+```
+
+Or with [Bun](https://bun.sh/):
+
+```shell
+❯ bun watch-contracts -v -p ./config.hjson
 ```
 
 ## Example Contracts
