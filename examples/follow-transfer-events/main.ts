@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env ts-node-esm
 
 import { WsProvider } from '@polkadot/api';
 import type { SignedBlockExtended } from '@polkadot/api-derive/types';
