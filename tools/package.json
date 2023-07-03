@@ -25,7 +25,11 @@
     "shims": true
   },
   "scripts": {
-    "build": "tsup src/main.ts --clean --minify"
+    "build": "tsup src/main.ts --clean --minify && yarn sed:shebang",
+    "sed:shebang": "shx sed -i \"s/\\/env ts-node-esm/\\/env node/g\" dist/**/*.cjs > /dev/null"
   },
-  "stableVersion": "1.0.0"
+  "stableVersion": "1.0.0",
+  "devDependencies": {
+    "shx": "^0.3.4"
+  }
 }

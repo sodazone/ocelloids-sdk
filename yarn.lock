@@ -1557,6 +1557,7 @@ __metadata:
     "@sodazone/ocelloids-test": 1.0.0-dev.0
     cbor-x: ^1.5.3
     citty: ^0.1.1
+    shx: ^0.3.4
   bin:
     octools: dist/main.cjs
   languageName: unknown

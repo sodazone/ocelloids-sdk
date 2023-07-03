@@ -37,7 +37,7 @@
   },
   "scripts": {
     "build": "tsup **/main.ts --clean --minify && yarn sed:shebang",
-    "sed:shebang": "shx sed -i \"s/ts-node-esm/node/g\" dist/**/*.cjs > /dev/null"
+    "sed:shebang": "shx sed -i \"s/\\/env ts-node-esm/\\/env node/g\" dist/**/*.cjs > /dev/null"
   },
   "stableVersion": "1.0.0"
 }

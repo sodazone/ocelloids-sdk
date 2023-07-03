@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env ts-node-esm
 
 import { defineCommand, runMain } from 'citty';
 import capture from './commands/capture.js';
