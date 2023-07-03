@@ -10,12 +10,32 @@ Please, refer to the main README document for basic snippets.
 
 Additionally, check out the [examples/](https://github.com/sodazone/ocelloids/tree/main/examples) folder for demonstration applications.
 
-## Queries and Types
+## Logging
 
-TBD
+Ocelloids supports configuring debug logger outputs to aid in development.
 
-DEBUG=oc-ops-mongo-filter bun filter-fee-events
+The table below displays the available loggers and their descriptions:
 
+| Logger Name | Description |
+| ----------- | ----------- |
+| oc-ops-mongo-filter | Outputs the transformed object data in "named primitive" format before filtering in the `mongo-filter` operator. |
+| oc-blocks | Outputs the current block number in block-related observables. |
+
+To enable debugging logs for a specific category, use the `DEBUG` environment variable with the corresponding logger name.
+
+For example, to enable debugging logs for the "oc-ops-mongo-filter" category, you can run the following command:
+
+```shell
+DEBUG=oc-ops-mongo-filter yarn filter-fee-events
+```
+
+You can specify multiple logger names separated by a comma, as shown in the example below:
+
+```shell
+DEBUG=oc-ops-mongo-filter,oc-blocks yarn filter-fee-events
+```
+
+These loggers provide valuable information that can assist with data filtering and tracking contextual information.
 
 ## Layout
 
