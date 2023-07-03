@@ -23,6 +23,7 @@ import { printHeader, objectToStructuredString } from './utils.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
 export async function watcher({ configPath, verbose }) {
   const c = readFileSync(path.resolve(__dirname, configPath)).toString();
   const config = parse(c);
