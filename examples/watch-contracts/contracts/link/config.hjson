@@ -5,7 +5,10 @@
   // Path could be either absolute or relative to current directory.
   metadata: link.json
   network: wss://rococo-contracts-rpc.polkadot.io
-  getBlocksInRange: false
+  getBlocksInRange: true
   startBlock: 2686243
   range: 20
+  extrinsicsCriteria: {
+    extrinsic.signer.id: 5HprbfKUFdN4qfweVbgRtqDPHfNtoi8NoWPE45e5bD5AEKiR
+  }
 }

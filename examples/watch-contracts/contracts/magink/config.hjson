@@ -5,7 +5,7 @@
   getBlocksInRange: true
   startBlock: 3944050
   range: 10
-  filter: {
+  callsCriteria: {
     message.identifier: { $in: [
         start
         claim
