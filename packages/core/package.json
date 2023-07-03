@@ -2,9 +2,9 @@
   "name": "@sodazone/ocelloids",
   "version": "1.0.0-dev.0",
   "description": "Software development kit for building monitoring applications for Substrate networks.",
-  "main": "./lib/index.cjs",
-  "module": "./lib/index.js",
-  "types": "./lib/index.d.ts",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "type": "module",
   "sideEffects": false,
   "author": "soda <projects@soda.zone>",
@@ -28,18 +28,18 @@
     "@sodazone/ocelloids-test": "1.0.0-dev.0"
   },
   "files": [
-    "lib",
+    "dist",
     "src"
   ],
   "exports": {
     ".": {
-      "types": "./lib/index.d.ts",
-      "require": "./lib/index.cjs",
-      "import": "./lib/index.js"
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.js"
     }
   },
   "scripts": {
-    "build": "tsup src/index.ts --format cjs,esm --dts --clean -d lib/"
+    "build": "tsup src/index.ts --format cjs,esm --dts --clean"
   },
   "stableVersion": "1.0.0"
 }

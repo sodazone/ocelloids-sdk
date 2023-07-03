@@ -1556,7 +1556,7 @@ __metadata:
     cbor-x: ^1.5.3
     citty: ^0.1.1
   bin:
-    octools: lib/main.cjs
+    octools: dist/main.cjs
   languageName: unknown
   linkType: soft
 

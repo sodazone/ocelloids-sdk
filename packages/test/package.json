@@ -5,9 +5,9 @@
   "sideEffects": true,
   "private": true,
   "type": "module",
-  "main": "./lib/index.cjs",
-  "module": "./lib/index.js",
-  "types": "./lib/index.d.ts",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "author": "soda <projects@soda.zone>",
   "license": "Apache-2.0",
   "repository": {
@@ -29,18 +29,18 @@
   },
   "exports": {
     ".": {
-      "types": "./lib/index.d.ts",
-      "require": "./lib/index.cjs",
-      "import": "./lib/index.js"
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.js"
     }
   },
   "files": [
-    "lib",
+    "dist",
     "src"
   ],
   "scripts": {
-    "build": "tsup src/index.ts --format cjs,esm --dts --clean -d lib/ && yarn cp:data",
-    "cp:data": "shx rm -rf lib/__data__ && shx cp -r src/__data__ lib/"
+    "build": "tsup src/index.ts --format cjs,esm --dts --clean && yarn cp:data",
+    "cp:data": "shx rm -rf dist/__data__ && shx cp -r src/__data__ dist/"
   },
   "stableVersion": "1.0.0"
 }

@@ -13,7 +13,7 @@
     "url": "https://github.com/sodazone/ocelloids.git"
   },
   "bin": {
-    "octools": "lib/main.cjs"
+    "octools": "dist/main.cjs"
   },
   "dependencies": {
     "@sodazone/ocelloids": "1.0.0-dev.0",
@@ -25,7 +25,7 @@
     "shims": true
   },
   "scripts": {
-    "build": "tsup src/main.ts --clean --minify -d lib/"
+    "build": "tsup src/main.ts --clean --minify"
   },
   "stableVersion": "1.0.0"
 }

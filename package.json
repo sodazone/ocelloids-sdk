@@ -43,7 +43,7 @@
     "examples"
   ],
   "scripts": {
-    "build": "yarn workspaces foreach -p --exclude tools --exclude examples run build",
+    "build": "yarn workspaces foreach -pt --exclude @sodazone/ocelloids-tools --exclude @sodazone/ocelloids-examples run build",
     "build:tools": "yarn workspace @sodazone/ocelloids-tools run build",
     "build:examples": "yarn workspace @sodazone/ocelloids-examples run build",
     "docs": "typedoc",
