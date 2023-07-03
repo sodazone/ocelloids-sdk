@@ -4,17 +4,17 @@ This is a demo application that allows you to watch contract messages of a speci
 
 ## Configuration
 
-To configure the application, create a config.hjson file with the following structure:
+To configure the application, create a `config.hjson` file with the following structure:
 
-```hjson
+```javascript
 {
   // Contract address.
-  address: 5HfQopC1yQSoG83auWgRLTxhWWFxiVQWT74LLXeXMLJDFBvP
+  address: '5HfQopC1yQSoG83auWgRLTxhWWFxiVQWT74LLXeXMLJDFBvP'
   // Path to contract metadata file.
   // The path can be absolute or relative to this config file.
   metadata: my_contract.json
   // Network WS endpoint where the contract is deployed.
-  network: ws://127.0.0.1:9944
+  network: 'ws://127.0.0.1:9944'
   // Blocks in range toggle.
   // If set to true, the application will scan past blocks starting from `startBlock`.
   // If set to false, the application will only watch new blocks.
@@ -25,14 +25,15 @@ To configure the application, create a config.hjson file with the following stru
   range: 30
   // Filter criteria for an extrinsic and its events.
   // This filter is applied before decoding the contract message.
+  // The default value filters for successful extrinsics only.
   // (Optional)
   extrinsicsCriteria: {
-    'extrinsic.signer': '5HprbfKUFdN4qfweVbgRtqDPHfNtoi8NoWPE45e5bD5AEKiR'
+    extrinsic.signer: '5HprbfKUFdN4qfweVbgRtqDPHfNtoi8NoWPE45e5bD5AEKiR'
   }
   // Filter criteria for decoded contract messages.
   // (Optional)
   callsCriteria: {
-    'message.identifier': register
+    message.identifier: register
   }
   // Path to custom type definitions.
   // The path can be absolute or relative to this config file.
