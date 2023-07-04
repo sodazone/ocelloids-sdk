@@ -173,6 +173,11 @@ function signedBlockToNamedPrimitive(data: SignedBlock) {
   };
 }
 
+/**
+ * Converts a `Codec` object to a primitive representation.
+ *
+ * Wraps the value in a 'value' key for non-indexable JSON objects.
+ */
 function codecToNamedPrimitive(data: Codec)
 : Record<string, AnyJson> {
   const converted = data.toPrimitive();

@@ -139,6 +139,7 @@ export class SubstrateApis {
   }
 
   /**
+   * Returns an observable for querying the storage of a given chain name.
    *
    * ## Example
    *
@@ -171,7 +172,7 @@ export class SubstrateApis {
   }
 
   /**
-   *
+   * Returns an observable for making multiple queries to the storage of a given chain name.
    */
   get queryMulti()
     : Record<string, Observable<QueryableStorageMulti<'rxjs'>>> {
