@@ -39,6 +39,10 @@ function isBlock(object: any): object is Block {
   return object.header !== undefined && object.extrinsics !== undefined;
 }
 
+function isRecord(obj: AnyJson): obj is Record<string, AnyJson> {
+  return obj !== null && typeof obj === 'object' &&  Object.getOwnPropertySymbols(obj).length === 0;
+}
+
 /**
  * Maps the `Event` data names to its corresponding values.
  */
@@ -169,8 +173,12 @@ function signedBlockToNamedPrimitive(data: SignedBlock) {
   };
 }
 
-function codecToNamedPrimitive(data: Codec) {
-  return data.toPrimitive();
+function codecToNamedPrimitive(data: Codec)
+: Record<string, AnyJson> {
+  const converted = data.toPrimitive();
+  return isRecord(converted)
+    ? converted
+    : { value: converted};
 }
 
 /**
@@ -186,7 +194,7 @@ function codecToNamedPrimitive(data: Codec) {
  */
 // We are leveraging on guards for type inference.
 // eslint-disable-next-line complexity
-function toNamedPrimitive<T>(data: T): AnyJson {
+function toNamedPrimitive<T>(data: T): Record<string, AnyJson> {
   switch (true) {
   case isEventRecord(data):
     return eventRecordToNamedPrimitive(data as EventRecord);
@@ -223,13 +231,13 @@ function toNamedPrimitive<T>(data: T): AnyJson {
  * @returns An array of objects in a primitive representation with named fields.
  * @see toNamedPrimitive
  */
-function toNamedPrimitives<T>(data: T): AnyJson[] {
+function toNamedPrimitives<T>(data: T): Record<string, AnyJson>[] {
   return Array.isArray(data) ? data.map(toNamedPrimitive) : [toNamedPrimitive(data)];
 }
 
 export interface Converter {
-  toNamedPrimitive: <T>(data: T) => AnyJson;
-  toNamedPrimitives: <T>(data: T) =>AnyJson[];
+  toNamedPrimitive: <T>(data: T) => Record<string, AnyJson>;
+  toNamedPrimitives: <T>(data: T) =>Record<string, AnyJson>[];
 }
 
 export const base : Converter = {
