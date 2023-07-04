@@ -27,16 +27,15 @@ Substrate monitoring SDK
 
 ---
 
-Ocelloids is an open-source software development kit (SDK) that provides a framework for building monitoring applications specifically designed for Substrate-based networks.
-With Ocelloids you can easily implement sophisticated multi-chain monitoring logic.
+Ocelloids is an open-source Software Development Kit (SDK) that provides a framework for building monitoring applications on Substrate-based networks. It is designed to simplify the implementation of sophisticated multi-chain monitoring logic.
 
 ## Features
 
 * **Composable Reactive Streams** — Easily filter and react to blockchain data using composable reactive streams.
 * **Data Sources** — Source data from extrinsics, blocks, events and storage.
-* **Powerful Query Operators** — Data filtering with integrated operators that support complex queries in the Mongo query language, including support for big numbers and advanced features such as dynamic queries.
+* **Powerful Query Operators** — Filter data using integrated operators that support complex queries in the Mongo query language. Includes support for big numbers and advanced features such as dynamic queries.
 * **Flexible Type Conversions** — Seamlessly convert data into a terse queryable format.
-* **Extended Context Types** — Extends the base generic events and existrincs with contextual information such as position in block, block number, position in extrinsic, etc.
+* **Extended Context Types** — Extend base generic events and extrinsics with contextual information such as block number, block position, extrinsic position, etc.
 * **Abstraction of Common Patterns** — Simplify development and reduce boilerplate code by abstracting common patterns such as utility batch calls.
 * **Multi-Chain Support** — Interact with multiple networks.
 * **Pallet-Specific Modules** — Modules designed to handle use cases related to a particular pallet, such as tracking calls and events from the contracts pallet.
@@ -51,7 +50,7 @@ With Ocelloids you can easily implement sophisticated multi-chain monitoring log
 npm i @sodazone/ocelloids
 ```
 
-Essential abstractions, reactive operators, base type converters, and pallet-independent functionality.
+Provides essential abstractions, reactive operators, base type converters, and pallet-independent functionality.
 
 Source code [packages/core](https://github.com/sodazone/ocelloids/tree/main/packages/core).
 
@@ -63,17 +62,17 @@ Source code [packages/core](https://github.com/sodazone/ocelloids/tree/main/pack
 npm i @sodazone/ocelloids-contracts
 ```
 
-Operators and type converters for the contracts pallet.
+Provides operators and type converters for the contracts pallet.
 
 Source code [packages/pallets/contracts](https://github.com/sodazone/ocelloids/tree/main/packages/pallets/contracts).
 
 ## Usage
 
-You can find the SDK documentation in docs/.
+Refer to the SDK documentation in the `docs/` directory.
 
 ### Example: Filtering Transfer Events
 
-Here's a basic usage example to filter out balance transfer events from finalized blocks above a certain amount:
+Here's a basic usage example that filters balance transfer events from finalized blocks above a certain amount:
 
 ```typescript
 import { WsProvider } from '@polkadot/api';
@@ -102,7 +101,7 @@ apis.rx.polkadot.pipe(
 );
 ```
 
-Output with contextual information:
+Extended event output with contextual information:
 
 ```javascript
 {
@@ -152,7 +151,7 @@ source.pipe(
 
 ### Example: Account Balance
 
-Here's an example to montior the balance of an account with an amount threshold condition:
+Here's an example that monitors the balance of an account with an amount threshold condition:
 
 ```typescript
 import { WsProvider } from '@polkadot/api';
@@ -181,7 +180,7 @@ apis.query.polkadot.pipe(
 
 ### Example: Dynamic Query
 
-Now let's explore a dynamic query example that collects seen addresses, starting from ALICE address:
+Now, let's explore a dynamic query example that collects and monitors balance transfer events for a set of addresses, starting from ALICE's address:
 
 <details>
 <summary>Dynamic query example - click to expand</summary>
@@ -243,9 +242,7 @@ apis.rx.polkadot.pipe(
 ```
 </details>
 
-In this example, we introduce the concept of a dynamic query.
-We initialize `seenAddresses` with ALICE, and the `dynamicQuery` with the initial filter.
-As new addresses are encountered, the dynamic query is updated.
+This example introduces the concept of a dynamic query. As new addresses are encountered, the dynamic query is updated with the newly seen addresses by calling `dynamicQuery.change()`. This ensures that future events will be filtered based on the updated set of addresses.
 
 ## Development
 
@@ -306,9 +303,7 @@ To run unit tests, use the following command:
 yarn test
 ```
 
-When adding new tests, you can take advantage of the existing test data and mocks available in `packages/test/`.
-
-If the provided test data does not meet your specific requirements, you can utilize the development support tools located in `tools/` to capture the necessary data for your tests.
+Additional test data and mocks are available in `packages/test/` for your convenience. If necessary, you can capture specific data using the development support tools located in `tools/` for testing purposes.
 
 ### Troubleshooting
 
