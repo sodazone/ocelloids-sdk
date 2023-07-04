@@ -31,7 +31,7 @@ Ocelloids is an open-source Software Development Kit (SDK) that provides a frame
 
 ## Features
 
-* **Composable Reactive Streams** — Easily filter and react to blockchain data using composable reactive streams.
+* **Composable Reactive Streams** — Easily filter blockchain data and react to occurences of interest using composable reactive streams.
 * **Data Sources** — Retrieve data from extrinsics, blocks, events and storage.
 * **Powerful Query Operators** — Filter data using integrated operators that support complex queries in the Mongo query language. Includes support for big numbers and advanced features such as dynamic queries.
 * **Flexible Type Conversions** — Seamlessly convert data into a terse queryable format.
@@ -101,6 +101,9 @@ apis.rx.polkadot.pipe(
 );
 ```
 
+<details>
+<summary>Extended event output - click to expand</summary>
+
 Extended event output with contextual information:
 
 ```javascript
@@ -119,6 +122,7 @@ Extended event output with contextual information:
   }
 }
 ```
+</details>
 
 The event identifier `eventId` consists of the block number, the position of the extrinsic within the block,
 and the position of the event within the extrinsic.
@@ -289,8 +293,6 @@ The repository contains three main folders: `packages`, `examples` and `tools`.
 #### Packages
 
 The `packages` folder contains the Ocelloids SDK implementation, which is further divided into `core`, `pallets`, and `test` modules.
-
-The `packages/test` module includes network captured test data and mocks.
 
 #### Tools
 
