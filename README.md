@@ -32,7 +32,7 @@ Ocelloids is an open-source Software Development Kit (SDK) that provides a frame
 ## Features
 
 * **Composable Reactive Streams** — Easily filter and react to blockchain data using composable reactive streams.
-* **Data Sources** — Source data from extrinsics, blocks, events and storage.
+* **Data Sources** — Retrieve data from extrinsics, blocks, events and storage.
 * **Powerful Query Operators** — Filter data using integrated operators that support complex queries in the Mongo query language. Includes support for big numbers and advanced features such as dynamic queries.
 * **Flexible Type Conversions** — Seamlessly convert data into a terse queryable format.
 * **Extended Context Types** — Extend base generic events and extrinsics with contextual information such as block number, block position, extrinsic position, etc.
@@ -123,6 +123,9 @@ Extended event output with contextual information:
 The event identifier `eventId` consists of the block number, the position of the extrinsic within the block,
 and the position of the event within the extrinsic.
 
+<details>
+<summary>Filter events operator details - click to expand</summary>
+
 The `filterEvents` operator used in the example is composed of the following stack:
 
 ```typescript
@@ -148,6 +151,8 @@ source.pipe(
   share()
 )
 ```
+
+</details>
 
 ### Example: Account Balance
 

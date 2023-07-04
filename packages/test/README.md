@@ -38,9 +38,7 @@ it('should emit the latest new block', done => {
 The currently available data can be found in the following files:
 
 - `./_blocks.ts` : Provides blocks, events and extrinsics data captured on Polkadot. It also includes `utility.Batch` extrinsics.
-
 - `./_contracts.ts` : Provides blocks, events, and extrinsics data captured on Rococo Contracts, including contract instantiation, calls, emitted events, contract metadata, and contract addresses.
-
 - `./mocks/` : Provides Jest mocks for PolkadotJS promise and RX API.
 
 ### Using Custom Captured Data
