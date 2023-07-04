@@ -7,11 +7,11 @@ The application expects the filter to be provided from standard input.
 
 ### Usage
 
-To execute the example, navigate to the `ocelloids/examples/filter-extrinsics` folder.
+To execute the example, navigate to the `ocelloids/examples` folder.
 
 Get timestamp extrinsics from Polkadot and Kusama:
 ```shell
-❯ ./main.ts -v -u wss://rpc.polkadot.io -u wss://kusama-rpc.polkadot.io < filters/timestamp.hjson
+❯ yarn filter-extrinsics -v -u wss://rpc.polkadot.io -u wss://kusama-rpc.polkadot.io < filters/timestamp.hjson
 ```
 <details>
 <summary>output - click to expand</summary>
@@ -32,10 +32,10 @@ Get timestamp extrinsics from Polkadot and Kusama:
 ```
 </details>
 
-Get balances extrinsics and pipe to jq, from `ocelloids/examples` execute:
+Get balances extrinsics and pipe to jq:
 
 ```shell
-❯ bun run filter-extrinsics/main.ts < filter-extrinsics/filters/balances.hjson | jq .
+❯ bun filter-extrinsics < filter-extrinsics/filters/balances.hjson | jq .
 ```
 <details>
 <summary>output - click to expand</summary>
@@ -99,6 +99,5 @@ Get balances extrinsics and pipe to jq, from `ocelloids/examples` execute:
   },
   "tip": "0"
 }
-# ...omitted
 ```
 </details>
