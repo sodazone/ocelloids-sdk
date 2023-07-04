@@ -1,6 +1,6 @@
 import { mockRxApi } from '@sodazone/ocelloids-test';
 import { blocks } from '../index.js';
-import { mongoFilter, mongoFilterFrom } from './mongo-filter.js';
+import { mongoFilter } from './mongo-filter.js';
 import { ControlQuery } from '../subjects/query.js';
 
 describe('control query', () => {
@@ -34,7 +34,7 @@ describe('control query', () => {
     const found = jest.fn();
 
     blocks()(mockRxApi).pipe(
-      mongoFilterFrom({
+      mongoFilter({
         'block.extrinsics.call.section': 'balances',
         'block.extrinsics.call.method': 'transferKeepAlive'
       })

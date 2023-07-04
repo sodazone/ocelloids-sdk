@@ -11,7 +11,7 @@ import { Abi } from '@polkadot/api-contract';
 
 import { from } from 'rxjs';
 
-import { types, mongoFilterFrom } from '@sodazone/ocelloids';
+import { types, mongoFilter } from '@sodazone/ocelloids';
 
 import { contractConstructors, contractEvents, contractMessages } from './contracts.js';
 import { ContractMessageWithTx } from '../types/interfaces.js';
@@ -77,7 +77,7 @@ describe('Wasm contracts operator', () => {
       const testPipe = contractMessages(testAbi, testContractAddress)(from(extrinsics));
 
       testPipe.pipe(
-        mongoFilterFrom(
+        mongoFilter(
           {
             'args.value': { $bn_gt: 800000000 },
             'message.identifier': 'transfer'
@@ -148,7 +148,7 @@ describe('Wasm contracts operator', () => {
       const testPipe = contractEvents(testAbi, testContractAddress)(from(testEventsWithIdAndTx));
 
       testPipe.pipe(
-        mongoFilterFrom(
+        mongoFilter(
           {
             'args.value': { $bn_gt: 800000000 },
             'event.identifier': 'Transfer'
