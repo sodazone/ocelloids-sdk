@@ -282,7 +282,7 @@ yarn build
 
 ### Project Layout
 
-The Ocelloids repository utilizes workspaces for modularization and organization.
+The Ocelloids repository utilizes workspaces for modularization.
 
 The repository contains three main folders: `packages`, `examples` and `tools`.
 
