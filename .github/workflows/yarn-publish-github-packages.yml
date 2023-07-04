@@ -41,6 +41,7 @@ jobs:
       - run: yarn install --immutable
       - run: yarn build
       - run: yarn config set npmPublishRegistry https://npm.pkg.github.com/
+      - run: yarn config set npmAlwaysAuth true
       - run: yarn workspace @sodazone/ocelloids npm publish --tolerate-republish --tag dev
       - run: yarn workspace @sodazone/ocelloids-contracts npm publish --tolerate-republish --tag dev
         env:
