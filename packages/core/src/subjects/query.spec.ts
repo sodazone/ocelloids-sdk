@@ -29,6 +29,26 @@ describe('control query', () => {
     })).toBeTruthy();
   });
 
+  it('should construct a query from criteria', () => {
+    const q = new ControlQuery({
+      a: { $exists: true }
+    });
+    expect(q.getValue().test({
+      a: 'b'
+    })).toBeTruthy();
+  });
+
+  it('should construct a query from other control query', () => {
+    const q = ControlQuery.from(
+      new ControlQuery({
+        a: { $exists: true }
+      })
+    );
+    expect(q.getValue().test({
+      a: 'b'
+    })).toBeTruthy();
+  });
+
   it('should be able to use custom query ops', () => {
     const data = {
       method: 'transferAllowDeath',
