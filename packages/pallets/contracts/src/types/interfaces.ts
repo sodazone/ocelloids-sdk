@@ -10,10 +10,7 @@ extends types.TxWithIdAndEvent, DecodedMessage {
   // empty impl.
 }
 
-export interface ContractConstructorWithTxAndEvents
-extends ContractMessageWithTx {
-  codeHash: string | null
-}
+export type ContractConstructorWithTx = ContractMessageWithTx
 
 /**
  * Represents a decoded contract event with the associated block event.

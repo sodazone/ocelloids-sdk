@@ -13,3 +13,4 @@ export const testContractEventRecords = testContractBlocks.reduce((acc: EventRec
 export const testContractEvents = testContractExtrinsics.reduce((acc: Event[], txt) => acc.concat(txt.events), []);
 export const testContractMetadata = testMetadataFrom('erc20.json');
 export const testContractAddress = '5Ee73nVsD1pLQEGkT4TfRQBR6cs7s4vnXWVAc2pCH8gZW12r';
+export const testContractCodeHash = '0xb1fc0d2c3df7250059748b65eb7ac72611bcaff728cc44b7aa8a27cd22a95417';

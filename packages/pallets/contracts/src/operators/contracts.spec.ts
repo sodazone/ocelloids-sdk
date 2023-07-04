@@ -4,7 +4,8 @@ import {
   testContractAddress,
   testContractExtrinsics,
   testContractBlocks,
-  testContractEvents
+  testContractEvents,
+  testContractCodeHash
 } from '@sodazone/ocelloids-test';
 
 import { Abi } from '@polkadot/api-contract';
@@ -40,7 +41,6 @@ const testEventsWithIdAndTx = eventsFromInstantiateTx.map(ev => {
   (ev as types.EventWithIdAndTx).extrinsic = instantiateTx.extrinsic;
   return ev as types.EventWithIdAndTx;
 });
-// console.log('test events with tx -> ', testEventsWithIdAndTx.map(ev => ev.toHuman()));
 
 describe('Wasm contracts operator', () => {
   let testAbi: Abi;
@@ -72,6 +72,18 @@ describe('Wasm contracts operator', () => {
       });
     });
 
+    it('should work with array of addresses', () => {
+      const found = jest.fn();
+      const testPipe = contractMessages(testAbi, [testContractAddress])(from(extrinsics));
+
+      testPipe.subscribe({
+        next: found,
+        complete: () => {
+          expect(found).toBeCalledTimes(2);
+        }
+      });
+    });
+
     it('should work with mongoFilter', () => {
       const found = jest.fn();
       const testPipe = contractMessages(testAbi, testContractAddress)(from(extrinsics));
@@ -94,27 +106,54 @@ describe('Wasm contracts operator', () => {
   });
 
   describe('contractConstructors', () => {
-    it('should emit decoded contract constructors', () => {
-      const found = jest.fn();
-      const codeHash = '0xb1fc0d2c3df7250059748b65eb7ac72611bcaff728cc44b7aa8a27cd22a95417';
+    const txWithIdAndEventObs = from(extrinsics.splice(0, 3));
 
+    beforeEach(() => {
       jest.spyOn(mockPromiseApi.query.contracts, 'contractInfoOf')
         .mockResolvedValue({
           isSome: () => true,
           unwrap: () => ({
-            codeHash
+            codeHash: testContractCodeHash
           })
         } as any);
+    });
 
-      const testPipe = contractConstructors(mockPromiseApi, testAbi, codeHash)(from(extrinsics.splice(0, 3)));
+    afterEach(() => {
+      jest.restoreAllMocks();
+    });
+
+    it('should emit decoded contract constructors', () => {
+      const found = jest.fn();
+
+      const testPipe = contractConstructors(mockPromiseApi, testAbi, testContractCodeHash)(txWithIdAndEventObs);
 
       testPipe.subscribe({
         next: constructor => {
           found();
           expect(constructor).toBeDefined();
+          expect(constructor.message).toBeDefined();
           expect(constructor.message.identifier).toBe('new');
-          expect(constructor.codeHash).toBe(codeHash);
         },
+        complete: () => {
+          expect(found).toBeCalledTimes(1);
+        }
+      });
+    });
+
+    it('should work with mongoFilter', () => {
+      const found = jest.fn();
+
+      const testPipe = contractConstructors(mockPromiseApi, testAbi, testContractCodeHash)(txWithIdAndEventObs);
+
+      testPipe.pipe(
+        mongoFilter(
+          {
+            'message.identifier': 'new'
+          },
+          contracts
+        )
+      ).subscribe({
+        next: found,
         complete: () => {
           expect(found).toBeCalledTimes(1);
         }
@@ -137,6 +176,18 @@ describe('Wasm contracts operator', () => {
           expect(result.event.identifier).toBe('Transfer');
           expect(result.event.index).toBe(0);
         },
+        complete: () => {
+          expect(found).toBeCalledTimes(1);
+        }
+      });
+    });
+
+    it('should work with array of addresses', () => {
+      const found = jest.fn();
+      const testPipe = contractEvents(testAbi, [testContractAddress])(from(testEventsWithIdAndTx));
+
+      testPipe.subscribe({
+        next: found,
         complete: () => {
           expect(found).toBeCalledTimes(1);
         }

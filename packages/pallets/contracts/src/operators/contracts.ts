@@ -5,7 +5,7 @@ import { Observable, concatMap, filter, map, share } from 'rxjs';
 
 import { mongoFilter, types } from '@sodazone/ocelloids';
 
-import { ContractConstructorWithTxAndEvents, ContractEventWithBlockEvent, ContractMessageWithTx } from '../types/interfaces.js';
+import { ContractConstructorWithTx, ContractEventWithBlockEvent, ContractMessageWithTx } from '../types/interfaces.js';
 import { AddressParam } from '../types/types.js';
 
 // Note: We will extract this helper function along with the contracts pallet module
@@ -72,7 +72,7 @@ export function contractConstructors(api: ApiPromise, abi: Abi, codeHash: string
   };
 
   return (source: Observable<types.TxWithIdAndEvent>)
-  : Observable<ContractConstructorWithTxAndEvents> => {
+  : Observable<ContractConstructorWithTx> => {
     return (source.pipe(
       mongoFilter(criteria),
       // Use concatMap to allow for async call to promise API to get contract code hash,
@@ -102,16 +102,15 @@ export function contractConstructors(api: ApiPromise, abi: Abi, codeHash: string
         }
 
         return {
-          ...tx,
+          tx,
           contractCodeHash
         };
       }),
       filter(({ contractCodeHash }) => contractCodeHash === codeHash),
-      map(tx => {
+      map(({ tx }) => {
         const data = getArgValueFromTx(tx.extrinsic, 'data');
         return {
           ...tx,
-          codeHash: tx.contractCodeHash,
           ...abi.decodeConstructor(data.toU8a())
         };
       }),

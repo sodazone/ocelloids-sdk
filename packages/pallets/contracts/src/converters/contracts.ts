@@ -3,7 +3,7 @@ import { AbiParam, DecodedEvent, DecodedMessage } from '@polkadot/api-contract/t
 
 import { converters } from '@sodazone/ocelloids';
 
-import { ContractConstructorWithTxAndEvents, ContractEventWithBlockEvent, ContractMessageWithTx } from '../types/interfaces.js';
+import { ContractEventWithBlockEvent, ContractMessageWithTx } from '../types/interfaces.js';
 
 function isContractMessage(object: any): object is DecodedMessage {
   return object.args !== undefined && object.message !== undefined;
@@ -19,10 +19,6 @@ function isContractEvent(object: any): object is DecodedEvent {
 
 function isContractEventWithBlockEvent(object: any): object is ContractEventWithBlockEvent {
   return object.blockEvent !== undefined && isContractEvent(object);
-}
-
-function isContractConstructorWithEventAndTx(object: any): object is ContractConstructorWithTxAndEvents {
-  return object.blockEvent !== undefined && object.codeHash !== undefined && isContractMessage(object);
 }
 
 function contractParamsToNamedPrimitive(abiParams: AbiParam[], args: Codec[]) {
@@ -85,14 +81,6 @@ function contractEventWithBlockEventToNamedPrimitive(data: ContractEventWithBloc
   };
 }
 
-function contractConstructorWithEventAndTxToNamedPrimitive(data: ContractConstructorWithTxAndEvents) {
-  return {
-    ...converters.helpers.txWithEventToNamedPrimitive(data),
-    ...contractMessageToNamedPrimitive(data),
-    codeHash: data.codeHash,
-  };
-}
-
 /**
  * Converts an object to a primitive representation with named fields based on its type.
  *
@@ -114,8 +102,6 @@ function toNamedPrimitive<T>(data: T): Record<string, AnyJson> {
     return contractMessageToNamedPrimitive(data as DecodedMessage);
   case isContractEventWithBlockEvent(data):
     return contractEventWithBlockEventToNamedPrimitive(data as ContractEventWithBlockEvent);
-  case isContractConstructorWithEventAndTx(data):
-    return contractConstructorWithEventAndTxToNamedPrimitive(data as ContractConstructorWithTxAndEvents);
   default:
     throw new Error(`No converter found for ${JSON.stringify(data)}`);
   }
