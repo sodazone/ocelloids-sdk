@@ -29,6 +29,9 @@ jobs:
     permissions:
       contents: read
       packages: write
+    env:
+      NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+      YARN_NPM_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
@@ -41,9 +44,7 @@ jobs:
       - run: yarn install --immutable
       - run: yarn build
       - run: yarn config set npmPublishRegistry https://npm.pkg.github.com/
-      - run: yarn config set npmAlwaysAuth true
-      - run: yarn workspace @sodazone/ocelloids npm publish --tolerate-republish --tag dev
-      - run: yarn workspace @sodazone/ocelloids-contracts npm publish --tolerate-republish --tag dev
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
-          YARN_NPM_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+      - name: Publish ocelloids (dev)
+        run: yarn workspace @sodazone/ocelloids npm publish --tolerate-republish --tag dev
+      - name: Publish ocelloids-contracts (dev)
+        run: yarn workspace @sodazone/ocelloids-contracts npm publish --tolerate-republish --tag dev
