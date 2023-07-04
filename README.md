@@ -32,7 +32,8 @@ With Ocelloids you can easily implement sophisticated multi-chain monitoring log
 
 ## Features
 
-* **Composable Reactive Streams** — Easily source, transform, and react to blockchain data using composable reactive streams.
+* **Composable Reactive Streams** — Easily filter and react to blockchain data using composable reactive streams.
+* **Data Sources** — Source data from extrinsics, blocks, events and storage.
 * **Powerful Query Operators** — Data filtering with integrated operators that support complex queries in the Mongo query language, including support for big numbers and advanced features such as dynamic queries.
 * **Flexible Type Conversions** — Seamlessly convert data into a terse queryable format.
 * **Extended Context Types** — Extends the base generic events and existrincs with contextual information such as position in block, block number, position in extrinsic, etc.
@@ -68,9 +69,11 @@ Source code [packages/pallets/contracts](https://github.com/sodazone/ocelloids/t
 
 ## Usage
 
-### Example: Filtering Balance Transfer Events
+You can find the SDK documentation in docs/.
 
-Here's an example showcasing the usage of Ocelloids to filter out balance transfer events above a certain amount:
+### Example: Filtering Transfer Events
+
+Here's a basic usage example to filter out balance transfer events from finalized blocks above a certain amount:
 
 ```typescript
 import { WsProvider } from '@polkadot/api';
@@ -133,7 +136,7 @@ source.pipe(
   
   // Filters at the extrinsic level
   // mainly for success or failure
-  mongoFilterFrom(extrinsicsCriteria),
+  mongoFilter(extrinsicsCriteria),
   
   // Maps the events with
   // block and extrinsic context
@@ -147,9 +150,38 @@ source.pipe(
 )
 ```
 
+### Example: Account Balance
+
+Here's an example to montior the balance of an account with an amount threshold condition:
+
+```typescript
+import { WsProvider } from '@polkadot/api';
+import { switchMap } from 'rxjs';
+
+import {
+  SubstrateApis,
+  mongoFilter
+} from '@sodazone/ocelloids';
+
+const apis = new SubstrateApis({
+  polkadot: {
+    provider: new WsProvider('wss://rpc.polkadot.io')
+  }
+});
+
+apis.query.polkadot.pipe(
+  switchMap(q => q.system.account(
+    '15QFBQY6TF6Abr6vA1r6opRh6RbRSMWgBC1PcCMDDzRSEXf5'
+  )),
+  mongoFilter({
+    'data.free': { $bn_lt: '6038009840776279' }
+  })
+).subscribe(x => console.log('Account Balance:', x.toHuman()));
+```
+
 ### Example: Dynamic Query
 
-Now let's explore a more advanced example with a dynamic query that collects seen addresses, starting from ALICE address:
+Now let's explore a dynamic query example that collects seen addresses, starting from ALICE address:
 
 <details>
 <summary>Dynamic query example - click to expand</summary>
@@ -211,7 +243,7 @@ apis.rx.polkadot.pipe(
 ```
 </details>
 
-In this advanced example, we introduce the concept of a dynamic query.
+In this example, we introduce the concept of a dynamic query.
 We initialize `seenAddresses` with ALICE, and the `dynamicQuery` with the initial filter.
 As new addresses are encountered, the dynamic query is updated.
 

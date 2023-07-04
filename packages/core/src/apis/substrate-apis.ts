@@ -140,6 +140,18 @@ export class SubstrateApis {
 
   /**
    *
+   * ## Example
+   *
+   * ```typescript
+   * apis.query.polkadot.pipe(
+   *   switchMap(q => q.system.account(
+   *     '15QFBQY6TF6Abr6vA1r6opRh6RbRSMWgBC1PcCMDDzRSEXf5'
+   *   )),
+   *   mongoFilter({
+   *     'data.free': { $bn_lt: '6038009840776279' }
+   *   })
+   * ).subscribe(x => console.log('Account Balance:', x.toHuman()));
+   * ```
    */
   get query()
     : Record<string, Observable<QueryableStorage<'rxjs'>>> {
