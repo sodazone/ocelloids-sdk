@@ -31,7 +31,7 @@ Ocelloids is an open-source Software Development Kit (SDK) that provides a frame
 
 ## Features
 
-* **Composable Reactive Streams** — Easily filter blockchain data and react to occurences of interest using composable reactive streams.
+* **Composable Reactive Streams** — Easily filter blockchain data and react to occurrences of interest using composable reactive streams.
 * **Data Sources** — Retrieve data from extrinsics, blocks, events and storage.
 * **Powerful Query Operators** — Filter data using integrated operators that support complex queries in the Mongo query language. Includes support for big numbers and advanced features such as dynamic queries.
 * **Flexible Type Conversions** — Seamlessly convert data into a terse queryable format.
