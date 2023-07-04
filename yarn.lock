@@ -1533,6 +1533,7 @@ __metadata:
     follow-transfer-events: ./dist/follow-transfer-events/main.cjs
     light-client: ./dist/light-client/main.cjs
     watch-contracts: ./dist/watch-contracts/main.cjs
+    watch-storage: ./dist/watch-storage/main.cjs
     watch-transfer-events: ./dist/watch-transfer-events/main.cjs
   languageName: unknown
   linkType: soft
