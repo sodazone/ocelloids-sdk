@@ -1,4 +1,5 @@
 import { EventRecord, Event, Extrinsic, SignedBlock, Block, FunctionMetadataLatest } from '@polkadot/types/interfaces';
+import type { Codec } from '@polkadot/types/types';
 import type { AnyJson, CallBase, AnyTuple } from '@polkadot/types-codec/types';
 import type { TxWithEvent, SignedBlockExtended } from '@polkadot/api-derive/types';
 
@@ -168,6 +169,10 @@ function signedBlockToNamedPrimitive(data: SignedBlock) {
   };
 }
 
+function codecToNamedPrimitive(data: Codec) {
+  return data.toPrimitive();
+}
+
 /**
  * Converts an object to a primitive representation with named fields based on its type.
  *
@@ -181,7 +186,7 @@ function signedBlockToNamedPrimitive(data: SignedBlock) {
  */
 // We are leveraging on guards for type inference.
 // eslint-disable-next-line complexity
-function toNamedPrimitive<T>(data: T): Record<string, AnyJson> {
+function toNamedPrimitive<T>(data: T): AnyJson {
   switch (true) {
   case isEventRecord(data):
     return eventRecordToNamedPrimitive(data as EventRecord);
@@ -203,7 +208,11 @@ function toNamedPrimitive<T>(data: T): Record<string, AnyJson> {
   case isBlock(data):
     return blockToNamedPrimitive(data as Block);
   default:
-    throw new Error(`No converter found for ${JSON.stringify(data)}`);
+    try {
+      return codecToNamedPrimitive(data as Codec);
+    } catch {
+      throw new Error(`No converter found for ${JSON.stringify(data)}`);
+    }
   }
 }
 
@@ -214,13 +223,13 @@ function toNamedPrimitive<T>(data: T): Record<string, AnyJson> {
  * @returns An array of objects in a primitive representation with named fields.
  * @see toNamedPrimitive
  */
-function toNamedPrimitives<T>(data: T): Record<string, AnyJson>[] {
+function toNamedPrimitives<T>(data: T): AnyJson[] {
   return Array.isArray(data) ? data.map(toNamedPrimitive) : [toNamedPrimitive(data)];
 }
 
 export interface Converter {
-  toNamedPrimitive: <T>(data: T) => Record<string, AnyJson>;
-  toNamedPrimitives: <T>(data: T) => Record<string, AnyJson>[];
+  toNamedPrimitive: <T>(data: T) => AnyJson;
+  toNamedPrimitives: <T>(data: T) =>AnyJson[];
 }
 
 export const base : Converter = {

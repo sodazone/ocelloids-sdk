@@ -3,7 +3,7 @@ import { Abi } from '@polkadot/api-contract';
 
 import { Observable, concatMap, filter, map, share } from 'rxjs';
 
-import { mongoFilterFrom, types } from '@sodazone/ocelloids';
+import { mongoFilter, types } from '@sodazone/ocelloids';
 
 import { ContractConstructorWithTxAndEvents, ContractEventWithBlockEvent, ContractMessageWithTx } from '../types/interfaces.js';
 import { AddressParam } from '../types/types.js';
@@ -37,7 +37,7 @@ export function contractMessages(abi: Abi, address: AddressParam ) {
   return (source: Observable<types.TxWithIdAndEvent>)
   : Observable<ContractMessageWithTx> => {
     return (source.pipe(
-      mongoFilterFrom(criteria),
+      mongoFilter(criteria),
       map(tx => {
         const data = getArgValueFromTx(tx.extrinsic, 'data');
         return {
@@ -74,7 +74,7 @@ export function contractConstructors(api: ApiPromise, abi: Abi, codeHash: string
   return (source: Observable<types.TxWithIdAndEvent>)
   : Observable<ContractConstructorWithTxAndEvents> => {
     return (source.pipe(
-      mongoFilterFrom(criteria),
+      mongoFilter(criteria),
       // Use concatMap to allow for async call to promise API to get contract code hash,
       // map to contractCodeHash property to be used for filtering in the next step.
       // This is necessary as we cannot make an async call in rxjs `filter` operator
@@ -142,7 +142,7 @@ export function contractEvents(
   return (source: Observable<types.EventWithIdAndTx>)
   : Observable<ContractEventWithBlockEvent> => {
     return source.pipe(
-      mongoFilterFrom(criteria),
+      mongoFilter(criteria),
       map(blockEvent => {
         // We cast as any below to avoid importing `@polkadotjs/api-augment`
         // as we want to keep the library side-effects-free.

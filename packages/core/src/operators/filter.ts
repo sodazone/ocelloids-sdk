@@ -4,7 +4,7 @@ import { Observable, share } from 'rxjs';
 
 import { extractEventsWithTx, extractTxWithEvents } from './extract.js';
 import { flattenBatch } from './flatten.js';
-import { mongoFilter, mongoFilterFrom } from './mongo-filter.js';
+import { mongoFilter } from './mongo-filter.js';
 import { ControlQuery, Criteria } from '../index.js';
 import { EventWithId, TxWithIdAndEvent } from '../types/interfaces.js';
 
@@ -29,7 +29,7 @@ export function filterExtrinsics(
       flattenBatch(),
       // Filters at the extrinsic level
       // mainly for success or failure
-      mongoFilterFrom(extrinsicsCriteria)
+      mongoFilter(extrinsicsCriteria)
     );
   };
 }

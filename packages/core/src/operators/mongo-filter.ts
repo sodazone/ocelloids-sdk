@@ -1,7 +1,8 @@
 import { logger } from '@polkadot/util';
 
-import { BehaviorSubject, Observable, filter } from 'rxjs';
-import { Query } from 'mingo';
+import { Observable, filter } from 'rxjs';
+
+import { RawObject } from 'mingo/types';
 
 import { ControlQuery, Criteria } from '../index.js';
 import { Converter, base } from '../converters/index.js';
@@ -34,9 +35,13 @@ const l = logger('oc-ops-mongo-filter');
  * @see {@link [Mongo Documentation](https://www.mongodb.com/docs/manual/tutorial/query-documents/)}
  */
 export function mongoFilter<T>(
-  query: BehaviorSubject<Query>,
+  criteria: Criteria | ControlQuery,
   converter: Converter = base
 ) {
+  const query = ControlQuery.isControlQuery(criteria)
+    ? criteria
+    : ControlQuery.from(criteria as Criteria);
+
   /**
    * Returns a filtered observable stream based on the provided query.
    * @param source The observable source to be filtered.
@@ -51,23 +56,9 @@ export function mongoFilter<T>(
         record => {
           const converted = converter.toNamedPrimitive(record);
           debugOnly(l, x => JSON.stringify(x, null, 2))(converted);
-          return query.value.test(converted);
+          return query.value.test(converted as RawObject);
         }
       )
     );
   };
-}
-
-/**
- * Creates a MongoDB query language filter using the provided criteria.
- *
- * @param criteria The criteria used to construct the query filter.
- * @returns A function that takes an observable source and returns a filtered observable stream.
- * @see {@link mongoFilter}
- */
-export function mongoFilterFrom<T>(
-  criteria: Criteria,
-  converter: Converter = base
-) {
-  return mongoFilter<T>(ControlQuery.from(criteria), converter);
 }
