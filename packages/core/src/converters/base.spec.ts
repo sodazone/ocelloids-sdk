@@ -33,6 +33,15 @@ describe('substrate converters', () => {
       .toBe('0x382951a7547ec688051e1d95c0589eb8bd247bd4451cf66af35cdfee0f674692');
   });
 
+  it('should convert an extrinsic', () => {
+    const xt = testBlocks[0].block.extrinsics[0];
+    const c = base.toNamedPrimitive(xt) as any;
+
+    expect(c).toBeDefined();
+    expect(c.hash)
+      .toBe('0x9e754973630b425e486445ed1600409c97d63a7c2a0679d949d008d784acc917');
+  });
+
   it('should convert all the test blocks', () => {
     for (let i = 0; i < testBlocks.length; i++) {
       const b = base.toNamedPrimitive(testBlocks[i]) as any;
@@ -92,5 +101,21 @@ describe('substrate converters', () => {
     const c = base.toNamedPrimitive(b) as any;
 
     expect(typeof c.extrinsics[2].extrinsic.call.args.value).toBe('string');
+  });
+
+  it('should convert codec objects', () => {
+    const b = testBlocks[0];
+    const v = b.block.header;
+    const c = base.toNamedPrimitive(v) as any;
+
+    expect(c.number).toBe(15950017);
+  });
+
+  it('should convert codec values', () => {
+    const b = testBlocks[0];
+    const v = b.block.header.number;
+    const c = base.toNamedPrimitive(v) as any;
+
+    expect(c.value).toBe(15950017);
   });
 });

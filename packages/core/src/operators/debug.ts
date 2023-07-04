@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import { Logger } from '@polkadot/util/types';
 import type { AnyJson } from '@polkadot/types-codec/types';
 

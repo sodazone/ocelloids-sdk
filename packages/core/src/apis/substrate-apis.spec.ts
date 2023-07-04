@@ -37,12 +37,20 @@ describe('substrate APIs', () => {
   it('should throw error on missing apis', () => {
     expect(apis.promise.polkadot.isConnected).toBeFalsy();
     expect(apis.rx.polkadot.pipe).toBeDefined();
+    expect(apis.query.polkadot.pipe).toBeDefined();
+    expect(apis.queryMulti.polkadot.pipe).toBeDefined();
 
     expect(() => {
       apis.promise.none.isConnected;
     }).toThrowError();
     expect(() => {
       apis.rx.none.pipe();
+    }).toThrowError();
+    expect(() => {
+      apis.query.none.pipe();
+    }).toThrowError();
+    expect(() => {
+      apis.queryMulti.none.pipe();
     }).toThrowError();
   });
 
@@ -54,6 +62,10 @@ describe('substrate APIs', () => {
     expect(apis.rx.polkadot).toBeDefined();
     expect(apis.promise.rococo).toBeDefined();
     expect(apis.rx.rococo).toBeDefined();
+    expect(apis.query).toBeDefined();
+    expect(apis.query.rococo).toBeDefined();
+    expect(apis.queryMulti).toBeDefined();
+    expect(apis.queryMulti.rococo).toBeDefined();
   });
 
   it('should trigger the disconnection of all the providers', async () => {
