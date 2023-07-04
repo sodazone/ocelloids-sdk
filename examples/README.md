@@ -32,6 +32,7 @@ Here are the available binaries to run the example applications:
 * follow-transfer-events: Simple demonstration of dynamic queries.
 * light-client: Demonstrates the usage of the Smoldot light client provider.
 * watch-contracts: Filters contract messages. Supports pipeable stdout.
+* watch-storage: Watches the storage for an account balance threshold.
 * watch-transfer-events: Watches transfers above a specified amount. Supports pipeable stdout.
 
 For example, to run the `filter-fee-events` application, use the following command:
