@@ -17,10 +17,10 @@
 import { ApiPromise, ApiRx } from '@polkadot/api';
 import { logger } from '@polkadot/util';
 
-import { Observable, shareReplay } from 'rxjs';
+import { Observable, map, shareReplay } from 'rxjs';
 
 import type { Configuration } from '../configuration/index.js';
-import type { ApiOptions } from '@polkadot/api/types';
+import type { ApiOptions, QueryableStorage, QueryableStorageMulti } from '@polkadot/api/types';
 
 const l = logger('oc-substrate-apis');
 
@@ -136,6 +136,46 @@ export class SubstrateApis {
         throw new Error(`${key} not found.`);
       }
     }) as unknown as Record<string, Observable<ApiRx>>;
+  }
+
+  /**
+   *
+   */
+  get query()
+    : Record<string, Observable<QueryableStorage<'rxjs'>>> {
+    return new Proxy(this.apiRx, {
+      get(target, prop) {
+        const key = prop.toString();
+        const res = target[key];
+        if (res) {
+          return res.isReady.pipe(
+            map(api => api.query),
+            shareReplay()
+          );
+        }
+        throw new Error(`${key} not found.`);
+      }
+    }) as unknown as Record<string, Observable<QueryableStorage<'rxjs'>>>;
+  }
+
+  /**
+   *
+   */
+  get queryMulti()
+    : Record<string, Observable<QueryableStorageMulti<'rxjs'>>> {
+    return new Proxy(this.apiRx, {
+      get(target, prop) {
+        const key = prop.toString();
+        const res = target[key];
+        if (res) {
+          return res.isReady.pipe(
+            map(api => api.queryMulti),
+            shareReplay()
+          );
+        }
+        throw new Error(`${key} not found.`);
+      }
+    }) as unknown as Record<string, Observable<QueryableStorageMulti<'rxjs'>>>;
   }
 
   /**
