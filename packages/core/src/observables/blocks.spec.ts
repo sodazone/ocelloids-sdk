@@ -3,7 +3,7 @@ import type { AnyNumber } from '@polkadot/types-codec/types';
 
 import { testBlocks, mockRxApi } from '@sodazone/ocelloids-test';
 
-import { blockAt, blocks, blocksInRange, finalizedBlocks } from './blocks.js';
+import { blocks, blocksInRange, finalizedBlocks } from './blocks.js';
 import { Observable, map, of } from 'rxjs';
 
 function observerForBlocks(done: jest.DoneCallback) {
@@ -29,20 +29,6 @@ describe('blocks reactive observable', () => {
 
       expect(o.next).toBeCalledTimes(testBlocks.length);
       expect(o.complete).toBeCalledTimes(1);
-    });
-
-    it('should emit the block at given height', done => {
-      const testPipe = blockAt(15950017)(mockRxApi);
-      const calls = jest.fn();
-      testPipe.subscribe({
-        next: ({ block: { header } }) => {
-          expect(header.number.toNumber())
-            .toBe(15950017);
-          calls();
-        },
-        complete: done
-      });
-      expect(calls).toBeCalledTimes(1);
     });
 
     it('should emit the latest finalized block', done => {

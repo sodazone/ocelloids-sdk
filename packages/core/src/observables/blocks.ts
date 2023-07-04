@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import { ApiRx } from '@polkadot/api';
-import { BN, logger } from '@polkadot/util';
+import { logger } from '@polkadot/util';
 import type { SignedBlockExtended } from '@polkadot/api-derive/types';
 
 import { Observable, concatMap, mergeMap, share, switchMap } from 'rxjs';
@@ -102,24 +102,6 @@ export function blocksInRange(
             mergeMap(number =>
               api.derive.chain.getBlockByNumber(number))
         )
-      )
-    ));
-  };
-}
-
-/**
- * Returns an observable that emits the block with the specified block number.
- *
- * @param blockNumber - The block number.
- * @returns An observable that emits the block with the specified block number.
-*/
-export function blockAt(
-  blockNumber: AnyBN,
-) {
-  return (source: Observable<ApiRx>) => {
-    return (source.pipe(
-      switchMap(api =>
-        api.derive.chain.getBlockByNumber(new BN(blockNumber))
       )
     ));
   };
