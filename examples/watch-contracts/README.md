@@ -1,8 +1,8 @@
 # Watch Contract Messages
 
-This is a demo application that allows you to watch contract messages of a specific contract deployed on a Substrate network.
+This is a demo application designed for monitoring contract messages of a specific contract deployed on a Substrate network. 
 
-The main monitoring logic of the application can be found in `watcher.ts`.
+The primary monitoring logic of the application can be found in the `watcher.ts` file.
 
 ## Configuration
 
@@ -46,6 +46,8 @@ To configure the application, create a `config.hjson` file with the following st
 
 ## Usage
 
+Before running this example, make sure you have installed and built the root project and the examples package. If you have not done so, please follow the instructions for building [root](https://github.com/sodazone/ocelloids#development) and [examples](https://github.com/sodazone/ocelloids/tree/main/examples#running-the-examples).
+
 From anywhere within the `ocelloids/examples/` directory, execute the following command:
 
 ```shell
@@ -63,7 +65,7 @@ From anywhere within the `ocelloids/examples/` directory, execute the following 
 ❯ yarn watch-contracts -v -p ./config.hjson
 ```
 
-Alternatively, if you want to execute Typescript directly, you can use [ts-node-esm](https://github.com/TypeStrong/ts-node).
+Alternatively, if you prefer executing TypeScript directly, you can use [ts-node-esm](https://github.com/TypeStrong/ts-node).
 
 Example running from the `/ocelloids/examples/` directory:
 
@@ -79,7 +81,7 @@ Or with [Bun](https://bun.sh/):
 
 ## Example Contracts
 
-We have provided a few showcase contracts deployed on public test networks as examples. Configuration files, contract metadata, and, if applicable, custom type files for these contracts can be found in the `./contracts/` directory.
+We have included a few showcase contracts deployed on public test networks as examples. Configuration files, contract metadata, and, if applicable, custom type files for these contracts can be found in the `./contracts/` directory.
 
 To run any of the examples, simply specify the path to the configuration file:
 
@@ -89,12 +91,13 @@ To run any of the examples, simply specify the path to the configuration file:
 
 ### [Link](https://github.com/paritytech/link)
 
-This is a showcase dApp created by the ink! team at Parity. It is a URL shortener that allows users to store a shortened version of a URL, which can be resolved back to the long version. It is deployed on Rococo Contracts.
+Link is a showcase dApp created by the ink! team at Parity. It functions as a URL shortener, allowing users to store shortened versions of URLs that can be resolved back to the original long URLs. The contract is deployed on Rococo Contracts.
 
 ### [AZERO.ID](https://azero.id/)
 
 This contract serves as the main registry for .tzero domains, which is the testnet version of AZERO.ID. It enables users to register, transfer, and claim their preferred domain names. The contract is deployed on the Aleph Zero Testnet.
 
 ### [Magink](https://github.com/swanky-dapps/magink-dapp)
+
 Magink is an example dApp created by the Swanky team of Astar. It offers an immersive experience where users can earn badges for completing lessons and unlock an exclusive Wizard NFT upon conquering all ten lessons. The contract is deployed on Shibuya.
 
