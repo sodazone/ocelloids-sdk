@@ -28,9 +28,9 @@ yarn <binary_name>
 Here are the available binaries to run the example applications:
 
 * __filter-extrinsics__: Filters extrinsics using HJSON provided filters. Supports pipeable stdin and stdout.
-* __filter-fee-events__: Filters balances fee-related events. Supports pipeable stdout.
 * __follow-transfer-events__: Simple demonstration of dynamic queries.
 * __light-client__: Demonstrates the usage of the Smoldot light client provider.
+* __simple-fees__: Calculates simple fee stats for a block range.
 * __watch-contracts__: Filters contract messages. Supports pipeable stdout.
 * __watch-instantiations__: Watches contract instantiations of the same code hash.
 * __watch-storage__: Watches the storage for an account balance threshold.
