@@ -23,7 +23,7 @@ import { watcher } from './watcher.js';
 
 const argv = yargs(hideBin(process.argv))
   .usage('Usage: watch-contracts [options]')
-  .example('watch-contracts -p ./link/config.hjson', 'watches contract messages of link contract deployed on Rococo')
+  .example('watch-contracts -v -p ./config.hjson', 'watches contract messages and outputs verbose logging')
   .option('p', {
     type: 'string',
     alias: 'path',
