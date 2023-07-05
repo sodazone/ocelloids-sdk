@@ -24,8 +24,10 @@ header:
     - '**/*.md'
     - '.*'
     - 'coverage'
-    - 'node_modules'
+    - '**/node_modules'
     - '**/*.json'
+    - '.yarn'
+    - '.github'
     - 'LICENSE'
     - 'NOTICE'
 
