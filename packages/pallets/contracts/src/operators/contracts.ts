@@ -1,7 +1,7 @@
 import { ApiPromise } from '@polkadot/api';
 import { Abi } from '@polkadot/api-contract';
 
-import { Observable, concatMap, filter, map, share } from 'rxjs';
+import { Observable, from, of, filter, map, mergeMap, share } from 'rxjs';
 
 import { mongoFilter, types } from '@sodazone/ocelloids';
 
@@ -75,13 +75,8 @@ export function contractConstructors(api: ApiPromise, abi: Abi, codeHash: string
   : Observable<ContractConstructorWithTx> => {
     return (source.pipe(
       mongoFilter(criteria),
-      // Use concatMap to allow for async call to promise API to get contract code hash,
-      // map to contractCodeHash property to be used for filtering in the next step.
-      // This is necessary as we cannot make an async call in rxjs `filter` operator
-      concatMap(async (tx: types.TxWithIdAndEvent) => {
+      mergeMap((tx: types.TxWithIdAndEvent) => {
         const instantiatedEvent = tx.events.find(ev => api.events.contracts.Instantiated.is(ev));
-
-        let contractCodeHash: string | null = null;
 
         if (instantiatedEvent !== undefined) {
           // We cast as any below to avoid importing `@polkadotjs/api-augment`
@@ -93,18 +88,28 @@ export function contractConstructors(api: ApiPromise, abi: Abi, codeHash: string
           //   contract: 'AccountId32',
           // }
           const { contract } = instantiatedEvent.data as any;
-          // contractInfo is of type Option<PalletContractsStorageContractInfo>
-          const contractInfo = (await api.query.contracts.contractInfoOf(contract)) as any;
 
-          if (contractInfo.isSome) {
-            contractCodeHash = contractInfo.unwrap().codeHash.toString();
-          }
+          return from(api.query.contracts.contractInfoOf(contract)).pipe(
+            map((contractInfo : any) => {
+              // contractInfo is of type Option<PalletContractsStorageContractInfo>
+              if (contractInfo.isSome) {
+                return {
+                  tx,
+                  contractCodeHash: contractInfo.unwrap().codeHash.toString()
+                };
+              }
+              return {
+                tx,
+                contractCodeHash: null
+              };
+            })
+          );
         }
 
-        return {
+        return of({
           tx,
-          contractCodeHash
-        };
+          contractCodeHash: null
+        });
       }),
       filter(({ contractCodeHash }) => contractCodeHash === codeHash),
       map(({ tx }) => {
