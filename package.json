@@ -49,7 +49,8 @@
     "docs": "typedoc",
     "lint": "eslint --cache --fix \"packages/**/src/**/*.ts\"",
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "license:fix": "docker run -it --rm -v $(pwd):/github/workspace apache/skywalking-eyes header fix"
   },
   "devDependencies": {
     "@types/jest": "^29.5.2",
