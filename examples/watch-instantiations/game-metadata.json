@@ -1,0 +1,1513 @@
+{
+  "source": {
+    "hash": "0x571da9282d8a1370ea9155d7ce3ca4fde01e480d1ead4f1fcfc1c239f7b9ee85",
+    "language": "ink! 4.0.0-rc",
+    "compiler": "rustc 1.67.0",
+    "build_info": {
+      "build_mode": "Release",
+      "cargo_contract_version": "2.0.0-rc.1",
+      "rust_toolchain": "stable-x86_64-unknown-linux-gnu",
+      "wasm_opt_settings": {
+        "keep_debug_symbols": false,
+        "optimization_passes": "Z"
+      }
+    }
+  },
+  "contract": {
+    "name": "squink_splash",
+    "version": "0.1.0",
+    "authors": [
+      "Parity Technologies <admin@parity.io>"
+    ]
+  },
+  "spec": {
+    "constructors": [
+      {
+        "args": [
+          {
+            "label": "dimensions",
+            "type": {
+              "displayName": [
+                "Field"
+              ],
+              "type": 9
+            }
+          },
+          {
+            "label": "buy_in",
+            "type": {
+              "displayName": [
+                "Balance"
+              ],
+              "type": 8
+            }
+          },
+          {
+            "label": "forming_rounds",
+            "type": {
+              "displayName": [
+                "u32"
+              ],
+              "type": 0
+            }
+          },
+          {
+            "label": "rounds",
+            "type": {
+              "displayName": [
+                "u32"
+              ],
+              "type": 0
+            }
+          }
+        ],
+        "docs": [
+          "Create a new game.",
+          "",
+          "- `dimensions`: (width, height) of the board.",
+          "- `buy_in`: The amount of balance each player needs to submit in order to play.",
+          "- `forming_rounds`: Number of blocks that needs to pass until anyone can start the game.",
+          "- `rounds`: The number of blocks a game can be played for.",
+          "- `score_multiplier`: The higher the more score you get per field.",
+          "- `gas_per_round`: The amount of gas each player can use. Unused gas is carried over to the next round."
+        ],
+        "label": "new",
+        "payable": false,
+        "returnType": {
+          "displayName": [
+            "ink_primitives",
+            "ConstructorResult"
+          ],
+          "type": 10
+        },
+        "selector": "0x9bae9d5e"
+      }
+    ],
+    "docs": [],
+    "events": [
+      {
+        "args": [
+          {
+            "docs": [
+              " The player contract account ID."
+            ],
+            "indexed": false,
+            "label": "player",
+            "type": {
+              "displayName": [
+                "AccountId"
+              ],
+              "type": 1
+            }
+          }
+        ],
+        "docs": [
+          " A player joined the game by calling [`register_player`]."
+        ],
+        "label": "PlayerRegistered"
+      },
+      {
+        "args": [
+          {
+            "docs": [
+              " The number of rounds played."
+            ],
+            "indexed": false,
+            "label": "rounds_played",
+            "type": {
+              "displayName": [
+                "u32"
+              ],
+              "type": 0
+            }
+          }
+        ],
+        "docs": [
+          " The rounds played have increased. This is used for the client side to keep",
+          " the [`TurnTaken`] events and \"Blocks\" UI in sync. Events are emitted before",
+          " block number changes, so re-fetching [`rounds_played`] on a block change",
+          " causes a brief delay in the UI."
+        ],
+        "label": "RoundIncremented"
+      },
+      {
+        "args": [
+          {
+            "docs": [
+              " The account start called [`start_game`]."
+            ],
+            "indexed": false,
+            "label": "starter",
+            "type": {
+              "displayName": [
+                "AccountId"
+              ],
+              "type": 1
+            }
+          }
+        ],
+        "docs": [
+          " Someone started the game by calling [`start_game`]."
+        ],
+        "label": "GameStarted"
+      },
+      {
+        "args": [
+          {
+            "docs": [
+              " The player that attempted the turn."
+            ],
+            "indexed": false,
+            "label": "player",
+            "type": {
+              "displayName": [
+                "AccountId"
+              ],
+              "type": 1
+            }
+          },
+          {
+            "docs": [
+              " The effect of the turn that was performed by the player."
+            ],
+            "indexed": false,
+            "label": "outcome",
+            "type": {
+              "displayName": [
+                "TurnOutcome"
+              ],
+              "type": 27
+            }
+          }
+        ],
+        "docs": [
+          " A player attempted to make a turn."
+        ],
+        "label": "TurnTaken"
+      },
+      {
+        "args": [
+          {
+            "docs": [
+              " The account that ended the game."
+            ],
+            "indexed": false,
+            "label": "ender",
+            "type": {
+              "displayName": [
+                "AccountId"
+              ],
+              "type": 1
+            }
+          }
+        ],
+        "docs": [
+          " Someone ended the game by calling [`end_game`].",
+          "",
+          " This event doesn't contain information about the winner because the contract still",
+          " exists. Interested parties can read this information from the contract by calling",
+          " [`state`] and [`player_scores`]."
+        ],
+        "label": "GameEnded"
+      },
+      {
+        "args": [
+          {
+            "docs": [
+              " The winning player who is also the one who destroyed the contract."
+            ],
+            "indexed": false,
+            "label": "winner",
+            "type": {
+              "displayName": [
+                "Player"
+              ],
+              "type": 5
+            }
+          }
+        ],
+        "docs": [
+          " The game ended and the winner destroyed the contract."
+        ],
+        "label": "GameDestroyed"
+      }
+    ],
+    "lang_error": {
+      "displayName": [
+        "ink",
+        "LangError"
+      ],
+      "type": 12
+    },
+    "messages": [
+      {
+        "args": [],
+        "docs": [
+          " When the game is in finished the contract can be deleted by the winner."
+        ],
+        "label": "destroy",
+        "mutates": true,
+        "payable": false,
+        "returnType": {
+          "displayName": [
+            "ink",
+            "MessageResult"
+          ],
+          "type": 10
+        },
+        "selector": "0xc7e248e4"
+      },
+      {
+        "args": [],
+        "docs": [
+          " Anyone can start the game when `earliest_start` is reached."
+        ],
+        "label": "start_game",
+        "mutates": true,
+        "payable": false,
+        "returnType": {
+          "displayName": [
+            "ink",
+            "MessageResult"
+          ],
+          "type": 10
+        },
+        "selector": "0x0dad731d"
+      },
+      {
+        "args": [],
+        "docs": [
+          " When enough time has passed, no new turns can be submitted.",
+          " Then anybody may call this function to end the game and",
+          " trigger the payout to the winner."
+        ],
+        "label": "end_game",
+        "mutates": true,
+        "payable": false,
+        "returnType": {
+          "displayName": [
+            "ink",
+            "MessageResult"
+          ],
+          "type": 10
+        },
+        "selector": "0xc76d285a"
+      },
+      {
+        "args": [
+          {
+            "label": "id",
+            "type": {
+              "displayName": [
+                "AccountId"
+              ],
+              "type": 1
+            }
+          },
+          {
+            "label": "name",
+            "type": {
+              "displayName": [
+                "String"
+              ],
+              "type": 6
+            }
+          }
+        ],
+        "docs": [
+          " Add a new player to the game. Only allowed while the game has not started."
+        ],
+        "label": "register_player",
+        "mutates": true,
+        "payable": true,
+        "returnType": {
+          "displayName": [
+            "ink",
+            "MessageResult"
+          ],
+          "type": 10
+        },
+        "selector": "0x44c9d826"
+      },
+      {
+        "args": [],
+        "docs": [
+          " This is the actual game loop.",
+          "",
+          " It can be called by anyone and triggers at most one turn",
+          " of the game per block."
+        ],
+        "label": "submit_turn",
+        "mutates": true,
+        "payable": false,
+        "returnType": {
+          "displayName": [
+            "ink",
+            "MessageResult"
+          ],
+          "type": 10
+        },
+        "selector": "0xd73c7bba"
+      },
+      {
+        "args": [],
+        "docs": [
+          " The buy-in amount to register a player."
+        ],
+        "label": "buy_in_amount",
+        "mutates": false,
+        "payable": false,
+        "returnType": {
+          "displayName": [
+            "ink",
+            "MessageResult"
+          ],
+          "type": 13
+        },
+        "selector": "0x3bd6cf8d"
+      },
+      {
+        "args": [],
+        "docs": [
+          " The total amount of rounds this game is to be played for."
+        ],
+        "label": "total_rounds",
+        "mutates": false,
+        "payable": false,
+        "returnType": {
+          "displayName": [
+            "ink",
+            "MessageResult"
+          ],
+          "type": 14
+        },
+        "selector": "0x98e2054a"
+      },
+      {
+        "args": [],
+        "docs": [
+          " How much gas each player is allowed to use per round."
+        ],
+        "label": "gas_limit",
+        "mutates": false,
+        "payable": false,
+        "returnType": {
+          "displayName": [
+            "ink",
+            "MessageResult"
+          ],
+          "type": 15
+        },
+        "selector": "0x58f2a0ae"
+      },
+      {
+        "args": [],
+        "docs": [
+          " Describes into many groups the players should be partitioned.",
+          "",
+          " How often [`submit_turn`] needs to be called until all players",
+          " made a turn."
+        ],
+        "label": "num_batches",
+        "mutates": false,
+        "payable": false,
+        "returnType": {
+          "displayName": [
+            "ink",
+            "MessageResult"
+          ],
+          "type": 14
+        },
+        "selector": "0xb0e1bfe3"
+      },
+      {
+        "args": [],
+        "docs": [
+          " How much gas each player is allowed to consume for the whole game."
+        ],
+        "label": "gas_budget",
+        "mutates": false,
+        "payable": false,
+        "returnType": {
+          "displayName": [
+            "ink",
+            "MessageResult"
+          ],
+          "type": 15
+        },
+        "selector": "0x45617f0d"
+      },
+      {
+        "args": [],
+        "docs": [
+          " The current game state."
+        ],
+        "label": "state",
+        "mutates": false,
+        "payable": false,
+        "returnType": {
+          "displayName": [
+            "ink",
+            "MessageResult"
+          ],
+          "type": 16
+        },
+        "selector": "0x0ced162a"
+      },
+      {
+        "args": [],
+        "docs": [
+          " Returns `true` if the game is running."
+        ],
+        "label": "is_running",
+        "mutates": false,
+        "payable": false,
+        "returnType": {
+          "displayName": [
+            "ink",
+            "MessageResult"
+          ],
+          "type": 18
+        },
+        "selector": "0x1b0e6452"
+      },
+      {
+        "args": [],
+        "docs": [
+          " List of all players sorted by score and gas costs."
+        ],
+        "label": "players_sorted",
+        "mutates": false,
+        "payable": false,
+        "returnType": {
+          "displayName": [
+            "ink",
+            "MessageResult"
+          ],
+          "type": 20
+        },
+        "selector": "0x2952cc11"
+      },
+      {
+        "args": [],
+        "docs": [
+          " Returns the dimensions of the board."
+        ],
+        "label": "dimensions",
+        "mutates": false,
+        "payable": false,
+        "returnType": {
+          "displayName": [
+            "ink",
+            "MessageResult"
+          ],
+          "type": 21
+        },
+        "selector": "0xf10dee95"
+      },
+      {
+        "args": [
+          {
+            "label": "coord",
+            "type": {
+              "displayName": [
+                "Field"
+              ],
+              "type": 9
+            }
+          }
+        ],
+        "docs": [
+          " Returns the value (owner) of the supplied field."
+        ],
+        "label": "field",
+        "mutates": false,
+        "payable": false,
+        "returnType": {
+          "displayName": [
+            "ink",
+            "MessageResult"
+          ],
+          "type": 22
+        },
+        "selector": "0x4abe8f1b"
+      },
+      {
+        "args": [],
+        "docs": [
+          " Returns the complete board.",
+          "",
+          " The index into the vector is calculated as `x + y * width`."
+        ],
+        "label": "board",
+        "mutates": false,
+        "payable": false,
+        "returnType": {
+          "displayName": [
+            "ink",
+            "MessageResult"
+          ],
+          "type": 25
+        },
+        "selector": "0x276086cb"
+      }
+    ]
+  },
+  "storage": {
+    "root": {
+      "layout": {
+        "struct": {
+          "fields": [
+            {
+              "layout": {
+                "enum": {
+                  "dispatchKey": "0x00000000",
+                  "name": "State",
+                  "variants": {
+                    "0": {
+                      "fields": [
+                        {
+                          "layout": {
+                            "leaf": {
+                              "key": "0x00000000",
+                              "ty": 0
+                            }
+                          },
+                          "name": "earliest_start"
+                        }
+                      ],
+                      "name": "Forming"
+                    },
+                    "1": {
+                      "fields": [
+                        {
+                          "layout": {
+                            "leaf": {
+                              "key": "0x00000000",
+                              "ty": 0
+                            }
+                          },
+                          "name": "rounds_played"
+                        }
+                      ],
+                      "name": "Running"
+                    },
+                    "2": {
+                      "fields": [
+                        {
+                          "layout": {
+                            "leaf": {
+                              "key": "0x00000000",
+                              "ty": 1
+                            }
+                          },
+                          "name": "winner"
+                        }
+                      ],
+                      "name": "Finished"
+                    }
+                  }
+                }
+              },
+              "name": "state"
+            },
+            {
+              "layout": {
+                "root": {
+                  "layout": {
+                    "struct": {
+                      "fields": [
+                        {
+                          "layout": {
+                            "leaf": {
+                              "key": "0xb93a8c6e",
+                              "ty": 1
+                            }
+                          },
+                          "name": "owner"
+                        },
+                        {
+                          "layout": {
+                            "leaf": {
+                              "key": "0xb93a8c6e",
+                              "ty": 0
+                            }
+                          },
+                          "name": "claimed_at"
+                        }
+                      ],
+                      "name": "FieldEntry"
+                    }
+                  },
+                  "root_key": "0xb93a8c6e"
+                }
+              },
+              "name": "board"
+            },
+            {
+              "layout": {
+                "struct": {
+                  "fields": [
+                    {
+                      "layout": {
+                        "leaf": {
+                          "key": "0x00000000",
+                          "ty": 0
+                        }
+                      },
+                      "name": "x"
+                    },
+                    {
+                      "layout": {
+                        "leaf": {
+                          "key": "0x00000000",
+                          "ty": 0
+                        }
+                      },
+                      "name": "y"
+                    }
+                  ],
+                  "name": "Field"
+                }
+              },
+              "name": "dimensions"
+            },
+            {
+              "layout": {
+                "root": {
+                  "layout": {
+                    "leaf": {
+                      "key": "0x900fc968",
+                      "ty": 4
+                    }
+                  },
+                  "root_key": "0x900fc968"
+                }
+              },
+              "name": "players"
+            },
+            {
+              "layout": {
+                "leaf": {
+                  "key": "0x00000000",
+                  "ty": 8
+                }
+              },
+              "name": "buy_in"
+            },
+            {
+              "layout": {
+                "leaf": {
+                  "key": "0x00000000",
+                  "ty": 0
+                }
+              },
+              "name": "rounds"
+            },
+            {
+              "layout": {
+                "root": {
+                  "layout": {
+                    "leaf": {
+                      "key": "0xecf15311",
+                      "ty": 0
+                    }
+                  },
+                  "root_key": "0xecf15311"
+                }
+              },
+              "name": "last_turn"
+            }
+          ],
+          "name": "SquinkSplash"
+        }
+      },
+      "root_key": "0x00000000"
+    }
+  },
+  "types": [
+    {
+      "id": 0,
+      "type": {
+        "def": {
+          "primitive": "u32"
+        }
+      }
+    },
+    {
+      "id": 1,
+      "type": {
+        "def": {
+          "composite": {
+            "fields": [
+              {
+                "type": 2,
+                "typeName": "[u8; 32]"
+              }
+            ]
+          }
+        },
+        "path": [
+          "ink_primitives",
+          "types",
+          "AccountId"
+        ]
+      }
+    },
+    {
+      "id": 2,
+      "type": {
+        "def": {
+          "array": {
+            "len": 32,
+            "type": 3
+          }
+        }
+      }
+    },
+    {
+      "id": 3,
+      "type": {
+        "def": {
+          "primitive": "u8"
+        }
+      }
+    },
+    {
+      "id": 4,
+      "type": {
+        "def": {
+          "sequence": {
+            "type": 5
+          }
+        }
+      }
+    },
+    {
+      "id": 5,
+      "type": {
+        "def": {
+          "composite": {
+            "fields": [
+              {
+                "name": "id",
+                "type": 1,
+                "typeName": "AccountId"
+              },
+              {
+                "name": "name",
+                "type": 6,
+                "typeName": "String"
+              },
+              {
+                "name": "gas_used",
+                "type": 7,
+                "typeName": "u64"
+              },
+              {
+                "name": "score",
+                "type": 7,
+                "typeName": "u64"
+              }
+            ]
+          }
+        },
+        "path": [
+          "squink_splash",
+          "contract",
+          "Player"
+        ]
+      }
+    },
+    {
+      "id": 6,
+      "type": {
+        "def": {
+          "primitive": "str"
+        }
+      }
+    },
+    {
+      "id": 7,
+      "type": {
+        "def": {
+          "primitive": "u64"
+        }
+      }
+    },
+    {
+      "id": 8,
+      "type": {
+        "def": {
+          "primitive": "u128"
+        }
+      }
+    },
+    {
+      "id": 9,
+      "type": {
+        "def": {
+          "composite": {
+            "fields": [
+              {
+                "name": "x",
+                "type": 0,
+                "typeName": "u32"
+              },
+              {
+                "name": "y",
+                "type": 0,
+                "typeName": "u32"
+              }
+            ]
+          }
+        },
+        "path": [
+          "squink_splash",
+          "contract",
+          "Field"
+        ]
+      }
+    },
+    {
+      "id": 10,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "fields": [
+                  {
+                    "type": 11
+                  }
+                ],
+                "index": 0,
+                "name": "Ok"
+              },
+              {
+                "fields": [
+                  {
+                    "type": 12
+                  }
+                ],
+                "index": 1,
+                "name": "Err"
+              }
+            ]
+          }
+        },
+        "params": [
+          {
+            "name": "T",
+            "type": 11
+          },
+          {
+            "name": "E",
+            "type": 12
+          }
+        ],
+        "path": [
+          "Result"
+        ]
+      }
+    },
+    {
+      "id": 11,
+      "type": {
+        "def": {
+          "tuple": []
+        }
+      }
+    },
+    {
+      "id": 12,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "index": 1,
+                "name": "CouldNotReadInput"
+              }
+            ]
+          }
+        },
+        "path": [
+          "ink_primitives",
+          "LangError"
+        ]
+      }
+    },
+    {
+      "id": 13,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "fields": [
+                  {
+                    "type": 8
+                  }
+                ],
+                "index": 0,
+                "name": "Ok"
+              },
+              {
+                "fields": [
+                  {
+                    "type": 12
+                  }
+                ],
+                "index": 1,
+                "name": "Err"
+              }
+            ]
+          }
+        },
+        "params": [
+          {
+            "name": "T",
+            "type": 8
+          },
+          {
+            "name": "E",
+            "type": 12
+          }
+        ],
+        "path": [
+          "Result"
+        ]
+      }
+    },
+    {
+      "id": 14,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "fields": [
+                  {
+                    "type": 0
+                  }
+                ],
+                "index": 0,
+                "name": "Ok"
+              },
+              {
+                "fields": [
+                  {
+                    "type": 12
+                  }
+                ],
+                "index": 1,
+                "name": "Err"
+              }
+            ]
+          }
+        },
+        "params": [
+          {
+            "name": "T",
+            "type": 0
+          },
+          {
+            "name": "E",
+            "type": 12
+          }
+        ],
+        "path": [
+          "Result"
+        ]
+      }
+    },
+    {
+      "id": 15,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "fields": [
+                  {
+                    "type": 7
+                  }
+                ],
+                "index": 0,
+                "name": "Ok"
+              },
+              {
+                "fields": [
+                  {
+                    "type": 12
+                  }
+                ],
+                "index": 1,
+                "name": "Err"
+              }
+            ]
+          }
+        },
+        "params": [
+          {
+            "name": "T",
+            "type": 7
+          },
+          {
+            "name": "E",
+            "type": 12
+          }
+        ],
+        "path": [
+          "Result"
+        ]
+      }
+    },
+    {
+      "id": 16,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "fields": [
+                  {
+                    "type": 17
+                  }
+                ],
+                "index": 0,
+                "name": "Ok"
+              },
+              {
+                "fields": [
+                  {
+                    "type": 12
+                  }
+                ],
+                "index": 1,
+                "name": "Err"
+              }
+            ]
+          }
+        },
+        "params": [
+          {
+            "name": "T",
+            "type": 17
+          },
+          {
+            "name": "E",
+            "type": 12
+          }
+        ],
+        "path": [
+          "Result"
+        ]
+      }
+    },
+    {
+      "id": 17,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "fields": [
+                  {
+                    "name": "earliest_start",
+                    "type": 0,
+                    "typeName": "u32"
+                  }
+                ],
+                "index": 0,
+                "name": "Forming"
+              },
+              {
+                "fields": [
+                  {
+                    "name": "rounds_played",
+                    "type": 0,
+                    "typeName": "u32"
+                  }
+                ],
+                "index": 1,
+                "name": "Running"
+              },
+              {
+                "fields": [
+                  {
+                    "name": "winner",
+                    "type": 1,
+                    "typeName": "AccountId"
+                  }
+                ],
+                "index": 2,
+                "name": "Finished"
+              }
+            ]
+          }
+        },
+        "path": [
+          "squink_splash",
+          "contract",
+          "State"
+        ]
+      }
+    },
+    {
+      "id": 18,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "fields": [
+                  {
+                    "type": 19
+                  }
+                ],
+                "index": 0,
+                "name": "Ok"
+              },
+              {
+                "fields": [
+                  {
+                    "type": 12
+                  }
+                ],
+                "index": 1,
+                "name": "Err"
+              }
+            ]
+          }
+        },
+        "params": [
+          {
+            "name": "T",
+            "type": 19
+          },
+          {
+            "name": "E",
+            "type": 12
+          }
+        ],
+        "path": [
+          "Result"
+        ]
+      }
+    },
+    {
+      "id": 19,
+      "type": {
+        "def": {
+          "primitive": "bool"
+        }
+      }
+    },
+    {
+      "id": 20,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "fields": [
+                  {
+                    "type": 4
+                  }
+                ],
+                "index": 0,
+                "name": "Ok"
+              },
+              {
+                "fields": [
+                  {
+                    "type": 12
+                  }
+                ],
+                "index": 1,
+                "name": "Err"
+              }
+            ]
+          }
+        },
+        "params": [
+          {
+            "name": "T",
+            "type": 4
+          },
+          {
+            "name": "E",
+            "type": 12
+          }
+        ],
+        "path": [
+          "Result"
+        ]
+      }
+    },
+    {
+      "id": 21,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "fields": [
+                  {
+                    "type": 9
+                  }
+                ],
+                "index": 0,
+                "name": "Ok"
+              },
+              {
+                "fields": [
+                  {
+                    "type": 12
+                  }
+                ],
+                "index": 1,
+                "name": "Err"
+              }
+            ]
+          }
+        },
+        "params": [
+          {
+            "name": "T",
+            "type": 9
+          },
+          {
+            "name": "E",
+            "type": 12
+          }
+        ],
+        "path": [
+          "Result"
+        ]
+      }
+    },
+    {
+      "id": 22,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "fields": [
+                  {
+                    "type": 23
+                  }
+                ],
+                "index": 0,
+                "name": "Ok"
+              },
+              {
+                "fields": [
+                  {
+                    "type": 12
+                  }
+                ],
+                "index": 1,
+                "name": "Err"
+              }
+            ]
+          }
+        },
+        "params": [
+          {
+            "name": "T",
+            "type": 23
+          },
+          {
+            "name": "E",
+            "type": 12
+          }
+        ],
+        "path": [
+          "Result"
+        ]
+      }
+    },
+    {
+      "id": 23,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "index": 0,
+                "name": "None"
+              },
+              {
+                "fields": [
+                  {
+                    "type": 24
+                  }
+                ],
+                "index": 1,
+                "name": "Some"
+              }
+            ]
+          }
+        },
+        "params": [
+          {
+            "name": "T",
+            "type": 24
+          }
+        ],
+        "path": [
+          "Option"
+        ]
+      }
+    },
+    {
+      "id": 24,
+      "type": {
+        "def": {
+          "composite": {
+            "fields": [
+              {
+                "name": "owner",
+                "type": 1,
+                "typeName": "AccountId"
+              },
+              {
+                "name": "claimed_at",
+                "type": 0,
+                "typeName": "u32"
+              }
+            ]
+          }
+        },
+        "path": [
+          "squink_splash",
+          "contract",
+          "FieldEntry"
+        ]
+      }
+    },
+    {
+      "id": 25,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "fields": [
+                  {
+                    "type": 26
+                  }
+                ],
+                "index": 0,
+                "name": "Ok"
+              },
+              {
+                "fields": [
+                  {
+                    "type": 12
+                  }
+                ],
+                "index": 1,
+                "name": "Err"
+              }
+            ]
+          }
+        },
+        "params": [
+          {
+            "name": "T",
+            "type": 26
+          },
+          {
+            "name": "E",
+            "type": 12
+          }
+        ],
+        "path": [
+          "Result"
+        ]
+      }
+    },
+    {
+      "id": 26,
+      "type": {
+        "def": {
+          "sequence": {
+            "type": 23
+          }
+        }
+      }
+    },
+    {
+      "id": 27,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "fields": [
+                  {
+                    "name": "turn",
+                    "type": 9,
+                    "typeName": "Field"
+                  }
+                ],
+                "index": 0,
+                "name": "Success"
+              },
+              {
+                "fields": [
+                  {
+                    "name": "turn",
+                    "type": 9,
+                    "typeName": "Field"
+                  }
+                ],
+                "index": 1,
+                "name": "OutOfBounds"
+              },
+              {
+                "fields": [
+                  {
+                    "name": "turn",
+                    "type": 9,
+                    "typeName": "Field"
+                  },
+                  {
+                    "name": "player",
+                    "type": 1,
+                    "typeName": "AccountId"
+                  }
+                ],
+                "index": 2,
+                "name": "Occupied"
+              },
+              {
+                "index": 3,
+                "name": "BrokenPlayer"
+              },
+              {
+                "index": 4,
+                "name": "NoTurn"
+              },
+              {
+                "index": 5,
+                "name": "BudgetExhausted"
+              }
+            ]
+          }
+        },
+        "path": [
+          "squink_splash",
+          "contract",
+          "TurnOutcome"
+        ]
+      }
+    }
+  ],
+  "version": "4"
+}

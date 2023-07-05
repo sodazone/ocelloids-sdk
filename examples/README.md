@@ -32,6 +32,7 @@ Here are the available binaries to run the example applications:
 * __follow-transfer-events__: Simple demonstration of dynamic queries.
 * __light-client__: Demonstrates the usage of the Smoldot light client provider.
 * __watch-contracts__: Filters contract messages. Supports pipeable stdout.
+* __watch-instantiations__: Watches contract instantiations of the same code hash.
 * __watch-storage__: Watches the storage for an account balance threshold.
 * __watch-transfer-events__: Watches transfers above a specified amount. Supports pipeable stdout.
 
