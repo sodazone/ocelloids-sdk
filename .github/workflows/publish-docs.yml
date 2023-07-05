@@ -28,6 +28,7 @@ jobs:
         - name: Enable Corepack
           run: corepack enable
         - run: yarn install --immutable
+        - run: yarn build
         - run: yarn docs
         - name: Upload artifact
           uses: actions/upload-pages-artifact@v1
