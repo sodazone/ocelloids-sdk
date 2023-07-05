@@ -27,6 +27,7 @@ header:
     - '**/node_modules'
     - '**/*.json'
     - '.yarn'
+    - '**/*.lock'
     - '.github'
     - 'LICENSE'
     - 'NOTICE'
