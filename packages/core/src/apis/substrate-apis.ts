@@ -93,11 +93,28 @@ export class SubstrateApis {
   /**
    * Returns the `ApiPromise` instance for a given chain name.
    *
-   * ## Example
+   * ## Example: isReady
    * ```ts
    * // registered under 'polkadot' name
    * apis.promise.polkadot.isReady
    * ```
+   *
+   * ## Example: chain info
+   * ```ts
+   * apis.promise.polkadot.isReady.then(api => {
+   *   const chainInfo = api.registry.getChainProperties();
+   *   if (chainInfo === undefined) {
+   *     throw new Error('Unable to retrieve chain info');
+   *   }
+   *   const { tokenDecimals, tokenSymbol } = chainInfo;
+   *
+   *   formatBalance.setDefaults({
+   *     decimals: tokenDecimals.unwrapOrDefault().toArray().map(v => v.toNumber()),
+   *     unit: tokenSymbol.unwrapOrDefault().toArray().map(v => v.toString())
+   *   });
+   * });
+   *```
+   *
    * @see ApiPromise
    */
   get promise(): Record<string, ApiPromise> {
