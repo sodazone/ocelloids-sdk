@@ -68,7 +68,9 @@ Source code [packages/pallets/contracts](https://github.com/sodazone/ocelloids/t
 
 ## Usage
 
-Refer to the SDK documentation in the `docs/` directory.
+Refer to the SDK documentation at [https://sodazone.github.io/ocelloids/](https://sodazone.github.io/ocelloids/).
+
+You can also explore some example applications in the [examples/](https://github.com/sodazone/ocelloids/tree/main/examples) folder in this repository.
 
 ### Example: Filtering Transfer Events
 
