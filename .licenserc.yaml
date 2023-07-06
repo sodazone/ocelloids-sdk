@@ -18,14 +18,15 @@ header:
     copyright-owner: SO/DA zone - Marc Fornós & Xueying Wang
 
   paths-ignore:
-    - '**/dist'
     - 'docs'
     - 'licenses'
     - '**/*.md'
-    - '.*'
-    - 'coverage'
-    - '**/node_modules'
+    - '**/.*'
+    - '**/*.hjson'
     - '**/*.json'
+    - 'coverage'
+    - '**/node_modules/**'
+    - '**/dist/**'
     - '.yarn'
     - '**/*.lock'
     - '.github'
