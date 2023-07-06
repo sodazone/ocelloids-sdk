@@ -81,7 +81,6 @@ const argv = yargs(hideBin(process.argv))
   .alias('h', 'help')
   .alias('v', 'verbose')
   .scriptName('watch-transfer-events')
-  .completion()
   .argv as any;
 
 watcher({
