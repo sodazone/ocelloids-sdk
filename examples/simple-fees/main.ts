@@ -25,7 +25,7 @@ import { WsProvider } from '@polkadot/api';
 import { BN, formatBalance } from '@polkadot/util';
 
 import {
-  bufferCount, last, map, max, merge, min, scan
+  bufferCount, last, map, max, merge, min, scan, tap
 } from 'rxjs';
 
 import {
@@ -76,11 +76,18 @@ function watcher({ url, blockHeight, blockCount, verbose }) {
     fee: BN
   }
 
+  let extrinsicsCount = 0;
+  let eventsCount = 0;
+
   const feesPipe = apis.rx.network.pipe(
     blocksInRange(blockHeight, blockCount, false),
+    tap(b => {
+      extrinsicsCount += b.extrinsics.length;
+      eventsCount += b.events.length;
+    }),
     filterEvents({
       section: 'transactionPayment',
-      method: { $in: ['TransactionFeePaid'] }
+      method: 'TransactionFeePaid'
     }),
     map(x => {
       const { extrinsicId, blockNumber } = x;
@@ -110,6 +117,8 @@ function watcher({ url, blockHeight, blockCount, verbose }) {
     return `${formatBalance(info.fee)} (@${info.extrinsicId})`;
   }
 
+  const start = Date.now();
+
   merge(
     feesPipe.pipe(
       scan(reducer, {
@@ -126,10 +135,21 @@ function watcher({ url, blockHeight, blockCount, verbose }) {
     )
   ).pipe(bufferCount(3)).subscribe({
     next: ([avgFee, minFee, maxFee]) => {
-      console.log('Average Fee:', formatBalance(avgFee as BN));
-      console.log('Minimum Fee:', formatFeeInfo(minFee as FeeInfo));
-      console.log('Maximum Fee:', formatFeeInfo(maxFee as FeeInfo));
+      const t = Date.now() - start;
+      const bh = parseInt(blockHeight);
+      const bc = parseInt(blockCount);
+      const bt = t / bc;
+
+      console.log(`Fees [${bh}-${bh + bc}]`);
+      console.log('='.repeat(40));
+      console.log('Average:', formatBalance(avgFee as BN));
+      console.log('Minimum:', formatFeeInfo(minFee as FeeInfo));
+      console.log('Maximum:', formatFeeInfo(maxFee as FeeInfo));
+      console.log('-'.repeat(40));
+      console.log(`Time: ${t}ms (${bt} block/s)`);
+      console.log(`Blocks: ${bc} (tx: ${extrinsicsCount}, events: ${eventsCount})`);
     },
+    error: console.error,
     complete: () => exit(0)
   });
 }
