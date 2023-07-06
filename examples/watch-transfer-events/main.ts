@@ -20,6 +20,7 @@ import yargs from 'yargs/yargs';
 import { hideBin } from 'yargs/helpers';
 
 import { WsProvider } from '@polkadot/api';
+import type { SignedBlockExtended } from '@polkadot/api-derive/types';
 
 import {
   SubstrateApis,
@@ -27,6 +28,7 @@ import {
   filterEvents,
   ControlQuery
 } from '@sodazone/ocelloids';
+import { tap } from 'rxjs';
 
 function watcher({ url, threshold, verbose }) {
   if (verbose) {
@@ -42,6 +44,12 @@ function watcher({ url, threshold, verbose }) {
 
   apis.rx.network.pipe(
     finalizedBlocks(),
+    verbose ?
+      tap((x: SignedBlockExtended) => console.log(
+        '> Block Height',
+        x.block.header.number.toHuman()
+      )) :
+      x => x,
     filterEvents(ControlQuery.from({
       section: 'balances',
       method: 'Transfer',
@@ -53,8 +61,8 @@ function watcher({ url, threshold, verbose }) {
 }
 
 const argv = yargs(hideBin(process.argv))
-  .usage('Usage: watch-transfers <url> <threshold> [options]')
-  .example('watch-transfers 6280000000000', 'watches transfers above amount')
+  .usage('Usage: $0 <url> <threshold> [options]')
+  .example('$0 6280000000000', 'watches transfers above amount')
   .option('t', {
     type: 'string',
     alias: 'threshold',
@@ -72,6 +80,8 @@ const argv = yargs(hideBin(process.argv))
   .help('h')
   .alias('h', 'help')
   .alias('v', 'verbose')
+  .scriptName('watch-transfer-events')
+  .completion()
   .argv as any;
 
 watcher({

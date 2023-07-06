@@ -72,9 +72,9 @@ function watcher({ urls, verbose }) {
 }
 
 const argv = yargs(hideBin(process.argv))
-  .usage('Usage: filter-xt <url> [options]')
-  .example('filter-xt < filters/balances.hjson', 'use balances.hjson filter')
-  .example('filter-xt < filters/balances.hjson | jq .', 'pipe out to jq')
+  .usage('Usage: $0 <url> [options]')
+  .example('$0 < filters/balances.hjson', 'use balances.hjson filter')
+  .example('$0 < filters/balances.hjson | jq .', 'pipe out to jq')
   .option('u', {
     type: 'array',
     alias: 'url',
@@ -85,6 +85,7 @@ const argv = yargs(hideBin(process.argv))
   .help('h')
   .alias('h', 'help')
   .alias('v', 'verbose')
+  .scriptName('filter-extrinsics')
   .argv as any;
 
 watcher({

@@ -155,8 +155,8 @@ function watcher({ url, blockHeight, blockCount, verbose }) {
 }
 
 const argv = yargs(hideBin(process.argv))
-  .usage('Usage: simple-fees <url> <block height> <block count> [options]')
-  .example('simple-fees', 'calculates simple fee stats for a block range')
+  .usage('Usage: $0 <url> <block height> <block count> [options]')
+  .example('$0', 'calculates simple fee stats for a block range')
   .option('b', {
     type: 'string',
     alias: 'block-height',
@@ -181,6 +181,7 @@ const argv = yargs(hideBin(process.argv))
   .help('h')
   .alias('h', 'help')
   .alias('v', 'verbose')
+  .scriptName('simple-fees')
   .argv as any;
 
 watcher({
