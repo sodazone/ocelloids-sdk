@@ -16,24 +16,32 @@
  * limitations under the License.
  */
 
+import path from 'node:path';
+
 import yargs from 'yargs/yargs';
 import { hideBin } from 'yargs/helpers';
 
 import { watcher } from './watcher.js';
 
 const argv = yargs(hideBin(process.argv))
-  .usage('Usage: watch-contracts [options]')
-  .example('watch-contracts -v -p ./config.hjson', 'watches contract messages and outputs verbose logging')
+  .usage('Usage: $0 [options]')
+  .example('$0 -v -p ./config.hjson', 'watches contract messages and outputs verbose logging')
   .option('p', {
     type: 'string',
     alias: 'path',
-    default: './contracts/link/config.hjson',
     describe: 'The path to the configuration file for the contract to watch',
+    coerce: p => path.resolve(p),
+    demandOption: true,
     requiresArg: true
+  })
+  .option('v', {
+    type: 'boolean',
+    alias: 'verbose',
+    describe: 'Enable verbose logging'
   })
   .help('h')
   .alias('h', 'help')
-  .alias('v', 'verbose')
+  .scriptName('watch-contracts')
   .argv as any;
 
 watcher({

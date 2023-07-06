@@ -16,7 +16,6 @@
 
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 import { exit } from 'node:process';
 
 import { parse } from 'hjson';
@@ -37,11 +36,8 @@ import {
 
 import { printHeader, objectToStructuredString } from './utils.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
 export async function watcher({ configPath, verbose }) {
-  const c = readFileSync(path.resolve(__dirname, configPath)).toString();
+  const c = readFileSync(configPath).toString();
   const config = parse(c);
 
   if (config.getBlocksInRange && (config.startBlock === undefined || config.range === undefined)) {
@@ -63,15 +59,11 @@ export async function watcher({ configPath, verbose }) {
   };
 
   if (config.customTypes) {
-    const customTypes = await import(
-      path.resolve(__dirname, configPath, '../', config.customTypes)
-    ).then(
-      (module) => module.default
-    );
+    const customTypes = readFileSync(path.resolve(configPath, '../', config.customTypes)).toString();
 
     apiOptions = {
       ...apiOptions,
-      ...customTypes
+      ...JSON.parse(customTypes)
     };
   }
 
@@ -79,7 +71,7 @@ export async function watcher({ configPath, verbose }) {
     network: apiOptions
   });
 
-  const contractMetadataJson = readFileSync((path.resolve(__dirname, configPath, '../', config.metadata))).toString();
+  const contractMetadataJson = readFileSync((path.resolve(configPath, '../', config.metadata))).toString();
 
   const abi = new Abi(contractMetadataJson);
 

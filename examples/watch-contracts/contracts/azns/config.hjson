@@ -9,5 +9,5 @@
   callsCriteria: {
     message.identifier: register
   }
-  customTypes: azero_types.ts
+  customTypes: azero_types.json
 }
