@@ -20,10 +20,12 @@ Substrate monitoring SDK
       alt="CI"
     />
   </a>
-  <img
-    src="https://img.shields.io/librariesio/release/npm/@sodazone/ocelloids?color=69D2E7&labelColor=A7DBD8"
-    alt="Dependencies"
-  />
+  <picture>
+    <img
+      src="https://img.shields.io/librariesio/release/npm/@sodazone/ocelloids?color=69D2E7&labelColor=A7DBD8"
+      alt="Dependencies"
+    />
+  </picture>
   <a href="https://github.com/sodazone/ocelloids/blob/main/LICENSE">
     <img
       src="https://img.shields.io/github/license/sodazone/ocelloids?color=69D2E7&labelColor=A7DBD8"
