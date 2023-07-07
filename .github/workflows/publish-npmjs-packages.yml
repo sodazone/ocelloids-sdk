@@ -1,0 +1,31 @@
+name: Publish Packages to NPM
+on:
+  #release:
+  #  types: [published]
+  workflow_dispatch:
+
+jobs:
+  publish-npm:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: yarn
+          registry-url: https://registry.npmjs.org
+          scope: '@sodazone'
+      - name: Enable Corepack
+        run: corepack enable
+      - run: yarn install --immutable
+      - run: yarn build
+      - name: Publish ocelloids
+        run: npm publish --provenance --access public -w packages/core
+      - name: Publish ocelloids-contracts
+        run: npm publish --provenance --access public -w packages/pallets/contracts
+       
