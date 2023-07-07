@@ -38,5 +38,5 @@
   "scripts": {
     "build": "tsup src/index.ts --format cjs,esm --dts --clean --minify"
   },
-  "stableVersion": "1.0.0"
+  "stableVersion": "0.0.0"
 }
