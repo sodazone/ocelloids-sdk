@@ -12,6 +12,9 @@
     "Marc Fornós <marc@soda.zone>",
     "Xueying Wang <xueying@soda.zone>"
   ],
+  "keywords": [
+    "substrate", "polkadot", "monitoring", "blockchain", "sdk"
+  ],
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
