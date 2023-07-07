@@ -17,6 +17,7 @@
  */
 
 import { WsProvider } from '@polkadot/api';
+import { AccountInfo } from '@polkadot/types/interfaces';
 import { formatBalance } from '@polkadot/util';
 
 import {
@@ -65,10 +66,10 @@ function trackIO(address: string) {
     bufferCount(2,1),
     map(([x, y]) => ([{
       address,
-      balance: x.data
+      balance: (x as AccountInfo).data
     },{
       address,
-      balance: y.data
+      balance: (y as AccountInfo).data
     }]))
   );
 }
