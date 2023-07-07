@@ -1,6 +1,6 @@
 {
   "name": "@sodazone/ocelloids-contracts",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Contracts pallet support.",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -13,7 +13,11 @@
     "Xueying Wang <xueying@soda.zone>"
   ],
   "keywords": [
-    "substrate", "polkadot", "monitoring", "smart-contracts", "sdk"
+    "substrate",
+    "polkadot",
+    "monitoring",
+    "smart-contracts",
+    "sdk"
   ],
   "license": "Apache-2.0",
   "repository": {
@@ -23,10 +27,10 @@
   },
   "dependencies": {
     "@polkadot/api-contract": "^10.9.1",
-    "@sodazone/ocelloids": "1.0.0"
+    "@sodazone/ocelloids": "1.0.1"
   },
   "devDependencies": {
-    "@sodazone/ocelloids-test": "1.0.0"
+    "@sodazone/ocelloids-test": "1.0.1"
   },
   "files": [
     "dist"

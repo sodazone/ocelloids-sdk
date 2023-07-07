@@ -1,6 +1,6 @@
 {
   "name": "@sodazone/ocelloids",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Software development kit for building monitoring applications for Substrate networks.",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -13,7 +13,11 @@
     "Xueying Wang <xueying@soda.zone>"
   ],
   "keywords": [
-    "substrate", "polkadot", "monitoring", "blockchain", "sdk"
+    "substrate",
+    "polkadot",
+    "monitoring",
+    "blockchain",
+    "sdk"
   ],
   "license": "Apache-2.0",
   "repository": {
@@ -28,7 +32,7 @@
     "rxjs": "^7.8.1"
   },
   "devDependencies": {
-    "@sodazone/ocelloids-test": "1.0.0"
+    "@sodazone/ocelloids-test": "1.0.1"
   },
   "files": [
     "dist"
