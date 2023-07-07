@@ -1,6 +1,6 @@
 {
   "name": "@sodazone/ocelloids-tools",
-  "version": "1.0.0-dev.0",
+  "version": "1.0.0",
   "description": "Ocelloids development tools.",
   "sideEffects": false,
   "private": true,
@@ -16,8 +16,8 @@
     "octools": "dist/main.cjs"
   },
   "dependencies": {
-    "@sodazone/ocelloids": "1.0.0-dev.0",
-    "@sodazone/ocelloids-test": "1.0.0-dev.0",
+    "@sodazone/ocelloids": "1.0.0",
+    "@sodazone/ocelloids-test": "1.0.0",
     "cbor-x": "^1.5.3",
     "citty": "^0.1.1"
   },
@@ -28,7 +28,6 @@
     "build": "tsup src/main.ts --clean --minify && yarn sed:shebang",
     "sed:shebang": "shx sed -i \"s/\\/env ts-node-esm/\\/env node/g\" dist/**/*.cjs > /dev/null"
   },
-  "stableVersion": "0.0.0",
   "devDependencies": {
     "shx": "^0.3.4"
   }
