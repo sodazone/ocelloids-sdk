@@ -14,8 +14,8 @@ Substrate monitoring SDK
   />
 </picture>
 
-![GitHub CI](https://img.shields.io/github/actions/workflow/status/sodazone/ocelloids/ci.yml?branch=main)
-![GitHub](https://img.shields.io/github/license/sodazone/ocelloids)
+![CI](https://img.shields.io/github/actions/workflow/status/sodazone/ocelloids/ci.yml?branch=main&link=https://github.com/sodazone/ocelloids/actions/workflows/ci.yml)
+![License](https://img.shields.io/github/license/sodazone/ocelloids?link=https://github.com/sodazone/ocelloids/blob/main/LICENSE)
 
 </div>
 
@@ -46,7 +46,7 @@ Ocelloids is an open-source Software Development Kit (SDK) that provides a frame
 
 ### Ocelloids Core
 
-![npm](https://img.shields.io/npm/v/@sodazone/ocelloids)
+![npm @sodazone/ocelloids](https://img.shields.io/npm/v/@sodazone/ocelloids?link=https://www.npmjs.com/package/@sodazone/ocelloids)
 
 ```shell
 npm i @sodazone/ocelloids
@@ -58,7 +58,7 @@ Source code [packages/core](https://github.com/sodazone/ocelloids/tree/main/pack
 
 ### Ocelloids Contracts
 
-![npm](https://img.shields.io/npm/v/@sodazone/ocelloids-contracts)
+![npm @sodazone/ocelloids-contracts](https://img.shields.io/npm/v/@sodazone/ocelloids-contracts?link=https://www.npmjs.com/package/@sodazone/ocelloids-contracts)
 
 ```shell
 npm i @sodazone/ocelloids-contracts
