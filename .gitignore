@@ -3,6 +3,7 @@ coverage/
 dist/
 docs/
 **/.yarn/cache
+**/.yarn/versions
 **/.yarn/*.gz
 .eslintcache
 tsconfig*buildinfo
