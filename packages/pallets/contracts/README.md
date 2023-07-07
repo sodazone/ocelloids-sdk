@@ -1,10 +1,17 @@
 # Ocelloids Contracts Module
 
-![npm](https://img.shields.io/npm/v/@sodazone/ocelloids-contracts)
+<a href="https://www.npmjs.com/package/@sodazone/ocelloids-contracts">
+  <img 
+    src="https://img.shields.io/npm/v/@sodazone/ocelloids-contracts"
+    alt="npm @sodazone/ocelloids-contracts"
+  />
+</a>
 
 The Ocelloids Contracts Module provides support for Substrate's contracts pallet, specifically for decoding contract messages, events, and constructors, and enables easy filtering of these components. It is designed to be used in conjunction with the Ocelloids Core Module.
 
 ## Usage
+
+Refer to the [SDK documentation](https://sodazone.github.io/ocelloids/).
 
 ### Example: Tracking Contract Events
 

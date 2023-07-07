@@ -1,12 +1,17 @@
 # Ocelloids Core Module
 
-![npm](https://img.shields.io/npm/v/@sodazone/ocelloids)
+<a href="https://www.npmjs.com/package/@sodazone/ocelloids">
+  <img 
+    src="https://img.shields.io/npm/v/@sodazone/ocelloids"
+    alt="npm @sodazone/ocelloids"
+  />
+</a>
 
 The Ocelloids Core Module provides base abstractions, reactive operators, and pallet-independent functionality.
 
 ## Usage
 
-Please, refer to the main [README](https://github.com/sodazone/ocelloids/) for basic usage snippets.
+Refer to the [SDK documentation](https://sodazone.github.io/ocelloids/).
 
 Additionally, check out the [examples/](https://github.com/sodazone/ocelloids/tree/main/examples) folder for example applications.
 

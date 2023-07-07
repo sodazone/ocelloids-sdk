@@ -13,10 +13,20 @@ Substrate monitoring SDK
     alt=""
   />
 </picture>
-
-![CI](https://img.shields.io/github/actions/workflow/status/sodazone/ocelloids/ci.yml?branch=main&link=https://github.com/sodazone/ocelloids/actions/workflows/ci.yml)
-![License](https://img.shields.io/github/license/sodazone/ocelloids?link=https://github.com/sodazone/ocelloids/blob/main/LICENSE)
-
+<p align="center">
+  <a href="https://github.com/sodazone/ocelloids/actions/workflows/ci.yml">
+    <img
+      src="https://img.shields.io/github/actions/workflow/status/sodazone/ocelloids/ci.yml?branch=main"
+      alt="CI"
+    />
+  </a>
+  <a href="https://github.com/sodazone/ocelloids/blob/main/LICENSE">
+    <img
+      src="https://img.shields.io/github/license/sodazone/ocelloids?color=424242"
+      alt="License"
+    />
+  </a>
+</p>
 </div>
 
 ---
@@ -46,7 +56,12 @@ Ocelloids is an open-source Software Development Kit (SDK) that provides a frame
 
 ### Ocelloids Core
 
-![npm @sodazone/ocelloids](https://img.shields.io/npm/v/@sodazone/ocelloids?link=https://www.npmjs.com/package/@sodazone/ocelloids)
+<a href="https://www.npmjs.com/package/@sodazone/ocelloids">
+  <img 
+    src="https://img.shields.io/npm/v/@sodazone/ocelloids"
+    alt="npm @sodazone/ocelloids"
+  />
+</a>
 
 ```shell
 npm i @sodazone/ocelloids
@@ -58,7 +73,12 @@ Source code [packages/core](https://github.com/sodazone/ocelloids/tree/main/pack
 
 ### Ocelloids Contracts
 
-![npm @sodazone/ocelloids-contracts](https://img.shields.io/npm/v/@sodazone/ocelloids-contracts?link=https://www.npmjs.com/package/@sodazone/ocelloids-contracts)
+<a href="https://www.npmjs.com/package/@sodazone/ocelloids-contracts">
+  <img 
+    src="https://img.shields.io/npm/v/@sodazone/ocelloids-contracts"
+    alt="npm @sodazone/ocelloids-contracts"
+  />
+</a>
 
 ```shell
 npm i @sodazone/ocelloids-contracts
@@ -70,7 +90,7 @@ Source code [packages/pallets/contracts](https://github.com/sodazone/ocelloids/t
 
 ## Usage
 
-Refer to the SDK documentation at [https://sodazone.github.io/ocelloids/](https://sodazone.github.io/ocelloids/).
+Refer to the [SDK documentation](https://sodazone.github.io/ocelloids/).
 
 You can also explore some example applications in the [examples/](https://github.com/sodazone/ocelloids/tree/main/examples) folder.
 
