@@ -1,4 +1,4 @@
-# Ocelloids SDK Examples
+# 🧪 Ocelloids SDK Examples
 
 The Ocelloids SDK Examples provide demonstrations of various functionalities offered by Ocelloids.
 They serve as a reference for integrating Ocelloids into your own projects.
