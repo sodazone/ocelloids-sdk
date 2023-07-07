@@ -3,7 +3,7 @@
   address: 5GdHQQkRHvEEE4sDkcLkxCCumSkw2SFBJSLKzbMTNARLTXz3
   // Path to contract metadata file.
   // Path could be either absolute or relative to current directory.
-  metadata: link.json
+  metadata: ./link.json
   network: wss://rococo-contracts-rpc.polkadot.io
   getBlocksInRange: true
   startBlock: 2686243

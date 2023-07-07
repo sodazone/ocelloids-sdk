@@ -35,25 +35,7 @@ import {
   filterEvents
 } from '@sodazone/ocelloids';
 
-function initFromChainInfo(apiPromise, verbose) {
-  apiPromise.isReady.then(api => {
-    const chainInfo = api.registry.getChainProperties();
-    if (chainInfo === undefined) {
-      throw new Error('Unable to retrieve chain info');
-    }
-    const { tokenDecimals, tokenSymbol } = chainInfo;
-
-    if (verbose) {
-      console.log('> Chain Decimals:', tokenDecimals.toHuman());
-      console.log('> Chain Symbol:', tokenSymbol.toHuman());
-    }
-
-    formatBalance.setDefaults({
-      decimals: tokenDecimals.unwrapOrDefault().toArray().map(v => v.toNumber()),
-      unit: tokenSymbol.unwrapOrDefault().toArray().map(v => v.toString())
-    });
-  });
-}
+import { initFromChainInfo } from '../common/index.js';
 
 function watcher({ url, blockHeight, blockCount, verbose }) {
   if (verbose) {

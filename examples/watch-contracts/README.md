@@ -14,7 +14,11 @@ To configure the application, create a `config.hjson` file with the following st
   address: '5HfQopC1yQSoG83auWgRLTxhWWFxiVQWT74LLXeXMLJDFBvP'
   // Path to contract metadata file.
   // The path can be absolute or relative to this config file.
-  metadata: my_contract.json
+  metadata: ./my_contract.json
+  // Path to custom type definitions.
+  // The path can be absolute or relative to this config file.
+  // (Optional)
+  customTypes: ./my_custom_types.json
   // Network WS endpoint where the contract is deployed.
   network: 'ws://127.0.0.1:9944'
   // Blocks in range toggle.
@@ -37,10 +41,6 @@ To configure the application, create a `config.hjson` file with the following st
   callsCriteria: {
     message.identifier: register
   }
-  // Path to custom type definitions.
-  // The path can be absolute or relative to this config file.
-  // (Optional)
-  customTypes: my_custom_types.ts
 }
 ```
 
