@@ -2,7 +2,7 @@
 
 <a href="https://www.npmjs.com/package/@sodazone/ocelloids-contracts">
   <img 
-    src="https://img.shields.io/npm/v/@sodazone/ocelloids-contracts"
+    src="https://img.shields.io/npm/v/@sodazone/ocelloids-contracts?color=69D2E7&labelColor=69D2E7&logo=npm&logoColor=333333"
     alt="npm @sodazone/ocelloids-contracts"
   />
 </a>
