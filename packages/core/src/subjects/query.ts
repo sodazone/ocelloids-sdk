@@ -26,7 +26,7 @@ installOperators();
 export type Criteria = RawObject;
 
 /**
- * Represents a control object that can be used to change the value of a query.
+ * Represents a control subject that can be used to change the value of a query.
  */
 export interface Control<T, S> extends Subject<S> {
   /**
@@ -37,9 +37,10 @@ export interface Control<T, S> extends Subject<S> {
 }
 
 /**
- * Represents a control object for managing queries with a criteria.
- * Extends the `BehaviorSubject` class.
+ * Represents a behavior subject for managing queries with a criteria.
+ *
  * ## Example
+ *
  * ```ts
  * import { ControlQuery } from '@sodazone/ocelloids';
  *

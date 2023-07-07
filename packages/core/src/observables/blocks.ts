@@ -47,12 +47,9 @@ function subscribeFinalizedBlocks(api: ApiRx) {
  * apis.rx.polkadot.pipe(
  *   blocks()
  * ).subscribe(x => console.log(`New block on Polkadot has hash ${x.block.hash.toHuman()}`))
- *
- * // Subscribe to finalized blocks on Polkadot
- * apis.rx.polkadot.pipe(
- *   blocks(true)
- * ).subscribe(x => console.log(`New block on Polkadot has hash ${x.block.hash.toHuman()}`))
  * ```
+ *
+ * @see {@link finalizedBlocks}
  */
 export function blocks(finalized = false) {
   return (source: Observable<ApiRx>)
@@ -71,6 +68,17 @@ export function blocks(finalized = false) {
 
 /**
  * Returns an Observable that emits the latest finalized blocks.
+ *
+ * ## Example
+ *
+ * ```ts
+ * // Subscribe to finalized blocks on Polkadot
+ * apis.rx.polkadot.pipe(
+ *   finalizedBlocks()
+ * ).subscribe(x => console.log(`New block on Polkadot has hash ${x.block.hash.toHuman()}`))
+ * ```
+ *
+ * @see {@link blocks}
  */
 export function finalizedBlocks() {
   return blocks(true);
@@ -78,12 +86,12 @@ export function finalizedBlocks() {
 
 /**
  * Returns an Observable that emits blocks within a specified range.
- * By default, blocks are emitted in order,
- * but you can configure it to emit blocks in an unsorted order for better performance.
+ * By default, blocks are emitted sequentially,
+ * but you can configure it to emit blocks in parallel for better performance.
  *
  * @param start - The starting block number.
  * @param count - The number of blocks to emit.
- * @param sorted - (Optional) Whether to emit blocks in order. Default is `true`.
+ * @param sorted - (Optional) Whether to emit blocks sequentially. Default is `true`.
  */
 export function blocksInRange(
   start: AnyBN,

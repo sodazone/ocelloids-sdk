@@ -5,21 +5,25 @@ They serve as a reference for integrating Ocelloids into your own projects.
 
 ## Running the Examples
 
-Before running the examples, ensure that you have already installed and built the root project.
+1. From the root directory ensure that you have already installed and built the project:
 
-1. Build the examples package:
+```shell
+yarn && yarn build
+```
+
+2. Build the examples package:
 
 ```shell
 yarn build:examples
 ```
 
-2. Navigate to the examples folder:
+3. Navigate to the examples folder:
 
 ```shell
 cd examples
 ```
 
-3. Run the desired example by executing the corresponding binary, use the following command:
+4. Run the desired example by executing the corresponding binary, use the following command:
 
 ```shell
 yarn <binary_name>
@@ -61,3 +65,4 @@ These examples serve as practical illustrations of how to utilize the Ocelloids 
 
 If you prefer to run TypeScript `main.ts` files directly, either for development or quick testing without the need for building,
 you have the option to use either [ts-node-esm](https://github.com/TypeStrong/ts-node) or [Bun](https://bun.sh/).
+

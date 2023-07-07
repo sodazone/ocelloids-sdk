@@ -29,9 +29,7 @@ type BatchEvents = Event[];
 const l = logger('oc-ops-flatten');
 
 /**
- * Groups events into batches based on utility events.
- * Utility events with method 'ItemCompleted' indicate the end of a batch.
- * Utility events with method 'BatchCompleted' indicate the end of all batches.
+ * Groups events into batches based on utility batch events.
  *
  * @param events - Array of events to be grouped into batches.
  * @returns An array of grouped event batches.
@@ -41,12 +39,14 @@ function groupBatchEvents(events: Event[]): BatchEvents[] {
   let batch: BatchEvents = [];
 
   for (const event of events) {
+    // Utility events with method 'BatchCompleted' indicate the end of all batches.
     if (event.section === 'utility' && event.method === 'BatchCompleted') {
       break;
     }
 
     batch.push(event);
 
+    // Utility events with method 'ItemCompleted' indicate the end of a batch.
     if (event.section === 'utility' && event.method === 'ItemCompleted') {
       batches.push(batch);
       batch = [];

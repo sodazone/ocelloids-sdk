@@ -31,14 +31,18 @@ const l = logger('oc-ops-mongo-filter');
  *
  * ## Example
  * ```ts
- * // Filter all blocks with `transferKeepAlive` calls from a block stream
  * apis.rx.polkadot.pipe(
  *   blocks(),
- *   mongoFilter(ControlQuery.from({
- *    'block.extrinsics.call.section': 'balances',
- *    'block.extrinsics.call.method': 'transferKeepAlive'
- *   }))
- * ).subscribe(x => console.log(`Block with transferKeepAlive ${x.block.hash.toHuman()}`))
+ *   extractExtrinsics(),
+ *   mongoFilter({
+ *     'call.section': 'balances',
+ *     'call.method': { $in: [
+ *       'transferAllowDeath',
+ *       'transferKeepAlive'
+ *     ]},
+ *     'call.args.dest.id': '1odhHWsddwRnDQLpyKypBSNhqQbFi43RuHxVaCgeTVEcQv7'
+ *   })
+ * ).subscribe(x => console.log(`Extrinsic with transfer ${x.toHuman()}`))
  * ```
  *
  * To match nested objects, including collections refer to

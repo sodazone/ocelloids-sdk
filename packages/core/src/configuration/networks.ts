@@ -16,6 +16,8 @@
 
 /**
  * A list of well known RPC endpoints.
+ *
+ * @remark This list is not intended to be maintained, it is just for convinience.
  */
 export const networks = {
   polkadot: ['wss://rpc.polkadot.io', 'wss://1rpc.io/dot'],

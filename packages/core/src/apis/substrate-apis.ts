@@ -27,9 +27,8 @@ const l = logger('oc-substrate-apis');
 /**
  * Substrate APIs wrapper with multi-chain support.
  *
- * ## Examples
+ * ## Example: Websocket Provider
  *
- * Websocket Provider
  * ```typescript
  * import { WsProvider } from '@polkadot/api';
  *
@@ -40,7 +39,8 @@ const l = logger('oc-substrate-apis');
  * });
  * ```
  *
- * Substrate Connect Provider
+ * ## Example: Substrate Connect Provider
+ *
  * ```typescript
  * import { ScProvider } from '@polkadot/rpc-provider/substrate-connect';
  * import * as Sc from '@substrate/connect';
@@ -93,13 +93,13 @@ export class SubstrateApis {
   /**
    * Returns the `ApiPromise` instance for a given chain name.
    *
-   * ## Example: isReady
+   * ## Example: Use isReady Promise
    * ```ts
    * // registered under 'polkadot' name
    * apis.promise.polkadot.isReady
    * ```
    *
-   * ## Example: chain info
+   * ## Example: Fetch Chain Info
    * ```ts
    * apis.promise.polkadot.isReady.then(api => {
    *   const chainInfo = api.registry.getChainProperties();

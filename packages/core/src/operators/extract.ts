@@ -25,6 +25,7 @@ import { EventWithIdAndTx, EventWithId, ExtrinsicWithId, TxWithIdAndEvent } from
 
 /**
  * Operator to extract extrinsics with paired events from blocks.
+ *
  * Takes an `Observable<SignedBlockExtended>` as input and emits each `TxWithEvents` included in the block.
  * Additionally, expands the extrinsic data with a generated identifier.
  *
@@ -34,7 +35,9 @@ import { EventWithIdAndTx, EventWithId, ExtrinsicWithId, TxWithIdAndEvent } from
  * apis.rx.polkadot.pipe(
  *   blocks(),
  *   extractTxWithEvents()
- * ).subscribe(tx => console.log(`New extrinsic on Polkadot: ${tx.extrinsic.method.toHuman()}`));
+ * ).subscribe(tx => console.log(
+ *   `New extrinsic on Polkadot: ${tx.extrinsic.method.toHuman()}`
+ * ));
  * ```
  *
  * @see {@link TxWithIdAndEvent}
@@ -61,6 +64,7 @@ export function extractTxWithEvents() {
 
 /**
  * Operator to extract extrinsics from signed blocks.
+ *
  * Takes an `Observable<SignedBlock>` as input and emits each `Extrinsic` included in the block.
  * Additionally, expands the extrinsic data with a generated identifier.
  *
@@ -70,7 +74,9 @@ export function extractTxWithEvents() {
  * apis.rx.polkadot.pipe(
  *   blocks(),
  *   extractExtrinsics()
- * ).subscribe(xt => console.log(`New extrinsic on Polkadot: ${xt.toHuman()}`));
+ * ).subscribe(xt => console.log(
+ *   `New extrinsic on Polkadot: ${xt.toHuman()}`
+ * ));
  * ```
  * @see {@link ExtrinsicWithId}
  */
@@ -96,6 +102,7 @@ export function extractExtrinsics() {
 
 /**
  * Operator to extract events from blocks and provide additional contextual information.
+ *
  * Takes an `Observable<SignedBlockExtended>` as input and emits each `Event` included in the block.
  * The emitted events are expanded with the block context, including block number, position in block,
  * extrinsic ID, and position in extrinsic.
@@ -108,7 +115,9 @@ export function extractExtrinsics() {
  * apis.rx.polkadot.pipe(
  *   blocks(),
  *   extractEvents()
- * ).subscribe(record => console.log(`New event on Polkadot: ${record.data.toHuman()}`));
+ * ).subscribe(record => console.log(
+ *   `New event on Polkadot: ${record.data.toHuman()}`
+ * ));
  * ```
  *
  * @see {@link EventWithId}
@@ -140,6 +149,7 @@ export function extractEvents() {
 
 /**
  * Operator to extract events with associated extrinsic from extrinsics with id.
+ *
  * Takes an `Observable<TxWithIdAndEvent>` as input and emits each event along with its associated extrinsic.
  * The emitted events are expanded with additional contextual information, including block number,
  * extrinsic ID, and position in extrinsic.
@@ -154,7 +164,9 @@ export function extractEvents() {
  *   extractTxWithEvents(),
  *   flattenBatch(),
  *   extractEventsWithTx()
- * ).subscribe(record => console.log(`New event on Polkadot: ${record.data.toHuman()}`));
+ * ).subscribe(record => console.log(
+ *   `New event on Polkadot: ${record.data.toHuman()}`
+ * ));
  * ```
  *
  * @see {@link EventWithIdAndTx}

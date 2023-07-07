@@ -75,7 +75,7 @@ Output:
 }
 ```
 
-For more detailed examples, please refer to the [watch-contracts](https://github.com/sodazone/ocelloids/tree/main/examples/watch-contracts) example app
+For more detailed examples, please refer to the [watch-contracts](https://github.com/sodazone/ocelloids/tree/main/examples/watch-contracts) example application.
 
 ## Layout
 

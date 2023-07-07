@@ -29,6 +29,10 @@ import type { ApiOptions } from '@polkadot/api/types';
  *   },
  *   kusama: {
  *     provider: new WsProvider('wss://kusama-rpc.polkadot.io')
+ *   },
+ *   moonbeam: {
+ *     noInitWarn: true,
+ *     provider: new WsProvider('wss://wss.api.moonbeam.network')
  *   }
  * }
  * ```

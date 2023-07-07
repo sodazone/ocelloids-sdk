@@ -3,6 +3,8 @@
 # Ocelloids
 Substrate monitoring SDK
 
+[Packages](https://github.com/sodazone/ocelloids/#installation) | [Documentation](https://sodazone.github.io/ocelloids/) | [Examples](https://github.com/sodazone/ocelloids/tree/main/examples)
+
 <picture>
   <img
     src="https://github.com/sodazone/ocelloids/blob/main/.github/assets/ocesp_250-min.png?raw=true"
@@ -70,7 +72,7 @@ Source code [packages/pallets/contracts](https://github.com/sodazone/ocelloids/t
 
 Refer to the SDK documentation at [https://sodazone.github.io/ocelloids/](https://sodazone.github.io/ocelloids/).
 
-You can also explore some example applications in the [examples/](https://github.com/sodazone/ocelloids/tree/main/examples) folder in this repository.
+You can also explore some example applications in the [examples/](https://github.com/sodazone/ocelloids/tree/main/examples) folder.
 
 ### Example: Filtering Transfer Events
 
