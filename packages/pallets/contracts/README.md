@@ -7,7 +7,7 @@
   />
 </a>
 
-The Ocelloids Contracts Module provides support for Substrate's contracts pallet, specifically for decoding contract messages, events, and constructors, and enables easy filtering of these components. It is designed to be used in conjunction with the Ocelloids Core Module.
+The Ocelloids Contracts Module provides support for Substrate's contracts pallet, specifically for decoding contract messages, events, and constructors, and enables easy filtering of these elements. It is designed to be used in conjunction with the Ocelloids Core Module.
 
 ## Usage
 
@@ -93,3 +93,4 @@ The `packages/pallets/contracts` module source folder is structured as follows:
 |  converters                  | Contract data type conversions             |
 |  operators                   | Reactive operators for contract activities |
 |  types                       | Extended contract types                    |
+

@@ -1,7 +1,7 @@
-# 🧪 Ocelloids SDK Examples
+# Ocelloids SDK Examples
 
 The Ocelloids SDK Examples provide demonstrations of various functionalities offered by Ocelloids.
-They serve as a reference for integrating Ocelloids into your own projects.
+They serve as a reference for integrating Ocelloids into your own projects and as a test bench.
 
 ## Running the Examples
 
@@ -29,7 +29,7 @@ cd examples
 yarn <binary_name>
 ```
 
-Here are the available binaries to run the example applications:
+🧪 Here are the available binaries to run the example applications:
 
 * __filter-extrinsics__: Filters extrinsics using HJSON provided filters. Supports pipeable stdin and stdout.
 * __follow-transfer-events__: Simple demonstration of dynamic queries.
