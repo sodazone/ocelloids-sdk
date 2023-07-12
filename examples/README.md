@@ -38,6 +38,7 @@ Here are the available binaries to run the example applications:
 * __watch-balances__: Watches the change in balances of big exchange hot wallets from chain storage.
 * __watch-contracts__: Watches for contract messages of a specific contract and filters based on configured criteria. Supports pipeable stdout.
 * __watch-instantiations__: Watches contract instantiations of the same code hash.
+* __watch-sovereign-acc__: Watches the Moonbeam sovereign account on Astar and xcASTR supply on Moonbeam and logs the difference, if any, between the two.
 * __watch-transfer-events__: Watches transfers above a specified amount. Supports pipeable stdout.
 
 For example, to run the `simple-fees` application, use the following command:

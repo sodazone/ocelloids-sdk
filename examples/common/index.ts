@@ -1,7 +1,7 @@
 import { formatBalance } from '@polkadot/util';
 import { ApiPromise } from '@polkadot/api';
 
-export function initFromChainInfo(apiPromise: ApiPromise, verbose = false) {
+export function setTokenDefaultsFromChainInfo(apiPromise: ApiPromise, verbose = false) {
   apiPromise.isReady.then(api => {
     const chainInfo = api.registry.getChainProperties();
     if (chainInfo === undefined) {
@@ -27,4 +27,8 @@ export function red(text: string) {
 
 export function blue(text: string) {
   return `\u001b[34m${text}\u001b[39m`;
+}
+
+export function green(text: string) {
+  return `\u001b[32m${text}\u001b[39m`;
 }

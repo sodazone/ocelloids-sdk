@@ -1535,6 +1535,7 @@ __metadata:
     watch-balances: ./dist/watch-balances/main.cjs
     watch-contracts: ./dist/watch-contracts/main.cjs
     watch-instantiations: ./dist/watch-instantiations/main.cjs
+    watch-sovereign-acc: ./dist/watch-sovereign-acc/main.cjs
     watch-transfer-events: ./dist/watch-transfer-events/main.cjs
   languageName: unknown
   linkType: soft

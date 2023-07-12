@@ -28,7 +28,7 @@ import {
   bufferCount, merge, map, switchMap, mergeAll
 } from 'rxjs';
 
-import { blue, initFromChainInfo, red } from '../common/index.js';
+import { blue, setTokenDefaultsFromChainInfo, red } from '../common/index.js';
 
 const ADDRESSES = {
   '12xtAYsRUrmbniiWQqJtECiBQrMn8AypQcXhnQAc6RB6XkLW': 'Kraken',
@@ -58,7 +58,7 @@ const apis = new SubstrateApis({
   }
 });
 
-initFromChainInfo(apis.promise.polkadot);
+setTokenDefaultsFromChainInfo(apis.promise.polkadot);
 
 function trackIO(address: string) {
   return apis.query.polkadot.pipe(

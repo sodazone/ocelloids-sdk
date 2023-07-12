@@ -35,7 +35,7 @@ import {
   filterEvents
 } from '@sodazone/ocelloids';
 
-import { initFromChainInfo } from '../common/index.js';
+import { setTokenDefaultsFromChainInfo } from '../common/index.js';
 
 function watcher({ url, blockHeight, blockCount, verbose }) {
   if (verbose) {
@@ -50,7 +50,7 @@ function watcher({ url, blockHeight, blockCount, verbose }) {
     }
   });
 
-  initFromChainInfo(apis.promise.network, verbose);
+  setTokenDefaultsFromChainInfo(apis.promise.network, verbose);
 
   type FeeInfo = {
     extrinsicId: string,
