@@ -29,7 +29,7 @@ cd examples
 yarn <binary_name>
 ```
 
-🧪 Here are the available binaries to run the example applications:
+Here are the available binaries to run the example applications:
 
 * __filter-extrinsics__: Filters extrinsics using HJSON provided filters. Supports pipeable stdin and stdout.
 * __follow-transfer-events__: Simple demonstration of dynamic queries.
