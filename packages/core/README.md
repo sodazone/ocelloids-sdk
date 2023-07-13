@@ -42,6 +42,45 @@ DEBUG=oc-ops-mongo-filter,oc-blocks yarn filter-fee-events
 
 These loggers provide valuable information that can assist with data filtering and tracking contextual information.
 
+## Custom Methods and Types
+
+When instantiating the APIs, you have the flexibility to register custom RPC and runtime methods, as well as define custom types for the networks you're interacting with.
+
+Here's a simple demonstration:
+
+```typescript
+import { WsProvider } from '@polkadot/api';
+
+import { SubstrateApis } from '@sodazone/ocelloids';
+
+const apis = new SubstrateApis({
+  network: {
+    provider: new WsProvider('wss://my-custom-rpc.io')
+  },
+  rpc: {
+    // custom RPC methods
+  },
+  runtime: {
+    // custome runtime methods
+  },
+  types: [
+    {
+      "minmax": [
+        0,
+        null
+      ],
+      types: {
+        // custom types
+      }
+    }
+  ]
+});
+```
+
+For more detailed information on extending types and methods in the API, please refer to the Polkadot.js documentation on [Extending Types](https://polkadot.js.org/docs/api/start/types.extend) and [Custom RPC](https://polkadot.js.org/docs/api/start/rpc.custom).
+
+You can also explore a practical example of how custom methods and types are registered in the [watch-contracts](https://github.com/sodazone/ocelloids/tree/main/examples/watch-contracts) example application.
+
 ## Layout
 
 The `packages/core` module source folder is structured as follows:
