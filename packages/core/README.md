@@ -55,25 +55,25 @@ import { SubstrateApis } from '@sodazone/ocelloids';
 
 const apis = new SubstrateApis({
   network: {
-    provider: new WsProvider('wss://my-custom-rpc.io')
-  },
-  rpc: {
-    // custom RPC methods
-  },
-  runtime: {
-    // custome runtime methods
-  },
-  types: [
-    {
-      "minmax": [
-        0,
-        null
-      ],
-      types: {
-        // custom types
+    provider: new WsProvider('wss://my-custom-rpc.io'),
+    rpc: {
+      // custom RPC methods
+    },
+    runtime: {
+      // custome runtime methods
+    },
+    types: [
+      {
+        "minmax": [
+          0,
+          null
+        ],
+        types: {
+          // custom types
+        }
       }
-    }
-  ]
+    ]
+  },
 });
 ```
 
