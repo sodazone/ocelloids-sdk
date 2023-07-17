@@ -45,7 +45,8 @@ Substrate monitoring SDK
 
 ---
 
-Ocelloids is an open-source Software Development Kit (SDK) that provides a framework for building monitoring applications on Substrate-based networks. It is designed to simplify the implementation of sophisticated multi-chain monitoring logic.
+Ocelloids is an open-source Software Development Kit (SDK) for monitoring Substrate-based networks.
+Simplifies the implementation of multi-chain monitoring logic and provides domain-specific logic for different pallets.
 
 ## Features
 
