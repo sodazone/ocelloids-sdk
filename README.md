@@ -9,7 +9,7 @@
   />
 </picture>
 
-Substrate Monitoring SDK
+**Substrate Monitoring SDK**
 
 [Packages](https://github.com/sodazone/ocelloids/#installation) | [Documentation](https://sodazone.github.io/ocelloids/) | [Examples](https://github.com/sodazone/ocelloids/tree/main/examples)
 
