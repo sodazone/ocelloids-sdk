@@ -7,8 +7,8 @@ Substrate monitoring SDK
 
 <picture>
   <img
-    src="https://github.com/sodazone/ocelloids/blob/main/.github/assets/ocesp_250-min.png?raw=true"
-    width="250"
+    src="https://github.com/sodazone/ocelloids/blob/main/.github/assets/oc-sdk.png?raw=true"
+    width="330"
     height="auto"
     alt=""
   />
