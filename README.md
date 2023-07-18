@@ -9,7 +9,7 @@
   />
 </picture>
 
-Ocelloids - Substrate monitoring SDK
+Substrate Monitoring SDK
 
 [Packages](https://github.com/sodazone/ocelloids/#installation) | [Documentation](https://sodazone.github.io/ocelloids/) | [Examples](https://github.com/sodazone/ocelloids/tree/main/examples)
 
@@ -37,15 +37,7 @@ Ocelloids - Substrate monitoring SDK
 
 ---
 
-**Etymology** _ocellus_ + _-oid_
-
-**Noun** ocelloid (_plural_ ocelloids)
-
->  “(microbiology) a cellular structure found in unicellular microorganisms that is analogous in structure and function to eyes, which focus, process and detect light.”
-
----
-
-Ocelloids is an open-source Software Development Kit (SDK) for monitoring Substrate-based networks.
+Ocelloids[^1] is an open-source Software Development Kit (SDK) for monitoring Substrate-based networks.
 It simplifies the implementation of multi-chain monitoring programs and provides domain-specific logic for different pallets.
 
 ## Features
@@ -355,3 +347,9 @@ in the `spec` test files after building the project, you can resolve it by follo
 
 For further assistance or troubleshooting, please consult the project's documentation or reach out to the Ocelloids community.
 
+[^1]: Origin of the name.
+
+  **Etymology** _ocellus_ + _-oid_
+  **Noun** ocelloid (_plural_ ocelloids)
+
+  >  “(microbiology) a cellular structure found in unicellular microorganisms that is analogous in structure and function to eyes, which focus, process and detect light.”
