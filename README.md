@@ -347,9 +347,4 @@ in the `spec` test files after building the project, you can resolve it by follo
 
 For further assistance or troubleshooting, please consult the project's documentation or reach out to the Ocelloids community.
 
-[^1]: Origin of the name.
-
-  **Etymology** _ocellus_ + _-oid_
-  **Noun** ocelloid (_plural_ ocelloids)
-
-  >  “(microbiology) a cellular structure found in unicellular microorganisms that is analogous in structure and function to eyes, which focus, process and detect light.”
+[^1]: “(microbiology) a cellular structure found in unicellular microorganisms that is analogous in structure and function to eyes, which focus, process and detect light.”
