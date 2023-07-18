@@ -1,10 +1,5 @@
 <div align="center">
 
-# Ocelloids
-Substrate monitoring SDK
-
-[Packages](https://github.com/sodazone/ocelloids/#installation) | [Documentation](https://sodazone.github.io/ocelloids/) | [Examples](https://github.com/sodazone/ocelloids/tree/main/examples)
-
 <picture>
   <img
     src="https://github.com/sodazone/ocelloids/blob/main/.github/assets/oc-sdk.png?raw=true"
@@ -13,6 +8,11 @@ Substrate monitoring SDK
     alt=""
   />
 </picture>
+
+Ocelloids - Substrate monitoring SDK
+
+[Packages](https://github.com/sodazone/ocelloids/#installation) | [Documentation](https://sodazone.github.io/ocelloids/) | [Examples](https://github.com/sodazone/ocelloids/tree/main/examples)
+
 <p align="center">
   <a href="https://github.com/sodazone/ocelloids/actions/workflows/ci.yml">
     <img
