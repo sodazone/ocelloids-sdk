@@ -42,7 +42,7 @@ export interface Configuration {
 }
 
 /**
- * Typed configured API names.
+ * Configured API names type.
  *
  * @internal
  */
