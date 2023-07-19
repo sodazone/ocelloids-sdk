@@ -43,5 +43,7 @@ export interface Configuration {
 
 /**
  * Typed configured API names.
+ *
+ * @internal
  */
 export type ApiNames<T extends Configuration> = keyof T & string
