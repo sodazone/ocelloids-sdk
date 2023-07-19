@@ -19,7 +19,7 @@ import { logger } from '@polkadot/util';
 
 import { Observable, map, shareReplay } from 'rxjs';
 
-import type { Configuration } from '../configuration/index.js';
+import type { ApiNames, Configuration } from '../configuration/index.js';
 import type { ApiOptions, QueryableStorage, QueryableStorageMulti } from '@polkadot/api/types';
 
 const l = logger('oc-substrate-apis');
@@ -56,7 +56,7 @@ const l = logger('oc-substrate-apis');
  * });
  * ```
  */
-export class SubstrateApis {
+export class SubstrateApis<C extends Configuration, N extends ApiNames<C>> {
   private readonly chains: string[] = [];
   private readonly options: Record<string, ApiOptions> = {};
   private readonly apiRx: Record<string, ApiRx> = {};
@@ -67,7 +67,7 @@ export class SubstrateApis {
    * @param config The configuration instance
    */
   constructor(
-    config: Configuration
+    config: C
   ) {
     l.debug('Initialize Substrate APIs');
 
@@ -117,7 +117,7 @@ export class SubstrateApis {
    *
    * @see ApiPromise
    */
-  get promise(): Record<string, ApiPromise> {
+  get promise(): Record<N, ApiPromise> {
     return new Proxy(this.promises, {
       get(target, prop) {
         const key = prop.toString();
@@ -142,7 +142,7 @@ export class SubstrateApis {
    * ```
    * @see ApiRx.isReady
    */
-  get rx(): Record<string, Observable<ApiRx>> {
+  get rx(): Record<N, Observable<ApiRx>> {
     return new Proxy(this.apiRx, {
       get(target, prop) {
         const key = prop.toString();
@@ -172,7 +172,7 @@ export class SubstrateApis {
    * ```
    */
   get query()
-    : Record<string, Observable<QueryableStorage<'rxjs'>>> {
+    : Record<N, Observable<QueryableStorage<'rxjs'>>> {
     return new Proxy(this.apiRx, {
       get(target, prop) {
         const key = prop.toString();
@@ -185,14 +185,14 @@ export class SubstrateApis {
         }
         throw new Error(`${key} not found.`);
       }
-    }) as unknown as Record<string, Observable<QueryableStorage<'rxjs'>>>;
+    }) as unknown as Record<N, Observable<QueryableStorage<'rxjs'>>>;
   }
 
   /**
    * Returns an observable for making multiple queries to the storage of a given chain name.
    */
   get queryMulti()
-    : Record<string, Observable<QueryableStorageMulti<'rxjs'>>> {
+    : Record<N, Observable<QueryableStorageMulti<'rxjs'>>> {
     return new Proxy(this.apiRx, {
       get(target, prop) {
         const key = prop.toString();
@@ -205,7 +205,7 @@ export class SubstrateApis {
         }
         throw new Error(`${key} not found.`);
       }
-    }) as unknown as Record<string, Observable<QueryableStorageMulti<'rxjs'>>>;
+    }) as unknown as Record<N, Observable<QueryableStorageMulti<'rxjs'>>>;
   }
 
   /**
