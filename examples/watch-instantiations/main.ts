@@ -37,17 +37,21 @@ import {
   converters
 } from '@sodazone/ocelloids-contracts';
 
-const apis = new SubstrateApis({
-  network: {
-    provider: new WsProvider('wss://rococo-contracts-rpc.polkadot.io')
-  }
-});
-
-function watcher({ metadataPath, verbose }) {
+function watcher({ metadataPath, codeHash, verbose }) {
   const contractMetadataJson = readFileSync(metadataPath).toString();
 
   const abi = new Abi(contractMetadataJson);
-  console.log(abi.info);
+
+  if (verbose) {
+    console.log(`> Watching for instantiations of contract with code hash ${codeHash}`);
+    console.log(`> Contract name: ${abi.info.contract.name.toHuman()}`);
+  }
+
+  const apis = new SubstrateApis({
+    network: {
+      provider: new WsProvider('wss://rococo-contracts-rpc.polkadot.io')
+    }
+  });
 
   apis.rx.network.pipe(
     blocksInRange(1951957, 30, false),
@@ -55,7 +59,7 @@ function watcher({ metadataPath, verbose }) {
     contractConstructors(
       apis.promise.network,
       abi,
-      '0x6cf11f2c80feaa775afb888442a5857dbb2da91d46f3ff03698a8a45f645667c'
+      codeHash
     )
   ).subscribe({
     next: x => {
@@ -88,14 +92,23 @@ function watcher({ metadataPath, verbose }) {
 
 const argv = yargs(hideBin(process.argv))
   .usage('Usage: $0 [options]')
-  .example('$0 -v -p ./metadata.json', 'watches instantiations of a code hash and outputs verbose logging')
+  .example(
+    '$0 -v -c 0x6cf11f2c80feaa775afb888442a5857dbb2da91d46f3ff03698a8a45f645667c -p ./game-metadata.json',
+    'watches instantiations of the squink-splash contract and outputs verbose logging'
+  )
   .option('p', {
     type: 'string',
     alias: 'path',
-    describe: 'The path to the metadata file for the code hash to watch',
+    describe: 'The path to the metadata file for the contract to watch',
     coerce: p => path.resolve(p),
     demandOption: true,
     requiresArg: true
+  })
+  .option('c', {
+    type: 'string',
+    alias: 'codeHash',
+    describe: 'The code hash to watch for instantiations',
+    demandOption: true
   })
   .option('v', {
     type: 'boolean',
@@ -109,5 +122,6 @@ const argv = yargs(hideBin(process.argv))
 
 watcher({
   metadataPath: argv.path,
+  codeHash: argv.codeHash,
   verbose: argv.verbose
 });
