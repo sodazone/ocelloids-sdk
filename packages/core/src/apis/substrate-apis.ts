@@ -82,10 +82,6 @@ export class SubstrateApis<C extends Configuration, N extends ApiNames<C>> {
 
       this.options[name] = options;
 
-      this.apiRx[name] = new ApiRx(options);
-
-      this.promises[name] = new ApiPromise(options);
-
       this.chains.push(name);
     });
   }
@@ -118,12 +114,19 @@ export class SubstrateApis<C extends Configuration, N extends ApiNames<C>> {
    * @see ApiPromise
    */
   get promise(): Record<N, ApiPromise> {
+    const opts = this.options;
     return new Proxy(this.promises, {
       get(target, prop) {
         const key = prop.toString();
-        const res = target[key];
-        if (res) {
-          return res;
+        if (opts[key]) {
+          // Lazy initialization
+          if (!target[key]) {
+            l.debug('init ApiPromise', key);
+            target[key] = new ApiPromise(opts[key]);
+            target[key].isReadyOrError
+              .catch(error => l.error(error.message));
+          }
+          return target[key];
         }
         throw new Error(`${key} not found.`);
       }
@@ -143,12 +146,17 @@ export class SubstrateApis<C extends Configuration, N extends ApiNames<C>> {
    * @see ApiRx.isReady
    */
   get rx(): Record<N, Observable<ApiRx>> {
+    const opts = this.options;
     return new Proxy(this.apiRx, {
       get(target, prop) {
         const key = prop.toString();
-        const res = target[key];
-        if (res) {
-          return res.isReady.pipe(shareReplay());
+        if (opts[key]) {
+          // Lazy initialization
+          if (!target[key]) {
+            l.debug('init ApiRx', key);
+            target[key] = new ApiRx(opts[key]);
+          }
+          return target[key].isReady.pipe(shareReplay());
         }
         throw new Error(`${key} not found.`);
       }
@@ -173,12 +181,17 @@ export class SubstrateApis<C extends Configuration, N extends ApiNames<C>> {
    */
   get query()
     : Record<N, Observable<QueryableStorage<'rxjs'>>> {
+    const opts = this.options;
     return new Proxy(this.apiRx, {
       get(target, prop) {
         const key = prop.toString();
-        const res = target[key];
-        if (res) {
-          return res.isReady.pipe(
+        if (opts[key]) {
+          // Lazy initialization
+          if (!target[key]) {
+            l.debug('init ApiRx', key);
+            target[key] = new ApiRx(opts[key]);
+          }
+          return target[key].isReady.pipe(
             map(api => api.query),
             shareReplay()
           );
@@ -193,12 +206,17 @@ export class SubstrateApis<C extends Configuration, N extends ApiNames<C>> {
    */
   get queryMulti()
     : Record<N, Observable<QueryableStorageMulti<'rxjs'>>> {
+    const opts = this.options;
     return new Proxy(this.apiRx, {
       get(target, prop) {
         const key = prop.toString();
-        const res = target[key];
-        if (res) {
-          return res.isReady.pipe(
+        if (opts[key]) {
+          // Lazy initialization
+          if (!target[key]) {
+            l.debug('init ApiRx', key);
+            target[key] = new ApiRx(opts[key]);
+          }
+          return target[key].isReady.pipe(
             map(api => api.queryMulti),
             shareReplay()
           );
