@@ -25,6 +25,7 @@ The table below displays the available loggers and their descriptions:
 | ----------- | ----------- |
 | oc-ops-mongo-filter | Outputs the transformed object data in "named primitive" format before filtering in the `mongo-filter` operator. |
 | oc-blocks | Outputs the current block number in block-related observables. |
+| oc-substrate-apis | Outputs the initialisation data of the Substrate APIs. |
 
 To enable debugging logs for a specific category, use the `DEBUG` environment variable with the corresponding logger name.
 
