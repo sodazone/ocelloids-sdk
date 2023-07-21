@@ -134,7 +134,7 @@ export class SubstrateApis<C extends Configuration, N extends ApiNames<C>> {
   }
 
   /**
-   *
+   * Returns the submittable extrinsics for a named chain.
    */
   get tx(): Record<N, SubmittableExtrinsics<'rxjs'>> {
     return new Proxy(this, {
@@ -146,7 +146,24 @@ export class SubstrateApis<C extends Configuration, N extends ApiNames<C>> {
   }
 
   /**
+   * Returns the decorated events data for a named chain.
    *
+   * ## Example: Typed Event Data
+   *
+   * ```ts
+   * import type { } from '@polkadot/api-augment';
+   *
+   * // ...
+   *
+   * // Narrows down the event data type
+   * if (apis.events.polkadot.balances.Transfer.is(event) ) {
+   *   const transfer = event.data;
+   *
+   *   // Here we have typed data fields
+   *   const from = transfer.from.toPrimitive();
+   *   const to = transfer.to.toPrimitive();
+   * }
+   * ```
    */
   get events(): Record<N, DecoratedEvents<'rxjs'>> {
     return new Proxy(this, {
@@ -234,7 +251,9 @@ export class SubstrateApis<C extends Configuration, N extends ApiNames<C>> {
   }
 
   /**
+   * Internal proxy to access named ApiRx instances.
    *
+   * Provides lazy instantiation.
    */
   get #proxyApiRx() : Record<string, ApiRx> {
     return new Proxy(this, {
