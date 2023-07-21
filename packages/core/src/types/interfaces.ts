@@ -14,14 +14,16 @@
  * limitations under the License.
  */
 
-import type { BlockNumber, Event, Extrinsic } from '@polkadot/types/interfaces';
+import type { BlockNumber } from '@polkadot/types/interfaces';
 import type { TxWithEvent } from '@polkadot/api-derive/types';
 import { Compact } from '@polkadot/types';
+import { GenericExtrinsicWithId } from './extrinsic.js';
+import { GenericEventWithId } from './event.js';
 
 /**
  * Represents an extrinsic with additional identifier information.
  */
-export interface ExtrinsicWithId extends Extrinsic {
+export interface ExtrinsicWithId extends GenericExtrinsicWithId {
   blockNumber: Compact<BlockNumber>,
   blockPosition: number,
   extrinsicId: string
@@ -37,7 +39,7 @@ export interface TxWithIdAndEvent extends TxWithEvent {
 /**
  * Represents an event with additional identifier information.
  */
-export interface EventWithId extends Event {
+export interface EventWithId extends GenericEventWithId {
   blockNumber: Compact<BlockNumber>,
   extrinsicPosition: number,
   extrinsicId: string,
