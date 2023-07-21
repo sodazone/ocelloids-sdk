@@ -14,11 +14,14 @@
  * limitations under the License.
  */
 
-import { bnToBn } from '@polkadot/util';
+import { bnToBn, logger } from '@polkadot/util';
 
 import { OperatorType, useOperators, QueryOperator, Options, getOperator } from 'mingo/core';
+import { BASIC_CONTEXT } from 'mingo/init/basic';
 import { AnyVal, Predicate, RawObject } from 'mingo/types';
 import { ensureArray, resolve } from 'mingo/util';
+
+const l = logger('oc-mingo-ops');
 
 function bn(x: AnyVal) {
   switch (typeof x) {
@@ -77,7 +80,11 @@ function createQueryOperator(
 
 export function installOperators() {
   // Register query operators
-  if (getOperator(OperatorType.QUERY, '$bn_lt') === undefined) {
+  if (getOperator(OperatorType.QUERY, '$bn_lt', {
+    useGlobalContext: true, context: BASIC_CONTEXT
+  }) === null) {
+    l.debug('register operators');
+
     useOperators(OperatorType.QUERY, {
       '$bn_lt': createQueryOperator($bn_lt),
       '$bn_lte': createQueryOperator($bn_lte),

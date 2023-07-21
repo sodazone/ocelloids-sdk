@@ -178,4 +178,11 @@ describe('mingo query ops', () => {
       });
     }).toThrowError();
   });
+
+  it('should be idempotent on ops registration', () => {
+    expect(() => {
+      installOperators();
+      installOperators();
+    }).not.toThrow();
+  });
 });

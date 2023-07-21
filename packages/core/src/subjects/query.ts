@@ -20,6 +20,9 @@ import { Query } from 'mingo';
 import { RawObject } from 'mingo/types';
 import { installOperators } from './mingo-ops.js';
 
+// Installs mingo operators if needed
+installOperators();
+
 export type Criteria = RawObject;
 
 /**
@@ -64,9 +67,6 @@ export class ControlQuery
    * @param criteria The initial criteria for the query.
    */
   constructor(criteria: Criteria) {
-    // Installs mingo operators if needed
-    installOperators();
-
     super(new Query(criteria));
   }
 

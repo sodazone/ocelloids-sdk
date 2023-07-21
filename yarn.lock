@@ -4420,10 +4420,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mingo@npm:^6.4.1":
-  version: 6.4.1
-  resolution: "mingo@npm:6.4.1"
-  checksum: b717194b0d780c6f65e92f8d040ec778db91adbfdc3049be63780f5d81acd9c1e746d30dbf5f983370a5c143551b90cb9ba81b7f0bd9ba43b4b5d9f5e7dd61ca
+"mingo@npm:^6.4.3":
+  version: 6.4.3
+  resolution: "mingo@npm:6.4.3"
+  checksum: 6a54ae5fcb64ae353e2d80ef2fdc1b9d4b7055adbc73c25504447d585ba9635934623bf7972067b031730c595c9762655f9a7221934fb1f66ef9d99a8318bf37
   languageName: node
   linkType: hard
 
