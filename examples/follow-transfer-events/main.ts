@@ -84,12 +84,10 @@ apis.rx.polkadot.pipe(
   )),
   filterEvents(dynamicQuery)
 ).subscribe({
-  next: async event => {
+  next: event => {
     console.log('Event', event.toHuman());
 
-    const p = await apis.promise.polkadot.isReady;
-
-    if (p.events.balances.Transfer.is(event) ) {
+    if (apis.events.polkadot.balances.Transfer.is(event) ) {
       const transfer = event.data;
       const from = transfer.from.toPrimitive();
       const to = transfer.to.toPrimitive();

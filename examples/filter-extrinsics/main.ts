@@ -28,9 +28,8 @@ import { WsProvider } from '@polkadot/api';
 import {
   SubstrateApis,
   blocks,
-  mongoFilter,
-  extractExtrinsics,
-  types
+  types,
+  filterExtrinsics
 } from '@sodazone/ocelloids';
 
 function watcher({ urls, verbose }) {
@@ -57,8 +56,7 @@ function watcher({ urls, verbose }) {
       for (let i = 0; i < urls.length; i++) {
         pipes.push(apis.rx[i].pipe(
           blocks(),
-          extractExtrinsics(),
-          mongoFilter(parsed),
+          filterExtrinsics(parsed),
           map((x: any) => ({ network: i, ...x.toHuman() }))
         ));
       }
