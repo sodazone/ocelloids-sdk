@@ -12,22 +12,14 @@ Here's an example `tsconfig.json` file:
 ```javascript
 {
   "compilerOptions": {
-    /* Language and Environment */
-    "target": "ESNext",
-  
-    /* Modules */
-    "module": "ESNext",
-    "moduleResolution": "NodeNext",
+    "target": "es2016",
+    "module": "nodenext",
+    "sourceMap": true,
+    "outDir": "./out",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    
-    /* Type Checking */
     "strict": true,
-    "skipLibCheck": true,
-    
-    /* Emit */
-    "outDir": "out",
-    "sourceMap": true
+    "skipLibCheck": true
   }
 }
 ```
