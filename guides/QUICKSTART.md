@@ -77,7 +77,7 @@ apis.rx.polkadot.pipe(
 EOF
 ```
 
-> This straightforward example that subscribes to new blocks and logs them to the console.
+> This is a straightforward example that subscribes to new blocks and logs them to the console.
 
 Finally, execute the following command to run your monitor:
 
@@ -91,7 +91,7 @@ Congratulations on having your basic monitor up and running! Now, let's enhance 
 
 ### Filtering over Streams
 
-The [`mongoFilter` operator](https://sodazone.github.io/ocelloids/functions/_sodazone_ocelloids.mongoFilter.html) allows you to filter data and receive alerts only for specific blocks. This operator applies a MongoDB query language filter to the incoming observable stream, processing it in memory.
+The [`mongoFilter` operator](https://sodazone.github.io/ocelloids/functions/_sodazone_ocelloids.mongoFilter.html) allows you to filter the blocks of your interest. This operator applies a [MongoDB query language](https://www.mongodb.com/docs/manual/tutorial/query-documents/) filter to the incoming observable stream, processing it in memory.
 
 For example, to monitor blocks validated by certain validators:
 
