@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import type { ApiOptions, QueryableStorage, QueryableStorageMulti } from '@polkadot/api/types';
+import type { ApiOptions, DecoratedEvents, QueryableStorage, QueryableStorageMulti, SubmittableExtrinsics } from '@polkadot/api/types';
 import { ApiPromise, ApiRx } from '@polkadot/api';
 import { logger } from '@polkadot/util';
 
@@ -134,6 +134,30 @@ export class SubstrateApis<C extends Configuration, N extends ApiNames<C>> {
   }
 
   /**
+   *
+   */
+  get tx(): Record<N, SubmittableExtrinsics<'rxjs'>> {
+    return new Proxy(this, {
+      get(target, prop) {
+        const api = target.#proxyApiRx[prop.toString()];
+        return api.tx;
+      }
+    }) as unknown as Record<string, SubmittableExtrinsics<'rxjs'>>;
+  }
+
+  /**
+   *
+   */
+  get events(): Record<N, DecoratedEvents<'rxjs'>> {
+    return new Proxy(this, {
+      get(target, prop) {
+        const api = target.#proxyApiRx[prop.toString()];
+        return api.events;
+      }
+    }) as unknown as Record<string, DecoratedEvents<'rxjs'>>;
+  }
+
+  /**
    * Returns the reactive `ApiRx` observable for a given chain name.
    *
    * The returned observable is shared.
@@ -146,19 +170,10 @@ export class SubstrateApis<C extends Configuration, N extends ApiNames<C>> {
    * @see ApiRx.isReady
    */
   get rx(): Record<N, Observable<ApiRx>> {
-    const opts = this.options;
-    return new Proxy(this.apiRx, {
+    return new Proxy(this, {
       get(target, prop) {
-        const key = prop.toString();
-        if (opts[key]) {
-          // Lazy initialization
-          if (!target[key]) {
-            l.debug('init ApiRx', key);
-            target[key] = new ApiRx(opts[key]);
-          }
-          return target[key].isReady.pipe(shareReplay());
-        }
-        throw new Error(`${key} not found.`);
+        const api = target.#proxyApiRx[prop.toString()];
+        return api.isReady.pipe(shareReplay());
       }
     }) as unknown as Record<string, Observable<ApiRx>>;
   }
@@ -181,22 +196,13 @@ export class SubstrateApis<C extends Configuration, N extends ApiNames<C>> {
    */
   get query()
     : Record<N, Observable<QueryableStorage<'rxjs'>>> {
-    const opts = this.options;
-    return new Proxy(this.apiRx, {
+    return new Proxy(this, {
       get(target, prop) {
-        const key = prop.toString();
-        if (opts[key]) {
-          // Lazy initialization
-          if (!target[key]) {
-            l.debug('init ApiRx', key);
-            target[key] = new ApiRx(opts[key]);
-          }
-          return target[key].isReady.pipe(
-            map(api => api.query),
-            shareReplay()
-          );
-        }
-        throw new Error(`${key} not found.`);
+        const api = target.#proxyApiRx[prop.toString()];
+        return api.isReady.pipe(
+          map(x => x.query),
+          shareReplay()
+        );
       }
     }) as unknown as Record<N, Observable<QueryableStorage<'rxjs'>>>;
   }
@@ -206,22 +212,13 @@ export class SubstrateApis<C extends Configuration, N extends ApiNames<C>> {
    */
   get queryMulti()
     : Record<N, Observable<QueryableStorageMulti<'rxjs'>>> {
-    const opts = this.options;
-    return new Proxy(this.apiRx, {
+    return new Proxy(this, {
       get(target, prop) {
-        const key = prop.toString();
-        if (opts[key]) {
-          // Lazy initialization
-          if (!target[key]) {
-            l.debug('init ApiRx', key);
-            target[key] = new ApiRx(opts[key]);
-          }
-          return target[key].isReady.pipe(
-            map(api => api.queryMulti),
-            shareReplay()
-          );
-        }
-        throw new Error(`${key} not found.`);
+        const api = target.#proxyApiRx[prop.toString()];
+        return api.isReady.pipe(
+          map(x => x.queryMulti),
+          shareReplay()
+        );
       }
     }) as unknown as Record<N, Observable<QueryableStorageMulti<'rxjs'>>>;
   }
@@ -235,4 +232,27 @@ export class SubstrateApis<C extends Configuration, N extends ApiNames<C>> {
     );
     return Promise.all(promises).catch(l.error);
   }
+
+  /**
+   *
+   */
+  get #proxyApiRx() : Record<string, ApiRx> {
+    return new Proxy(this, {
+      get(target, prop) {
+        const opts = target.options;
+        const apiRx = target.apiRx;
+        const key = prop.toString();
+        if (opts[key]) {
+          // Lazy initialization
+          if (!apiRx[key]) {
+            l.debug('init ApiRx', key);
+            apiRx[key] = new ApiRx(opts[key]);
+          }
+          return apiRx[key];
+        }
+        throw new Error(`${key} not found.`);
+      }
+    }) as unknown as Record<string, ApiRx>;
+  }
 }
+
