@@ -2,6 +2,7 @@
   // Filter balance related extrinsics
   call.section: balances
   call.method: { $in: [
+      transfer
       transferAllowDeath
       transferKeepAlive
     ]

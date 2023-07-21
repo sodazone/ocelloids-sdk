@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
+import type { ApiOptions, QueryableStorage, QueryableStorageMulti } from '@polkadot/api/types';
 import { ApiPromise, ApiRx } from '@polkadot/api';
 import { logger } from '@polkadot/util';
 
 import { Observable, map, shareReplay } from 'rxjs';
 
 import type { ApiNames, Configuration } from '../configuration/index.js';
-import type { ApiOptions, QueryableStorage, QueryableStorageMulti } from '@polkadot/api/types';
 
 const l = logger('oc-substrate-apis');
 
