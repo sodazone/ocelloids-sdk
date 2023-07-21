@@ -1,7 +1,7 @@
 {
   "sideEffects": false,
   "type": "module",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "author": "soda <projects@soda.zone>",
   "contributors": [
     "Marc Fornós <marc@soda.zone>",

@@ -1,6 +1,6 @@
 {
   "name": "@sodazone/ocelloids",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "description": "Software development kit for building monitoring applications for Substrate networks.",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -32,7 +32,7 @@
     "rxjs": "^7.8.1"
   },
   "devDependencies": {
-    "@sodazone/ocelloids-test": "1.1.4"
+    "@sodazone/ocelloids-test": "1.1.5"
   },
   "files": [
     "dist",
