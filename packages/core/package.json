@@ -35,7 +35,8 @@
     "@sodazone/ocelloids-test": "1.1.3-dev.0"
   },
   "files": [
-    "dist"
+    "dist",
+    "src"
   ],
   "exports": {
     ".": {
@@ -45,7 +46,7 @@
     }
   },
   "scripts": {
-    "build": "tsup src/index.ts --format cjs,esm --dts --clean --minify"
+    "build": "tsup src/index.ts --format cjs,esm --dts --sourcemap --clean --minify"
   },
   "tsup": {
     "bundle": true,
