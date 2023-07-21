@@ -1573,7 +1573,7 @@ __metadata:
     "@polkadot/api": ^10.9.1
     "@polkadot/util": ^12.3.2
     "@sodazone/ocelloids-test": 1.1.6-dev.0
-    mingo: ^6.4.1
+    mingo: ^6.4.3
     rxjs: ^7.8.1
   languageName: unknown
   linkType: soft
