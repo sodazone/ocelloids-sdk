@@ -142,7 +142,7 @@ Whilst the main parts of the types passed through the reactive pipelines are wel
 DEBUG=oc-ops-mongo-filter npx ts-node --esm main.ts
 ```
 
-1. Use the convert operator:
+2. Use the convert operator:
 
 ```typescript
 // imports and initialise APIS...

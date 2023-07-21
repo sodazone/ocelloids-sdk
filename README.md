@@ -51,6 +51,11 @@ It simplifies the implementation of multi-chain monitoring programs and provides
 * **Multi-Chain Support** — Interact with multiple networks.
 * **Pallet-Specific Modules** — Modules designed to handle use cases related to a particular pallet, such as tracking calls and events from the contracts pallet.
 
+
+## Quickstart
+
+Check our [Quickstart Guide](https://github.com/sodazone/ocelloids/blob/main/guides/QUICKSTART.md) to set up your first Ocelloids monitoring program.
+
 ## Installation
 
 ### Ocelloids Core
