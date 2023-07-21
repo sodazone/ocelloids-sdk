@@ -7,6 +7,7 @@ on:
     paths-ignore:
       - "**/README.md"
       - ".github/assets"
+      - "guides/"
   pull_request:
   workflow_dispatch:
 
