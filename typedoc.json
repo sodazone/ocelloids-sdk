@@ -8,6 +8,7 @@
 "darkHighlightTheme": "github-dark",
 "lightHighlightTheme": "github-light",
 "entryPointStrategy": "packages",
+"excludeExternals": true,
 "entryPoints": [
     "packages/core",
     "packages/pallets/*"
