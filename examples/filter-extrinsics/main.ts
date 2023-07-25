@@ -57,7 +57,7 @@ function watcher({ urls, verbose }) {
         pipes.push(apis.rx[i].pipe(
           blocks(),
           filterExtrinsics(parsed),
-          map((x: any) => ({ network: i, ...x.toHuman() }))
+          map((x: any) => ({ network: i, ...x.extrinsic.toHuman() }))
         ));
       }
 

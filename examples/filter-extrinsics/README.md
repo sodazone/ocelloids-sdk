@@ -11,7 +11,7 @@ To execute the example, navigate to the `ocelloids/examples` folder.
 
 Get timestamp extrinsics from Polkadot and Kusama:
 ```shell
-❯ yarn filter-extrinsics -v -u wss://rpc.polkadot.io -u wss://kusama-rpc.polkadot.io < filters/timestamp.hjson
+yarn filter-extrinsics -v -u wss://rpc.polkadot.io -u wss://kusama-rpc.polkadot.io < filter-extrinsics/filters/timestamp.hjson
 ```
 <details>
 <summary>output - click to expand</summary>
@@ -35,7 +35,7 @@ Get timestamp extrinsics from Polkadot and Kusama:
 Get balances extrinsics and pipe to jq:
 
 ```shell
-❯ bun filter-extrinsics < filter-extrinsics/filters/balances.hjson | jq .
+yarn filter-extrinsics < filter-extrinsics/filters/balances.hjson | jq .
 ```
 <details>
 <summary>output - click to expand</summary>

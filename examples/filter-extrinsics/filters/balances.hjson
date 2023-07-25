@@ -1,12 +1,12 @@
 {
   // Filter balance related extrinsics
-  call.section: balances
-  call.method: { $in: [
+  extrinsic.call.section: balances
+  extrinsic.call.method: { $in: [
       transfer
       transferAllowDeath
       transferKeepAlive
     ]
   }
-  // call.args.dest.id: 1odhHWsddwRnDQLpyKypBSNhqQbFi43RuHxVaCgeTVEcQv7
-  // signer.id: 158ehshkqqopCuXqbdK7vQ6nmBMc9JGwDtR61nnJB3t29fYX
+  // extrinsic.call.args.dest.id: 1odhHWsddwRnDQLpyKypBSNhqQbFi43RuHxVaCgeTVEcQv7
+  // extrinsic.signer.id: 158ehshkqqopCuXqbdK7vQ6nmBMc9JGwDtR61nnJB3t29fYX
 }

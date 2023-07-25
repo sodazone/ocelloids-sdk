@@ -1,4 +1,4 @@
 {
   // Filter timestamp extrinsics
-  call.section: timestamp
+  extrinsic.call.section: timestamp
 }
