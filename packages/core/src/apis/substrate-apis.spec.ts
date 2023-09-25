@@ -48,6 +48,14 @@ describe('substrate APIs', () => {
     expect(apis.queryMulti.rococo).toBeDefined();
   });
 
+  it('should iterate the registered chain names', async () => {
+    expect(apis.chains.length).toBeGreaterThan(0);
+
+    for (const chain of apis.chains) {
+      expect(chain).toBeDefined();
+    }
+  });
+
   it('should trigger the disconnection of all the providers', async () => {
     // Cast as any to access private readonly property
     const polkadotProvider = (apis as any).options['polkadot'].provider as any;

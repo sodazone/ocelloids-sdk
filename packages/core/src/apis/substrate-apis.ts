@@ -57,10 +57,11 @@ const l = logger('oc-substrate-apis');
  * ```
  */
 export class SubstrateApis<C extends Configuration, N extends ApiNames<C>> {
-  private readonly chains: string[] = [];
   private readonly options: Record<string, ApiOptions> = {};
   private readonly apiRx: Record<string, ApiRx> = {};
   private readonly promises: Record<string, ApiPromise> = {};
+
+  readonly chains: string[] = [];
 
   /**
    * @constructor
