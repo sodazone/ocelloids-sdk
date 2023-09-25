@@ -27,8 +27,7 @@
   },
   "dependencies": {
     "@polkadot/api": "^10.9.1",
-    "@polkadot/util": "^12.3.2",
-    "mingo": "^6.4.3",
+    "mingo": "^6.4.4",
     "rxjs": "^7.8.1"
   },
   "devDependencies": {

@@ -25,7 +25,7 @@
   "dependencies": {
     "@polkadot/rpc-provider": "^10.9.1",
     "@sodazone/ocelloids": "1.1.8-dev.0",
-    "@substrate/connect": "^0.7.29",
+    "@substrate/connect": "^0.7.32",
     "graph-data-structure": "^3.3.0",
     "hjson": "^3.2.2",
     "rxjs": "^7.8.1",
@@ -33,7 +33,7 @@
   },
   "devDependencies": {
     "shx": "^0.3.4",
-    "tsup": "^7.1.0"
+    "tsup": "^7.2.0"
   },
   "tsup": {
     "shims": true
