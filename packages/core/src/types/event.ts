@@ -15,7 +15,7 @@
  */
 
 import type { BlockNumber } from '@polkadot/types/interfaces';
-import type { AnyJson } from '@polkadot/types-codec/types';
+import type { AnyJson, IU8a } from '@polkadot/types-codec/types';
 import { Compact, GenericEvent } from '@polkadot/types';
 
 import { EventBlockContext, EventWithId } from './interfaces.js';
@@ -26,6 +26,7 @@ import { EventBlockContext, EventWithId } from './interfaces.js';
 export class GenericEventWithId extends GenericEvent
   implements EventWithId {
   blockNumber: Compact<BlockNumber>;
+  blockHash: IU8a;
   extrinsicPosition: number;
   extrinsicId: string;
 
@@ -33,12 +34,14 @@ export class GenericEventWithId extends GenericEvent
     value: GenericEvent,
     {
       blockNumber,
+      blockHash,
       extrinsicPosition,
       extrinsicId
     }: EventBlockContext
   ) {
     super(value.registry, value.toU8a());
     this.blockNumber = blockNumber;
+    this.blockHash = blockHash;
     this.extrinsicPosition = extrinsicPosition;
     this.extrinsicId = extrinsicId;
   }
@@ -64,6 +67,7 @@ export class GenericEventWithId extends GenericEvent
       extrinsicId: this.extrinsicId,
       extrinsicPosition: this.extrinsicPosition,
       blockNumber: this.blockNumber.toHuman(),
+      blockHash: this.blockHash.toHuman(),
       ...(super.toHuman(isExpanded) as any)
     };
   }

@@ -48,6 +48,7 @@ describe('extractors over extended signed blocks', () => {
           expect(result.extrinsic.method.toString())
             .toEqual(testExtrinsics[index].extrinsic.method.toString());
           expect(result.extrinsic.data).toEqual(testExtrinsics[index].extrinsic.data);
+          expect(result.extrinsic.blockHash).toBeDefined();
           expect(result.extrinsic.extrinsicId).toBeDefined();
           index++;
         },
@@ -66,6 +67,7 @@ describe('extractors over extended signed blocks', () => {
           expect(extrinsic.method.toString())
             .toEqual(testExtrinsics[index].extrinsic.method.toString());
           expect(extrinsic.data).toEqual(testExtrinsics[index].extrinsic.data);
+          expect(extrinsic.blockHash).toBeDefined();
           expect(extrinsic.extrinsicId).toBeDefined();
           index++;
         },
@@ -83,6 +85,7 @@ describe('extractors over extended signed blocks', () => {
           expect(event).toBeDefined();
           expect(event.method).toEqual(testEvents[index].method);
           expect(event.data.toString()).toEqual(testEvents[index].data.toString());
+          expect(event.blockHash).toBeDefined();
           expect(event.eventId).toBeDefined();
           index++;
         },
@@ -102,7 +105,9 @@ describe('extractors over extended signed blocks', () => {
           expect(record.extrinsicPosition).toBeDefined();
           expect(record.extrinsic).toBeDefined();
           expect(record.eventId).toBeDefined();
+          expect(record.blockHash).toBeDefined();
           expect(record.extrinsic.extrinsicId).toBeDefined();
+          expect(record.blockHash.toString()).toEqual(record.extrinsic.blockHash.toString());
           expect(record.blockNumber.toString()).toEqual(record.extrinsic.blockNumber.toString());
         },
         complete: done,

@@ -16,6 +16,7 @@
 
 import type { BlockNumber } from '@polkadot/types/interfaces';
 import type { TxWithEvent } from '@polkadot/api-derive/types';
+import type { IU8a } from '@polkadot/types-codec/types';
 import { Compact } from '@polkadot/types';
 import { GenericExtrinsicWithId } from './extrinsic.js';
 import { GenericEventWithId } from './event.js';
@@ -25,6 +26,7 @@ import { GenericEventWithId } from './event.js';
  */
 export interface ExtrinsicWithId extends GenericExtrinsicWithId {
   blockNumber: Compact<BlockNumber>,
+  blockHash: IU8a,
   blockPosition: number,
   extrinsicId: string
 }
@@ -41,6 +43,7 @@ export interface TxWithIdAndEvent extends TxWithEvent {
  */
 export interface EventWithId extends GenericEventWithId {
   blockNumber: Compact<BlockNumber>,
+  blockHash: IU8a,
   extrinsicPosition: number,
   extrinsicId: string,
   eventId: string
@@ -55,19 +58,21 @@ export interface EventWithIdAndTx extends EventWithId {
 
 /**
  * Represents the context of an extrinsic in a block,
- * including the block number and the position of the extrinsic in the block.
+ * including the block number, the block hash and the position of the extrinsic in the block.
  */
 export interface ExtrinsicBlockContext {
   blockNumber: Compact<BlockNumber>;
+  blockHash: IU8a,
   blockPosition: number;
 }
 
 /**
  * Represents the context of an event within a block, including the event's position within an extrinsic,
- * the ID of the extrinsic, the block number and the position of the event in the block.
+ * the ID of the extrinsic, the block number, the block hash and the position of the event in the block.
  */
 export interface EventBlockContext {
   blockNumber: Compact<BlockNumber>;
+  blockHash: IU8a,
   extrinsicPosition: number,
   extrinsicId: string
 }

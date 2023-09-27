@@ -258,7 +258,7 @@ function toNamedPrimitives<T>(data: T): Record<string, AnyJson>[] {
 
 export interface Converter {
   toNamedPrimitive: <T>(data: T) => Record<string, AnyJson>;
-  toNamedPrimitives: <T>(data: T) =>Record<string, AnyJson>[];
+  toNamedPrimitives: <T>(data: T) => Record<string, AnyJson>[];
 }
 
 export const base : Converter = {

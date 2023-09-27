@@ -17,7 +17,7 @@
 import { BlockNumber } from '@polkadot/types/interfaces';
 import { Compact, GenericExtrinsic } from '@polkadot/types';
 import type { TxWithEvent } from '@polkadot/api-derive/types';
-import type { AnyJson } from '@polkadot/types-codec/types';
+import type { AnyJson, IU8a } from '@polkadot/types-codec/types';
 
 import { ExtrinsicBlockContext, ExtrinsicWithId, TxWithIdAndEvent } from './interfaces.js';
 
@@ -27,18 +27,21 @@ import { ExtrinsicBlockContext, ExtrinsicWithId, TxWithIdAndEvent } from './inte
 export class GenericExtrinsicWithId extends GenericExtrinsic
   implements ExtrinsicWithId {
   blockNumber: Compact<BlockNumber>;
+  blockHash: IU8a;
   blockPosition: number;
 
   constructor(
     value: GenericExtrinsic,
     {
       blockNumber,
-      blockPosition
+      blockPosition,
+      blockHash
     } : ExtrinsicBlockContext
   ) {
     super(value.registry, value.toU8a());
     this.blockNumber = blockNumber;
     this.blockPosition = blockPosition;
+    this.blockHash = blockHash;
   }
 
   /**
@@ -59,6 +62,7 @@ export class GenericExtrinsicWithId extends GenericExtrinsic
     return {
       extrinsicId: this.extrinsicId,
       blockNumber: this.blockNumber.toHuman(),
+      blockHash: this.blockHash.toHuman(),
       position: this.blockPosition,
       ...(super.toHuman(isExpanded) as any)
     };
@@ -67,8 +71,7 @@ export class GenericExtrinsicWithId extends GenericExtrinsic
 
 /**
  * Enhances a transaction object with identifier information by wrapping the extrinsic with the GenericExtrinsicWithId class.
- * @param blockNumber The compact block number of the transaction.
- * @param blockPosition The position of the transaction within the block.
+ * @param context The extrinsic block context.
  * @param tx The transaction object to enhance.
  * @returns The enhanced transaction object with identifier information.
  */

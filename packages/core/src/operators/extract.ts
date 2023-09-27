@@ -48,10 +48,12 @@ export function extractTxWithEvents() {
     return (source.pipe(
       mergeMap(({block, extrinsics}) => {
         const blockNumber = block.header.number;
+        const blockHash = block.hash;
         return extrinsics.map(
           (xt, blockPosition) => enhanceTxWithId(
             {
               blockNumber,
+              blockHash,
               blockPosition
             },
             xt
@@ -86,11 +88,13 @@ export function extractExtrinsics() {
     return (source.pipe(
       mergeMap(({block}) => {
         const blockNumber = block.header.number;
+        const blockHash = block.hash;
         return block.extrinsics.map(
           (xt, blockPosition) => new GenericExtrinsicWithId(
             xt,
             {
               blockNumber,
+              blockHash,
               blockPosition
             }
           ));
@@ -104,7 +108,7 @@ export function extractExtrinsics() {
  * Operator to extract events from blocks and provide additional contextual information.
  *
  * Takes an `Observable<SignedBlockExtended>` as input and emits each `Event` included in the block.
- * The emitted events are expanded with the block context, including block number, position in block,
+ * The emitted events are expanded with the block context, including block number, block hash, position in block,
  * extrinsic ID, and position in extrinsic.
  *
  * @returns An operator function that transforms an Observable of `SignedBlockExtended` into an Observable of `EventWithId`.
@@ -127,6 +131,7 @@ export function extractEvents() {
     return source.pipe(
       mergeMap(({ block, extrinsics }) => {
         const blockNumber = block.header.number;
+        const blockHash = block.hash;
 
         return extrinsics.reduce((eventsWithId: EventWithId[], xt, i) => {
           const extrinsicId = `${blockNumber.toString()}-${i}`;
@@ -135,6 +140,7 @@ export function extractEvents() {
             xt.events.map((e, extrinsicPosition) => (
               new GenericEventWithId(e, {
                 blockNumber,
+                blockHash,
                 extrinsicPosition,
                 extrinsicId
               })
@@ -151,7 +157,7 @@ export function extractEvents() {
  * Operator to extract events with associated extrinsic from extrinsics with id.
  *
  * Takes an `Observable<TxWithIdAndEvent>` as input and emits each event along with its associated extrinsic.
- * The emitted events are expanded with additional contextual information, including block number,
+ * The emitted events are expanded with additional contextual information, including block number, block hash,
  * extrinsic ID, and position in extrinsic.
  *
  * @returns An operator function that transforms an Observable of `TxWithIdAndEvent` into an Observable of `EventWithIdAndTx`.
@@ -176,11 +182,13 @@ export function extractEventsWithTx() {
     return source.pipe(
       mergeMap(({ extrinsic, events }) => {
         const blockNumber = extrinsic.blockNumber;
+        const blockHash = extrinsic.blockHash;
         const eventRecords: EventWithIdAndTx[] = [];
 
         for (const [extrinsicPosition, event] of events.entries()) {
           const eventWithIdAndTx = new GenericEventWithId(event, {
             blockNumber,
+            blockHash,
             extrinsicPosition,
             extrinsicId: extrinsic.extrinsicId
           }) as EventWithIdAndTx;
