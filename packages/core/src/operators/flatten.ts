@@ -80,7 +80,7 @@ function flattenBatchCalls(batchTx: TxWithIdAndEvent): TxWithIdAndEvent[] {
 
       const flatted = calls.map((call, index) => {
         const flatCall = new GenericCall(extrinsic.registry, call);
-        const { blockNumber, blockPosition } = extrinsic;
+        const { blockNumber, blockPosition, blockHash } = extrinsic;
         const flatExtrinsic = new GenericExtrinsic(extrinsic.registry, {
           method: flatCall,
           signature: extrinsic.inner.signature
@@ -90,6 +90,7 @@ function flattenBatchCalls(batchTx: TxWithIdAndEvent): TxWithIdAndEvent[] {
           events: batchEvents[index],
           extrinsic: new GenericExtrinsicWithId(flatExtrinsic, {
             blockNumber,
+            blockHash,
             blockPosition
           })
         };
