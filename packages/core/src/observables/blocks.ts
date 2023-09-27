@@ -16,6 +16,7 @@
 import { ApiRx } from '@polkadot/api';
 import { logger } from '@polkadot/util';
 import type { SignedBlockExtended } from '@polkadot/api-derive/types';
+import type { Header } from '@polkadot/types/interfaces';
 
 import { Observable, concatMap, mergeMap, share, switchMap } from 'rxjs';
 
@@ -35,10 +36,49 @@ function subscribeFinalizedBlocks(api: ApiRx) {
 }
 
 /**
+ * Returns an Observable that emits the latest new block headers or finalized block headers.
+ *
+ * @param finalized - (Optional) Whether to subscribe to finalized block headers.
+ * When set to `true`, only finalized block headers are emitted.
+ * When set to `false`, all new block headers are emitted.
+ * Default is `false`.
+ *
+ * @returns An Observable of block headers.
+ *
+ * @see {@link finalizedHeads}
+ */
+export function heads(finalized = false) {
+  return (source: Observable<ApiRx>)
+  : Observable<Header> => {
+    return (source.pipe(
+      switchMap(api => {
+        return finalized ?
+          api.rpc.chain.subscribeFinalizedHeads() :
+          api.rpc.chain.subscribeNewHeads();
+      }),
+      debug(l, header => header.number.toHuman()),
+      share()
+    ));
+  };
+}
+
+/**
+ * Returns an Observable that emits the latest finalized block headers.
+ *
+ * @returns An Observable of finalized block headers.
+ *
+ * @see {@link heads}
+ */
+export function finalizedHeads() {
+  return heads(true);
+}
+
+/**
  * Returns an Observable that emits the latest new block or finalized block.
  *
  * @param finalized - (Optional) Whether to subscribe to finalized blocks.
- * When set to `true`, only finalized new blocks are emitted. When set to `false`, all new blocks are emitted.
+ * When set to `true`, only finalized new blocks are emitted.
+ * When set to `false`, all new blocks are emitted.
  * Default is `false`.
  *
  * ## Example

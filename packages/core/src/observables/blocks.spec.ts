@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
+import type { Header } from '@polkadot/types/interfaces';
 import type { SignedBlockExtended } from '@polkadot/api-derive/types';
 import type { AnyNumber } from '@polkadot/types-codec/types';
 
 import { testBlocks, mockRxApi } from '@sodazone/ocelloids-test';
 
-import { blocks, blocksInRange, finalizedBlocks } from './blocks.js';
+import { blocks, blocksInRange, finalizedBlocks, finalizedHeads, heads } from './blocks.js';
 import { Observable, map, of } from 'rxjs';
 
 function observerForBlocks(done: jest.DoneCallback) {
@@ -36,8 +37,40 @@ function observerForBlocks(done: jest.DoneCallback) {
   return {next, complete};
 }
 
+function observerForHeads(done: jest.DoneCallback) {
+  let index = 0;
+  const next = jest.fn().mockImplementation((result: Header) => {
+    expect(result).toBeDefined();
+    expect(result.number).toEqual(testBlocks[index].block.header.number);
+    expect(result.hash).toEqual(testBlocks[index].block.hash);
+    index++;
+  });
+  const complete = jest.fn().mockImplementation(() => {
+    done();
+  });
+  return {next, complete};
+}
+
 describe('blocks reactive observable', () => {
   describe('blocks', () => {
+    it('should emit the latest new head', done => {
+      const testPipe = heads()(mockRxApi);
+      const o = observerForHeads(done);
+      testPipe.subscribe(o);
+
+      expect(o.next).toBeCalledTimes(testBlocks.length);
+      expect(o.complete).toBeCalledTimes(1);
+    });
+
+    it('should emit the latest finalized head', done => {
+      const testPipe = finalizedHeads()(mockRxApi);
+      const o = observerForHeads(done);
+      testPipe.subscribe(o);
+
+      expect(o.next).toBeCalledTimes(testBlocks.length);
+      expect(o.complete).toBeCalledTimes(1);
+    });
+
     it('should emit the latest new block', done => {
       const testPipe = blocks()(mockRxApi);
       const o = observerForBlocks(done);
