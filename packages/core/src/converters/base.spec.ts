@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import type { AnyJson } from '@polkadot/types-codec/types';
 
 import { testBlocks, testBlocksFrom } from '@sodazone/ocelloids-test';
 
@@ -103,12 +104,26 @@ describe('substrate converters', () => {
     });
   });
 
+  it('should allow basic objects', () => {
+    expect(base.toNamedPrimitive({
+      hello: 'world'
+    })).toStrictEqual({hello: 'world'});
+  });
+
+  it('should convert humanizable objects', () => {
+    expect(base.toNamedPrimitive({
+      hello: 'world',
+      toHuman: () => {
+        return {
+          hola: true
+        } as AnyJson;
+      }
+    })).toStrictEqual({ hola: true });
+  });
+
   it('should throw error for types without converters', () => {
     expect(() => {
-      const _ = base.toNamedPrimitive({
-        yes: true,
-        some: 1
-      });
+      const _ = base.toNamedPrimitive(null);
     }).toThrowError();
   });
 

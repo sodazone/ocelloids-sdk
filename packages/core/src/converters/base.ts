@@ -59,6 +59,18 @@ function isRecord(obj: AnyJson): obj is Record<string, AnyJson> {
   return obj !== null && typeof obj === 'object' &&  Object.getOwnPropertySymbols(obj).length === 0;
 }
 
+function isCodec(object: any): object is Codec {
+  return object.registry !== undefined && object.hash !== undefined;
+}
+
+interface Humanizable {
+  toHuman(isExtended?: boolean): AnyJson;
+}
+
+function isHumanizable(object: any): object is Humanizable {
+  return object.toHuman !== undefined;
+}
+
 /**
  * Maps the `Event` data names to its corresponding values.
  */
@@ -236,9 +248,13 @@ function toNamedPrimitive<T>(data: T): Record<string, AnyJson> {
     return signedBlockToNamedPrimitive(data as SignedBlock);
   case isBlock(data):
     return blockToNamedPrimitive(data as Block);
+  case isCodec(data):
+    return codecToNamedPrimitive(data as Codec);
+  case isHumanizable(data):
+    return (data as Humanizable).toHuman() as Record<string, AnyJson>;
   default:
     try {
-      return codecToNamedPrimitive(data as Codec);
+      return data as Record<string, AnyJson>;
     } catch {
       throw new Error(`No converter found for ${JSON.stringify(data)}`);
     }
