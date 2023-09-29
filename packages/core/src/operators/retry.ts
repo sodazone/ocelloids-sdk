@@ -62,12 +62,12 @@ export function truncatedExpBackoff(
  * @param config An object containing configuration options for truncatedExpBackoff.
  * @returns A retry operator that uses truncated exponential backoff for retry attempts.
  */
-export function retryWithTruncatedExpBackoff({
+export function retryWithTruncatedExpBackoff<T>({
   baseDelay = 10,
   maxDelay = 900000, // 15 minutes,
   maxCount = Infinity
 } : TruncatedExpBackoffConfig = {}) {
-  return retry({
+  return retry<T>({
     count: maxCount,
     delay: truncatedExpBackoff(
       baseDelay,
