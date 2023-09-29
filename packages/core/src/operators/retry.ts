@@ -20,8 +20,8 @@ import { Observable, retry, asyncScheduler, SchedulerLike } from 'rxjs';
  * Configuration options for the truncated exponential backoff strategy.
  *
  * @property baseDelay - The base delay in milliseconds.
- * @property maxDelay - The maximum delay in milliseconds between retry attempts.
- * @property maxCount - The maximum number of retry attempts. If not specified, retries will continue indefinitely.
+ * @property maxDelay  - The maximum delay in milliseconds between retry attempts.
+ * @property maxCount  - The maximum number of retry attempts. If not specified, retries will continue indefinitely.
  */
 export type TruncatedExpBackoffConfig = {
   baseDelay?: number,
