@@ -24,3 +24,4 @@ export * from './extract.js';
 export * from './filter.js';
 export * from './mongo-filter.js';
 export * from './convert.js';
+export * from './retry.js';
