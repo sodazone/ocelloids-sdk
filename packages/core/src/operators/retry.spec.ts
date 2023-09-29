@@ -28,7 +28,7 @@ const errorUntil = (until: number) => {
 describe('retry with truncated exponential backoff', () => {
   it('should not retry', done => {
     of(1).pipe(
-      retryWithTruncatedExpBackoff({ baseDelay: 1 })
+      retryWithTruncatedExpBackoff()
     ).subscribe(x => {
       expect(x).toBe(1);
       done();

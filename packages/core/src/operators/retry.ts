@@ -66,7 +66,7 @@ export function retryWithTruncatedExpBackoff({
   baseDelay = 10,
   maxDelay = 900000, // 15 minutes,
   maxCount = Infinity
-} : TruncatedExpBackoffConfig) {
+} : TruncatedExpBackoffConfig = {}) {
   return retry({
     count: maxCount,
     delay: truncatedExpBackoff(
