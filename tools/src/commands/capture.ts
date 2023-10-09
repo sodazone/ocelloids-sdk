@@ -24,10 +24,10 @@ import { defineCommand } from 'citty';
 import { WsProvider } from '@polkadot/api';
 import { SignedBlockExtended } from '@polkadot/api-derive/types';
 
-import { SubstrateApis, blocksInRange } from '@sodazone/ocelloids';
+import { SubstrateApis, blocksInRange, GenericSubstrateApis } from '@sodazone/ocelloids';
 import { BinBlock } from '@sodazone/ocelloids-test';
 
-function observer(outfile: string, apis: SubstrateApis)
+function observer(outfile: string, apis: GenericSubstrateApis)
 : Observer<SignedBlockExtended> {
   const b : BinBlock[] = [];
 
