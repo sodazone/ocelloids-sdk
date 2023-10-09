@@ -276,3 +276,8 @@ export class SubstrateApis<C extends Configuration, N extends ApiNames<C>> {
   }
 }
 
+/**
+ * Generic Substrate Apis.
+ */
+export type GenericSubstrateApis = SubstrateApis<Configuration, ApiNames<Configuration>>;
+
