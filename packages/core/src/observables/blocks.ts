@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { ApiRx } from '@polkadot/api';
+import { ApiPromise, ApiRx } from '@polkadot/api';
 import { logger } from '@polkadot/util';
 import type { SignedBlockExtended } from '@polkadot/api-derive/types';
 import type { Header } from '@polkadot/types/interfaces';
 
-import { Observable, concatMap, mergeMap, share, switchMap } from 'rxjs';
+import { Observable, from, concatMap, mergeMap, share, switchMap } from 'rxjs';
 
 import { AnyBN, bnRange } from '../observables/bn.js';
 import { debug } from '../operators/debug.js';
@@ -122,6 +122,22 @@ export function blocks(finalized = false) {
  */
 export function finalizedBlocks() {
   return blocks(true);
+}
+
+/**
+ * Returns an Observable that emits extended signed blocks from headers.
+ *
+ * @param {ApiPromise} api The promise API instance
+ */
+export function blockFromHeader(api: ApiPromise) {
+  return (source: Observable<Header>)
+  : Observable<SignedBlockExtended> => {
+    return (source.pipe(
+      mergeMap(header => {
+        return from(api.derive.chain.getBlock(header.hash));
+      })
+    ));
+  };
 }
 
 /**
