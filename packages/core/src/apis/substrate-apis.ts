@@ -56,7 +56,10 @@ const l = logger('oc-substrate-apis');
  * });
  * ```
  */
-export class SubstrateApis<C extends Configuration, N extends ApiNames<C>> {
+export class SubstrateApis<
+C extends Configuration = Configuration,
+N extends ApiNames<C> = ApiNames<Configuration>
+> {
   private readonly options: Record<string, ApiOptions> = {};
   private readonly apiRx: Record<string, ApiRx> = {};
   private readonly promises: Record<string, ApiPromise> = {};
@@ -275,9 +278,4 @@ export class SubstrateApis<C extends Configuration, N extends ApiNames<C>> {
     }) as unknown as Record<string, ApiRx>;
   }
 }
-
-/**
- * Generic Substrate Apis.
- */
-export type GenericSubstrateApis = SubstrateApis<Configuration, ApiNames<Configuration>>;
 
