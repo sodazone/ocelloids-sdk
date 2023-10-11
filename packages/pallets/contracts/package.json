@@ -1,6 +1,6 @@
 {
   "name": "@sodazone/ocelloids-contracts",
-  "version": "1.1.8-dev.0",
+  "version": "1.1.8",
   "description": "Contracts pallet support.",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -27,10 +27,10 @@
   },
   "dependencies": {
     "@polkadot/api-contract": "^10.9.1",
-    "@sodazone/ocelloids": "1.1.8-dev.0"
+    "@sodazone/ocelloids": "1.1.8"
   },
   "devDependencies": {
-    "@sodazone/ocelloids-test": "1.1.8-dev.0"
+    "@sodazone/ocelloids-test": "1.1.8"
   },
   "files": [
     "dist",
@@ -49,6 +49,5 @@
   "tsup": {
     "bundle": true,
     "skipNodeModulesBundle": true
-  },
-  "stableVersion": "1.1.7"
+  }
 }

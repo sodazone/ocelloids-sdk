@@ -1,6 +1,6 @@
 {
   "name": "@sodazone/ocelloids-tools",
-  "version": "1.1.8-dev.0",
+  "version": "1.1.8",
   "description": "Ocelloids development tools.",
   "sideEffects": false,
   "private": true,
@@ -16,8 +16,8 @@
     "octools": "dist/main.cjs"
   },
   "dependencies": {
-    "@sodazone/ocelloids": "1.1.8-dev.0",
-    "@sodazone/ocelloids-test": "1.1.8-dev.0",
+    "@sodazone/ocelloids": "1.1.8",
+    "@sodazone/ocelloids-test": "1.1.8",
     "cbor-x": "^1.5.4",
     "citty": "^0.1.4"
   },
@@ -30,6 +30,5 @@
   },
   "devDependencies": {
     "shx": "^0.3.4"
-  },
-  "stableVersion": "1.1.7"
+  }
 }
