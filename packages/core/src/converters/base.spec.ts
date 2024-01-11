@@ -124,7 +124,7 @@ describe('substrate converters', () => {
   it('should throw error for types without converters', () => {
     expect(() => {
       const _ = base.toNamedPrimitive(null);
-    }).toThrowError();
+    }).toThrow();
   });
 
   it('should convert big numbers to strings', () => {

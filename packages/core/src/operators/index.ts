@@ -26,3 +26,4 @@ export * from './mongo-filter.js';
 export * from './convert.js';
 export * from './retry.js';
 export * from './util.js';
+export * from './debug.js';

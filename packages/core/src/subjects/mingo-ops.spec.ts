@@ -176,7 +176,7 @@ describe('mingo query ops', () => {
           value: '108515280000000000'
         }
       });
-    }).toThrowError();
+    }).toThrow();
   });
 
   it('should be idempotent on ops registration', () => {

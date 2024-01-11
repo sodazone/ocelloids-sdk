@@ -42,8 +42,8 @@ describe('events reactive observable', () => {
         complete,
       });
 
-      expect(next).toBeCalledTimes(testEventRecords.length);
-      expect(complete).toBeCalledTimes(1);
+      expect(next).toHaveBeenCalledTimes(testEventRecords.length);
+      expect(complete).toHaveBeenCalledTimes(1);
     });
   });
 });

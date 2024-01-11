@@ -30,8 +30,8 @@ it('should emit the latest new block', done => {
   };
   testPipe.subscribe(o);
 
-  expect(o.next).toBeCalledTimes(testBlocks.length);
-  expect(o.complete).toBeCalledTimes(1);
+  expect(o.next).toHaveBeenCalledTimes(testBlocks.length);
+  expect(o.complete).toHaveBeenCalledTimes(1);
 });
 ```
 

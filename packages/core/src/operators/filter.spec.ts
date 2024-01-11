@@ -34,7 +34,7 @@ describe('filterEvents', () => {
         expect(event.blockNumber).toBeDefined();
       },
       complete: () => {
-        expect(calls).toBeCalledTimes(148);
+        expect(calls).toHaveBeenCalledTimes(148);
         done();
       }
     });
@@ -54,7 +54,7 @@ describe('filterEvents', () => {
         expect(event.blockNumber).toBeDefined();
       },
       complete: () => {
-        expect(calls).toBeCalledTimes(32);
+        expect(calls).toHaveBeenCalledTimes(32);
         done();
       }
     });

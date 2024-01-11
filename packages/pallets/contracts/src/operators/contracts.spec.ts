@@ -95,7 +95,7 @@ describe('Wasm contracts operator', () => {
       testPipe.subscribe({
         next: found,
         complete: () => {
-          expect(found).toBeCalledTimes(2);
+          expect(found).toHaveBeenCalledTimes(2);
         }
       });
     });
@@ -115,7 +115,7 @@ describe('Wasm contracts operator', () => {
       ).subscribe({
         next: found,
         complete: () => {
-          expect(found).toBeCalledTimes(1);
+          expect(found).toHaveBeenCalledTimes(1);
         }
       });
     });
@@ -151,7 +151,7 @@ describe('Wasm contracts operator', () => {
           expect(constructor.message.identifier).toBe('new');
         },
         complete: () => {
-          expect(found).toBeCalledTimes(1);
+          expect(found).toHaveBeenCalledTimes(1);
         }
       });
     });
@@ -171,7 +171,7 @@ describe('Wasm contracts operator', () => {
       ).subscribe({
         next: found,
         complete: () => {
-          expect(found).toBeCalledTimes(1);
+          expect(found).toHaveBeenCalledTimes(1);
         }
       });
     });
@@ -193,7 +193,7 @@ describe('Wasm contracts operator', () => {
           expect(result.event.index).toBe(0);
         },
         complete: () => {
-          expect(found).toBeCalledTimes(1);
+          expect(found).toHaveBeenCalledTimes(1);
         }
       });
     });
@@ -205,7 +205,7 @@ describe('Wasm contracts operator', () => {
       testPipe.subscribe({
         next: found,
         complete: () => {
-          expect(found).toBeCalledTimes(1);
+          expect(found).toHaveBeenCalledTimes(1);
         }
       });
     });
@@ -225,7 +225,7 @@ describe('Wasm contracts operator', () => {
       ).subscribe({
         next: found,
         complete: () => {
-          expect(found).toBeCalledTimes(1);
+          expect(found).toHaveBeenCalledTimes(1);
         }
       });
     });

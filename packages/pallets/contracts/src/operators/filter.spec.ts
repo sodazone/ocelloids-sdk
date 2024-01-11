@@ -49,7 +49,7 @@ describe('Contracts filter operator', () => {
       testPipe.subscribe({
         next: found,
         complete: () => {
-          expect(found).toBeCalledTimes(1);
+          expect(found).toHaveBeenCalledTimes(1);
         }
       });
     });
@@ -66,7 +66,7 @@ describe('Contracts filter operator', () => {
       testPipe.subscribe({
         next: found,
         complete: () => {
-          expect(found).toBeCalledTimes(2);
+          expect(found).toHaveBeenCalledTimes(2);
         }
       });
     });
@@ -93,7 +93,7 @@ describe('Contracts filter operator', () => {
           expect(ev.event.identifier).toBe('Transfer');
         },
         complete: () => {
-          expect(found).toBeCalledTimes(2);
+          expect(found).toHaveBeenCalledTimes(2);
         }
       });
     });
@@ -110,7 +110,7 @@ describe('Contracts filter operator', () => {
       testPipe.subscribe({
         next: found,
         complete: () => {
-          expect(found).toBeCalledTimes(3);
+          expect(found).toHaveBeenCalledTimes(3);
         }
       });
     });

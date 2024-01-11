@@ -30,7 +30,7 @@ describe('control query', () => {
       }))
     ).subscribe(found);
 
-    expect(found).not.toBeCalled;
+    expect(found).not.toHaveBeenCalled;
   });
 
   it('should filter balance transfers', () => {
@@ -43,7 +43,7 @@ describe('control query', () => {
       }))
     ).subscribe(found);
 
-    expect(found).toBeCalledTimes(1);
+    expect(found).toHaveBeenCalledTimes(1);
   });
 
   it('should filter balance transfers from criteria', () => {
@@ -56,6 +56,6 @@ describe('control query', () => {
       })
     ).subscribe(found);
 
-    expect(found).toBeCalledTimes(1);
+    expect(found).toHaveBeenCalledTimes(1);
   });
 });

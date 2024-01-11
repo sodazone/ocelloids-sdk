@@ -43,7 +43,7 @@ describe('configuration', () => {
     it('should fail on unknown URI scheme', () => {
       expect(() => {
         providerFromUrl('unk://some-rpc');
-      }).toThrowError();
+      }).toThrow();
     });
   });
 });

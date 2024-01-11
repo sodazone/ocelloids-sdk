@@ -31,7 +31,7 @@ describe('substrate APIs', () => {
   it('should throw error on missing provider', () => {
     expect(() => {
       const _ = new SubstrateApis({ polkadot: {} });
-    }).toThrowError();
+    }).toThrow();
   });
 
   it('should be instantiated', () => {
@@ -67,7 +67,7 @@ describe('substrate APIs', () => {
     // Call disconnect on all providers
     await apis.disconnect();
 
-    expect(polkadotProvider.disconnect).toBeCalledTimes(1);
-    expect(rococoProvider.disconnect).toBeCalledTimes(1);
+    expect(polkadotProvider.disconnect).toHaveBeenCalledTimes(1);
+    expect(rococoProvider.disconnect).toHaveBeenCalledTimes(1);
   });
 });

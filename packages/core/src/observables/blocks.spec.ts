@@ -58,8 +58,8 @@ describe('blocks reactive observable', () => {
       const o = observerForHeads(done);
       testPipe.subscribe(o);
 
-      expect(o.next).toBeCalledTimes(testBlocks.length);
-      expect(o.complete).toBeCalledTimes(1);
+      expect(o.next).toHaveBeenCalledTimes(testBlocks.length);
+      expect(o.complete).toHaveBeenCalledTimes(1);
     });
 
     it('should emit the latest finalized head', done => {
@@ -67,8 +67,8 @@ describe('blocks reactive observable', () => {
       const o = observerForHeads(done);
       testPipe.subscribe(o);
 
-      expect(o.next).toBeCalledTimes(testBlocks.length);
-      expect(o.complete).toBeCalledTimes(1);
+      expect(o.next).toHaveBeenCalledTimes(testBlocks.length);
+      expect(o.complete).toHaveBeenCalledTimes(1);
     });
 
     it('should emit the latest new block', done => {
@@ -76,8 +76,8 @@ describe('blocks reactive observable', () => {
       const o = observerForBlocks(done);
       testPipe.subscribe(o);
 
-      expect(o.next).toBeCalledTimes(testBlocks.length);
-      expect(o.complete).toBeCalledTimes(1);
+      expect(o.next).toHaveBeenCalledTimes(testBlocks.length);
+      expect(o.complete).toHaveBeenCalledTimes(1);
     });
 
     it('should emit the latest finalized block', done => {
@@ -85,8 +85,8 @@ describe('blocks reactive observable', () => {
       const o = observerForBlocks(done);
       testPipe.subscribe(o);
 
-      expect(o.next).toBeCalledTimes(testBlocks.length);
-      expect(o.complete).toBeCalledTimes(1);
+      expect(o.next).toHaveBeenCalledTimes(testBlocks.length);
+      expect(o.complete).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -96,8 +96,8 @@ describe('blocks reactive observable', () => {
       const o = observerForBlocks(done);
       testPipe.subscribe(o);
 
-      expect(o.next).toBeCalledTimes(3);
-      expect(o.complete).toBeCalledTimes(1);
+      expect(o.next).toHaveBeenCalledTimes(3);
+      expect(o.complete).toHaveBeenCalledTimes(1);
     });
 
     it('should stream blocks in defined range', (done) => {
@@ -108,7 +108,7 @@ describe('blocks reactive observable', () => {
         complete: done
       });
 
-      expect(calls).toBeCalledTimes(3);
+      expect(calls).toHaveBeenCalledTimes(3);
     });
 
     it('should catch error from API', (done) => {
@@ -132,7 +132,7 @@ describe('blocks reactive observable', () => {
         },
         error: (err: Error) => {
           expect(err.message).toBe('Mock error');
-          expect(spy).toBeCalledTimes(2);
+          expect(spy).toHaveBeenCalledTimes(2);
           done();
         },
       });

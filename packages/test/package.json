@@ -16,12 +16,12 @@
     "url": "https://github.com/sodazone/ocelloids.git"
   },
   "devDependencies": {
-    "cbor-x": "^1.5.4",
+    "cbor-x": "^1.5.7",
     "shx": "^0.3.4"
   },
   "dependencies": {
-    "@polkadot/api": "^10.10.1",
-    "@polkadot/util": "^12.5.1",
+    "@polkadot/api": "^10.11.2",
+    "@polkadot/util": "^12.6.2",
     "rxjs": "^7.8.1"
   },
   "tsup": {

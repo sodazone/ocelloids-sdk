@@ -18,8 +18,8 @@
   "dependencies": {
     "@sodazone/ocelloids": "1.1.10-dev.0",
     "@sodazone/ocelloids-test": "1.1.10-dev.0",
-    "cbor-x": "^1.5.4",
-    "citty": "^0.1.4"
+    "cbor-x": "^1.5.7",
+    "citty": "^0.1.5"
   },
   "tsup": {
     "shims": true
