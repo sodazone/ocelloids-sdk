@@ -14,12 +14,17 @@
  * limitations under the License.
  */
 
-import { BlockNumber } from '@polkadot/types/interfaces';
+import { BlockNumber, Address } from '@polkadot/types/interfaces';
 import { Compact, GenericExtrinsic } from '@polkadot/types';
 import type { TxWithEvent } from '@polkadot/api-derive/types';
 import type { AnyJson, IU8a } from '@polkadot/types-codec/types';
 
 import { ExtrinsicBlockContext, ExtrinsicWithId, TxWithIdAndEvent } from './interfaces.js';
+
+export type Origin = {
+  type: 'proxy' | 'multisig',
+  address: Address
+}
 
 /**
  * A subclass of GenericExtrinsic that includes identifier information.
@@ -29,6 +34,7 @@ export class GenericExtrinsicWithId extends GenericExtrinsic
   blockNumber: Compact<BlockNumber>;
   blockHash: IU8a;
   blockPosition: number;
+  origins: Origin[];
 
   constructor(
     value: GenericExtrinsic,
@@ -36,12 +42,14 @@ export class GenericExtrinsicWithId extends GenericExtrinsic
       blockNumber,
       blockPosition,
       blockHash
-    } : ExtrinsicBlockContext
+    } : ExtrinsicBlockContext,
+    origins?: Origin[]
   ) {
     super(value.registry, value.toU8a());
     this.blockNumber = blockNumber;
     this.blockPosition = blockPosition;
     this.blockHash = blockHash;
+    this.origins = origins ? origins : [];
   }
 
   /**
@@ -55,6 +63,13 @@ export class GenericExtrinsicWithId extends GenericExtrinsic
     return `${this.blockNumber.toString()}-${this.blockPosition}`;
   }
 
+  addOrigin(o: Origin) {
+    // if (!this.origins) {
+    //   this.origins = [];
+    // }
+    this.origins.push(o);
+  }
+
   /**
    * Returns the JSON representation of the extrinsic with the added extrinsicId, blockNumber, and position properties.
    */
@@ -64,6 +79,12 @@ export class GenericExtrinsicWithId extends GenericExtrinsic
       blockNumber: this.blockNumber.toHuman(),
       blockHash: this.blockHash.toHuman(),
       position: this.blockPosition,
+      origins: this.origins?.map(o => (
+        {
+          type: o.type,
+          address: o.address.toHuman()
+        }
+      )),
       ...(super.toHuman(isExpanded) as any)
     };
   }

@@ -18,7 +18,7 @@ import type { BlockNumber } from '@polkadot/types/interfaces';
 import type { TxWithEvent } from '@polkadot/api-derive/types';
 import type { IU8a } from '@polkadot/types-codec/types';
 import { Compact } from '@polkadot/types';
-import { GenericExtrinsicWithId } from './extrinsic.js';
+import { GenericExtrinsicWithId, Origin } from './extrinsic.js';
 import { GenericEventWithId } from './event.js';
 
 /**
@@ -28,7 +28,8 @@ export interface ExtrinsicWithId extends GenericExtrinsicWithId {
   blockNumber: Compact<BlockNumber>,
   blockHash: IU8a,
   blockPosition: number,
-  extrinsicId: string
+  extrinsicId: string,
+  origins: Origin[]
 }
 
 /**

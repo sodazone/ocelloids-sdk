@@ -19,10 +19,36 @@ import type { SignedBlockExtended } from '@polkadot/api-derive/types';
 import { Observable, share } from 'rxjs';
 
 import { extractEventsWithTx, extractTxWithEvents } from './extract.js';
-import { flattenBatch } from './flatten.js';
+import { flattenCalls } from './flatten.js';
 import { mongoFilter } from './mongo-filter.js';
 import { ControlQuery, Criteria } from '../index.js';
 import { EventWithId, TxWithIdAndEvent } from '../types/interfaces.js';
+
+/**
+ * Filters extrinsics based on the provided criteria.
+ *
+ * It extracts extrinsics with events from the given block,
+ * flattens batch calls if needed and applies the filter criteria.
+ *
+ * @param extrinsicsCriteria The criteria to filter extrinsics.
+ * @returns An observable that emits filtered extrinsics with identifier and event information.
+ */
+export function filterExtrinsicsFlattened(
+  extrinsicsCriteria: Criteria
+) {
+  return (source: Observable<SignedBlockExtended>)
+    : Observable<TxWithIdAndEvent> => {
+    return source.pipe(
+      // Extracts extrinsics with events
+      extractTxWithEvents(),
+      // Flattens batches/multisig/proxy/derivative calls recursively
+      flattenCalls(),
+      // Filters at the extrinsic level
+      // mainly for success or failure
+      mongoFilter(extrinsicsCriteria)
+    );
+  };
+}
 
 /**
  * Filters extrinsics based on the provided criteria.
@@ -41,8 +67,6 @@ export function filterExtrinsics(
     return source.pipe(
       // Extracts extrinsics with events
       extractTxWithEvents(),
-      // Flattens batches if needed
-      flattenBatch(),
       // Filters at the extrinsic level
       // mainly for success or failure
       mongoFilter(extrinsicsCriteria)

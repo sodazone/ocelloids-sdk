@@ -25,23 +25,26 @@ import {
   testBatchCalls
 } from '@sodazone/ocelloids-test';
 
-import { flattenBatch } from './flatten.js';
+import { flattenCalls } from './flatten.js';
 import { types } from '../index.js';
 
-const blockNumber = testBlocks[0].block.header.number;
+const { number, hash } = testBlocks[0].block.header;
+
 const testBatchTxWithId = types.enhanceTxWithId({
-  blockNumber,
-  blockPosition: 0
+  blockNumber: number,
+  blockPosition: 0,
+  blockHash: hash
 }, testBatchExtrinsic);
 const testNonBatchTxWithId = types.enhanceTxWithId({
-  blockNumber,
-  blockPosition: 0
+  blockNumber: number,
+  blockPosition: 0,
+  blockHash: hash
 }, testExtrinsics[2]);
 
 describe('flatten batch call operator', () => {
   describe('flattenBatch', () => {
     it('should flatten `utility.batchAll` extrinsics', done => {
-      const testPipe = flattenBatch()(of(testBatchTxWithId));
+      const testPipe = flattenCalls()(of(testBatchTxWithId));
       let index = 0;
 
       testPipe.subscribe({
@@ -69,7 +72,7 @@ describe('flatten batch call operator', () => {
 
     it('should work with non-batched extrinsics', done => {
       let index = 0;
-      const testPipe = flattenBatch()(of(testNonBatchTxWithId));
+      const testPipe = flattenCalls()(of(testNonBatchTxWithId));
       testPipe.subscribe({
         next: (result: TxWithEvent) => {
           index++;
