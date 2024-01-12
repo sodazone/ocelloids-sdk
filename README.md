@@ -37,7 +37,7 @@
 
 ---
 
-Ocelloids[^1] is an open-source Software Development Kit (SDK) for monitoring Substrate-based networks.
+Ocelloids[^1] is an open-source Software Development Kit (SDK) for monitoring Polkadot and Substrate based networks.
 It simplifies the implementation of multi-chain monitoring programs and provides domain-specific logic for different pallets.
 
 ## Features
@@ -47,7 +47,7 @@ It simplifies the implementation of multi-chain monitoring programs and provides
 * **Powerful Query Operators** — Filter data using integrated operators that support complex queries in the Mongo query language. Includes support for big numbers and advanced features such as dynamic queries.
 * **Flexible Type Conversions** — Seamlessly convert data into a terse queryable format.
 * **Extended Context Types** — Extend base generic events and extrinsics with contextual information such as block number, block position, extrinsic position, etc.
-* **Abstraction of Common Patterns** — Simplify development and reduce boilerplate code by abstracting common patterns such as utility batch calls.
+* **Abstraction of Common Patterns** — Simplify development and reduce boilerplate code by abstracting common patterns. Supports recursive flattening with event correlation of nested batch, multisig, proxy and derivative calls within an extrinsic.
 * **Multi-Chain Support** — Interact with multiple networks.
 * **Pallet-Specific Modules** — Modules designed to handle use cases related to a particular pallet, such as tracking calls and events from the contracts pallet.
 
@@ -165,8 +165,9 @@ source.pipe(
   // Extracts extrinsics with events
   extractTxWithEvents(),
   
-  // Flattens batches if needed
-  flattenBatch(),
+  // Flattens and correlates events for nested 
+  // batch, multisig, proxy and derivative calls
+  flattenCalls(),
   
   // Filters at the extrinsic level
   // mainly for success or failure
