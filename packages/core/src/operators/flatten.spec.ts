@@ -13,28 +13,46 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import type { TxWithEvent } from '@polkadot/api-derive/types';
-
 import { of } from 'rxjs';
+
+import type { Event } from '@polkadot/types/interfaces';
 
 import {
   testBlocks,
   testExtrinsics,
-  testBatchExtrinsic,
-  testBatchCalls
+  testNestedCalls,
+  testNestedExtrinsic,
+  testNestedBatchCalls,
+  testNestedBatchExtrinsic,
+  testDeepNestedCalls,
+  testDeepNestedExtrinsic
 } from '@sodazone/ocelloids-test';
 
 import { flattenCalls } from './flatten.js';
 import { types } from '../index.js';
+import { TxWithIdAndEvent } from '../types/interfaces.js';
 
+type NestedCallToMatch = {
+  name: string;
+  events: Event[];
+}
 const { number, hash } = testBlocks[0].block.header;
 
-const testBatchTxWithId = types.enhanceTxWithId({
+const testNestedTxWithId = types.enhanceTxWithId({
   blockNumber: number,
   blockPosition: 0,
   blockHash: hash
-}, testBatchExtrinsic);
+}, testNestedExtrinsic);
+const testNestedBatchTxWithId = types.enhanceTxWithId({
+  blockNumber: number,
+  blockPosition: 0,
+  blockHash: hash
+}, testNestedBatchExtrinsic);
+const testDeepNestedTxWithId = types.enhanceTxWithId({
+  blockNumber: number,
+  blockPosition: 0,
+  blockHash: hash
+}, testDeepNestedExtrinsic);
 const testNonBatchTxWithId = types.enhanceTxWithId({
   blockNumber: number,
   blockPosition: 0,
@@ -43,28 +61,68 @@ const testNonBatchTxWithId = types.enhanceTxWithId({
 
 describe('flatten batch call operator', () => {
   describe('flattenBatch', () => {
-    it('should flatten `utility.batchAll` extrinsics', done => {
-      const testPipe = flattenCalls()(of(testBatchTxWithId));
+    const assertResults = (
+      result: TxWithIdAndEvent,
+      nestedCalls: NestedCallToMatch[],
+      index: number
+    ) => {
+      expect(result).toBeDefined();
+
+      const { extrinsic: { method }, events } = result;
+
+      const name = `${method.section}.${method.method}`;
+      expect(name).toEqual(nestedCalls[index].name);
+
+      events.forEach((e, i) => {
+        expect(e.section).toEqual(nestedCalls[index].events[i].section);
+        expect(e.method).toEqual(nestedCalls[index].events[i].method);
+      });
+    };
+
+    it('should flatten nested multisig + proxy extrinsics', done => {
+      const testPipe = flattenCalls()(of(testNestedTxWithId));
       let index = 0;
 
       testPipe.subscribe({
-        next: (result: TxWithEvent) => {
-          expect(result).toBeDefined();
-          expect(result.extrinsic.signer.toJSON()).toEqual({ 'id': '1qnJN7FViy3HZaxZK9tGAA71zxHSBeUweirKqCaox4t8GT7' });
-
-          // The first result should be the actual batch call
-          // After that, the emitted extrinsics should be of the flattened calls
-          if (index === 0) {
-            expect(result.extrinsic.method.section).toBe('utility');
-            expect(result.extrinsic.method.method).toBe('batchAll');
-          } else {
-            expect(result.extrinsic.method.toHuman()).toEqual(testBatchCalls[index - 1].toHuman());
-          }
-
+        next: (result: TxWithIdAndEvent) => {
+          assertResults(result, testNestedCalls, index);
           index++;
         },
         complete: () => {
-          expect(index).toBe(7);
+          expect(index).toBe(testNestedCalls.length);
+          done();
+        }
+      });
+    });
+
+    it('should flatten nested batch extrinsics', done => {
+      const testPipe = flattenCalls()(of(testNestedBatchTxWithId));
+
+      let index = 0;
+      testPipe.subscribe({
+        next: (result: TxWithIdAndEvent) => {
+          assertResults(result, testNestedBatchCalls, index);
+          index++;
+        },
+        complete: () => {
+          expect(index).toBe(testNestedBatchCalls.length);
+          done();
+        }
+      });
+    });
+
+    it('should flatten deep nested batch + batchAll extrinsics', done => {
+      const testPipe = flattenCalls()(of(testDeepNestedTxWithId));
+
+      let index = 0;
+
+      testPipe.subscribe({
+        next: (result: TxWithIdAndEvent) => {
+          assertResults(result, testDeepNestedCalls, index);
+          index++;
+        },
+        complete: () => {
+          expect(index).toBe(testDeepNestedCalls.length);
           done();
         }
       });
@@ -74,7 +132,7 @@ describe('flatten batch call operator', () => {
       let index = 0;
       const testPipe = flattenCalls()(of(testNonBatchTxWithId));
       testPipe.subscribe({
-        next: (result: TxWithEvent) => {
+        next: (result: TxWithIdAndEvent) => {
           index++;
           expect(result).toBeDefined();
           expect(result.extrinsic.signer.toHuman()).toEqual({ Id: '1sa85enM8EQ56Tzfyg97kvQf1CYfPoTczin4ASYTwUdH9iK' });
