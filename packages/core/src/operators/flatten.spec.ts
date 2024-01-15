@@ -15,8 +15,6 @@
  */
 import { of } from 'rxjs';
 
-import type { Event } from '@polkadot/types/interfaces';
-
 import {
   testBlocks,
   testExtrinsics,
@@ -24,43 +22,23 @@ import {
   testNestedExtrinsic,
   testNestedBatchCalls,
   testNestedBatchExtrinsic,
+  testForceBatchCalls,
+  testForceBatchExtrinsic,
   testDeepNestedCalls,
-  testDeepNestedExtrinsic
+  testDeepNestedExtrinsic,
+  testMultisigThreshold1Calls,
+  testMultisigThreshold1Extrinsic
 } from '@sodazone/ocelloids-test';
+import type { NestedCallToMatch } from '@sodazone/ocelloids-test';
 
 import { flattenCalls } from './flatten.js';
 import { types } from '../index.js';
 import { TxWithIdAndEvent } from '../types/interfaces.js';
 
-type NestedCallToMatch = {
-  name: string;
-  events: Event[];
-}
 const { number, hash } = testBlocks[0].block.header;
 
-const testNestedTxWithId = types.enhanceTxWithId({
-  blockNumber: number,
-  blockPosition: 0,
-  blockHash: hash
-}, testNestedExtrinsic);
-const testNestedBatchTxWithId = types.enhanceTxWithId({
-  blockNumber: number,
-  blockPosition: 0,
-  blockHash: hash
-}, testNestedBatchExtrinsic);
-const testDeepNestedTxWithId = types.enhanceTxWithId({
-  blockNumber: number,
-  blockPosition: 0,
-  blockHash: hash
-}, testDeepNestedExtrinsic);
-const testNonBatchTxWithId = types.enhanceTxWithId({
-  blockNumber: number,
-  blockPosition: 0,
-  blockHash: hash
-}, testExtrinsics[2]);
-
-describe('flatten batch call operator', () => {
-  describe('flattenBatch', () => {
+describe('flatten call operator', () => {
+  describe('flattenCall', () => {
     const assertResults = (
       result: TxWithIdAndEvent,
       nestedCalls: NestedCallToMatch[],
@@ -68,11 +46,22 @@ describe('flatten batch call operator', () => {
     ) => {
       expect(result).toBeDefined();
 
-      const { extrinsic: { method }, events } = result;
+      const { extrinsic: { method, origins }, events, dispatchError } = result;
 
+      // Assert that nested calls are extracted correctly
       const name = `${method.section}.${method.method}`;
       expect(name).toEqual(nestedCalls[index].name);
 
+      // Assert that nested call dispatch errors are correlated correctly
+      expect(dispatchError?.toHuman()).toEqual(nestedCalls[index].dispatchError);
+
+      // Assert that nested call origins are extracted correctly
+      origins.forEach((o, i) => {
+        expect(o.type).toEqual(nestedCalls[index].origins[i].type);
+        expect(o.address.toString()).toEqual(nestedCalls[index].origins[i].address);
+      });
+
+      // Assert that nested call events are correlated correctly
       events.forEach((e, i) => {
         expect(e.section).toEqual(nestedCalls[index].events[i].section);
         expect(e.method).toEqual(nestedCalls[index].events[i].method);
@@ -80,6 +69,11 @@ describe('flatten batch call operator', () => {
     };
 
     it('should flatten nested multisig + proxy extrinsics', done => {
+      const testNestedTxWithId = types.enhanceTxWithId({
+        blockNumber: number,
+        blockPosition: 0,
+        blockHash: hash
+      }, testNestedExtrinsic);
       const testPipe = flattenCalls()(of(testNestedTxWithId));
       let index = 0;
 
@@ -96,6 +90,11 @@ describe('flatten batch call operator', () => {
     });
 
     it('should flatten nested batch extrinsics', done => {
+      const testNestedBatchTxWithId = types.enhanceTxWithId({
+        blockNumber: number,
+        blockPosition: 0,
+        blockHash: hash
+      }, testNestedBatchExtrinsic);
       const testPipe = flattenCalls()(of(testNestedBatchTxWithId));
 
       let index = 0;
@@ -111,7 +110,33 @@ describe('flatten batch call operator', () => {
       });
     });
 
+    it('should flatten force batch extrinsics', done => {
+      const testForceBatchTxWithId = types.enhanceTxWithId({
+        blockNumber: number,
+        blockPosition: 0,
+        blockHash: hash
+      }, testForceBatchExtrinsic);
+      const testPipe = flattenCalls()(of(testForceBatchTxWithId));
+
+      let index = 0;
+      testPipe.subscribe({
+        next: (result: TxWithIdAndEvent) => {
+          assertResults(result, testForceBatchCalls, index);
+          index++;
+        },
+        complete: () => {
+          expect(index).toBe(testForceBatchCalls.length);
+          done();
+        }
+      });
+    });
+
     it('should flatten deep nested batch + batchAll extrinsics', done => {
+      const testDeepNestedTxWithId = types.enhanceTxWithId({
+        blockNumber: number,
+        blockPosition: 0,
+        blockHash: hash
+      }, testDeepNestedExtrinsic);
       const testPipe = flattenCalls()(of(testDeepNestedTxWithId));
 
       let index = 0;
@@ -128,9 +153,37 @@ describe('flatten batch call operator', () => {
       });
     });
 
-    it('should work with non-batched extrinsics', done => {
+    it('should flatten multisig threshold 1 extrinsics', done => {
+      const testMultisigThreshold1TxWithId = types.enhanceTxWithId({
+        blockNumber: number,
+        blockPosition: 0,
+        blockHash: hash
+      }, testMultisigThreshold1Extrinsic);
+      const testPipe = flattenCalls()(of(testMultisigThreshold1TxWithId));
       let index = 0;
+
+      testPipe.subscribe({
+        next: (result: TxWithIdAndEvent) => {
+          assertResults(result, testMultisigThreshold1Calls, index);
+          index++;
+        },
+        complete: () => {
+          expect(index).toBe(testMultisigThreshold1Calls.length);
+          done();
+        }
+      });
+    });
+
+    it('should work with non-batched extrinsics', done => {
+      const testNonBatchTxWithId = types.enhanceTxWithId({
+        blockNumber: number,
+        blockPosition: 0,
+        blockHash: hash
+      }, testExtrinsics[2]);
       const testPipe = flattenCalls()(of(testNonBatchTxWithId));
+
+      let index = 0;
+
       testPipe.subscribe({
         next: (result: TxWithIdAndEvent) => {
           index++;
