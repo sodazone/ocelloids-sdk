@@ -1,6 +1,6 @@
 import type { Call, Address } from '@polkadot/types/interfaces/runtime';
 import type { Result, Null } from '@polkadot/types-codec';
-import type { Vec, u16 } from '@polkadot/types-codec';
+import type { Vec } from '@polkadot/types-codec';
 import { AccountId32, DispatchError } from '@polkadot/types/interfaces';
 import { createKeyMulti } from '@polkadot/util-crypto';
 import { isU8a, u8aToHex } from '@polkadot/util';
@@ -61,12 +61,11 @@ export function extractAsMultiCall(tx: TxWithIdAndEvent) {
 // as_multi_threshold_1 directly executes the multisig call without emitting event MultisigExecuted
 export function extractAsMutiThreshold1Call(tx: TxWithIdAndEvent) {
   const { extrinsic, events } = tx;
-  const threshold = getArgValueFromTx(tx.extrinsic, 'threshold') as u16;
   const otherSignatories = getArgValueFromTx(tx.extrinsic, 'other_signatories') as Vec<AccountId32>;
   // Signer must be added to the signatories to obtain the multisig address
   const signatories = otherSignatories.map(s => s.toString());
   signatories.push(extrinsic.signer.toString());
-  const multisig = createKeyMulti(signatories, threshold.toNumber());
+  const multisig = createKeyMulti(signatories, 1);
   const multisigAddress = extrinsic.registry.createTypeUnsafe(
     'Address',
     [isU8a(multisig) ? u8aToHex(multisig) : multisig]
