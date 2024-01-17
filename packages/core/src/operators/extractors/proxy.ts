@@ -24,24 +24,13 @@ export function extractProxyCalls(tx: TxWithIdAndEvent) {
   const executedEvent = events[proxyExecutedIndex];
   const [callResult] = executedEvent.data as unknown as [Result<Null, DispatchError>];
 
-  if (callResult.isErr) {
-    return callAsTxWithIdAndEvent(
-      call,
-      {
-        tx,
-        events: events.slice(0, proxyExecutedIndex),
-        callError: callResult.asErr,
-        origin: { type: 'proxy', address: real }
-      }
-    );
-  } else {
-    return callAsTxWithIdAndEvent(
-      call,
-      {
-        tx,
-        events: events.slice(0, proxyExecutedIndex),
-        origin: { type: 'proxy', address: real }
-      }
-    );
-  }
+  return callAsTxWithIdAndEvent(
+    call,
+    {
+      tx,
+      events: events.slice(0, proxyExecutedIndex),
+      callError: callResult.isErr ? callResult.asErr : undefined,
+      origin: { type: 'proxy', address: real }
+    }
+  );
 }

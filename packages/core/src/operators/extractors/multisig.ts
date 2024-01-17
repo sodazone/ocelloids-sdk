@@ -41,32 +41,18 @@ export function extractAsMultiCall(tx: TxWithIdAndEvent) {
 
   const call = getArgValueFromTx(tx.extrinsic, 'call') as Call;
 
-  if (callResult.isErr) {
-    return callAsTxWithIdAndEvent(
-      call,
-      {
-        tx,
-        events: events.slice(0, multisigExecutedIndex),
-        callError: callResult.asErr,
-        origin: {
-          type: 'multisig',
-          address: multisigAddress
-        }
+  return callAsTxWithIdAndEvent(
+    call,
+    {
+      tx,
+      events: events.slice(0, multisigExecutedIndex),
+      callError: callResult.isErr ? callResult.asErr : undefined,
+      origin: {
+        type: 'multisig',
+        address: multisigAddress
       }
-    );
-  } else {
-    return callAsTxWithIdAndEvent(
-      call,
-      {
-        tx,
-        events: events.slice(0, multisigExecutedIndex),
-        origin: {
-          type: 'multisig',
-          address: multisigAddress
-        }
-      }
-    );
-  }
+    }
+  );
 }
 
 /**
