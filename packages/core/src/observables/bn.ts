@@ -5,6 +5,9 @@ import { EMPTY, Observable } from 'rxjs';
 
 import { BN } from '@polkadot/util';
 
+/**
+ * Represents a flexible type that accepts various representations of numeric values.
+ */
 export type AnyBN = number | string | number[] | Uint8Array | Buffer | BN;
 
 const ZERO = new BN(0);

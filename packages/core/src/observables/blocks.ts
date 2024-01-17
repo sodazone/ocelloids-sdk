@@ -135,6 +135,7 @@ export function blockFromHeader(api: ApiPromise) {
  * @param start - The starting block number.
  * @param count - The number of blocks to emit.
  * @param sorted - (Optional) Whether to emit blocks sequentially. Default is `true`.
+ * @returns An Observable that emits blocks within the specified range.
  */
 export function blocksInRange(
   start: AnyBN,

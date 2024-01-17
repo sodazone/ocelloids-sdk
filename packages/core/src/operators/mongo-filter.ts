@@ -36,7 +36,8 @@ const l = logger('oc-ops-mongo-filter');
  * {@link [dot notation](https://www.mongodb.com/docs/manual/core/document/#dot-notation)}
  * documentation for details.
  *
- * @param query The subject representing the query used for filtering.
+ * @param criteria - The MongoDB query language criteria used for filtering.
+ * @param converter - (Optional) The converter to be used for transforming data before applying the filter.
  * @returns A function that takes an observable source and returns a filtered observable stream.
  * @see {@link ControlQuery}
  * @see {@link [Mongo Documentation](https://www.mongodb.com/docs/manual/tutorial/query-documents/)}
