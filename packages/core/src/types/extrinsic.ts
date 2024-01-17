@@ -14,10 +14,12 @@ import { ExtrinsicBlockContext, ExtrinsicWithId, TxWithIdAndEvent } from './inte
  * The `Origin` type is used to provide context about the origin of flattened extrinsics,
  * indicating whether it originated from a proxy or multisig account.
  *
+ * Note: This is unrelated to Polkadot runtime origins.
+ *
  * @property type - The type of origin, which can be 'proxy', 'multisig'.
  * @property address - The address associated with the origin.
  */
-// TODO: better name to avoid confusion with runtime origins?
+// TODO: think of better name to avoid confusion with runtime origins.
 export type Origin = {
   type: 'proxy' | 'multisig',
   address: Address
