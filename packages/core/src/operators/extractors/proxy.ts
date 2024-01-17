@@ -1,3 +1,6 @@
+// Copyright 2023-2024 SO/DA zone
+// SPDX-License-Identifier: Apache-2.0
+
 import { MultiAddress, DispatchError } from '@polkadot/types/interfaces';
 import type { Call } from '@polkadot/types/interfaces/runtime';
 import type { Result, Null } from '@polkadot/types-codec';

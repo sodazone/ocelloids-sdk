@@ -1,3 +1,6 @@
+// Copyright 2023-2024 SO/DA zone
+// SPDX-License-Identifier: Apache-2.0
+
 import type { FunctionMetadataLatest, Event, DispatchError } from '@polkadot/types/interfaces';
 import type { CallBase, AnyTuple } from '@polkadot/types-codec/types';
 import type { u16, u32 } from '@polkadot/types-codec';

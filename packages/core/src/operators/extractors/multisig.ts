@@ -1,3 +1,6 @@
+// Copyright 2023-2024 SO/DA zone
+// SPDX-License-Identifier: Apache-2.0
+
 import type { Call, Address } from '@polkadot/types/interfaces/runtime';
 import type { Result, Null } from '@polkadot/types-codec';
 import type { Vec } from '@polkadot/types-codec';
