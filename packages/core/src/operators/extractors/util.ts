@@ -12,6 +12,14 @@ type CallContext = {
   origin? : Origin
 }
 
+/**
+ * Converts a nested call to a TxWithIdAndEvent.
+ * Maps the call dispatch error and adds the origin if passed in the CallContext.
+ *
+ * @param call - The nested call to be converted.
+ * @param context - The call context containing the original transaction, events, callError, and origin.
+ * @returns The TxWithIdAndEvent, with updated extrinsic.
+ */
 export function callAsTxWithIdAndEvent(
   call: CallBase<AnyTuple, FunctionMetadataLatest>,
   { tx, events, callError, origin }: CallContext
@@ -45,6 +53,14 @@ export function callAsTxWithIdAndEvent(
   };
 }
 
+/**
+ * Retrieves the value of an argument from an extrinsic.
+ *
+ * @param extrinsic - The input extrinsic.
+ * @param name - The name of the argument to retrieve.
+ * @returns The value of the specified argument.
+ * @throws An error if the argument with the specified name is not found in the extrinsic.
+ */
 export function getArgValueFromTx(extrinsic: ExtrinsicWithId, name: string) {
   const { args, argsDef } = extrinsic.method;
   const keys = Object.keys(argsDef);
@@ -57,6 +73,14 @@ export function getArgValueFromTx(extrinsic: ExtrinsicWithId, name: string) {
   );
 }
 
+/**
+ * Retrieves the value of an argument from an event.
+ *
+ * @param event - The input vent.
+ * @param name - The name of the argument to retrieve.
+ * @returns The value of the specified argument.
+ * @throws An error if the event does not have a list of data names or if the argument with the specified name is not found in the event.
+ */
 export function getArgValueFromEvent(event: Event, name: string) {
   const { names } = event.data;
   if (!names) {

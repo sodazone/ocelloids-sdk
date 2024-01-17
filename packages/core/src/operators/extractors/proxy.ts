@@ -5,6 +5,14 @@ import type { Result, Null } from '@polkadot/types-codec';
 import { TxWithIdAndEvent } from '../../types/interfaces.js';
 import { callAsTxWithIdAndEvent, getArgValueFromTx } from './util.js';
 
+/**
+ * Extracts proxy calls from a transaction.
+ * Maps the execution result from 'ProxyExecuted' event to the extracted call and
+ * adds the proxy address as an origin to the transaction.
+ *
+ * @param tx - The input transaction to extract proxy calls from .
+ * @returns The extracted proxy call as TxWithIdAndEvent.
+ */
 export function extractProxyCalls(tx: TxWithIdAndEvent) {
   const { extrinsic, events } = tx;
   const real = getArgValueFromTx(extrinsic, 'real') as MultiAddress;

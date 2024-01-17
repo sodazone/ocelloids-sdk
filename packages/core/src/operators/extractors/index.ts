@@ -10,6 +10,11 @@ import { extractProxyCalls } from './proxy.js';
 
 type Extractor = (tx: TxWithIdAndEvent) => TxWithIdAndEvent[] | TxWithIdAndEvent | undefined
 
+/**
+ * Extractors object which maps method signatures to their corresponding extractor functions.
+ * Extractor functions take a transaction as input and return the nested call(s)
+ * as an array of transactions, a single transaction, or undefined based on the extraction logic.
+ */
 export const extractors :  Record<string, Extractor> = {
   'proxy.proxy': extractProxyCalls,
   'proxy.proxyAnnounced': extractProxyCalls,

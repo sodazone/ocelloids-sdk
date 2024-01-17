@@ -7,6 +7,12 @@ import { callAsTxWithIdAndEvent } from './util.js';
 
 type EventsGroup = Event[];
 
+/**
+ * Groups events of batch calls based on 'ItemCompleted' or 'ItemFailed' events.
+ *
+ * @param events - Array of events.
+ * @returns An array of grouped event batches.
+ */
 function groupByBatchItem(events: Event[]) {
   const groups: EventsGroup[] = [];
   let group: EventsGroup = [];
@@ -28,12 +34,16 @@ function groupByBatchItem(events: Event[]) {
 
 /**
  * Groups events into batches based on utility batch events.
- * Checks for possible inner batch events see e.g. https://polkadot.subscan.io/event?extrinsic=16769534-2
+ * Takes into account the possibility of inner nested batch events
+ * and correlates to the right batch.
+ * The number of events batches should be equal to the number of calls in the batch.
+ * The index of the event group corresponds to the index of the call in the batch.
  *
- * @param events - Array of events to be grouped into batches.
+ * @param events - Array of events to be grouped.
+ * @param numberOfCalls - The number of calls in the batch.
  * @returns An array of grouped event batches.
  */
-function groupEventsByBatch(
+function groupEventsForBatch(
   events: Event[],
   numberOfCalls: number
 ): EventsGroup[] {
@@ -63,6 +73,14 @@ function groupEventsByBatch(
   return groups;
 }
 
+/**
+ * Maps batch calls to an array of TxWithIdAndEvent.
+ *
+ * @param calls - Array of nested batch calls.
+ * @param tx - The original transaction.
+ * @param batchEvents - Array of grouped event batches.
+ * @returns An array of mapped batch calls as TxWithIdAndEvent.
+ */
 function mapBatchCalls(
   calls: CallBase<AnyTuple, FunctionMetadataLatest>[],
   tx: TxWithIdAndEvent,
@@ -79,19 +97,35 @@ function mapBatchCalls(
   );
 }
 
+/**
+ * Maps batch completed calls to an array of TxWithIdAndEvent.
+ *
+ * @param calls - Array of batch calls.
+ * @param tx - The original transaction.
+ * @param batchCompletedIndex - Index of the 'BatchCompleted' event in the events array.
+ * @returns An array of mapped batch calls as TxWithIdAndEvent.
+ */
 function mapBatchCompleted(
   calls: CallBase<AnyTuple, FunctionMetadataLatest>[],
   tx: TxWithIdAndEvent,
   batchCompletedIndex: number
 ) {
   const { events } = tx;
-  const batchEvents = groupEventsByBatch(
+  const batchEvents = groupEventsForBatch(
     events.slice(0, batchCompletedIndex),
     calls.length
   );
   return mapBatchCalls(calls, tx, batchEvents);
 }
 
+/**
+ * Maps batch interrupted calls to an array of TxWithIdAndEvent.
+ *
+ * @param calls - Array of batch calls.
+ * @param tx - The original transaction.
+ * @param batchInterruptedIndex - Index of the 'BatchInterrupted' event in the events array.
+ * @returns An array of mapped batch calls as TxWithIdAndEvent.
+ */
 function mapBatchInterrupted(
   calls: CallBase<AnyTuple, FunctionMetadataLatest>[],
   tx: TxWithIdAndEvent,
@@ -101,7 +135,7 @@ function mapBatchInterrupted(
   const interruptedEvent = events[batchInterruptedIndex];
   const [callIndex, callError] = interruptedEvent.data as unknown as [u32, DispatchError];
   const interruptedIndex = callIndex.toNumber();
-  const batchEvents = groupEventsByBatch(
+  const batchEvents = groupEventsForBatch(
     events.slice(0, batchInterruptedIndex),
     interruptedIndex
   );
@@ -130,13 +164,21 @@ function mapBatchInterrupted(
   });
 }
 
+/**
+ * Maps batch errored calls to an array of TxWithIdAndEvent.
+ *
+ * @param calls - Array of batch calls.
+ * @param tx - The original transaction.
+ * @param batchErroredIndex - Index of the 'BatchCompletedWithErrors' event in the events array.
+ * @returns An array of mapped batch calls as TxWithIdAndEvent.
+ */
 function mapBatchErrored(
   calls: CallBase<AnyTuple, FunctionMetadataLatest>[],
   tx: TxWithIdAndEvent,
   batchErroredIndex: number
 ) {
   const { events } = tx;
-  const batchEvents = groupEventsByBatch(
+  const batchEvents = groupEventsForBatch(
     events.slice(0, batchErroredIndex),
     calls.length
   );
@@ -167,6 +209,12 @@ function mapBatchErrored(
   });
 }
 
+/**
+ * Extracts calls from an 'asDerivative' extrinsic.
+ *
+ * @param tx - The 'asDerivative' transaction.
+ * @returns The extracted call as TxWithIdAndEvent.
+ */
 export function extractAsDerivativeCall(tx: TxWithIdAndEvent) {
   const [_, call] = tx.extrinsic.args as unknown as [u16, CallBase<AnyTuple, FunctionMetadataLatest>];
 
@@ -179,8 +227,14 @@ export function extractAsDerivativeCall(tx: TxWithIdAndEvent) {
   );
 }
 
-// `Batch` always returns extrinsic success.
-// Emits BatchCompleted event if all items are executed succesfully, otherwise emits BatchInterrupted
+/**
+ * Extracts calls from a 'utility.batch' extrinsic, handling 'BatchCompleted' and 'BatchInterrupted' events.
+ * 'BatchCompleted' event is emitted if all items are executed succesfully, otherwise emits 'BatchInterrupted'
+ *
+ * @param tx - The 'utility.batch' transaction.
+ * @returns The array of extracted batch calls
+ * with correlated events and dispatch result as TxWithIdAndEvent.
+ */
 export function extractBatchCalls(tx: TxWithIdAndEvent) {
   const { extrinsic, events } = tx;
   const calls = extrinsic.args[0] as unknown as CallBase<AnyTuple, FunctionMetadataLatest>[];
@@ -205,8 +259,15 @@ export function extractBatchCalls(tx: TxWithIdAndEvent) {
   }
 }
 
-// `BatchAll` returns extrinsic success and BatchCompleted event if the whole batch executed succesfully,
-// otherwise returns extrinsic error and emits no event
+/**
+ * Extracts calls from a 'BatchAll' extrinsic, handling 'BatchCompleted' event.
+ * 'BatchCompleted' event is emitted if the whole batch executed succesfully,
+ * otherwise returns extrinsic error and emits no batch events.
+ *
+ * @param tx - The 'utility.batchAll' transaction.
+ * @returns The array of extracted batch calls
+ * with correlated events and dispatch result as TxWithIdAndEvent.
+ */
 export function extractBatchAllCalls(tx: TxWithIdAndEvent) {
   const { extrinsic, events, dispatchError } = tx;
   const calls = extrinsic.args[0] as unknown as CallBase<AnyTuple, FunctionMetadataLatest>[];
@@ -224,9 +285,15 @@ export function extractBatchAllCalls(tx: TxWithIdAndEvent) {
   }
 }
 
-// Always returns extrinsic success
-// If executed all items successfully, will emit ItemCompleted for each item and BatchCompleted at the end
-// If some items fails, will emit ItemFailed for failed items, ItemCompleted for successful items, and BatchCompletedWithErrors at the end
+/**
+ * Extracts calls from a 'ForceBatch' extrinsic, handling 'BatchCompleted' and 'BatchCompletedWithErrors' events.
+ * If executed all items successfully, will emit ItemCompleted for each item and BatchCompleted at the end.
+ * If some items fails, will emit ItemFailed for failed items, ItemCompleted for successful items, and BatchCompletedWithErrors at the end.
+ *
+ * @param tx - The transaction with ID and events.
+ * @returns The array of extracted batch calls
+ * with correlated events and dispatch result as TxWithIdAndEvent.
+ */
 export function extractForceBatchCalls(tx: TxWithIdAndEvent) {
   const { extrinsic, events } = tx;
   const calls = extrinsic.args[0] as unknown as CallBase<AnyTuple, FunctionMetadataLatest>[];

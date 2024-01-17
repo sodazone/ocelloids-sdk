@@ -8,10 +8,21 @@ import { isU8a, u8aToHex } from '@polkadot/util';
 import { TxWithIdAndEvent } from '../../types/interfaces.js';
 import { callAsTxWithIdAndEvent, getArgValueFromEvent, getArgValueFromTx } from './util.js';
 
-// Extract executed multisig call
-// as_multi emits event MultisigExecuted when threshold is met,
-// otherwise emits NewMultisig on new multisig call or MultisigApproval on approval of multisig call without meeting threshold
-// approve_as_multi only approves and does not execute even if threshold is met, emits MultisigApproval
+/**
+ * Extracts executed multisig calls from transactions.
+ * Maps the execution result from 'MultisigExecuted' events to the extracted call and
+ * adds the multisig address as an origin to the transaction.
+ *
+ * <p>
+ * The `as_multi` method emits the 'MultisigExecuted' event when the threshold is met.
+ * If the threshold is not met, it emits 'NewMultisig' for new multisig calls
+ * or 'MultisigApproval' on the approval of a multisig call without meeting the threshold.
+ * </p>
+ *
+ * @param tx - The input transaction to extract multisig calls from.
+ * @returns The extracted multisig call as TxWithIdAndEvent.
+ * Returns undefined if the 'MultisigExecuted' event is not found in the transaction events.
+ */
 export function extractAsMultiCall(tx: TxWithIdAndEvent) {
   const { extrinsic, events } = tx;
 
@@ -58,7 +69,17 @@ export function extractAsMultiCall(tx: TxWithIdAndEvent) {
   }
 }
 
-// as_multi_threshold_1 directly executes the multisig call without emitting event MultisigExecuted
+/**
+ * Extracts directly executed multisig calls with a threshold of 1 from transactions.
+ * Creates the multisig address from passed signatories and adds it as an origin to the transaction.
+ *
+ * <p>
+ * Note: The `as_multi_threshold_1` method directly executes the multisig call without emitting the 'MultisigExecuted' event.
+ * </p>
+ *
+ * @param tx - The input transaction to extract multisig calls from.
+ * @returns The extracted multisig call as TxWithIdAndEvent.
+ */
 export function extractAsMutiThreshold1Call(tx: TxWithIdAndEvent) {
   const { extrinsic, events } = tx;
   const otherSignatories = getArgValueFromTx(tx.extrinsic, 'other_signatories') as Vec<AccountId32>;
