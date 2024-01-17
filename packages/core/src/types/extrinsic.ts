@@ -12,13 +12,14 @@ import { ExtrinsicBlockContext, ExtrinsicWithId, TxWithIdAndEvent } from './inte
  * Represents additional origins for flattened extrinsics.
  *
  * The `Origin` type is used to provide context about the origin of flattened extrinsics,
- * indicating whether it originated from a proxy, multisig, or the root account.
+ * indicating whether it originated from a proxy or multisig account.
  *
- * @property type - The type of origin, which can be 'proxy', 'multisig', or 'root'.
+ * @property type - The type of origin, which can be 'proxy', 'multisig'.
  * @property address - The address associated with the origin.
  */
+// TODO: better name to avoid confusion with runtime origins?
 export type Origin = {
-  type: 'proxy' | 'multisig' | 'root',
+  type: 'proxy' | 'multisig',
   address: Address
 }
 
