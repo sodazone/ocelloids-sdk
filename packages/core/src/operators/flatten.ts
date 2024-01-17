@@ -39,7 +39,7 @@ function flatten(tx: TxWithIdAndEvent): TxWithIdAndEvent[] {
  * Operator to recursively flatten any nested calls in an extrinsic.
  *
  * Takes an `Observable<TxWithIdAndEvent>` as input and recursively checks for any nested calls.
- * Nested calls could originate from the multisig, proxy, utility or sudo pallets.
+ * Nested calls could originate from the multisig, proxy, utility, etc. pallets.
  * Additionally, correlates corresponding events and dispatch result to each extracted call.
  * Emits the input extrinsic plus all nested calls as individual TxWithIdAndEvent for easy filtering.
  *
