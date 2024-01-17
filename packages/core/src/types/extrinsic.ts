@@ -8,8 +8,17 @@ import type { AnyJson, IU8a } from '@polkadot/types-codec/types';
 
 import { ExtrinsicBlockContext, ExtrinsicWithId, TxWithIdAndEvent } from './interfaces.js';
 
+/**
+ * Represents additional origins for flattened extrinsics.
+ *
+ * The `Origin` type is used to provide context about the origin of flattened extrinsics,
+ * indicating whether it originated from a proxy, multisig, or the root account.
+ *
+ * @property type - The type of origin, which can be 'proxy', 'multisig', or 'root'.
+ * @property address - The address associated with the origin.
+ */
 export type Origin = {
-  type: 'proxy' | 'multisig',
+  type: 'proxy' | 'multisig' | 'root',
   address: Address
 }
 
@@ -30,13 +39,14 @@ export class GenericExtrinsicWithId extends GenericExtrinsic
       blockPosition,
       blockHash
     } : ExtrinsicBlockContext,
-    origins?: Origin[]
+    origins: Origin[] = []
   ) {
     super(value.registry, value.toU8a());
+
     this.blockNumber = blockNumber;
     this.blockPosition = blockPosition;
     this.blockHash = blockHash;
-    this.origins = origins ? origins : [];
+    this.origins = origins;
   }
 
   /**
@@ -51,9 +61,6 @@ export class GenericExtrinsicWithId extends GenericExtrinsic
   }
 
   addOrigin(o: Origin) {
-    // if (!this.origins) {
-    //   this.origins = [];
-    // }
     this.origins.push(o);
   }
 
