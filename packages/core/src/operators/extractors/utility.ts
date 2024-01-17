@@ -1,17 +1,18 @@
 import type { FunctionMetadataLatest, Event, DispatchError } from '@polkadot/types/interfaces';
 import type { CallBase, AnyTuple } from '@polkadot/types-codec/types';
 import type { u16, u32 } from '@polkadot/types-codec';
+import type { Result, Null } from '@polkadot/types-codec';
 
 import { TxWithIdAndEvent } from '../../types/interfaces.js';
-import { callAsTxWithIdAndEvent } from './util.js';
+import { callAsTxWithIdAndEvent, getArgValueFromTx } from './util.js';
 
 type EventsGroup = Event[];
 
 /**
- * Groups events of batch calls based on 'ItemCompleted' or 'ItemFailed' events.
+ * Groups events of batch items based on 'ItemCompleted' or 'ItemFailed' events.
  *
  * @param events - Array of events.
- * @returns An array of grouped event batches.
+ * @returns An array of grouped events.
  */
 function groupByBatchItem(events: Event[]) {
   const groups: EventsGroup[] = [];
@@ -20,7 +21,8 @@ function groupByBatchItem(events: Event[]) {
   for (const event of events) {
     group.push(event);
 
-    // Utility events with method 'ItemCompleted' or 'ItemFailed' indicate the end of a batch item.
+    // Utility events with method 'ItemCompleted' or 'ItemFailed'
+    // indicate the end of an event group for a batch item.
     if (
       event.section === 'utility' &&
       ['ItemCompleted', 'ItemFailed'].includes(event.method)
@@ -33,22 +35,26 @@ function groupByBatchItem(events: Event[]) {
 }
 
 /**
- * Groups events into batches based on utility batch events.
- * Takes into account the possibility of inner nested batch events
- * and correlates to the right batch.
- * The number of events batches should be equal to the number of calls in the batch.
- * The index of the event group corresponds to the index of the call in the batch.
+ * Groups events in a batch extrinsic to be correlated to the calls in the batch.
+ * Ensures that events are properly grouped, considering the possibility of events in nested batch items
+ * and guaranteeing that each event group corresponds to a call in the batch.
  *
  * @param events - Array of events to be grouped.
  * @param numberOfCalls - The number of calls in the batch.
- * @returns An array of grouped event batches.
+ * @returns An array of grouped events where the index of the group
+ * correlates to the index of the call in the batch.
+ * @throws An error if the number of event groups does not correspond to the number of calls in a batch.
  */
 function groupEventsForBatch(
   events: Event[],
   numberOfCalls: number
 ): EventsGroup[] {
+  // Initial grouping based on 'ItemCompleted' or 'ItemFailed' events,
+  // does not take into account possibility of nested batch calls
   const groups = groupByBatchItem(events);
 
+  // Find the index of the last event group with events
+  // that indicate a nested batch.
   const findNestedBatchIndex = (): number | undefined => {
     for (let index = groups.length - 1; index >= 0; index--) {
       const hasNestedBatch = groups[index].some(e =>
@@ -62,24 +68,29 @@ function groupEventsForBatch(
     return undefined;
   };
 
+  // Merge event groups until the number of groups matches the number of calls
   while (groups.length > numberOfCalls) {
     const indexToDelete = findNestedBatchIndex();
-    if (indexToDelete !== undefined) {
-      groups[indexToDelete - 1] = groups[indexToDelete - 1].concat(groups[indexToDelete]);
-      groups.splice(indexToDelete, 1);
+    // Throw an error if no index is found, indicating an inconsistency in the number of events and calls
+    if (indexToDelete === undefined) {
+      throw new Error('Number of event groups does not correspond to number of calls in a batch.');
     }
+    // Merge the nested batch events with the previous event group
+    groups[indexToDelete - 1] = groups[indexToDelete - 1].concat(groups[indexToDelete]);
+    groups.splice(indexToDelete, 1);
   }
 
   return groups;
 }
 
 /**
- * Maps batch calls to an array of TxWithIdAndEvent.
+ * Maps calls in a batch to an array of TxWithIdAndEvent
+ * and assigns the correlated events to the TxWithIdAndEvent.
  *
  * @param calls - Array of nested batch calls.
  * @param tx - The original transaction.
- * @param batchEvents - Array of grouped event batches.
- * @returns An array of mapped batch calls as TxWithIdAndEvent.
+ * @param batchEvents - Array of grouped events.
+ * @returns An array of batch calls mapped as TxWithIdAndEvent.
  */
 function mapBatchCalls(
   calls: CallBase<AnyTuple, FunctionMetadataLatest>[],
@@ -98,12 +109,13 @@ function mapBatchCalls(
 }
 
 /**
- * Maps batch completed calls to an array of TxWithIdAndEvent.
+ * Maps calls in a completed batch to an array of TxWithIdAndEvent
+ * and assigns the correlated events to the TxWithIdAndEvent.
  *
  * @param calls - Array of batch calls.
  * @param tx - The original transaction.
  * @param batchCompletedIndex - Index of the 'BatchCompleted' event in the events array.
- * @returns An array of mapped batch calls as TxWithIdAndEvent.
+ * @returns An array of batch calls mapped as TxWithIdAndEvent.
  */
 function mapBatchCompleted(
   calls: CallBase<AnyTuple, FunctionMetadataLatest>[],
@@ -119,12 +131,12 @@ function mapBatchCompleted(
 }
 
 /**
- * Maps batch interrupted calls to an array of TxWithIdAndEvent.
+ * Maps calls in a interrupted batch to an array of TxWithIdAndEvent.
  *
  * @param calls - Array of batch calls.
  * @param tx - The original transaction.
  * @param batchInterruptedIndex - Index of the 'BatchInterrupted' event in the events array.
- * @returns An array of mapped batch calls as TxWithIdAndEvent.
+ * @returns An array of batch calls mapped as TxWithIdAndEvent.
  */
 function mapBatchInterrupted(
   calls: CallBase<AnyTuple, FunctionMetadataLatest>[],
@@ -142,7 +154,7 @@ function mapBatchInterrupted(
 
   return calls.map((call, i) => {
     if (i < interruptedIndex) {
-      // Executed
+      // Executed items
       return callAsTxWithIdAndEvent(
         call,
         {
@@ -151,7 +163,7 @@ function mapBatchInterrupted(
         }
       );
     } else {
-      // Failed or not executed
+      // Failed or not executed items
       return callAsTxWithIdAndEvent(
         call,
         {
@@ -165,12 +177,12 @@ function mapBatchInterrupted(
 }
 
 /**
- * Maps batch errored calls to an array of TxWithIdAndEvent.
+ * Maps calls in an errored batch to an array of TxWithIdAndEvent.
  *
  * @param calls - Array of batch calls.
  * @param tx - The original transaction.
  * @param batchErroredIndex - Index of the 'BatchCompletedWithErrors' event in the events array.
- * @returns An array of mapped batch calls as TxWithIdAndEvent.
+ * @returns An array of batch calls mapped as TxWithIdAndEvent.
  */
 function mapBatchErrored(
   calls: CallBase<AnyTuple, FunctionMetadataLatest>[],
@@ -225,6 +237,45 @@ export function extractAsDerivativeCall(tx: TxWithIdAndEvent) {
       events: tx.events
     }
   );
+}
+
+/**
+ * Extracts calls from a 'dispatchAs' extrinsic.
+ * If call is executed with a 'DispatchedAs' event,
+ * maps the execution result from the event to the extracted call.
+ *
+ * @param tx - The 'dispatchAs' transaction.
+ * @returns The extracted call as TxWithIdAndEvent.
+ */
+export function extractDispatchAsCall(tx: TxWithIdAndEvent) {
+  const { extrinsic, events } = tx;
+  const call = getArgValueFromTx(extrinsic, 'call') as CallBase<AnyTuple, FunctionMetadataLatest>;
+
+  const dispatchedAsIndex = events.findLastIndex(
+    e => e.method.toLowerCase() === 'dispatchedAs'
+  );
+
+  if (dispatchedAsIndex !== -1) {
+    const dispatchedAsEvent = events[dispatchedAsIndex];
+    const [callResult] = dispatchedAsEvent.data as unknown as [Result<Null, DispatchError>];
+
+    return callAsTxWithIdAndEvent(
+      call,
+      {
+        tx,
+        events: events.slice(0, dispatchedAsIndex),
+        callError: callResult.isErr ? callResult.asErr : undefined
+      }
+    );
+  } else {
+    return callAsTxWithIdAndEvent(
+      call,
+      {
+        tx,
+        events: events
+      }
+    );
+  }
 }
 
 /**
