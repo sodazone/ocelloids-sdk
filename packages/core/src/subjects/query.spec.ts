@@ -6,6 +6,34 @@ import { ControlQuery } from './query.js';
 const testAddress = '1a1LcBX6hGPKg5aQ6DXZpAHCCzWjckhea4sz3P1PvL3oc4F';
 
 describe('control query', () => {
+  it('should filter out dispatch errors', () => {
+    const q = ControlQuery.from({
+      'dispatchError': { $eq: undefined },
+      'extrinsic.section': 'convictionVoting',
+      'extrinsic.method': 'vote'
+    });
+    const extrinsic = {
+      section: 'convictionVoting',
+      method: 'vote'
+    };
+    expect(q).toBeDefined();
+    expect(q.getValue().test({
+      extrinsic,
+      dispatchError: 'errored'
+    })).toBeFalsy();
+    expect(q.getValue().test({
+      extrinsic,
+      dispatchError: undefined
+    })).toBeTruthy();
+    expect(q.getValue().test({
+      extrinsic,
+      dispatchError: null
+    })).toBeTruthy();
+    expect(q.getValue().test({
+      extrinsic
+    })).toBeTruthy();
+  });
+
   it('should construct an underlying query', () => {
     const q = ControlQuery.from({
       $and: [

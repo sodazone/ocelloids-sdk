@@ -51,7 +51,8 @@ export function filterExtrinsics(
  * Optionally, it flattens nested calls in extrinsics and applies the filtering criteria.
  *
  * @param eventsCriteria - Criteria for filtering events.
- * @param extrinsicsCriteria - (Optional) Criteria for filtering extrinsics. Defaults to `{ dispatchError: { $exists: false } }`.
+ * @param extrinsicsCriteria - (Optional) Criteria for filtering extrinsics. Defaults to an empty criteria.
+ * E.g. `{ 'dispatchError': { $eq: undefined } }` to filter out failed extrinsics.
  * @param flatten - (Optional) A flag indicating whether to flatten nested calls.
  * Defaults to false to avoid duplication of filtered events.
  * When extrinsicCriteria is set for filtering of calls by method and section,
@@ -60,9 +61,7 @@ export function filterExtrinsics(
  */
 export function filterEvents(
   eventsCriteria: ControlQuery | Criteria,
-  extrinsicsCriteria : Criteria = {
-    dispatchError: { $exists: false }
-  },
+  extrinsicsCriteria : Criteria = {},
   flatten: boolean = false
 ) {
   const eventsQuery = ControlQuery.from(eventsCriteria);
