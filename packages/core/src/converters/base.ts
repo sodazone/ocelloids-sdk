@@ -162,7 +162,9 @@ function extrinsicToNamedPrimitive(
 export function txWithEventToNamedPrimitive(data: TxWithEvent) {
   return {
     extrinsic: extrinsicToNamedPrimitive(data.extrinsic as Extrinsic),
-    events: data.events?.map(eventToNamedPrimitive) || []
+    events: data.events?.map(eventToNamedPrimitive) || [],
+    dispatchInfo: data.dispatchInfo?.toHuman(),
+    dispatchError: data.dispatchError?.toHuman()
   };
 }
 
