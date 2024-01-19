@@ -34,7 +34,7 @@ export function extractAsMultiCall(tx: TxWithIdAndEvent) {
   );
 
   if (multisigExecutedIndex === -1) {
-    return undefined;
+    return [];
   }
 
   const executedEvent = events[multisigExecutedIndex];
@@ -44,7 +44,7 @@ export function extractAsMultiCall(tx: TxWithIdAndEvent) {
 
   const call = getArgValueFromTx(tx.extrinsic, 'call') as Call;
 
-  return callAsTxWithIdAndEvent(
+  return [callAsTxWithIdAndEvent(
     call,
     {
       tx,
@@ -55,7 +55,7 @@ export function extractAsMultiCall(tx: TxWithIdAndEvent) {
         address: multisigAddress
       }
     }
-  );
+  )];
 }
 
 /**
@@ -83,7 +83,7 @@ export function extractAsMutiThreshold1Call(tx: TxWithIdAndEvent) {
 
   const call = getArgValueFromTx(tx.extrinsic, 'call') as Call;
 
-  return callAsTxWithIdAndEvent(
+  return [callAsTxWithIdAndEvent(
     call,
     {
       tx,
@@ -93,5 +93,5 @@ export function extractAsMutiThreshold1Call(tx: TxWithIdAndEvent) {
         address: multisigAddress
       }
     }
-  );
+  )];
 }

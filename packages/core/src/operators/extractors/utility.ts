@@ -233,13 +233,13 @@ function mapBatchErrored(
 export function extractAsDerivativeCall(tx: TxWithIdAndEvent) {
   const [_, call] = tx.extrinsic.args as unknown as [u16, CallBase<AnyTuple, FunctionMetadataLatest>];
 
-  return callAsTxWithIdAndEvent(
+  return [callAsTxWithIdAndEvent(
     call,
     {
       tx,
       events: tx.events
     }
-  );
+  )];
 }
 
 /**

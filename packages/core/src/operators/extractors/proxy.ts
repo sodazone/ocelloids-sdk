@@ -27,7 +27,7 @@ export function extractProxyCalls(tx: TxWithIdAndEvent) {
   const executedEvent = events[proxyExecutedIndex];
   const [callResult] = executedEvent.data as unknown as [Result<Null, DispatchError>];
 
-  return callAsTxWithIdAndEvent(
+  return [callAsTxWithIdAndEvent(
     call,
     {
       tx,
@@ -35,5 +35,5 @@ export function extractProxyCalls(tx: TxWithIdAndEvent) {
       callError: callResult.isErr ? callResult.asErr : undefined,
       origin: { type: 'proxy', address: real }
     }
-  );
+  )];
 }

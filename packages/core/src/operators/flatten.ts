@@ -26,11 +26,7 @@ function flatten(tx: TxWithIdAndEvent): TxWithIdAndEvent[] {
 
   if (extractor) {
     const nestedCalls = extractor(tx);
-    if (Array.isArray(nestedCalls)) {
-      acc.push(...nestedCalls.flatMap(c => flatten(c)));
-    } else if (nestedCalls) {
-      acc.push(...flatten(nestedCalls));
-    }
+    acc.push(...nestedCalls.flatMap(c => flatten(c)));
   }
   return acc;
 }

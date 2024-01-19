@@ -11,7 +11,7 @@ import {
 import { extractAsMultiCall, extractAsMutiThreshold1Call } from './multisig.js';
 import { extractProxyCalls } from './proxy.js';
 
-type Extractor = (tx: TxWithIdAndEvent) => TxWithIdAndEvent[] | TxWithIdAndEvent | undefined
+type Extractor = (tx: TxWithIdAndEvent) => TxWithIdAndEvent[]
 
 /**
  * Extractors object which maps method signatures to their corresponding extractor functions.
