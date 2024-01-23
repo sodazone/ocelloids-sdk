@@ -3,8 +3,9 @@
 
 import { logger } from '@polkadot/util';
 
-import type { Event } from '@polkadot/types/interfaces';
+import type { Event, DispatchInfo, DispatchError } from '@polkadot/types/interfaces';
 
+import { GenericExtrinsicWithId } from '../../types/index.js';
 import { TxWithIdAndEvent } from '../../types/interfaces.js';
 import { extractors } from './index.js';
 import { isEventType } from './util.js';
@@ -52,13 +53,24 @@ export class Flattener {
   }[];
   private calls: TxWithIdAndEvent[];
   private pointer: number;
+  private tx : TxWithIdAndEvent;
 
-  constructor(private tx: TxWithIdAndEvent) {
-    // copy the events before reversing
+  constructor(tx: TxWithIdAndEvent) {
+    const { extrinsic } = tx;
+    const { registry } = extrinsic;
+
+    // work on a copy of the events and extrinsics
     this.events = tx.events.slice().reverse().map(e => ({
       event: e,
       callId: 0
     }));
+    this.tx = {
+      events: this.events.map(({event}) => event),
+      dispatchError: tx.dispatchError ? registry.createType('DispatchError', tx.dispatchError) as DispatchError : undefined,
+      dispatchInfo: tx.dispatchInfo ? registry.createType('DispatchInfo', tx.dispatchInfo) as DispatchInfo : undefined,
+      extrinsic: new GenericExtrinsicWithId(extrinsic, extrinsic)
+    };
+
     this.calls = [];
     this.pointer = 0;
   }
