@@ -34,14 +34,15 @@ const DispatchedAsBoundary = {
  *
  * @param calls - Array of batch calls.
  * @param tx - The original transaction.
- * @returns An array of batch calls mapped as TxWithIdAndEvent.
+ * @param flattener - The {@link Flattener} instance.
+ * @returns An array of batch calls mapped as {@link TxWithIdAndEvent}.
  */
 function mapBatchErrored(
   calls: CallBase<AnyTuple, FunctionMetadataLatest>[],
   tx: TxWithIdAndEvent,
   flattener: Flattener
 ) {
-  let from = flattener.pointer + 1;
+  let from = flattener.nextPointer;
 
   return calls.map(call => {
     const  eventIndex = flattener.findEventIndex(
@@ -74,7 +75,7 @@ function mapBatchErrored(
  * Extracts calls from an 'asDerivative' extrinsic.
  *
  * @param tx - The 'asDerivative' transaction.
- * @returns The extracted call as TxWithIdAndEvent.
+ * @returns The extracted call as {@link TxWithIdAndEvent}.
  */
 export function extractAsDerivativeCall(tx: TxWithIdAndEvent) {
   const [_, call] = tx.extrinsic.args as unknown as [
@@ -98,7 +99,8 @@ export function extractAsDerivativeCall(tx: TxWithIdAndEvent) {
  * maps the execution result from the event to the extracted call.
  *
  * @param tx - The 'dispatchAs' transaction.
- * @returns The extracted call as TxWithIdAndEvent.
+ * @param flattener - The {@link Flattener} instance.
+ * @returns The extracted call as {@link TxWithIdAndEvent}.
  */
 export function extractDispatchAsCall(tx: TxWithIdAndEvent, flattener: Flattener) {
   const { extrinsic, events } = tx;
@@ -177,12 +179,12 @@ function mapBatchInterrupt(
  * 'BatchCompleted' event is emitted if all items are executed succesfully, otherwise emits 'BatchInterrupted'
  *
  * @param tx - The 'utility.batch' transaction.
+ * @param flattener - The {@link Flattener} instance.
  * @returns The array of extracted batch calls
- * with correlated events and dispatch result as TxWithIdAndEvent.
+ * with correlated events and dispatch result as {@link TxWithIdAndEvent}.
  */
 export function extractBatchCalls(tx: TxWithIdAndEvent, flattener: Flattener) {
   const { extrinsic } = tx;
-  const { events } = flattener;
   const calls = extrinsic.args[0] as unknown as CallBase<AnyTuple, FunctionMetadataLatest>[];
 
   const batchCompletedIndex = flattener.findEventIndex(BatchCompleted);
@@ -193,8 +195,8 @@ export function extractBatchCalls(tx: TxWithIdAndEvent, flattener: Flattener) {
   );
 
   if (isInterrupted) {
-    const interruptedEvent = events[batchInterruptedIndex];
-    const [callIndex, callError] = interruptedEvent.event.data as unknown as [u32, DispatchError];
+    const interruptedEvent = flattener.getEvent(batchInterruptedIndex);
+    const [callIndex, callError] = interruptedEvent.data as unknown as [u32, DispatchError];
     const interruptedIndex = callIndex.toNumber();
     return mapBatchInterrupt(calls, tx, interruptedIndex, callError);
   } else {
@@ -209,7 +211,7 @@ export function extractBatchCalls(tx: TxWithIdAndEvent, flattener: Flattener) {
  *
  * @param tx - The 'utility.batchAll' transaction.
  * @returns The array of extracted batch calls
- * with correlated events and dispatch result as TxWithIdAndEvent.
+ * with correlated events and dispatch result as {@link TxWithIdAndEvent}.
  */
 export function extractBatchAllCalls(tx: TxWithIdAndEvent) {
   const { extrinsic, dispatchError } = tx;
@@ -230,8 +232,9 @@ export function extractBatchAllCalls(tx: TxWithIdAndEvent) {
  * If some items fails, will emit ItemFailed for failed items, ItemCompleted for successful items, and BatchCompletedWithErrors at the end.
  *
  * @param tx - The transaction with ID and events.
+ * @param flattener - The {@link Flattener} instance.
  * @returns The array of extracted batch calls
- * with correlated events and dispatch result as TxWithIdAndEvent.
+ * with correlated events and dispatch result as {@link TxWithIdAndEvent}.
  */
 export function extractForceBatchCalls(tx: TxWithIdAndEvent, flattener: Flattener) {
   const { extrinsic } = tx;

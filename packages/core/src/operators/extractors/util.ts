@@ -103,6 +103,14 @@ export function getArgValueFromEvent(event: Event, name: string) {
   );
 }
 
+/**
+ * Matches a given event to a single or multiple event names.
+ * The event names include the section and the method concatenated by a dot.
+ *
+ * @param names - The full event names to match. Could be a string or an array of strings.
+ * @param event - The event instance
+ * @returns true if the event matches any of the event names.
+ */
 export function isEventType(names: string | string[], event: Event) : boolean {
   return Array.isArray(names)
     ? names.includes(`${event.section}.${event.method}`)

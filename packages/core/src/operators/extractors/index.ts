@@ -12,6 +12,9 @@ import { extractAsMultiCall, extractAsMutiThreshold1Call } from './multisig.js';
 import { extractProxyCalls } from './proxy.js';
 import { Boundary, Flattener } from './flattener.js';
 
+/**
+ * Type that represents an extractor function.
+ */
 type Extractor = (tx: TxWithIdAndEvent, flattener: Flattener) => {
   call: TxWithIdAndEvent,
   boundary?: Boundary

@@ -11,31 +11,50 @@ import { isEventType } from './util.js';
 
 const l = logger('oc-ops-flattener');
 
+/**
+ * Enum representing static, well-known boundaries.
+ */
 // eslint-disable-next-line no-shadow
 export enum Boundaries {
   ALL
 }
+
+/**
+ * Type defining a boundary for events demarcation to correlate with a call.
+ */
 export type Boundary = {
+  /**
+   * The event name, i.e. `section.method`.
+   */
   eventName: string,
+  /**
+   * Offset to exclude the current event from the boundary.
+   * Defaults to 0.
+   */
   offset?: number
 } | Boundaries;
 
+/**
+ * Checks if a boundary is of type `Boundaries.ALL`.
+ */
 const isAllBoundary = (boundary: Boundary): boundary is Boundaries => {
   return boundary === Boundaries.ALL;
 };
 
+/**
+ * Flattens nested calls in the extrinsic and correlates the events belonging to each call.
+ * Supports all the extractors registered in the {@link extractors} map.
+ */
 export class Flattener {
-  tx: TxWithIdAndEvent;
-  events: {
+  private events: {
     event: Event,
     callId: number
   }[];
-  calls: TxWithIdAndEvent[];
-  pointer: number;
+  private calls: TxWithIdAndEvent[];
+  private pointer: number;
 
-  constructor(tx: TxWithIdAndEvent) {
-    this.tx = tx;
-    // do not mutate
+  constructor(private tx: TxWithIdAndEvent) {
+    // copy the events before reversing
     this.events = tx.events.slice().reverse().map(e => ({
       event: e,
       callId: 0
@@ -44,6 +63,12 @@ export class Flattener {
     this.pointer = 0;
   }
 
+  /**
+   * Flattens nested calls in the extrinsic and correlates the events belonging to each call.
+   *
+   * @param boundary - (Optional) The event boundary.
+   * @param id - The level identifier for the current call; e.g. '0.0.1'. Defaults to '0'.
+   */
   flatten(boundary?: Boundary, id = '0') {
     l.debug(
       'flatten(boundary, extrinsic)',
@@ -68,6 +93,9 @@ export class Flattener {
     }
   }
 
+  /**
+   * Get the flattened calls with associated events.
+   */
   get flattenedCalls() {
     const flattenedCalls = this.calls.map((call, i) => {
       const eventsForCall = this.events.filter(e => e.callId === i);
@@ -75,6 +103,30 @@ export class Flattener {
       return call;
     });
     return flattenedCalls;
+  }
+
+  /**
+   * Finds the index of the event with the specified name.
+   *
+   * @param names - The event name or an array of names.
+   * @param from - (Optional) The starting index for the search.
+   * @returns The index of the found event, or -1 if not found.
+   */
+  findEventIndex(names: string | string[], from?: number) {
+    for (let i = from ?? this.pointer; i < this.events.length; i++) {
+      if (isEventType(names, this.events[i].event)) {
+        return i;
+      }
+    }
+    return -1;
+  }
+
+  getEvent(index: number) {
+    return this.events[index].event;
+  }
+
+  get nextPointer() {
+    return this.pointer + 1;
   }
 
   private correlate(boundary?: Boundary) {
@@ -119,22 +171,5 @@ export class Flattener {
         this.events.map(e => e.callId + '::' + e.event.method)
       );
     }
-  }
-
-  findEventIndex(method: string | string[], from?: number) {
-    for (let i = from ?? this.pointer; i < this.events.length; i++) {
-      if (isEventType(method, this.events[i].event)) {
-        return i;
-      }
-    }
-    return -1;
-  }
-
-  getEvent(index: number) {
-    return this.events[index].event;
-  }
-
-  get nextPointer() {
-    return this.pointer + 1;
   }
 }
