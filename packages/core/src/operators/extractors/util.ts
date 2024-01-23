@@ -7,10 +7,12 @@ import { GenericCall, GenericExtrinsic } from '@polkadot/types';
 
 import { GenericExtrinsicWithId, Origin } from '../../types/extrinsic.js';
 import { ExtrinsicWithId, TxWithIdAndEvent } from '../../types/interfaces.js';
+import { Boundary } from './flattener.js';
 
 type CallContext = {
+  call: CallBase<AnyTuple, FunctionMetadataLatest>,
   tx: TxWithIdAndEvent,
-  events: Event[],
+  boundary?: Boundary,
   callError?: DispatchError,
   origin? : Origin
 }
@@ -23,9 +25,8 @@ type CallContext = {
  * @param context - The call context containing the original transaction, events, callError, and origin.
  * @returns The TxWithIdAndEvent, with updated extrinsic.
  */
-export function callAsTxWithIdAndEvent(
-  call: CallBase<AnyTuple, FunctionMetadataLatest>,
-  { tx, events, callError, origin }: CallContext
+export function callAsTxWithBoundary(
+  { call, tx, boundary, callError, origin }: CallContext
 ) {
   const { extrinsic } = tx;
   const flatCall = new GenericCall(extrinsic.registry, call);
@@ -49,10 +50,12 @@ export function callAsTxWithIdAndEvent(
   }
 
   return {
-    ...tx,
-    events,
-    dispatchError: callError ? callError : tx.dispatchError,
-    extrinsic: txWithId
+    call: {
+      ...tx,
+      dispatchError: callError ? callError : tx.dispatchError,
+      extrinsic: txWithId
+    },
+    boundary
   };
 }
 
@@ -98,4 +101,10 @@ export function getArgValueFromEvent(event: Event, name: string) {
   throw new Error(
     `Event ${event.section}.${event.method} does not contain argument with name ${name}`
   );
+}
+
+export function isEventType(names: string | string[], event: Event) : boolean {
+  return Array.isArray(names)
+    ? names.includes(`${event.section}.${event.method}`)
+    : names === `${event.section}.${event.method}`;
 }

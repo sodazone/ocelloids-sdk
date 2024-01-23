@@ -24,6 +24,7 @@ export interface ExtrinsicWithId extends GenericExtrinsicWithId {
  */
 export interface TxWithIdAndEvent extends TxWithEvent {
   extrinsic: ExtrinsicWithId;
+  levelId?: string;
 }
 
 /**

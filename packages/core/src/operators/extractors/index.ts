@@ -10,8 +10,12 @@ import {
 } from './utility.js';
 import { extractAsMultiCall, extractAsMutiThreshold1Call } from './multisig.js';
 import { extractProxyCalls } from './proxy.js';
+import { Boundary, Flattener } from './flattener.js';
 
-type Extractor = (tx: TxWithIdAndEvent) => TxWithIdAndEvent[]
+type Extractor = (tx: TxWithIdAndEvent, flattener: Flattener) => {
+  call: TxWithIdAndEvent,
+  boundary?: Boundary
+}[]
 
 /**
  * Extractors object which maps method signatures to their corresponding extractor functions.

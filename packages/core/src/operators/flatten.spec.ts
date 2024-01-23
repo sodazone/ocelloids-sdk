@@ -1,5 +1,6 @@
 // Copyright 2023-2024 SO/DA zone
 // SPDX-License-Identifier: Apache-2.0
+
 import { of } from 'rxjs';
 
 import {
@@ -28,30 +29,33 @@ describe('flatten call operator', () => {
   describe('flattenCall', () => {
     const assertResults = (
       result: TxWithIdAndEvent,
-      nestedCalls: NestedCallToMatch[],
-      index: number
+      nestedCalls: NestedCallToMatch[]
     ) => {
       expect(result).toBeDefined();
 
-      const { extrinsic: { method, origins }, events, dispatchError } = result;
+      const { levelId, extrinsic: { method, origins }, events, dispatchError } = result;
+
+      expect(levelId).toBeDefined();
+
+      const call = nestedCalls.find(c => c.levelId === levelId)!;
 
       // Assert that nested calls are extracted correctly
       const name = `${method.section}.${method.method}`;
-      expect(name).toEqual(nestedCalls[index].name);
+      expect(name).toEqual(call.name);
 
       // Assert that nested call dispatch errors are correlated correctly
-      expect(dispatchError?.toHuman()).toEqual(nestedCalls[index].dispatchError);
+      expect(dispatchError?.toHuman()).toEqual(call.dispatchError);
 
       // Assert that nested call origins are extracted correctly
       origins.forEach((o, i) => {
-        expect(o.type).toEqual(nestedCalls[index].origins[i].type);
-        expect(o.address.toString()).toEqual(nestedCalls[index].origins[i].address);
+        expect(o.type).toEqual(call.origins[i].type);
+        expect(o.address.toString()).toEqual(call.origins[i].address);
       });
 
       // Assert that nested call events are correlated correctly
       events.forEach((e, i) => {
-        expect(e.section).toEqual(nestedCalls[index].events[i].section);
-        expect(e.method).toEqual(nestedCalls[index].events[i].method);
+        expect(e.section).toEqual(call.events[i].section);
+        expect(e.method).toEqual(call.events[i].method);
       });
     };
 
@@ -62,15 +66,15 @@ describe('flatten call operator', () => {
         blockHash: hash
       }, testNestedExtrinsic);
       const testPipe = flattenCalls()(of(testNestedTxWithId));
-      let index = 0;
 
+      let c = 0;
       testPipe.subscribe({
         next: (result: TxWithIdAndEvent) => {
-          assertResults(result, testNestedCalls, index);
-          index++;
+          assertResults(result, testNestedCalls);
+          c++;
         },
         complete: () => {
-          expect(index).toBe(testNestedCalls.length);
+          expect(c).toBe(testNestedCalls.length);
           done();
         }
       });
@@ -84,14 +88,14 @@ describe('flatten call operator', () => {
       }, testNestedBatchExtrinsic);
       const testPipe = flattenCalls()(of(testNestedBatchTxWithId));
 
-      let index = 0;
+      let c = 0;
       testPipe.subscribe({
         next: (result: TxWithIdAndEvent) => {
-          assertResults(result, testNestedBatchCalls, index);
-          index++;
+          assertResults(result, testNestedBatchCalls);
+          c++;
         },
         complete: () => {
-          expect(index).toBe(testNestedBatchCalls.length);
+          expect(c).toBe(testNestedBatchCalls.length);
           done();
         }
       });
@@ -105,14 +109,14 @@ describe('flatten call operator', () => {
       }, testForceBatchExtrinsic);
       const testPipe = flattenCalls()(of(testForceBatchTxWithId));
 
-      let index = 0;
+      let c = 0;
       testPipe.subscribe({
         next: (result: TxWithIdAndEvent) => {
-          assertResults(result, testForceBatchCalls, index);
-          index++;
+          assertResults(result, testForceBatchCalls);
+          c++;
         },
         complete: () => {
-          expect(index).toBe(testForceBatchCalls.length);
+          expect(c).toBe(testForceBatchCalls.length);
           done();
         }
       });
@@ -126,15 +130,14 @@ describe('flatten call operator', () => {
       }, testDeepNestedExtrinsic);
       const testPipe = flattenCalls()(of(testDeepNestedTxWithId));
 
-      let index = 0;
-
+      let c = 0;
       testPipe.subscribe({
         next: (result: TxWithIdAndEvent) => {
-          assertResults(result, testDeepNestedCalls, index);
-          index++;
+          assertResults(result, testDeepNestedCalls);
+          c++;
         },
         complete: () => {
-          expect(index).toBe(testDeepNestedCalls.length);
+          expect(c).toBe(testDeepNestedCalls.length);
           done();
         }
       });
@@ -147,15 +150,15 @@ describe('flatten call operator', () => {
         blockHash: hash
       }, testMultisigThreshold1Extrinsic);
       const testPipe = flattenCalls()(of(testMultisigThreshold1TxWithId));
-      let index = 0;
 
+      let c = 0;
       testPipe.subscribe({
         next: (result: TxWithIdAndEvent) => {
-          assertResults(result, testMultisigThreshold1Calls, index);
-          index++;
+          assertResults(result, testMultisigThreshold1Calls);
+          c++;
         },
         complete: () => {
-          expect(index).toBe(testMultisigThreshold1Calls.length);
+          expect(c).toBe(testMultisigThreshold1Calls.length);
           done();
         }
       });
@@ -170,7 +173,6 @@ describe('flatten call operator', () => {
       const testPipe = flattenCalls()(of(testNonBatchTxWithId));
 
       let index = 0;
-
       testPipe.subscribe({
         next: (result: TxWithIdAndEvent) => {
           index++;

@@ -12,6 +12,7 @@ export type NestedCallToMatch = {
     type: string,
     address: string
   }[],
+  levelId?: string,
   dispatchError: Record<string, any> | undefined
 }
 
@@ -21,8 +22,9 @@ const testExtrinsics = testBlocks.reduce((acc: TxWithEvent[], tb) => acc.concat(
 export const testNestedExtrinsic = testExtrinsics[2];
 export const testNestedCalls: NestedCallToMatch[] = [
   {
+    levelId: '0',
     name: 'multisig.asMulti',
-    events: testNestedExtrinsic.events,
+    events: testNestedExtrinsic.events.slice(7),
     origins: [
       {
         type: 'multisig',
@@ -40,8 +42,9 @@ export const testNestedCalls: NestedCallToMatch[] = [
     dispatchError: undefined
   },
   {
+    levelId: '0.0',
     name: 'proxy.proxy',
-    events: testNestedExtrinsic.events.slice(0,7),
+    events: testNestedExtrinsic.events.slice(6,7),
     origins: [
       {
         type: 'multisig',
@@ -59,8 +62,9 @@ export const testNestedCalls: NestedCallToMatch[] = [
     dispatchError: undefined
   },
   {
+    levelId: '0.0.0',
     name: 'proxy.proxy',
-    events: testNestedExtrinsic.events.slice(0,6),
+    events: testNestedExtrinsic.events.slice(5,6),
     origins: [
       {
         type: 'multisig',
@@ -78,6 +82,7 @@ export const testNestedCalls: NestedCallToMatch[] = [
     dispatchError: undefined
   },
   {
+    levelId: '0.0.0.0',
     name: 'convictionVoting.vote',
     events: testNestedExtrinsic.events.slice(0,5),
     origins: [
@@ -104,38 +109,28 @@ const testNestedBatchExtrinsics = testNestedBatchBlocks.reduce((acc: TxWithEvent
 export const testNestedBatchExtrinsic = testNestedBatchExtrinsics[2];
 export const testNestedBatchCalls: NestedCallToMatch[] = [
   {
+    levelId: '0',
     name: 'utility.batch',
-    events: testNestedBatchExtrinsic.events,
+    events: testNestedBatchExtrinsic.events.slice(7),
     origins: [],
     dispatchError: undefined
   },
   {
+    levelId: '0.2',
     name: 'system.remark',
-    events: testNestedBatchExtrinsic.events.slice(0,2),
+    events: testNestedBatchExtrinsic.events.slice(6,7),
     origins: [],
     dispatchError: undefined
   },
   {
+    levelId: '0.1',
     name: 'utility.batch',
-    events: testNestedBatchExtrinsic.events.slice(2,7),
+    events: testNestedBatchExtrinsic.events.slice(4,6),
     origins: [],
     dispatchError: undefined
   },
   {
-    name: 'balances.transferKeepAlive',
-    events: testNestedBatchExtrinsic.events.slice(2,4),
-    origins: [],
-    dispatchError: undefined
-  },
-  {
-    name: 'balances.transferKeepAlive',
-    events: testNestedBatchExtrinsic.events.slice(4,5),
-    origins: [],
-    dispatchError: {
-      'Arithmetic': 'Underflow'
-    }
-  },
-  {
+    levelId: '0.1.2',
     name: 'balances.transferKeepAlive',
     events: [],
     origins: [],
@@ -144,8 +139,25 @@ export const testNestedBatchCalls: NestedCallToMatch[] = [
     }
   },
   {
+    levelId: '0.1.1',
+    name: 'balances.transferKeepAlive',
+    events: [],
+    origins: [],
+    dispatchError: {
+      'Arithmetic': 'Underflow'
+    }
+  },
+  {
+    levelId: '0.1.0',
+    name: 'balances.transferKeepAlive',
+    events: testNestedBatchExtrinsic.events.slice(2,4),
+    origins: [],
+    dispatchError: undefined
+  },
+  {
+    levelId: '0.0',
     name: 'system.remark',
-    events: testNestedBatchExtrinsic.events.slice(6,7),
+    events: testNestedBatchExtrinsic.events.slice(0,2),
     origins: [],
     dispatchError: undefined
   }
@@ -157,30 +169,35 @@ const testForceBatchExtrinsics = testForceBatchBlocks.reduce((acc: TxWithEvent[]
 export const testForceBatchExtrinsic = testForceBatchExtrinsics[2];
 export const testForceBatchCalls: NestedCallToMatch[] = [
   {
+    levelId: '0',
     name: 'utility.forceBatch',
-    events: testForceBatchExtrinsic.events,
+    events: testForceBatchExtrinsic.events.slice(10),
     origins: [],
     dispatchError: undefined
   },
   {
+    levelId: '0.0',
     name: 'system.remark',
     events: testForceBatchExtrinsic.events.slice(0, 2),
     origins: [],
     dispatchError: undefined
   },
   {
+    levelId: '0.1',
     name: 'utility.forceBatch',
-    events: testForceBatchExtrinsic.events.slice(2, 9),
+    events: testForceBatchExtrinsic.events.slice(7, 9),
     origins: [],
     dispatchError: undefined
   },
   {
+    levelId: '0.1.0',
     name: 'balances.transferKeepAlive',
     events: testForceBatchExtrinsic.events.slice(2, 4),
     origins: [],
     dispatchError: undefined
   },
   {
+    levelId: '0.1.1',
     name: 'balances.transferKeepAlive',
     events: testForceBatchExtrinsic.events.slice(4, 5),
     origins: [],
@@ -189,12 +206,14 @@ export const testForceBatchCalls: NestedCallToMatch[] = [
     }
   },
   {
+    levelId: '0.1.2',
     name: 'balances.transferKeepAlive',
     events: testForceBatchExtrinsic.events.slice(5, 7),
     origins: [],
     dispatchError: undefined
   },
   {
+    levelId: '0.2',
     name: 'system.remark',
     events: testForceBatchExtrinsic.events.slice(9, 10),
     origins: [],
@@ -208,30 +227,35 @@ const testDeepNestedExtrinsics = testDeepNestedBlocks.reduce((acc: TxWithEvent[]
 export const testDeepNestedExtrinsic = testDeepNestedExtrinsics[2];
 export const testDeepNestedCalls: NestedCallToMatch[] = [
   {
+    levelId: '0',
     name: 'utility.batch',
-    events: testDeepNestedExtrinsic.events,
+    events: testDeepNestedExtrinsic.events.slice(7),
     origins: [],
     dispatchError: undefined
   },
   {
+    levelId: '0.0',
     name: 'balances.transfer',
     events: testDeepNestedExtrinsic.events.slice(0,2),
     origins: [],
     dispatchError: undefined
   },
   {
+    levelId: '0.1',
     name: 'utility.batchAll',
-    events: testDeepNestedExtrinsic.events.slice(2,6),
+    events: testDeepNestedExtrinsic.events.slice(4,6),
     origins: [],
     dispatchError: undefined
   },
   {
+    levelId: '0.1.0',
     name: 'utility.batch',
     events: testDeepNestedExtrinsic.events.slice(2,4),
     origins: [],
     dispatchError: undefined
   },
   {
+    levelId: '0.1.0.0',
     name: 'utility.batchAll',
     events: [],
     origins: [],
@@ -243,6 +267,7 @@ export const testDeepNestedCalls: NestedCallToMatch[] = [
     }
   },
   {
+    levelId: '0.1.0.0.0',
     name: 'balances.transfer',
     events: [],
     origins: [],
@@ -254,6 +279,7 @@ export const testDeepNestedCalls: NestedCallToMatch[] = [
     }
   },
   {
+    levelId: '0.2',
     name: 'balances.transfer',
     events: testDeepNestedExtrinsic.events.slice(6,7),
     origins: [],
@@ -267,8 +293,9 @@ const testMultisigThreshold1Extrinsics = testMultisigThreshold1Blocks.reduce((ac
 export const testMultisigThreshold1Extrinsic = testMultisigThreshold1Extrinsics[2];
 export const testMultisigThreshold1Calls: NestedCallToMatch[] = [
   {
+    levelId: '0',
     name: 'multisig.asMultiThreshold1',
-    events: testMultisigThreshold1Extrinsic.events,
+    events: [],
     origins: [
       {
         type: 'multisig',
@@ -278,6 +305,7 @@ export const testMultisigThreshold1Calls: NestedCallToMatch[] = [
     dispatchError: undefined
   },
   {
+    levelId: '0.0',
     name: 'nominationPools.join',
     events: testMultisigThreshold1Extrinsic.events,
     origins: [

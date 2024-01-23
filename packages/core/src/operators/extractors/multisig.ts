@@ -9,7 +9,13 @@ import { createKeyMulti } from '@polkadot/util-crypto';
 import { isU8a, u8aToHex } from '@polkadot/util';
 
 import { TxWithIdAndEvent } from '../../types/interfaces.js';
-import { callAsTxWithIdAndEvent, getArgValueFromEvent, getArgValueFromTx } from './util.js';
+import { callAsTxWithBoundary, getArgValueFromEvent, getArgValueFromTx } from './util.js';
+import { Boundaries, Flattener } from './flattener.js';
+
+const MultisigExecuted = 'multisig.MultisigExecuted';
+const MultisigExecutedBoundary = {
+  eventName: MultisigExecuted
+};
 
 /**
  * Extracts executed multisig calls from transactions.
@@ -26,29 +32,27 @@ import { callAsTxWithIdAndEvent, getArgValueFromEvent, getArgValueFromTx } from 
  * @returns The extracted multisig call as TxWithIdAndEvent.
  * Returns undefined if the 'MultisigExecuted' event is not found in the transaction events.
  */
-export function extractAsMultiCall(tx: TxWithIdAndEvent) {
-  const { extrinsic, events } = tx;
+export function extractAsMultiCall(tx: TxWithIdAndEvent, flattener: Flattener) {
+  const { extrinsic } = tx;
 
-  const multisigExecutedIndex = events.findLastIndex(
-    e => e.method.toLowerCase() === 'multisigexecuted'
-  );
+  const multisigExecutedIndex = flattener.findEventIndex(MultisigExecuted);
 
   if (multisigExecutedIndex === -1) {
     return [];
   }
 
-  const executedEvent = events[multisigExecutedIndex];
+  const executedEvent = flattener.getEvent(multisigExecutedIndex);
   const callResult = getArgValueFromEvent(executedEvent, 'result') as Result<Null, DispatchError>;
   const multisig = getArgValueFromEvent(executedEvent, 'multisig') as AccountId32;
   const multisigAddress = extrinsic.registry.createTypeUnsafe('Address', [multisig.toHex()]) as Address;
 
   const call = getArgValueFromTx(tx.extrinsic, 'call') as Call;
 
-  return [callAsTxWithIdAndEvent(
-    call,
+  return [callAsTxWithBoundary(
     {
+      call,
       tx,
-      events: events.slice(0, multisigExecutedIndex),
+      boundary: MultisigExecutedBoundary,
       callError: callResult.isErr ? callResult.asErr : undefined,
       origin: {
         type: 'multisig',
@@ -70,7 +74,7 @@ export function extractAsMultiCall(tx: TxWithIdAndEvent) {
  * @returns The extracted multisig call as TxWithIdAndEvent.
  */
 export function extractAsMutiThreshold1Call(tx: TxWithIdAndEvent) {
-  const { extrinsic, events } = tx;
+  const { extrinsic } = tx;
   const otherSignatories = getArgValueFromTx(tx.extrinsic, 'other_signatories') as Vec<AccountId32>;
   // Signer must be added to the signatories to obtain the multisig address
   const signatories = otherSignatories.map(s => s.toString());
@@ -83,11 +87,11 @@ export function extractAsMutiThreshold1Call(tx: TxWithIdAndEvent) {
 
   const call = getArgValueFromTx(tx.extrinsic, 'call') as Call;
 
-  return [callAsTxWithIdAndEvent(
-    call,
+  return [callAsTxWithBoundary(
     {
+      call,
       tx,
-      events,
+      boundary: Boundaries.ALL,
       origin: {
         type: 'multisig',
         address: multisigAddress

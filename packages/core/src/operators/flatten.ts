@@ -7,28 +7,12 @@ import {
 } from 'rxjs';
 
 import { TxWithIdAndEvent } from '../types/interfaces.js';
-import { extractors } from './extractors/index.js';
+import { Flattener } from './extractors/flattener.js';
 
-/**
- * Recursively flattens a transaction and any of its nested calls using a specified extractor.
- * Extractors are defined and matched by the pallet and method of the input transaction.
- * If no extractor is available, returns the input transaction in an array.
- *
- * @param tx - The input transaction.
- * @returns An array of flattened transactions.
- */
-function flatten(tx: TxWithIdAndEvent): TxWithIdAndEvent[] {
-  const acc = [tx];
-
-  const {extrinsic: { method }} = tx;
-  const methodSignature = `${method.section}.${method.method}`;
-  const extractor = extractors[methodSignature];
-
-  if (extractor) {
-    const nestedCalls = extractor(tx);
-    acc.push(...nestedCalls.flatMap(c => flatten(c)));
-  }
-  return acc;
+function withFlattener(tx: TxWithIdAndEvent) {
+  const flattener = new Flattener(tx);
+  flattener.flatten();
+  return flattener.flattenedCalls;
 }
 
 /**
@@ -48,7 +32,7 @@ export function flattenCalls() {
   return (source: Observable<TxWithIdAndEvent>)
   : Observable<TxWithIdAndEvent> => {
     return (source.pipe(
-      concatMap(flatten)
+      concatMap(withFlattener)
     ));
   };
 }

@@ -6,7 +6,13 @@ import type { Call } from '@polkadot/types/interfaces/runtime';
 import type { Result, Null } from '@polkadot/types-codec';
 
 import { TxWithIdAndEvent } from '../../types/interfaces.js';
-import { callAsTxWithIdAndEvent, getArgValueFromTx } from './util.js';
+import { callAsTxWithBoundary, getArgValueFromTx } from './util.js';
+import { Flattener } from './flattener.js';
+
+const ProxyExecuted = 'proxy.ProxyExecuted';
+const ProxyExecutedBoundary = {
+  eventName: ProxyExecuted
+};
 
 /**
  * Extracts proxy calls from a transaction.
@@ -16,22 +22,20 @@ import { callAsTxWithIdAndEvent, getArgValueFromTx } from './util.js';
  * @param tx - The input transaction to extract proxy calls from .
  * @returns The extracted proxy call as TxWithIdAndEvent.
  */
-export function extractProxyCalls(tx: TxWithIdAndEvent) {
-  const { extrinsic, events } = tx;
+export function extractProxyCalls(tx: TxWithIdAndEvent, flattener: Flattener) {
+  const { extrinsic } = tx;
   const real = getArgValueFromTx(extrinsic, 'real') as MultiAddress;
   const call = getArgValueFromTx(extrinsic, 'call') as Call;
 
-  const proxyExecutedIndex = events.findLastIndex(
-    e => e.method.toLowerCase() === 'proxyexecuted'
-  );
-  const executedEvent = events[proxyExecutedIndex];
+  const proxyExecutedIndex = flattener.findEventIndex(ProxyExecuted);
+  const executedEvent = flattener.getEvent(proxyExecutedIndex);
   const [callResult] = executedEvent.data as unknown as [Result<Null, DispatchError>];
 
-  return [callAsTxWithIdAndEvent(
-    call,
+  return [callAsTxWithBoundary(
     {
+      call,
       tx,
-      events: events.slice(0, proxyExecutedIndex),
+      boundary: ProxyExecutedBoundary,
       callError: callResult.isErr ? callResult.asErr : undefined,
       origin: { type: 'proxy', address: real }
     }
