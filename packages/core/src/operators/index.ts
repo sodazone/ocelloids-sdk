@@ -14,4 +14,4 @@ export * from './convert.js';
 export * from './retry.js';
 export * from './util.js';
 export * from './debug.js';
-export { Flattener } from './extractors/flattener.js';
+export { Flattener } from './flatten/flattener.js';

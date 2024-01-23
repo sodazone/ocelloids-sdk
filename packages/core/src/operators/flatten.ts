@@ -7,7 +7,7 @@ import {
 } from 'rxjs';
 
 import { TxWithIdAndEvent } from '../types/interfaces.js';
-import { Flattener } from './extractors/flattener.js';
+import { Flattener } from './flatten/flattener.js';
 
 function withFlattener(tx: TxWithIdAndEvent, keepOrder: boolean) {
   const flattener = new Flattener(tx);
