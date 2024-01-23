@@ -129,6 +129,18 @@ export class Flattener {
     return this.pointer + 1;
   }
 
+  toString() : string {
+    return JSON.stringify({
+      tx: this.tx.extrinsic.method.toHuman(),
+      pointer: this.pointer,
+      calls: this.calls.map(c => ({
+        levelId: c.levelId,
+        method: c.extrinsic.method.toHuman()
+      })),
+      events: this.events.map(e => e.callId + '::' + e.event.method)
+    }, null, 2);
+  }
+
   private correlate(boundary?: Boundary) {
     l.debug('correlate(boundary)', boundary);
 
