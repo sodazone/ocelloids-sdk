@@ -10,7 +10,7 @@ import { TxWithIdAndEvent } from '../../types/interfaces.js';
 import { extractors } from './index.js';
 import { isEventType } from './util.js';
 
-const l = logger('oc-ops-flattener');
+const l = logger('oc-ops-flatten');
 
 /**
  * Enum representing static, well-known boundaries.
