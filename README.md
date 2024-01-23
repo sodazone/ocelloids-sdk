@@ -45,7 +45,7 @@ It simplifies the implementation of multi-chain monitoring programs and provides
 * **Powerful Query Operators** — Filter data using integrated operators that support complex queries in the Mongo query language. Includes support for big numbers and advanced features such as dynamic queries.
 * **Flexible Type Conversions** — Seamlessly convert data into a terse queryable format.
 * **Extended Context Types** — Extend base generic events and extrinsics with contextual information such as block number, block position, extrinsic position, etc.
-* **Abstraction of Common Patterns** — Simplify development and reduce boilerplate code by abstracting common patterns. Supports recursive flattening with event correlation of nested batch, multisig, proxy and derivative calls within an extrinsic.
+* **Nested Calls Extraction** — Supports recursive flattening with event correlation of nested utility (batch, batchAll, forceBatch, etc.), multisig, and proxy calls within an extrinsic.
 * **Multi-Chain Support** — Interact with multiple networks.
 * **Pallet-Specific Modules** — Modules designed to handle use cases related to a particular pallet, such as tracking calls and events from the contracts pallet.
 
