@@ -9,10 +9,16 @@ import {
 import { TxWithIdAndEvent } from '../types/interfaces.js';
 import { Flattener } from './extractors/flattener.js';
 
-function withFlattener(tx: TxWithIdAndEvent) {
+function withFlattener(tx: TxWithIdAndEvent, keepOrder: boolean) {
   const flattener = new Flattener(tx);
   flattener.flatten();
-  return flattener.flattenedCalls;
+  return keepOrder
+    ? flattener.flattenedCalls.sort(
+      (a: TxWithIdAndEvent, b: TxWithIdAndEvent) => {
+        return (a.levelId ?? '0').localeCompare(b.levelId ?? '0');
+      }
+    )
+    : flattener.flattenedCalls;
 }
 
 /**
@@ -23,16 +29,16 @@ function withFlattener(tx: TxWithIdAndEvent) {
  * Additionally, correlates corresponding events and dispatch result to each extracted call.
  * Emits the input extrinsic plus all nested calls as individual TxWithIdAndEvent for easy filtering.
  *
- * <p>
  * Note: Only flattens executed or skipped calls.
  * Multisig call creation or approval are not flattened to avoid duplication when subscribing to filtered calls.
- * </p>
+ *
+ * @param keepOrder - (Optional) preserve the order of nested calls. Defaults to true.
  */
-export function flattenCalls() {
+export function flattenCalls(keepOrder = true) {
   return (source: Observable<TxWithIdAndEvent>)
   : Observable<TxWithIdAndEvent> => {
     return (source.pipe(
-      concatMap(withFlattener)
+      concatMap(tx => withFlattener(tx, keepOrder))
     ));
   };
 }
