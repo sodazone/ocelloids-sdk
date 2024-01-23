@@ -134,6 +134,9 @@ export class Flattener {
   }
 
   getEvent(index: number) {
+    if (index < 0 || index > this.events.length) {
+      throw new Error(`Index ${index} not found in ${this}`);
+    }
     return this.events[index].event;
   }
 
@@ -143,6 +146,7 @@ export class Flattener {
 
   toString() : string {
     return JSON.stringify({
+      extrinsicId: this.tx.extrinsic.extrinsicId,
       tx: this.tx.extrinsic.method.toHuman(),
       pointer: this.pointer,
       calls: this.calls.map(c => ({

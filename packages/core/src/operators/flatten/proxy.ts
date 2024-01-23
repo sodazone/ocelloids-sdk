@@ -28,6 +28,11 @@ export function extractProxyCalls(tx: TxWithIdAndEvent, flattener: Flattener) {
   const call = getArgValueFromTx(extrinsic, 'call') as Call;
 
   const proxyExecutedIndex = flattener.findEventIndex(ProxyExecuted);
+
+  if (proxyExecutedIndex === -1) {
+    return [];
+  }
+
   const executedEvent = flattener.getEvent(proxyExecutedIndex);
   const [callResult] = executedEvent.data as unknown as [Result<Null, DispatchError>];
 
