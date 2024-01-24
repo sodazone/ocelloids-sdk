@@ -7,7 +7,7 @@ import type { Event, DispatchInfo, DispatchError } from '@polkadot/types/interfa
 
 import { GenericExtrinsicWithId } from '../../types/index.js';
 import { TxWithIdAndEvent } from '../../types/interfaces.js';
-import { extractors } from './index.js';
+import { findParser } from './index.js';
 import { isEventType } from './util.js';
 
 const l = logger('oc-ops-flatten');
@@ -44,7 +44,7 @@ const isAllBoundary = (boundary: Boundary): boundary is Boundaries => {
 
 /**
  * Flattens nested calls in the extrinsic and correlates the events belonging to each call.
- * Supports all the extractors registered in the {@link extractors} map.
+ * Supports all the extractors registered in the {@link parsers} map.
  */
 export class Flattener {
   private events: {
@@ -92,12 +92,10 @@ export class Flattener {
     this.calls.push(this.tx);
     this.correlate(boundary);
 
-    const {extrinsic: { method }} = this.tx;
-    const methodSignature = `${method.section}.${method.method}`;
-    const extractor = extractors[methodSignature];
+    const parser = findParser(this.tx);
 
-    if (extractor) {
-      const nestedCalls = extractor(this.tx, this);
+    if (parser) {
+      const nestedCalls = parser(this.tx, this);
       for (let i = nestedCalls.length - 1; i >= 0; i--) {
         this.tx = nestedCalls[i].call;
         this.flatten(nestedCalls[i].boundary, `${id}.${i}`);
@@ -153,7 +151,9 @@ export class Flattener {
         levelId: c.levelId,
         method: c.extrinsic.method.toHuman()
       })),
-      events: this.events.map(e => e.callId + '::' + e.event.method)
+      events: this.events.map(e => (
+        e.callId + '::' + e.event.method
+      ))
     }, null, 2);
   }
 

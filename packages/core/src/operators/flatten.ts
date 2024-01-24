@@ -3,16 +3,19 @@
 
 import {
   Observable,
-  concatMap
+  concatMap,
+  iif,
+  of
 } from 'rxjs';
 
 import { TxWithIdAndEvent } from '../types/interfaces.js';
 import { Flattener } from './flatten/flattener.js';
+import { hasParser } from './flatten/index.js';
 
-function withFlattener(tx: TxWithIdAndEvent, keepOrder: boolean) {
+function withFlattener(tx: TxWithIdAndEvent, sorted: boolean) {
   const flattener = new Flattener(tx);
   flattener.flatten();
-  return keepOrder
+  return sorted
     ? flattener.flattenedCalls.sort(
       (a: TxWithIdAndEvent, b: TxWithIdAndEvent) => {
         return (a.levelId ?? '0').localeCompare(b.levelId ?? '0');
@@ -32,13 +35,17 @@ function withFlattener(tx: TxWithIdAndEvent, keepOrder: boolean) {
  * Note: Only flattens executed or skipped calls.
  * Multisig call creation or approval are not flattened to avoid duplication when subscribing to filtered calls.
  *
- * @param keepOrder - (Optional) preserve the order of nested calls. Defaults to true.
+ * @param sorted - (Optional) preserve the order of nested calls. Defaults to true.
  */
-export function flattenCalls(keepOrder = true) {
+export function flattenCalls(sorted = true) {
   return (source: Observable<TxWithIdAndEvent>)
   : Observable<TxWithIdAndEvent> => {
     return (source.pipe(
-      concatMap(tx => withFlattener(tx, keepOrder))
+      concatMap(tx => iif(
+        () : boolean => hasParser(tx),
+        withFlattener(tx, sorted),
+        of(tx)
+      ))
     ));
   };
 }
