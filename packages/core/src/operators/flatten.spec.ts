@@ -164,6 +164,32 @@ describe('flatten call operator', () => {
       });
     });
 
+    it('should work with batched and non-batched extrinsics', done => {
+      const testDeepNestedTxWithId = types.enhanceTxWithId({
+        blockNumber: number,
+        blockPosition: 0,
+        blockHash: hash
+      }, testDeepNestedExtrinsic);
+      const testNonBatchTxWithId = types.enhanceTxWithId({
+        blockNumber: number,
+        blockPosition: 0,
+        blockHash: hash
+      }, testExtrinsics[2]);
+      const testPipe = flattenCalls()(of(testNonBatchTxWithId, testDeepNestedTxWithId));
+
+      let c = 0;
+      testPipe.subscribe({
+        next: (result: TxWithIdAndEvent) => {
+          c++;
+          expect(result).toBeDefined();
+        },
+        complete: () => {
+          expect(c).toBe(testDeepNestedCalls.length + 1);
+          done();
+        }
+      });
+    });
+
     it('should work with non-batched extrinsics', done => {
       const testNonBatchTxWithId = types.enhanceTxWithId({
         blockNumber: number,
@@ -172,10 +198,10 @@ describe('flatten call operator', () => {
       }, testExtrinsics[2]);
       const testPipe = flattenCalls()(of(testNonBatchTxWithId));
 
-      let index = 0;
+      let c = 0;
       testPipe.subscribe({
         next: (result: TxWithIdAndEvent) => {
-          index++;
+          c++;
           expect(result).toBeDefined();
           expect(result.extrinsic.signer.toHuman()).toEqual({ Id: '1sa85enM8EQ56Tzfyg97kvQf1CYfPoTczin4ASYTwUdH9iK' });
           expect(result.extrinsic.method.toHuman()).toEqual({
@@ -188,7 +214,7 @@ describe('flatten call operator', () => {
           });
         },
         complete: () => {
-          expect(index).toBe(1);
+          expect(c).toBe(1);
           done();
         }
       });
