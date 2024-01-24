@@ -3,9 +3,7 @@
 
 import {
   Observable,
-  concatMap,
-  iif,
-  of
+  concatMap
 } from 'rxjs';
 
 import { TxWithIdAndEvent } from '../types/interfaces.js';
@@ -41,10 +39,8 @@ export function flattenCalls(sorted = true) {
   return (source: Observable<TxWithIdAndEvent>)
   : Observable<TxWithIdAndEvent> => {
     return (source.pipe(
-      concatMap(tx => iif(
-        () : boolean => hasParser(tx),
-        withFlattener(tx, sorted),
-        of(tx)
+      concatMap(tx => (
+        hasParser(tx) ? withFlattener(tx, sorted) : [tx]
       ))
     ));
   };
