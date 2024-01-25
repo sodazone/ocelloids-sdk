@@ -9,7 +9,7 @@ import { extractEventsWithTx, extractTxWithEvents } from './extract.js';
 import { flattenCalls } from './flatten.js';
 import { mongoFilter } from './mongo-filter.js';
 import { ControlQuery, Criteria } from '../index.js';
-import { EventWithId, TxWithIdAndEvent } from '../types/interfaces.js';
+import { EventWithIdAndTx, TxWithIdAndEvent } from '../types/interfaces.js';
 
 /**
  * Filters extrinsics based on the provided criteria.
@@ -67,7 +67,7 @@ export function filterEvents(
   const eventsQuery = ControlQuery.from(eventsCriteria);
 
   return (source: Observable<SignedBlockExtended>)
-    : Observable<EventWithId> => {
+    : Observable<EventWithIdAndTx> => {
     return source.pipe(
       filterExtrinsics(extrinsicsCriteria, flatten),
       // Maps the events with
