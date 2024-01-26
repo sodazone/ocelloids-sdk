@@ -42,9 +42,8 @@ const l = logger('oc-substrate-apis');
  *
  * ```typescript
  * import { ScProvider } from '@polkadot/rpc-provider/substrate-connect';
- * import { SubstrateApis, client } from '@sodazone/ocelloids';
+ * import { SubstrateApis, Smoldot } from '@sodazone/ocelloids';
  *
- * const { Smoldot } = client;
  * const provider = new ScProvider(Smoldot, Smoldot.WellKnownChain.polkadot);
  *
  * const apis = new SubstrateApis({
