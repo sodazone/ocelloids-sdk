@@ -4,16 +4,15 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { ScProvider } from '@polkadot/rpc-provider/substrate-connect';
-import * as Sc from '@substrate/connect';
 
+import { client } from '@sodazone/ocelloids';
 import { SubstrateApis, blocks } from '@sodazone/ocelloids';
 
 function watcher() {
-  const provider = new ScProvider(Sc, Sc.WellKnownChain.polkadot);
-
-  // Smoldot requires to manually connect,
-  // the promise is implicitly awaited by the rx pipe
-  provider.connect().catch(console.error);
+  const { Smoldot } = client;
+  const provider = new ScProvider(
+    Smoldot, Smoldot.WellKnownChain.polkadot
+  );
 
   const apis = new SubstrateApis({
     polkadot: {

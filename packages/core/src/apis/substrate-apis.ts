@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import type { ApiOptions, DecoratedEvents, QueryableStorage, QueryableStorageMulti, SubmittableExtrinsics } from '@polkadot/api/types';
-import { ApiPromise, ApiRx } from '@polkadot/api';
+import { ApiPromise, ApiRx, ScProvider } from '@polkadot/api';
 import { logger } from '@polkadot/util';
 
 import { Observable, map, shareReplay } from 'rxjs';
@@ -33,10 +33,6 @@ const l = logger('oc-substrate-apis');
  * import * as Sc from '@substrate/connect';
  *
  * const provider = new ScProvider(Sc, Sc.WellKnownChain.polkadot);
- *
- * // Smoldot requires to manually connect,
- * // the promise is implicitly awaited by the rx pipe
- * provider.connect().catch(console.error);
  *
  * const apis = new SubstrateApis({
  *  polkadot: { provider }
@@ -70,6 +66,15 @@ N extends ApiNames<C> = ApiNames<Configuration>
       }
 
       l.debug('-', name);
+
+      if (provider instanceof ScProvider
+        && !provider.isConnected) {
+        // Smoldot requires to manually connect,
+        // the promise is implicitly awaited by the rx pipe
+        provider.connect().catch(error => {
+          l.error(error);
+        });
+      }
 
       this.options[name] = options;
 
