@@ -22,9 +22,11 @@ import { EventWithIdAndTx, TxWithIdAndEvent } from '../types/interfaces.js';
  * @returns An observable that emits filtered extrinsics with identifier and event information.
  */
 export function filterExtrinsics(
-  extrinsicsCriteria: Criteria,
+  extrinsicsCriteria: ControlQuery | Criteria,
   flatten: boolean = true
 ) {
+  const xtQuery = ControlQuery.from(extrinsicsCriteria);
+
   return (source: Observable<SignedBlockExtended>)
     : Observable<TxWithIdAndEvent> => {
     return source.pipe(
@@ -39,7 +41,7 @@ export function filterExtrinsics(
         x => x,
       // Filters at the extrinsic level
       // mainly for success or failure
-      mongoFilter(extrinsicsCriteria)
+      mongoFilter(xtQuery)
     );
   };
 }
