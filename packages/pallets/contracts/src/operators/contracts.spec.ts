@@ -22,10 +22,12 @@ import { ContractMessageWithTx } from '../types/interfaces.js';
 import { contracts } from '../converters/contracts.js';
 
 const blockNumber = testContractBlocks[0].block.header.number;
+const blockHash = testContractBlocks[0].block.header.hash;
 const extrinsics = testContractExtrinsics.map(
   (xt, blockPosition) => types.enhanceTxWithId(
     {
       blockNumber,
+      blockHash,
       blockPosition
     },
     xt
@@ -35,6 +37,7 @@ const extrinsics = testContractExtrinsics.map(
 const extrinsicId = `${blockNumber.toString()}-0`;
 const events = testContractEvents.map((ev, blockPosition) => new types.GenericEventWithId(ev, {
   blockNumber,
+  blockHash,
   extrinsicPosition: blockPosition,
   extrinsicId
 }));
