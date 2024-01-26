@@ -2742,6 +2742,7 @@ __metadata:
   dependencies:
     "@polkadot/api": ^10.11.2
     "@sodazone/ocelloids-test": 1.1.15-0
+    "@substrate/connect-known-chains": ^1.0.6
     mingo: ^6.4.10
     rxjs: ^7.8.1
   languageName: unknown
@@ -2765,6 +2766,13 @@ __metadata:
   version: 1.0.5
   resolution: "@substrate/connect-known-chains@npm:1.0.5"
   checksum: 5d829a48f15098ce56392ad2613872f68c7eb44db9cfcc95b0ab6ebe24c853a4d366a557a82d09239f7df53bfbf8db41510a46783851904c6242767988a9a6bd
+  languageName: node
+  linkType: hard
+
+"@substrate/connect-known-chains@npm:^1.0.6":
+  version: 1.0.6
+  resolution: "@substrate/connect-known-chains@npm:1.0.6"
+  checksum: 4d9a9afc28b2900392d6ece1c1a02375c89a5b9a01b34a4ea43cf8e54da946ce88286fee8c3fa227dcb60b4f683f5e0e7f139e33ad7ba4ba84e338bd43bb0e76
   languageName: node
   linkType: hard
 

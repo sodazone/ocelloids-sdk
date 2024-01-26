@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "@polkadot/api": "^10.11.2",
+    "@substrate/connect-known-chains": "^1.0.6",
     "mingo": "^6.4.10",
     "rxjs": "^7.8.1"
   },
