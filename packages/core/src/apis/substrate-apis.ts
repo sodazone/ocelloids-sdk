@@ -43,9 +43,9 @@ export class SubstrateApis<
 C extends Configuration = Configuration,
 N extends ApiNames<C> = ApiNames<Configuration>
 > {
-  private readonly options: Record<string, ApiOptions> = {};
-  private readonly apiRx: Record<string, ApiRx> = {};
-  private readonly promises: Record<string, ApiPromise> = {};
+  protected readonly options: Record<string, ApiOptions> = {};
+  protected readonly apiRx: Record<string, ApiRx> = {};
+  protected readonly promises: Record<string, ApiPromise> = {};
 
   readonly chains: string[] = [];
 
