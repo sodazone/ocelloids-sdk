@@ -5,6 +5,7 @@ import { EventRecord, Event, Extrinsic, SignedBlock, Block, FunctionMetadataLate
 import type { Codec } from '@polkadot/types/types';
 import type { AnyJson, CallBase, AnyTuple } from '@polkadot/types-codec/types';
 import type { TxWithEvent, SignedBlockExtended } from '@polkadot/api-derive/types';
+import { EventWithId, EventWithIdAndTx } from '../types/interfaces.js';
 
 /* ================================================================
    Type guards for identifying specific objects.
@@ -28,6 +29,14 @@ function isEventRecord(object: any): object is EventRecord {
 
 function isEvent(object: any): object is Event {
   return object.data !== undefined && object.index !== undefined && object.meta !== undefined;
+}
+
+function isEventWithId(object: any): object is EventWithId {
+  return object.eventId !== undefined && isEvent(object);
+}
+
+function isEventWithIdAndTx(object: any): object is EventWithIdAndTx {
+  return object.extrinsic !== undefined && isEventWithId(object);
 }
 
 function isSignedBlockExtended(object: any): object is SignedBlockExtended {
@@ -157,6 +166,31 @@ function extrinsicToNamedPrimitive(
 }
 
 /**
+ * Converts an `EventWithId` object to a primitive representation with named fields.
+ */
+export function eventWithIdToNamedPrimitive(event: EventWithId) {
+  const { blockNumber, blockHash, extrinsicPosition, extrinsicId, eventId } = event;
+  return {
+    ...eventToNamedPrimitive(event),
+    blockNumber: blockNumber.toPrimitive(),
+    blockHash: blockHash.toPrimitive(),
+    extrinsicPosition,
+    extrinsicId,
+    eventId
+  };
+}
+
+/**
+ * Converts an `EventWithIdAndTx` object to a primitive representation with named fields.
+ */
+export function eventWithIdAndTxToNamedPrimitive(event: EventWithIdAndTx) {
+  return {
+    ...eventWithIdToNamedPrimitive(event),
+    extrinsic: extrinsicToNamedPrimitive(event.extrinsic)
+  };
+}
+
+/**
  * Converts a `TxWithEvent` object to a primitive representation with named fields.
  */
 export function txWithEventToNamedPrimitive(data: TxWithEvent) {
@@ -218,6 +252,10 @@ function codecToNamedPrimitive(data: Codec)
 // eslint-disable-next-line complexity
 function toNamedPrimitive<T>(data: T): Record<string, AnyJson> {
   switch (true) {
+  case isEventWithIdAndTx(data):
+    return eventWithIdAndTxToNamedPrimitive(data as EventWithIdAndTx);
+  case isEventWithId(data):
+    return eventWithIdToNamedPrimitive(data as EventWithId);
   case isEventRecord(data):
     return eventRecordToNamedPrimitive(data as EventRecord);
   case isEvent(data):
