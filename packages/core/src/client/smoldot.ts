@@ -15,6 +15,7 @@ import {
 
 import type {
   ScClient,
+  AddChain,
   Chain as ScChain,
   WellKnownChain
 } from '@substrate/connect';
@@ -132,7 +133,7 @@ export const createScClient = (): ScClient => {
   const chains = new Map<string, Chain>();
 
   // Add a chain to Smoldot
-  const addChain = async (
+  const addChain : AddChain = async (
     chainSpec: string,
     jsonRpcCallback?: JsonRpcCallback,
     databaseContent?: string

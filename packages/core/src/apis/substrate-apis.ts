@@ -37,6 +37,19 @@ const l = logger('oc-substrate-apis');
  * const apis = new SubstrateApis({
  *  polkadot: { provider }
  * });
+ *
+ * ## Example: Substrate Connect Provider w/ an alternative Smoldot connector
+ *
+ * ```typescript
+ * import { ScProvider } from '@polkadot/rpc-provider/substrate-connect';
+ * import { SubstrateApis, client } from '@sodazone/ocelloids';
+ *
+ * const { Smoldot } = client;
+ * const provider = new ScProvider(Smoldot, Smoldot.WellKnownChain.polkadot);
+ *
+ * const apis = new SubstrateApis({
+ *  polkadot: { provider }
+ * });
  * ```
  */
 export class SubstrateApis<

@@ -5,8 +5,7 @@
 
 import { ScProvider } from '@polkadot/rpc-provider/substrate-connect';
 
-import { client } from '@sodazone/ocelloids';
-import { SubstrateApis, blocks } from '@sodazone/ocelloids';
+import { SubstrateApis, client, blocks } from '@sodazone/ocelloids';
 
 function watcher() {
   const { Smoldot } = client;
