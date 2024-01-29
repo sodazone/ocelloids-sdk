@@ -1,7 +1,7 @@
 {
   "sideEffects": false,
   "type": "module",
-  "version": "1.1.15-0",
+  "version": "1.1.15",
   "author": "soda <projects@soda.zone>",
   "contributors": [
     "Marc Fornós <marc@soda.zone>",
@@ -65,6 +65,5 @@
     "@polkadot/util-crypto": "12.6.2",
     "@polkadot/keyring": "12.6.2"
   },
-  "packageManager": "yarn@3.6.0",
-  "stableVersion": "1.1.14"
+  "packageManager": "yarn@3.6.0"
 }
