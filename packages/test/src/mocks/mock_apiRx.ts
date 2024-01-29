@@ -30,6 +30,7 @@ const apiMock = {
       ),
       subscribeNewBlocks: () => from(testBlocks),
       subscribeFinalizedHeads: () => from(testHeaders),
+      subscribeFinalizedBlocks: () => from(testBlocks),
       getBlock: (hash: Uint8Array | string) => of(
         testBlocks.find(
           b => b.block.hash.eq(hash)
