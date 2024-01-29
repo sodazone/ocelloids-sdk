@@ -1,5 +1,6 @@
 // Copyright 2023-2024 SO/DA zone
 // SPDX-License-Identifier: Apache-2.0
+
 import { ApiPromise, ApiRx } from '@polkadot/api';
 import { logger } from '@polkadot/util';
 
@@ -12,6 +13,15 @@ import { AnyBN, bnRange } from '../observables/bn.js';
 import { debug } from '../operators/debug.js';
 
 const l = logger('oc-blocks');
+
+// see https://github.com/polkadot-js/api/pull/5787
+function subscribeFinalizedBlocks(api: ApiRx) {
+  return api.derive.chain.subscribeFinalizedHeads().pipe(
+    concatMap(header =>
+      api.derive.chain.getBlock(header.createdAtHash || header.hash)
+    )
+  );
+}
 
 /**
  * Returns an Observable that emits the latest new block headers or finalized block headers.
@@ -75,7 +85,7 @@ export function blocks(finalized = false) {
     return (source.pipe(
       switchMap(api => {
         return finalized ?
-          api.derive.chain.subscribeFinalizedBlocks() :
+          subscribeFinalizedBlocks(api) :
           api.derive.chain.subscribeNewBlocks();
       }),
       debug(l, b => b.block.header.number.toHuman()),
