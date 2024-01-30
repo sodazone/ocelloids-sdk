@@ -5,11 +5,11 @@ import type { SignedBlockExtended } from '@polkadot/api-derive/types';
 
 import { Observable, share } from 'rxjs';
 
-import { extractEventsWithTx, extractTxWithEvents } from './extract.js';
+import { extractEvents, extractEventsWithTx, extractTxWithEvents } from './extract.js';
 import { flattenCalls } from './flatten.js';
 import { mongoFilter } from './mongo-filter.js';
 import { ControlQuery, Criteria } from '../index.js';
-import { EventWithIdAndTx, TxWithIdAndEvent } from '../types/interfaces.js';
+import type { BlockEvent, EventWithIdAndTx, TxWithIdAndEvent } from '../types/interfaces.js';
 
 /**
  * Filters extrinsics based on the provided criteria.
@@ -19,7 +19,9 @@ import { EventWithIdAndTx, TxWithIdAndEvent } from '../types/interfaces.js';
  *
  * @param extrinsicsCriteria - The criteria to filter extrinsics.
  * @param flatten - (Optional) A flag indicating whether to flatten nested calls. Defaults to true.
- * @returns An observable that emits filtered extrinsics with identifier and event information.
+ * @returns An observable that emits filtered `TxWithIdAndEvent` objects with identifier and event information.
+ *
+ * @see {@link TxWithIdAndEvent}
  */
 export function filterExtrinsics(
   extrinsicsCriteria: ControlQuery | Criteria,
@@ -59,9 +61,14 @@ export function filterExtrinsics(
  * Defaults to false to avoid duplication of filtered events.
  * When extrinsicCriteria is set for filtering of calls by method and section,
  * it is advisable to set the flatten flag to true to not miss nested calls.
- * @returns An Observable that emits `EventWithId` objects that meet the specified filtering criteria.
+ * @returns An Observable that emits `EventWithIdAndTx` objects that meet the specified filtering criteria.
+ *
+ * Note: Only use this operator if the event being filtered is emitted from a submitted extrinsic.
+ * For events emitted from internally executed calls, e.g. with the scheduler pallet, use `filterEvents` instead.
+ *
+ * @see {@link EventWithIdAndTx}
  */
-export function filterEvents(
+export function filterEventsWithTx(
   eventsCriteria: ControlQuery | Criteria,
   extrinsicsCriteria : Criteria = {},
   flatten: boolean = false
@@ -75,6 +82,34 @@ export function filterEvents(
       // Maps the events with
       // block and extrinsic context
       extractEventsWithTx(),
+      // Filters over the events
+      mongoFilter(eventsQuery),
+      // Share multicast
+      share()
+    );
+  };
+}
+
+/**
+ * Returns an Observable that emits events filtered based on the provided criteria.
+ *
+ * This method allows for filtering over events emitted from either submitted extrinsics
+ * or from internally executed calls, e.g. with the scheduler pallet
+ *
+ * @param eventsCriteria - Criteria for filtering events.
+ * @returns An Observable that emits `BlockEvent` objects that meet the specified filtering criteria.
+ *
+ * @see {@link BlockEvent}
+ */
+export function filterEvents(
+  eventsCriteria: ControlQuery | Criteria
+) {
+  const eventsQuery = ControlQuery.from(eventsCriteria);
+
+  return (source: Observable<SignedBlockExtended>)
+    : Observable<BlockEvent> => {
+    return source.pipe(
+      extractEvents(),
       // Filters over the events
       mongoFilter(eventsQuery),
       // Share multicast
