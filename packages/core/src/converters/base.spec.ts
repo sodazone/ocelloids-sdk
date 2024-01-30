@@ -5,9 +5,9 @@ import type { AnyJson } from '@polkadot/types-codec/types';
 import { testBlocks, testBlocksFrom } from '@sodazone/ocelloids-test';
 
 import { base } from './base.js';
-import { GenericEventWithId } from '../types/event.js';
+import { GenericEventWithId, GenericEventWithIdAndTx } from '../types/event.js';
 import { EventWithIdAndTx } from '../types/interfaces.js';
-import { enhanceTxWithId } from '../types/extrinsic.js';
+import { enhanceTxWithIdAndEvents } from '../types/extrinsic.js';
 
 describe('substrate converters', () => {
   it('should convert an extended signed block', () => {
@@ -84,8 +84,7 @@ describe('substrate converters', () => {
     const eventWithId = new GenericEventWithId(e.event, {
       blockNumber: number,
       blockHash: hash,
-      extrinsicPosition: 0,
-      extrinsicId: `${number.toNumber()}-0`
+      blockPosition: 0
     });
 
     const c = base.toNamedPrimitives(eventWithId)[0];
@@ -93,26 +92,29 @@ describe('substrate converters', () => {
     expect(c.method).toBeDefined();
     expect(c.data).toBeDefined();
     expect(c.eventId).toBeDefined();
-    expect(c.eventId).toBe(`${number.toNumber()}-0-0`);
+    expect(c.eventId).toBe(`${number.toNumber()}-0`);
   });
 
   it('should convert events with ID and Tx', () => {
     const b = testBlocks[0];
     const e = b.events[0];
     const { number, hash } = b.block.header;
-    const txWithId = enhanceTxWithId(
+    const txWithId = enhanceTxWithIdAndEvents(
       {
         blockNumber: number,
         blockHash: hash,
         blockPosition: 0
       },
-      b.extrinsics[0]
+      b.extrinsics[0],
+      b.events
     );
-    const eventWithIdAndTx = new GenericEventWithId(e.event, {
+    const eventWithIdAndTx = new GenericEventWithIdAndTx(e.event, {
       blockNumber: number,
       blockHash: hash,
+      blockPosition: 0,
       extrinsicPosition: 0,
-      extrinsicId: txWithId.extrinsic.extrinsicId
+      extrinsicId: txWithId.extrinsic.extrinsicId,
+      extrinsic: txWithId.extrinsic
     }) as EventWithIdAndTx;
     eventWithIdAndTx.extrinsic = txWithId.extrinsic;
 
@@ -121,8 +123,9 @@ describe('substrate converters', () => {
     expect(c.method).toBeDefined();
     expect(c.data).toBeDefined();
     expect(c.eventId).toBeDefined();
-    expect(c.eventId).toBe(`${number.toNumber()}-0-0`);
+    expect(c.eventId).toBe(`${number.toNumber()}-0`);
     expect(c.extrinsic).toBeDefined();
+    expect(c.extrinsicId).toBeDefined();
   });
 
   it('should convert batch calls', () => {

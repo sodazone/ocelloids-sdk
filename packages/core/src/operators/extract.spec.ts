@@ -5,7 +5,7 @@ import type { TxWithEvent } from '@polkadot/api-derive/types';
 
 import { from, of } from 'rxjs';
 
-import { testBlocks, testExtrinsics, testEvents } from '@sodazone/ocelloids-test';
+import { testBlocks, testExtrinsics, testEventRecords } from '@sodazone/ocelloids-test';
 
 import { extractEventsWithTx, extractEvents, extractExtrinsics, extractTxWithEvents } from './extract.js';
 import { EventWithId, EventWithIdAndTx, ExtrinsicWithId, TxWithIdAndEvent } from '../types/interfaces.js';
@@ -70,8 +70,8 @@ describe('extractors over extended signed blocks', () => {
       testPipe.subscribe({
         next: (event: EventWithId) => {
           expect(event).toBeDefined();
-          expect(event.method).toEqual(testEvents[index].method);
-          expect(event.data.toString()).toEqual(testEvents[index].data.toString());
+          expect(event.method).toEqual(testEventRecords[index].event.method);
+          expect(event.data.toString()).toEqual(testEventRecords[index].event.data.toString());
           expect(event.blockHash).toBeDefined();
           expect(event.eventId).toBeDefined();
           index++;

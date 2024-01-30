@@ -1,11 +1,11 @@
 import type { TxWithEvent } from '@polkadot/api-derive/types';
-import type { Event } from '@polkadot/types/interfaces';
+import type { Event, EventRecord } from '@polkadot/types/interfaces';
 
 import { testBlocksFrom } from './_blocks.js';
 import rococoMetadata from './__data__/metadata/rococo-hex.js';
 import westendMetadata from './__data__/metadata/westend-hex.js';
 
-export type NestedCallToMatch = {
+export type DataToMatch = {
   name: string;
   events: Event[];
   origins: {
@@ -16,15 +16,22 @@ export type NestedCallToMatch = {
   dispatchError: Record<string, any> | undefined
 }
 
+export type TestItem = {
+  extrinsic: TxWithEvent,
+  events: EventRecord[],
+  data: DataToMatch[]
+}
+
 // Polkadot 16037760-2 multisig-proxy-proxy extrinsic
-const testBlocks = testBlocksFrom('polkadot16037760.cbor.bin');
-const testExtrinsics = testBlocks.reduce((acc: TxWithEvent[], tb) => acc.concat(tb.extrinsics), []);
-export const testNestedExtrinsic = testExtrinsics[2];
-export const testNestedCalls: NestedCallToMatch[] = [
+const testMultisigProxyBlocks = testBlocksFrom('polkadot16037760.cbor.bin');
+const testMultisigProxyExtrinsics = testMultisigProxyBlocks.reduce((acc: TxWithEvent[], tb) => acc.concat(tb.extrinsics), []);
+const testMultisigProxyExtrinsic = testMultisigProxyExtrinsics[2];
+const testMultisigProxyEvents = testMultisigProxyBlocks[0].events;
+const testMultisigProxyData: DataToMatch[] = [
   {
     levelId: '0',
     name: 'multisig.asMulti',
-    events: testNestedExtrinsic.events.slice(7),
+    events: testMultisigProxyExtrinsic.events.slice(7),
     origins: [
       {
         type: 'multisig',
@@ -44,7 +51,7 @@ export const testNestedCalls: NestedCallToMatch[] = [
   {
     levelId: '0.0',
     name: 'proxy.proxy',
-    events: testNestedExtrinsic.events.slice(6,7),
+    events: testMultisigProxyExtrinsic.events.slice(6,7),
     origins: [
       {
         type: 'multisig',
@@ -64,7 +71,7 @@ export const testNestedCalls: NestedCallToMatch[] = [
   {
     levelId: '0.0.0',
     name: 'proxy.proxy',
-    events: testNestedExtrinsic.events.slice(5,6),
+    events: testMultisigProxyExtrinsic.events.slice(5,6),
     origins: [
       {
         type: 'multisig',
@@ -84,7 +91,7 @@ export const testNestedCalls: NestedCallToMatch[] = [
   {
     levelId: '0.0.0.0',
     name: 'convictionVoting.vote',
-    events: testNestedExtrinsic.events.slice(0,5),
+    events: testMultisigProxyExtrinsic.events.slice(0,5),
     origins: [
       {
         type: 'multisig',
@@ -104,28 +111,29 @@ export const testNestedCalls: NestedCallToMatch[] = [
 ];
 
 // Rococo 8695659-2 batch-batch extrinsic
-const testNestedBatchBlocks = testBlocksFrom('rococo8695659.cbor.bin', rococoMetadata);
-const testNestedBatchExtrinsics = testNestedBatchBlocks.reduce((acc: TxWithEvent[], tb) => acc.concat(tb.extrinsics), []);
-export const testNestedBatchExtrinsic = testNestedBatchExtrinsics[2];
-export const testNestedBatchCalls: NestedCallToMatch[] = [
+const testBatchBlocks = testBlocksFrom('rococo8695659.cbor.bin', rococoMetadata);
+const testBatchExtrinsics = testBatchBlocks.reduce((acc: TxWithEvent[], tb) => acc.concat(tb.extrinsics), []);
+const testBatchExtrinsic = testBatchExtrinsics[2];
+const testBatchEvents = testBatchBlocks[0].events;
+const testBatchData: DataToMatch[] = [
   {
     levelId: '0',
     name: 'utility.batch',
-    events: testNestedBatchExtrinsic.events.slice(7),
+    events: testBatchExtrinsic.events.slice(7),
     origins: [],
     dispatchError: undefined
   },
   {
     levelId: '0.2',
     name: 'system.remark',
-    events: testNestedBatchExtrinsic.events.slice(6,7),
+    events: testBatchExtrinsic.events.slice(6,7),
     origins: [],
     dispatchError: undefined
   },
   {
     levelId: '0.1',
     name: 'utility.batch',
-    events: testNestedBatchExtrinsic.events.slice(4,6),
+    events: testBatchExtrinsic.events.slice(4,6),
     origins: [],
     dispatchError: undefined
   },
@@ -150,14 +158,14 @@ export const testNestedBatchCalls: NestedCallToMatch[] = [
   {
     levelId: '0.1.0',
     name: 'balances.transferKeepAlive',
-    events: testNestedBatchExtrinsic.events.slice(2,4),
+    events: testBatchExtrinsic.events.slice(2,4),
     origins: [],
     dispatchError: undefined
   },
   {
     levelId: '0.0',
     name: 'system.remark',
-    events: testNestedBatchExtrinsic.events.slice(0,2),
+    events: testBatchExtrinsic.events.slice(0,2),
     origins: [],
     dispatchError: undefined
   }
@@ -166,8 +174,9 @@ export const testNestedBatchCalls: NestedCallToMatch[] = [
 // Rococo 8695536-2 forceBatch-forceBatch extrinsic
 const testForceBatchBlocks = testBlocksFrom('rococo8695536.cbor.bin', rococoMetadata);
 const testForceBatchExtrinsics = testForceBatchBlocks.reduce((acc: TxWithEvent[], tb) => acc.concat(tb.extrinsics), []);
-export const testForceBatchExtrinsic = testForceBatchExtrinsics[2];
-export const testForceBatchCalls: NestedCallToMatch[] = [
+const testForceBatchExtrinsic = testForceBatchExtrinsics[2];
+const testForceBatchEvents = testForceBatchBlocks[0].events;
+const testForceBatchData: DataToMatch[] = [
   {
     levelId: '0',
     name: 'utility.forceBatch',
@@ -224,8 +233,9 @@ export const testForceBatchCalls: NestedCallToMatch[] = [
 // Westend 10091936-2 batch-batchAll-batch-batchAll extrinsic
 const testDeepNestedBlocks = testBlocksFrom('westend10091936.cbor.bin', westendMetadata);
 const testDeepNestedExtrinsics = testDeepNestedBlocks.reduce((acc: TxWithEvent[], tb) => acc.concat(tb.extrinsics), []);
-export const testDeepNestedExtrinsic = testDeepNestedExtrinsics[2];
-export const testDeepNestedCalls: NestedCallToMatch[] = [
+const testDeepNestedExtrinsic = testDeepNestedExtrinsics[2];
+const testDeepNestedEvents = testDeepNestedBlocks[0].events;
+const testDeepNestedData: DataToMatch[] = [
   {
     levelId: '0',
     name: 'utility.batch',
@@ -290,8 +300,9 @@ export const testDeepNestedCalls: NestedCallToMatch[] = [
 // Polkadot 18977445-2 multisig-proxy-proxy extrinsic
 const testMultisigThreshold1Blocks = testBlocksFrom('polkadot18977445.cbor.bin');
 const testMultisigThreshold1Extrinsics = testMultisigThreshold1Blocks.reduce((acc: TxWithEvent[], tb) => acc.concat(tb.extrinsics), []);
-export const testMultisigThreshold1Extrinsic = testMultisigThreshold1Extrinsics[2];
-export const testMultisigThreshold1Calls: NestedCallToMatch[] = [
+const testMultisigThreshold1Extrinsic = testMultisigThreshold1Extrinsics[2];
+const testMultisigThreshold1Events = testMultisigThreshold1Blocks[0].events;
+const testMultisigThreshold1Data: DataToMatch[] = [
   {
     levelId: '0',
     name: 'multisig.asMultiThreshold1',
@@ -317,3 +328,37 @@ export const testMultisigThreshold1Calls: NestedCallToMatch[] = [
     dispatchError: undefined
   }
 ];
+
+export const nestedItems = {
+  testMultisigProxy: {
+    extrinsic: testMultisigProxyExtrinsic,
+    events: testMultisigProxyEvents,
+    data: testMultisigProxyData
+  },
+  testBatch: {
+    extrinsic: testBatchExtrinsic,
+    events: testBatchEvents,
+    data: testBatchData
+  },
+  testForceBatch: {
+    extrinsic: testForceBatchExtrinsic,
+    events: testForceBatchEvents,
+    data: testForceBatchData
+  },
+  testDeepNested: {
+    extrinsic: testDeepNestedExtrinsic,
+    events: testDeepNestedEvents,
+    data: testDeepNestedData
+  },
+  testMultisigThreshold1: {
+    extrinsic: testMultisigThreshold1Extrinsic,
+    events: testMultisigThreshold1Events,
+    data: testMultisigThreshold1Data
+  }
+} as {
+  testMultisigProxy: TestItem,
+  testBatch: TestItem,
+  testForceBatch: TestItem,
+  testDeepNested: TestItem,
+  testMultisigThreshold1: TestItem
+};

@@ -21,31 +21,35 @@ import { contractConstructors, contractEvents, contractMessages } from './contra
 import { ContractMessageWithTx } from '../types/interfaces.js';
 import { contracts } from '../converters/contracts.js';
 
-const blockNumber = testContractBlocks[0].block.header.number;
-const blockHash = testContractBlocks[0].block.header.hash;
+const testContractBlock = testContractBlocks[0];
+const blockNumber = testContractBlock.block.header.number;
+const blockHash = testContractBlock.block.header.hash;
 const extrinsics = testContractExtrinsics.map(
-  (xt, blockPosition) => types.enhanceTxWithId(
+  (xt, blockPosition) => types.enhanceTxWithIdAndEvents(
     {
       blockNumber,
       blockHash,
       blockPosition
     },
-    xt
+    xt,
+    testContractBlock.events
   )
 );
 
-const extrinsicId = `${blockNumber.toString()}-0`;
 const events = testContractEvents.map((ev, blockPosition) => new types.GenericEventWithId(ev, {
   blockNumber,
   blockHash,
-  extrinsicPosition: blockPosition,
-  extrinsicId
+  blockPosition
 }));
 const instantiateTx = extrinsics[2];
 const eventsFromInstantiateTx = events.splice(2, 14);
 const testEventsWithIdAndTx = eventsFromInstantiateTx.map(ev => {
-  (ev as types.EventWithIdAndTx).extrinsic = instantiateTx.extrinsic;
-  return ev as types.EventWithIdAndTx;
+  return new types.GenericEventWithIdAndTx(ev, {
+    extrinsic: instantiateTx.extrinsic,
+    extrinsicId: instantiateTx.extrinsic.extrinsicId,
+    extrinsicPosition: 0,
+    ...ev
+  });
 });
 
 describe('Wasm contracts operator', () => {
@@ -178,7 +182,7 @@ describe('Wasm contracts operator', () => {
           found();
           expect(result.blockEvent).toBeDefined();
           expect(result.blockEvent.eventId).toBeDefined();
-          expect(result.blockEvent.eventId).toBe('2841323-0-9');
+          expect(result.blockEvent.eventId).toBe('2841323-9');
           expect(result.event.identifier).toBe('Transfer');
           expect(result.event.index).toBe(0);
         },
