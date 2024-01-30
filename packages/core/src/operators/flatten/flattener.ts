@@ -3,10 +3,10 @@
 
 import { logger } from '@polkadot/util';
 
-import type { Event, DispatchInfo, DispatchError } from '@polkadot/types/interfaces';
+import type { DispatchInfo, DispatchError } from '@polkadot/types/interfaces';
 
 import { GenericExtrinsicWithId } from '../../types/index.js';
-import { TxWithIdAndEvent } from '../../types/interfaces.js';
+import { EventWithId, TxWithIdAndEvent } from '../../types/interfaces.js';
 import { findParser } from './index.js';
 import { isEventType } from './util.js';
 
@@ -48,7 +48,7 @@ const isAllBoundary = (boundary: Boundary): boundary is Boundaries => {
  */
 export class Flattener {
   private events: {
-    event: Event,
+    event: EventWithId,
     callId: number
   }[];
   private calls: TxWithIdAndEvent[];
@@ -87,7 +87,6 @@ export class Flattener {
       boundary,
       this.tx.extrinsic.method.toHuman()
     );
-
     this.tx.levelId = id;
     this.calls.push(this.tx);
     this.correlate(boundary);

@@ -20,28 +20,30 @@ export interface ExtrinsicWithId extends GenericExtrinsicWithId {
 }
 
 /**
- * Represents a transaction with an additional identifier and event information.
- */
-export interface TxWithIdAndEvent extends TxWithEvent {
-  extrinsic: ExtrinsicWithId;
-  levelId?: string;
-}
-
-/**
- * Represents an event with additional identifier information.
+ * Represents an event with additional identifier information and block context.
  */
 export interface EventWithId extends GenericEventWithId {
   blockNumber: Compact<BlockNumber>,
   blockHash: IU8a,
-  extrinsicPosition: number,
-  extrinsicId: string,
+  blockPosition: number,
   eventId: string
+}
+
+/**
+ * Represents a transaction with an additional identifier and event information.
+ */
+export interface TxWithIdAndEvent extends TxWithEvent {
+  extrinsic: ExtrinsicWithId;
+  events: EventWithId[];
+  levelId?: string;
 }
 
 /**
  * Represents an event with additional block context and extrinsic information
  */
 export interface EventWithIdAndTx extends EventWithId {
+  extrinsicPosition: number,
+  extrinsicId: string,
   extrinsic: ExtrinsicWithId
 }
 
@@ -56,13 +58,31 @@ export interface ExtrinsicBlockContext {
 }
 
 /**
- * Represents the context of an event within a block, including the event's position within an extrinsic,
- * the ID of the extrinsic, the block number, the block hash and the position of the event in the block.
+ * Represents the context of an event within a block,
+ * including the position of the event in the block, the block number and the block hash.
  */
 export interface EventBlockContext {
   blockNumber: Compact<BlockNumber>;
   blockHash: IU8a,
-  extrinsicPosition: number,
-  extrinsicId: string
+  blockPosition: number
 }
 
+/**
+ * Represents the context of an event within an extrinsic, including the event's position within an extrinsic,
+ * the ID of the extrinsic, the block number, the block hash and the position of the event in the block.
+ */
+export interface EventExtrinsicContext extends EventBlockContext {
+  extrinsicPosition: number,
+  extrinsicId: string,
+  extrinsic: ExtrinsicWithId
+}
+
+/**
+ * Represents an event in a block that could be either
+ * an event associated to an extrinsic or an event without extrinsic.
+ */
+export interface BlockEvent extends EventWithId {
+  extrinsicPosition?: number,
+  extrinsicId?: string,
+  extrinsic?: ExtrinsicWithId
+}

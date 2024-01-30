@@ -169,13 +169,12 @@ function extrinsicToNamedPrimitive(
  * Converts an `EventWithId` object to a primitive representation with named fields.
  */
 export function eventWithIdToNamedPrimitive(event: EventWithId) {
-  const { blockNumber, blockHash, extrinsicPosition, extrinsicId, eventId } = event;
+  const { blockNumber, blockHash, blockPosition, eventId } = event;
   return {
     ...eventToNamedPrimitive(event),
     blockNumber: blockNumber.toPrimitive(),
     blockHash: blockHash.toPrimitive(),
-    extrinsicPosition,
-    extrinsicId,
+    blockPosition,
     eventId
   };
 }
@@ -184,9 +183,12 @@ export function eventWithIdToNamedPrimitive(event: EventWithId) {
  * Converts an `EventWithIdAndTx` object to a primitive representation with named fields.
  */
 export function eventWithIdAndTxToNamedPrimitive(event: EventWithIdAndTx) {
+  const { extrinsicId, extrinsicPosition, extrinsic } = event;
   return {
     ...eventWithIdToNamedPrimitive(event),
-    extrinsic: extrinsicToNamedPrimitive(event.extrinsic)
+    extrinsicId,
+    extrinsicPosition,
+    extrinsic: extrinsicToNamedPrimitive(extrinsic)
   };
 }
 

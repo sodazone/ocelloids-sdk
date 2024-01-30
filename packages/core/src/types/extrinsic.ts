@@ -1,12 +1,13 @@
 // Copyright 2023-2024 SO/DA zone
 // SPDX-License-Identifier: Apache-2.0
 
-import { BlockNumber, Address } from '@polkadot/types/interfaces';
+import { EventRecord, BlockNumber, Address } from '@polkadot/types/interfaces';
 import { Compact, GenericExtrinsic } from '@polkadot/types';
 import type { TxWithEvent } from '@polkadot/api-derive/types';
 import type { AnyJson, IU8a } from '@polkadot/types-codec/types';
 
-import { ExtrinsicBlockContext, ExtrinsicWithId, TxWithIdAndEvent } from './interfaces.js';
+import { EventWithId, ExtrinsicBlockContext, ExtrinsicWithId, TxWithIdAndEvent } from './interfaces.js';
+import { GenericEventWithId } from './event.js';
 
 /**
  * Represents additional origins for flattened extrinsics.
@@ -89,14 +90,30 @@ export class GenericExtrinsicWithId extends GenericExtrinsic
 
 /**
  * Enhances a transaction object with identifier information by wrapping the extrinsic with the GenericExtrinsicWithId class.
- * @param context The extrinsic block context.
+ * @param xtContext The extrinsic block context.
  * @param tx The transaction object to enhance.
  * @returns The enhanced transaction object with identifier information.
  */
-export function enhanceTxWithId(
-  context: ExtrinsicBlockContext,
-  tx: TxWithEvent
+export function enhanceTxWithIdAndEvents(
+  xtContext: ExtrinsicBlockContext,
+  tx: TxWithEvent,
+  events: EventRecord[]
 ) : TxWithIdAndEvent {
-  tx.extrinsic = new GenericExtrinsicWithId(tx.extrinsic, context);
+  const { blockHash, blockNumber, blockPosition: xtIndex } = xtContext;
+  const eventsWithId: EventWithId[] = [];
+
+  for (let index = 0; index < events.length; index++) {
+    const { phase, event } = events[index];
+    if (phase.isApplyExtrinsic && phase.asApplyExtrinsic.eq(xtIndex)) {
+      eventsWithId.push(new GenericEventWithId(event, {
+        blockHash,
+        blockNumber,
+        blockPosition: index
+      }));
+    }
+  }
+
+  tx.events = eventsWithId;
+  tx.extrinsic = new GenericExtrinsicWithId(tx.extrinsic, xtContext);
   return tx as TxWithIdAndEvent;
 }

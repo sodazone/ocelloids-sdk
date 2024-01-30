@@ -6,9 +6,9 @@ import type { SignedBlockExtended } from '@polkadot/api-derive/types';
 
 import { Observable, mergeMap, share } from 'rxjs';
 
-import { GenericExtrinsicWithId, enhanceTxWithId } from '../types/extrinsic.js';
-import { GenericEventWithId } from '../types/event.js';
-import { EventWithIdAndTx, EventWithId, ExtrinsicWithId, TxWithIdAndEvent } from '../types/interfaces.js';
+import { GenericExtrinsicWithId, enhanceTxWithIdAndEvents } from '../types/extrinsic.js';
+import { GenericEventWithId, GenericEventWithIdAndTx } from '../types/event.js';
+import { EventWithIdAndTx, ExtrinsicWithId, TxWithIdAndEvent, BlockEvent, EventBlockContext } from '../types/interfaces.js';
 
 /**
  * Operator to extract extrinsics with paired events from blocks.
@@ -33,18 +33,21 @@ export function extractTxWithEvents() {
   return (source: Observable<SignedBlockExtended>)
   : Observable<TxWithIdAndEvent> => {
     return (source.pipe(
-      mergeMap(({block, extrinsics}) => {
+      mergeMap(({ block, extrinsics, events }) => {
         const blockNumber = block.header.number;
         const blockHash = block.hash;
         return extrinsics.map(
-          (xt, blockPosition) => enhanceTxWithId(
-            {
-              blockNumber,
-              blockHash,
-              blockPosition
-            },
-            xt
-          ));
+          (xt, blockPosition) => {
+            return enhanceTxWithIdAndEvents(
+              {
+                blockNumber,
+                blockHash,
+                blockPosition
+              },
+              xt,
+              events
+            );
+          });
       }),
       share()
     ));
@@ -98,7 +101,7 @@ export function extractExtrinsics() {
  * The emitted events are expanded with the block context, including block number, block hash, position in block,
  * extrinsic ID, and position in extrinsic.
  *
- * @returns An operator function that transforms an Observable of `SignedBlockExtended` into an Observable of `EventWithId`.
+ * @returns An operator function that transforms an Observable of `SignedBlockExtended` into an Observable of `BlockEvent`.
  *
  * ## Example
  * ```ts
@@ -111,28 +114,59 @@ export function extractExtrinsics() {
  * ));
  * ```
  *
- * @see {@link EventWithId}
+ * @see {@link BlockEvent}
  */
 export function extractEvents() {
-  return (source: Observable<SignedBlockExtended>): Observable<EventWithId> => {
+  return (source: Observable<SignedBlockExtended>): Observable<BlockEvent> => {
     return source.pipe(
-      mergeMap(({ block, extrinsics }) => {
+      mergeMap(({ block, extrinsics, events }) => {
         const blockNumber = block.header.number;
         const blockHash = block.hash;
 
-        return extrinsics.reduce((eventsWithId: EventWithId[], xt, i) => {
-          const extrinsicId = `${blockNumber.toString()}-${i}`;
+        let prevXtIndex = -1;
+        let xtEventIndex = 0;
 
-          return eventsWithId.concat(
-            xt.events.map((e, extrinsicPosition) => (
-              new GenericEventWithId(e, {
-                blockNumber,
-                blockHash,
-                extrinsicPosition,
-                extrinsicId
+        // Loops through each event record in the block and enhance it with block context.
+        // If event is emitted from an extrinsic, enhance also with extrinsic context.
+        return events.reduce((blockEvents: BlockEvent[], { phase, event }, i) => {
+          const eventBlockContext: EventBlockContext = {
+            blockNumber,
+            blockHash,
+            blockPosition: i
+          };
+          const extrinsicIndex = phase.isApplyExtrinsic ? phase.asApplyExtrinsic.toNumber() : undefined;
+
+          if (extrinsicIndex) {
+            const extrinsic = new GenericExtrinsicWithId(extrinsics[extrinsicIndex].extrinsic, {
+              blockNumber,
+              blockHash,
+              blockPosition: extrinsicIndex
+            });
+            // If we have moved on to the next extrinsic,
+            // reset the event index to 0
+            if (extrinsicIndex > prevXtIndex) {
+              xtEventIndex = 0;
+            }
+
+            blockEvents.push(
+              new GenericEventWithIdAndTx(event, {
+                ...eventBlockContext,
+                extrinsicId: extrinsic.extrinsicId,
+                extrinsic,
+                extrinsicPosition: xtEventIndex
               })
-            ))
-          );
+            );
+            // Increase event index in extrinsic for next loop
+            xtEventIndex++;
+            // Assign current extrinsic index to prevXtIndex
+            prevXtIndex = extrinsicIndex;
+          } else {
+            blockEvents.push(
+              new GenericEventWithId(event, eventBlockContext)
+            );
+          }
+
+          return blockEvents;
         }, []);
       }),
       share()
@@ -155,7 +189,7 @@ export function extractEvents() {
  * apis.rx.polkadot.pipe(
  *   blocks(),
  *   extractTxWithEvents(),
- *   flattenBatch(),
+ *   flattenCalls(),
  *   extractEventsWithTx()
  * ).subscribe(record => console.log(
  *   `New event on Polkadot: ${record.data.toHuman()}`
@@ -173,11 +207,13 @@ export function extractEventsWithTx() {
         const eventRecords: EventWithIdAndTx[] = [];
 
         for (const [extrinsicPosition, event] of events.entries()) {
-          const eventWithIdAndTx = new GenericEventWithId(event, {
+          const eventWithIdAndTx = new GenericEventWithIdAndTx(event, {
             blockNumber,
             blockHash,
+            blockPosition: event.blockPosition,
             extrinsicPosition,
-            extrinsicId: extrinsic.extrinsicId
+            extrinsicId: extrinsic.extrinsicId,
+            extrinsic
           }) as EventWithIdAndTx;
 
           eventWithIdAndTx.extrinsic = extrinsic;
