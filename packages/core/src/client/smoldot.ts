@@ -9,7 +9,6 @@ import {
   type Client,
   type ClientOptions,
   type Chain,
-  type LogCallback,
   QueueFullError,
   start
 } from 'smoldot';
@@ -37,8 +36,7 @@ const defaultLogger = (level: number, target: string, message: string) => {
 };
 
 type ExtConfig = ScConfig & {
-  maxLogLevel?: number
-  logCallback?: LogCallback
+  clientOptions?: ClientOptions
 };
 
 // Regular expression to extract the property "id"
@@ -134,21 +132,17 @@ async function jsonRpcMessageLoop(
  * @returns A Substrate Connect client.
  */
 export const createScClient = (config?: ExtConfig): ScClient => {
-  // 4 = debug, 2 = warning
-  let maxLogLevel = config?.maxLogLevel ?? 2;
-  let logCallback;
+  let clientOptions = config?.clientOptions;
 
-  if (config?.logCallback) {
-    logCallback = config.logCallback;
-  } else {
-    maxLogLevel = l.noop === l.debug ? 2 : 4;
-    logCallback = defaultLogger;
+  if (clientOptions === undefined) {
+    clientOptions = {
+      // 4 = debug, 2 = warning
+      maxLogLevel: l.noop === l.debug ? 2 : 4,
+      logCallback: defaultLogger
+    };
   }
 
-  const client = startSmoldot({
-    maxLogLevel,
-    logCallback
-  });
+  const client = startSmoldot(clientOptions);
 
   const chains = new Map<string, Chain>();
 
