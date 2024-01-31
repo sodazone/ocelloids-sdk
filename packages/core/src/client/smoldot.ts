@@ -9,6 +9,7 @@ import {
   type Client,
   type ClientOptions,
   type Chain,
+  type LogCallback,
   QueueFullError,
   start
 } from 'smoldot';
@@ -17,10 +18,28 @@ import type {
   ScClient,
   AddChain,
   Chain as ScChain,
+  Config as ScConfig,
   WellKnownChain
 } from '@substrate/connect';
 
 const l = logger('oc-smoldot-worker');
+
+const defaultLogger = (level: number, target: string, message: string) => {
+  if (level === 1) {
+    l.error(`[${target}] ${message}`);
+  } else if (level === 2) {
+    l.warn(`[${target}] ${message}`);
+  } else if (level === 3) {
+    l.log(`[${target}] ${message}`);
+  } else if (level >= 4) {
+    l.debug(`[${target}] ${message}`);
+  }
+};
+
+type ExtConfig = ScConfig & {
+  maxLogLevel?: number
+  logCallback?: LogCallback
+};
 
 // Regular expression to extract the property "id"
 // from a JSON string. Note that 'g' makes it stateful.
@@ -114,20 +133,21 @@ async function jsonRpcMessageLoop(
  *
  * @returns A Substrate Connect client.
  */
-export const createScClient = (): ScClient => {
+export const createScClient = (config?: ExtConfig): ScClient => {
+  // 4 = debug, 2 = warning
+  let maxLogLevel = config?.maxLogLevel ?? 2;
+  let logCallback;
+
+  if (config?.logCallback) {
+    logCallback = config.logCallback;
+  } else {
+    maxLogLevel = l.noop === l.debug ? 2 : 4;
+    logCallback = defaultLogger;
+  }
+
   const client = startSmoldot({
-    maxLogLevel: l.noop === l.debug ? 2 : 4, // 4 = debug, 2 = warning
-    logCallback: (level: number, target: string, message: string) => {
-      if (level === 1) {
-        l.error(`[${target}] ${message}`);
-      } else if (level === 2) {
-        l.warn(`[${target}] ${message}`);
-      } else if (level === 3) {
-        l.log(`[${target}] ${message}`);
-      } else if (level >= 4) {
-        l.debug(`[${target}] ${message}`);
-      }
-    }
+    maxLogLevel,
+    logCallback
   });
 
   const chains = new Map<string, Chain>();
