@@ -17,12 +17,12 @@ import { GenericEventWithId } from './event.js';
  *
  * Note: This is unrelated to Polkadot runtime origins.
  *
- * @property type - The type of origin, which can be 'proxy', 'multisig'.
+ * @property type - The type of origin, which can be 'proxied' or 'multisig'.
  * @property address - The address associated with the origin.
  */
 // TODO: think of better name to avoid confusion with runtime origins.
 export type Origin = {
-  type: 'proxy' | 'multisig',
+  type: 'proxied' | 'multisig',
   address: Address
 }
 

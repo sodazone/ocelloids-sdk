@@ -42,7 +42,7 @@ export function extractProxyCalls(tx: TxWithIdAndEvent, flattener: Flattener) {
       tx,
       boundary: ProxyExecutedBoundary,
       callError: callResult.isErr ? callResult.asErr : undefined,
-      origin: { type: 'proxy', address: real }
+      origin: { type: 'proxied', address: real }
     }
   )];
 }
