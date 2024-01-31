@@ -5,7 +5,7 @@ import type { FunctionMetadataLatest, Event, DispatchError } from '@polkadot/typ
 import type { CallBase, AnyTuple } from '@polkadot/types-codec/types';
 import { GenericCall, GenericExtrinsic } from '@polkadot/types';
 
-import { GenericExtrinsicWithId, Origin } from '../../types/extrinsic.js';
+import { GenericExtrinsicWithId, ExtraSigner } from '../../types/extrinsic.js';
 import { ExtrinsicWithId, TxWithIdAndEvent } from '../../types/interfaces.js';
 import { Boundary } from './flattener.js';
 
@@ -14,19 +14,19 @@ type CallContext = {
   tx: TxWithIdAndEvent,
   boundary?: Boundary,
   callError?: DispatchError,
-  origin? : Origin
+  extraSigner? : ExtraSigner
 }
 
 /**
  * Converts a nested call to a TxWithIdAndEvent.
- * Maps the call dispatch error and adds the origin if passed in the CallContext.
+ * Maps the call dispatch error and adds the extra signer if passed in the CallContext.
  *
  * @param call - The nested call to be converted.
- * @param context - The call context containing the original transaction, events, callError, and origin.
- * @returns The TxWithIdAndEvent, with updated extrinsic.
+ * @param context - The call context containing the original transaction, events, call error, and extra signer.
+ * @returns The TxWithIdAndEvent, with updated extrinsic and dispatch error.
  */
 export function callAsTxWithBoundary(
-  { call, tx, boundary, callError, origin }: CallContext
+  { call, tx, boundary, callError, extraSigner }: CallContext
 ) {
   const { extrinsic } = tx;
   const flatCall = new GenericCall(extrinsic.registry, call);
@@ -42,11 +42,11 @@ export function callAsTxWithBoundary(
       blockHash,
       blockPosition
     },
-    extrinsic.origins
+    extrinsic.extraSigners
   );
 
-  if (origin) {
-    txWithId.addOrigin(origin);
+  if (extraSigner) {
+    txWithId.addExtraSigner(extraSigner);
   }
 
   return {

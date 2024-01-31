@@ -204,7 +204,7 @@ export function eventWithIdAndTxToNamedPrimitive(event: EventWithIdAndTx) {
  * Converts a `ExtrinsicWithId` object to a primitive representation with named fields.
  */
 export function extrinsicWithIdToNamedPrimitive(data: ExtrinsicWithId) {
-  const { extrinsicId, blockHash, blockNumber, blockPosition, origins } = data;
+  const { extrinsicId, blockHash, blockNumber, blockPosition, extraSigners: origins } = data;
   return {
     ...extrinsicToNamedPrimitive(data as Extrinsic),
     blockNumber: blockNumber.toPrimitive(),

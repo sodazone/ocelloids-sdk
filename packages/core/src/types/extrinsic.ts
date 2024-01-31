@@ -10,18 +10,15 @@ import { EventWithId, ExtrinsicBlockContext, ExtrinsicWithId, TxWithIdAndEvent }
 import { GenericEventWithId } from './event.js';
 
 /**
- * Represents additional origins for flattened extrinsics.
+ * Represents additional addresses involved in flattened extrinsics.
  *
- * The `Origin` type is used to provide context about the origin of flattened extrinsics,
- * indicating whether it originated from a proxy or multisig account.
+ * The `ExtraSigners` type is used to provide context in flattened extrinsics
+ * indicating the proxied or multisig address that was involved in the extrinsic.
  *
- * Note: This is unrelated to Polkadot runtime origins.
- *
- * @property type - The type of origin, which can be 'proxied' or 'multisig'.
- * @property address - The address associated with the origin.
+ * @property type - Either 'proxied' or 'multisig'.
+ * @property address - The address associated with the account.
  */
-// TODO: think of better name to avoid confusion with runtime origins.
-export type Origin = {
+export type ExtraSigner = {
   type: 'proxied' | 'multisig',
   address: Address
 }
@@ -34,7 +31,7 @@ export class GenericExtrinsicWithId extends GenericExtrinsic
   blockNumber: Compact<BlockNumber>;
   blockHash: IU8a;
   blockPosition: number;
-  origins: Origin[];
+  extraSigners: ExtraSigner[];
 
   constructor(
     value: GenericExtrinsic,
@@ -43,14 +40,14 @@ export class GenericExtrinsicWithId extends GenericExtrinsic
       blockPosition,
       blockHash
     } : ExtrinsicBlockContext,
-    origins: Origin[] = []
+    extraSigners: ExtraSigner[] = []
   ) {
     super(value.registry, value.toU8a());
 
     this.blockNumber = blockNumber;
     this.blockPosition = blockPosition;
     this.blockHash = blockHash;
-    this.origins = origins;
+    this.extraSigners = extraSigners;
   }
 
   /**
@@ -64,8 +61,8 @@ export class GenericExtrinsicWithId extends GenericExtrinsic
     return `${this.blockNumber.toString()}-${this.blockPosition}`;
   }
 
-  addOrigin(o: Origin) {
-    this.origins.push(o);
+  addExtraSigner(s: ExtraSigner) {
+    this.extraSigners.push(s);
   }
 
   /**
@@ -77,7 +74,7 @@ export class GenericExtrinsicWithId extends GenericExtrinsic
       blockNumber: this.blockNumber.toHuman(),
       blockHash: this.blockHash.toHuman(),
       position: this.blockPosition,
-      origins: this.origins?.map(o => (
+      extraSigners: this.extraSigners?.map(o => (
         {
           type: o.type,
           address: o.address.toHuman()

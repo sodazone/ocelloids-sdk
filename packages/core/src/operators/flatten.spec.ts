@@ -23,7 +23,7 @@ describe('flatten call operator', () => {
     ) => {
       expect(result).toBeDefined();
 
-      const { levelId, extrinsic: { method, origins }, events, dispatchError } = result;
+      const { levelId, extrinsic: { method, extraSigners }, events, dispatchError } = result;
 
       expect(levelId).toBeDefined();
 
@@ -37,9 +37,9 @@ describe('flatten call operator', () => {
       expect(dispatchError?.toHuman()).toEqual(call.dispatchError);
 
       // Assert that nested call origins are extracted correctly
-      origins.forEach((o, i) => {
-        expect(o.type).toEqual(call.origins[i].type);
-        expect(o.address.toString()).toEqual(call.origins[i].address);
+      extraSigners.forEach((o, i) => {
+        expect(o.type).toEqual(call.extraSigners[i].type);
+        expect(o.address.toString()).toEqual(call.extraSigners[i].address);
       });
 
       // Assert that nested call events are correlated correctly

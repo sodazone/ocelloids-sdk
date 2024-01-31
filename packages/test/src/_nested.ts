@@ -8,7 +8,7 @@ import westendMetadata from './__data__/metadata/westend-hex.js';
 export type DataToMatch = {
   name: string;
   events: Event[];
-  origins: {
+  extraSigners: {
     type: string,
     address: string
   }[],
@@ -32,7 +32,7 @@ const testMultisigProxyData: DataToMatch[] = [
     levelId: '0',
     name: 'multisig.asMulti',
     events: testMultisigProxyExtrinsic.events.slice(7),
-    origins: [
+    extraSigners: [
       {
         type: 'multisig',
         address: '17BA8dMH2ZDBJJNDf2UqvwJJ9xWQus6y1y7bhS3Lp9CHLuQ'
@@ -52,7 +52,7 @@ const testMultisigProxyData: DataToMatch[] = [
     levelId: '0.0',
     name: 'proxy.proxy',
     events: testMultisigProxyExtrinsic.events.slice(6,7),
-    origins: [
+    extraSigners: [
       {
         type: 'multisig',
         address: '17BA8dMH2ZDBJJNDf2UqvwJJ9xWQus6y1y7bhS3Lp9CHLuQ'
@@ -72,7 +72,7 @@ const testMultisigProxyData: DataToMatch[] = [
     levelId: '0.0.0',
     name: 'proxy.proxy',
     events: testMultisigProxyExtrinsic.events.slice(5,6),
-    origins: [
+    extraSigners: [
       {
         type: 'multisig',
         address: '17BA8dMH2ZDBJJNDf2UqvwJJ9xWQus6y1y7bhS3Lp9CHLuQ'
@@ -92,7 +92,7 @@ const testMultisigProxyData: DataToMatch[] = [
     levelId: '0.0.0.0',
     name: 'convictionVoting.vote',
     events: testMultisigProxyExtrinsic.events.slice(0,5),
-    origins: [
+    extraSigners: [
       {
         type: 'multisig',
         address: '17BA8dMH2ZDBJJNDf2UqvwJJ9xWQus6y1y7bhS3Lp9CHLuQ'
@@ -120,28 +120,28 @@ const testBatchData: DataToMatch[] = [
     levelId: '0',
     name: 'utility.batch',
     events: testBatchExtrinsic.events.slice(7),
-    origins: [],
+    extraSigners: [],
     dispatchError: undefined
   },
   {
     levelId: '0.2',
     name: 'system.remark',
     events: testBatchExtrinsic.events.slice(6,7),
-    origins: [],
+    extraSigners: [],
     dispatchError: undefined
   },
   {
     levelId: '0.1',
     name: 'utility.batch',
     events: testBatchExtrinsic.events.slice(4,6),
-    origins: [],
+    extraSigners: [],
     dispatchError: undefined
   },
   {
     levelId: '0.1.2',
     name: 'balances.transferKeepAlive',
     events: [],
-    origins: [],
+    extraSigners: [],
     dispatchError: {
       'Arithmetic': 'Underflow'
     }
@@ -150,7 +150,7 @@ const testBatchData: DataToMatch[] = [
     levelId: '0.1.1',
     name: 'balances.transferKeepAlive',
     events: [],
-    origins: [],
+    extraSigners: [],
     dispatchError: {
       'Arithmetic': 'Underflow'
     }
@@ -159,14 +159,14 @@ const testBatchData: DataToMatch[] = [
     levelId: '0.1.0',
     name: 'balances.transferKeepAlive',
     events: testBatchExtrinsic.events.slice(2,4),
-    origins: [],
+    extraSigners: [],
     dispatchError: undefined
   },
   {
     levelId: '0.0',
     name: 'system.remark',
     events: testBatchExtrinsic.events.slice(0,2),
-    origins: [],
+    extraSigners: [],
     dispatchError: undefined
   }
 ];
@@ -181,35 +181,35 @@ const testForceBatchData: DataToMatch[] = [
     levelId: '0',
     name: 'utility.forceBatch',
     events: testForceBatchExtrinsic.events.slice(10),
-    origins: [],
+    extraSigners: [],
     dispatchError: undefined
   },
   {
     levelId: '0.0',
     name: 'system.remark',
     events: testForceBatchExtrinsic.events.slice(0, 2),
-    origins: [],
+    extraSigners: [],
     dispatchError: undefined
   },
   {
     levelId: '0.1',
     name: 'utility.forceBatch',
     events: testForceBatchExtrinsic.events.slice(7, 9),
-    origins: [],
+    extraSigners: [],
     dispatchError: undefined
   },
   {
     levelId: '0.1.0',
     name: 'balances.transferKeepAlive',
     events: testForceBatchExtrinsic.events.slice(2, 4),
-    origins: [],
+    extraSigners: [],
     dispatchError: undefined
   },
   {
     levelId: '0.1.1',
     name: 'balances.transferKeepAlive',
     events: testForceBatchExtrinsic.events.slice(4, 5),
-    origins: [],
+    extraSigners: [],
     dispatchError: {
       'Arithmetic': 'Underflow'
     }
@@ -218,14 +218,14 @@ const testForceBatchData: DataToMatch[] = [
     levelId: '0.1.2',
     name: 'balances.transferKeepAlive',
     events: testForceBatchExtrinsic.events.slice(5, 7),
-    origins: [],
+    extraSigners: [],
     dispatchError: undefined
   },
   {
     levelId: '0.2',
     name: 'system.remark',
     events: testForceBatchExtrinsic.events.slice(9, 10),
-    origins: [],
+    extraSigners: [],
     dispatchError: undefined
   }
 ];
@@ -240,35 +240,35 @@ const testDeepNestedData: DataToMatch[] = [
     levelId: '0',
     name: 'utility.batch',
     events: testDeepNestedExtrinsic.events.slice(7),
-    origins: [],
+    extraSigners: [],
     dispatchError: undefined
   },
   {
     levelId: '0.0',
     name: 'balances.transfer',
     events: testDeepNestedExtrinsic.events.slice(0,2),
-    origins: [],
+    extraSigners: [],
     dispatchError: undefined
   },
   {
     levelId: '0.1',
     name: 'utility.batchAll',
     events: testDeepNestedExtrinsic.events.slice(4,6),
-    origins: [],
+    extraSigners: [],
     dispatchError: undefined
   },
   {
     levelId: '0.1.0',
     name: 'utility.batch',
     events: testDeepNestedExtrinsic.events.slice(2,4),
-    origins: [],
+    extraSigners: [],
     dispatchError: undefined
   },
   {
     levelId: '0.1.0.0',
     name: 'utility.batchAll',
     events: [],
-    origins: [],
+    extraSigners: [],
     dispatchError: {
       'Module': {
         'index': '0',
@@ -280,7 +280,7 @@ const testDeepNestedData: DataToMatch[] = [
     levelId: '0.1.0.0.0',
     name: 'balances.transfer',
     events: [],
-    origins: [],
+    extraSigners: [],
     dispatchError: {
       'Module': {
         'index': '0',
@@ -292,7 +292,7 @@ const testDeepNestedData: DataToMatch[] = [
     levelId: '0.2',
     name: 'balances.transfer',
     events: testDeepNestedExtrinsic.events.slice(6,7),
-    origins: [],
+    extraSigners: [],
     dispatchError: undefined
   }
 ];
@@ -307,7 +307,7 @@ const testMultisigThreshold1Data: DataToMatch[] = [
     levelId: '0',
     name: 'multisig.asMultiThreshold1',
     events: [],
-    origins: [
+    extraSigners: [
       {
         type: 'multisig',
         address: '13tpYpgt83Fv9oJoKSYotaMiGCD4quww4jTjpd2tFXos49pE'
@@ -319,7 +319,7 @@ const testMultisigThreshold1Data: DataToMatch[] = [
     levelId: '0.0',
     name: 'nominationPools.join',
     events: testMultisigThreshold1Extrinsic.events,
-    origins: [
+    extraSigners: [
       {
         type: 'multisig',
         address: '13tpYpgt83Fv9oJoKSYotaMiGCD4quww4jTjpd2tFXos49pE'

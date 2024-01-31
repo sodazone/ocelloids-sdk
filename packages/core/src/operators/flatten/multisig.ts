@@ -20,7 +20,7 @@ const MultisigExecutedBoundary = {
 /**
  * Extracts executed multisig calls from transactions.
  * Maps the execution result from 'MultisigExecuted' events to the extracted call and
- * adds the multisig address as an origin to the transaction.
+ * adds the multisig address as an extra signer to the transaction.
  *
  * <p>
  * The `as_multi` method emits the 'MultisigExecuted' event when the threshold is met.
@@ -54,7 +54,7 @@ export function extractAsMultiCall(tx: TxWithIdAndEvent, flattener: Flattener) {
       tx,
       boundary: MultisigExecutedBoundary,
       callError: callResult.isErr ? callResult.asErr : undefined,
-      origin: {
+      extraSigner: {
         type: 'multisig',
         address: multisigAddress
       }
@@ -64,7 +64,7 @@ export function extractAsMultiCall(tx: TxWithIdAndEvent, flattener: Flattener) {
 
 /**
  * Extracts directly executed multisig calls with a threshold of 1 from transactions.
- * Creates the multisig address from passed signatories and adds it as an origin to the transaction.
+ * Creates the multisig address from passed signatories and adds it as an extra signer to the transaction.
  *
  * <p>
  * Note: The `as_multi_threshold_1` method directly executes the multisig call without emitting the 'MultisigExecuted' event.
@@ -92,7 +92,7 @@ export function extractAsMutiThreshold1Call(tx: TxWithIdAndEvent) {
       call,
       tx,
       boundary: Boundaries.ALL,
-      origin: {
+      extraSigner: {
         type: 'multisig',
         address: multisigAddress
       }

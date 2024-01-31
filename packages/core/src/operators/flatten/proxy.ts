@@ -17,7 +17,7 @@ const ProxyExecutedBoundary = {
 /**
  * Extracts proxy calls from a transaction.
  * Maps the execution result from 'ProxyExecuted' event to the extracted call and
- * adds the proxy address as an origin to the transaction.
+ * adds the proxied address as an extra signer to the transaction.
  *
  * @param tx - The input transaction to extract proxy calls from .
  * @returns The extracted proxy call as TxWithIdAndEvent.
@@ -42,7 +42,7 @@ export function extractProxyCalls(tx: TxWithIdAndEvent, flattener: Flattener) {
       tx,
       boundary: ProxyExecutedBoundary,
       callError: callResult.isErr ? callResult.asErr : undefined,
-      origin: { type: 'proxied', address: real }
+      extraSigner: { type: 'proxied', address: real }
     }
   )];
 }
