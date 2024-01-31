@@ -38,11 +38,11 @@ const testMultisigProxyData: DataToMatch[] = [
         address: '17BA8dMH2ZDBJJNDf2UqvwJJ9xWQus6y1y7bhS3Lp9CHLuQ'
       },
       {
-        type: 'proxy',
+        type: 'proxied',
         address: '12easLRmTHY2AGmsYoxKsm967bdc5RfuqFFQt2LVG5Qvf6EP'
       },
       {
-        type: 'proxy',
+        type: 'proxied',
         address: '15j4dg5GzsL1bw2U2AWgeyAk6QTxq43V7ZPbXdAmbVLjvDCK'
       }
     ],
@@ -58,11 +58,11 @@ const testMultisigProxyData: DataToMatch[] = [
         address: '17BA8dMH2ZDBJJNDf2UqvwJJ9xWQus6y1y7bhS3Lp9CHLuQ'
       },
       {
-        type: 'proxy',
+        type: 'proxied',
         address: '12easLRmTHY2AGmsYoxKsm967bdc5RfuqFFQt2LVG5Qvf6EP'
       },
       {
-        type: 'proxy',
+        type: 'proxied',
         address: '15j4dg5GzsL1bw2U2AWgeyAk6QTxq43V7ZPbXdAmbVLjvDCK'
       }
     ],
@@ -78,11 +78,11 @@ const testMultisigProxyData: DataToMatch[] = [
         address: '17BA8dMH2ZDBJJNDf2UqvwJJ9xWQus6y1y7bhS3Lp9CHLuQ'
       },
       {
-        type: 'proxy',
+        type: 'proxied',
         address: '12easLRmTHY2AGmsYoxKsm967bdc5RfuqFFQt2LVG5Qvf6EP'
       },
       {
-        type: 'proxy',
+        type: 'proxied',
         address: '15j4dg5GzsL1bw2U2AWgeyAk6QTxq43V7ZPbXdAmbVLjvDCK'
       }
     ],
@@ -98,11 +98,11 @@ const testMultisigProxyData: DataToMatch[] = [
         address: '17BA8dMH2ZDBJJNDf2UqvwJJ9xWQus6y1y7bhS3Lp9CHLuQ'
       },
       {
-        type: 'proxy',
+        type: 'proxied',
         address: '12easLRmTHY2AGmsYoxKsm967bdc5RfuqFFQt2LVG5Qvf6EP'
       },
       {
-        type: 'proxy',
+        type: 'proxied',
         address: '15j4dg5GzsL1bw2U2AWgeyAk6QTxq43V7ZPbXdAmbVLjvDCK'
       }
     ],
