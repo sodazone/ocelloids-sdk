@@ -2795,17 +2795,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@substrate/connect@npm:0.7.35":
-  version: 0.7.35
-  resolution: "@substrate/connect@npm:0.7.35"
-  dependencies:
-    "@substrate/connect-extension-protocol": ^1.0.1
-    smoldot: 2.0.7
-  checksum: 4f0cfb2b9521c5300cbcc0245e87b72484738e6cc8103ddf91e3516f627de546d0a152839824ac2716b8ea2f327f3eee0f74a9a07886ed4a091e3b7c1e989441
-  languageName: node
-  linkType: hard
-
-"@substrate/connect@npm:^0.8.4":
+"@substrate/connect@npm:0.8.4":
   version: 0.8.4
   resolution: "@substrate/connect@npm:0.8.4"
   dependencies:
@@ -6583,15 +6573,6 @@ __metadata:
   dependencies:
     ws: ^8.8.1
   checksum: b9b9d54e34e6ce48db8f9ef9a126de36ec8c9b98bebad815460d4393aceffd3eece0ee7727b991db51870ccde458dd910fe2a9ec2960cbf769491a5fb0493340
-  languageName: node
-  linkType: hard
-
-"smoldot@npm:2.0.7":
-  version: 2.0.7
-  resolution: "smoldot@npm:2.0.7"
-  dependencies:
-    ws: ^8.8.1
-  checksum: fc039bfa0560312ae09c2136dd506f2a1994ead804b7234b49b2ecfac2fd19d306973a0fcfb66019645a8cf9a1702c270bc544a622ae40b63cf14790ea3531e0
   languageName: node
   linkType: hard
 

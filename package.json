@@ -64,7 +64,8 @@
   },
   "resolutions": {
     "@polkadot/util-crypto": "12.6.2",
-    "@polkadot/keyring": "12.6.2"
+    "@polkadot/keyring": "12.6.2",
+    "@substrate/connect": "0.8.4"
   },
   "packageManager": "yarn@3.6.0",
   "stableVersion": "1.1.15"
