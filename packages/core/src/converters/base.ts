@@ -5,7 +5,7 @@ import { EventRecord, Event, Extrinsic, SignedBlock, Block, FunctionMetadataLate
 import type { Codec } from '@polkadot/types/types';
 import type { AnyJson, CallBase, AnyTuple } from '@polkadot/types-codec/types';
 import type { TxWithEvent, SignedBlockExtended } from '@polkadot/api-derive/types';
-import { EventWithId, EventWithIdAndTx } from '../types/interfaces.js';
+import { EventWithId, EventWithIdAndTx, ExtrinsicWithId, TxWithIdAndEvent } from '../types/interfaces.js';
 
 /* ================================================================
    Type guards for identifying specific objects.
@@ -17,10 +17,18 @@ function isExtrinsic(object: any): object is Extrinsic {
     && object.era !== undefined;
 }
 
+function isExtrinsicWithId(object: any): object is ExtrinsicWithId {
+  return object.extrinsicId !== undefined && isExtrinsic(object);
+}
+
 function isTxWithEvent(object: any): object is TxWithEvent {
   // Note that the rest of fields could be undefined
   // so.. order carefully your guard checks
-  return object.extrinsic !== undefined && isExtrinsic(object.extrinsic);
+  return object.extrinsic !== undefined && object.events !== undefined && isExtrinsic(object.extrinsic);
+}
+
+function isTxWithIdAndEvent(object: any): object is TxWithIdAndEvent {
+  return object.extrinsic !== undefined && object.extrinsic.extrinsicId !== undefined && isTxWithEvent(object);
 }
 
 function isEventRecord(object: any): object is EventRecord {
@@ -193,6 +201,24 @@ export function eventWithIdAndTxToNamedPrimitive(event: EventWithIdAndTx) {
 }
 
 /**
+ * Converts a `ExtrinsicWithId` object to a primitive representation with named fields.
+ */
+export function extrinsicWithIdToNamedPrimitive(data: ExtrinsicWithId) {
+  const { extrinsicId, blockHash, blockNumber, blockPosition, origins } = data;
+  return {
+    ...extrinsicToNamedPrimitive(data as Extrinsic),
+    blockNumber: blockNumber.toPrimitive(),
+    blockHash: blockHash.toPrimitive(),
+    blockPosition,
+    extrinsicId,
+    origins: origins.map(o => ({
+      type: o.type,
+      address: o.address.toPrimitive()
+    }))
+  };
+}
+
+/**
  * Converts a `TxWithEvent` object to a primitive representation with named fields.
  */
 export function txWithEventToNamedPrimitive(data: TxWithEvent) {
@@ -201,6 +227,19 @@ export function txWithEventToNamedPrimitive(data: TxWithEvent) {
     events: data.events?.map(eventToNamedPrimitive) || [],
     dispatchInfo: data.dispatchInfo?.toHuman(),
     dispatchError: data.dispatchError?.toHuman()
+  };
+}
+
+/**
+ * Converts a `TxWithIdAndEvent` object to a primitive representation with named fields.
+ */
+export function txWithIdAndEventToNamedPrimitive(data: TxWithIdAndEvent) {
+  return {
+    extrinsic: extrinsicWithIdToNamedPrimitive(data.extrinsic as ExtrinsicWithId),
+    events: data.events?.map(eventWithIdToNamedPrimitive) || [],
+    dispatchInfo: data.dispatchInfo?.toHuman(),
+    dispatchError: data.dispatchError?.toHuman(),
+    levelId: data.levelId
   };
 }
 
@@ -262,8 +301,12 @@ function toNamedPrimitive<T>(data: T): Record<string, AnyJson> {
     return eventRecordToNamedPrimitive(data as EventRecord);
   case isEvent(data):
     return eventToNamedPrimitive(data as Event);
+  case isTxWithIdAndEvent(data):
+    return txWithIdAndEventToNamedPrimitive(data as TxWithIdAndEvent);
   case isTxWithEvent(data):
     return txWithEventToNamedPrimitive(data as TxWithEvent);
+  case isExtrinsicWithId(data):
+    return extrinsicWithIdToNamedPrimitive(data as ExtrinsicWithId);
   case isExtrinsic(data):
     return extrinsicToNamedPrimitive(data as Extrinsic);
   case isSignedBlockExtended(data):

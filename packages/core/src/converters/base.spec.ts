@@ -49,6 +49,37 @@ describe('substrate converters', () => {
       .toBe('0x9e754973630b425e486445ed1600409c97d63a7c2a0679d949d008d784acc917');
   });
 
+  it('should convert an TxWithEvent', () => {
+    const xt = testBlocks[0].extrinsics[0];
+    const c = base.toNamedPrimitive(xt) as any;
+
+    expect(c).toBeDefined();
+    expect(c.extrinsic).toBeDefined();
+    expect(c.events).toBeDefined();
+  });
+
+  it('should convert an TxWithIdAndEvent', () => {
+    const b = testBlocks[0];
+    const { number, hash } = b.block.header;
+    const txWithIdAndEvent = enhanceTxWithIdAndEvents(
+      {
+        blockNumber: number,
+        blockHash: hash,
+        blockPosition: 0
+      },
+      b.extrinsics[0],
+      b.events
+    );
+    const c = base.toNamedPrimitive(txWithIdAndEvent) as any;
+
+    expect(c).toBeDefined();
+    expect(c.extrinsic).toBeDefined();
+    expect(c.extrinsic.extrinsicId).toBeDefined();
+    expect(c.extrinsic.origins).toBeDefined();
+    expect(c.events).toBeDefined();
+    expect(c.events[0].eventId).toBeDefined();
+  });
+
   it('should convert all the test blocks', () => {
     for (let i = 0; i < testBlocks.length; i++) {
       const b = base.toNamedPrimitive(testBlocks[i]) as any;
@@ -116,7 +147,6 @@ describe('substrate converters', () => {
       extrinsicId: txWithId.extrinsic.extrinsicId,
       extrinsic: txWithId.extrinsic
     }) as EventWithIdAndTx;
-    eventWithIdAndTx.extrinsic = txWithId.extrinsic;
 
     const c = base.toNamedPrimitives(eventWithIdAndTx)[0];
     expect(c).toBeDefined();
