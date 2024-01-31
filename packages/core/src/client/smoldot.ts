@@ -132,15 +132,11 @@ async function jsonRpcMessageLoop(
  * @returns A Substrate Connect client.
  */
 export const createScClient = (config?: ExtConfig): ScClient => {
-  let clientOptions = config?.clientOptions;
-
-  if (clientOptions === undefined) {
-    clientOptions = {
-      // 4 = debug, 2 = warning
-      maxLogLevel: l.noop === l.debug ? 2 : 4,
-      logCallback: defaultLogger
-    };
-  }
+  const clientOptions = config?.clientOptions ?? {
+    // 4 = debug, 2 = warning
+    maxLogLevel: l.noop === l.debug ? 2 : 4,
+    logCallback: defaultLogger
+  };
 
   const client = startSmoldot(clientOptions);
 
