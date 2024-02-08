@@ -1,7 +1,9 @@
 // Copyright 2023-2024 SO/DA zone
 // SPDX-License-Identifier: Apache-2.0
 
-import { EventRecord, Event, Extrinsic, SignedBlock, Block, FunctionMetadataLatest } from '@polkadot/types/interfaces';
+import {
+  EventRecord, Event, Extrinsic, SignedBlock, Block, FunctionMetadataLatest, MultiAddress
+} from '@polkadot/types/interfaces';
 import type { Codec } from '@polkadot/types/types';
 import type { AnyJson, CallBase, AnyTuple } from '@polkadot/types-codec/types';
 import type { TxWithEvent, SignedBlockExtended } from '@polkadot/api-derive/types';
@@ -132,6 +134,11 @@ function callBaseToPrimitive({ argsDef, args, registry }: CallBase<AnyTuple, Fun
     if (type === 'Vec<Call>') {
       const calls = args[i] as unknown as CallBase<AnyTuple, FunctionMetadataLatest>[];
       json[argName] = calls.map(callBaseToPrimitive);
+    } else if (type === 'MultiAddress') {
+      json[argName] = Object.assign({},
+        args[i].toPrimitive(),
+        { publicKey: (args[i] as MultiAddress).value.toHex() }
+      );
     } else {
       json[argName] = args[i].toPrimitive();
     }
@@ -162,7 +169,11 @@ function extrinsicToNamedPrimitive(
     nonce: nonce.toPrimitive(),
     tip: tip.toPrimitive(),
     signature: signature.toPrimitive(),
-    signer: signer.toPrimitive(),
+    signer: Object.assign(
+      {},
+      signer.toPrimitive(),
+      { publicKey: signer.value.toHex() }
+    ),
     isSigned,
     isEmpty,
     call: {

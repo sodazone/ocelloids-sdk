@@ -49,6 +49,17 @@ describe('substrate converters', () => {
       .toBe('0x9e754973630b425e486445ed1600409c97d63a7c2a0679d949d008d784acc917');
   });
 
+  it('should include the decoded key of the extrinsic signer', () => {
+    const xt = testBlocks[0].block.extrinsics[2];
+    const c = base.toNamedPrimitive(xt) as any;
+
+    expect(c).toBeDefined();
+    expect(c.signer.id).toBe('1sa85enM8EQ56Tzfyg97kvQf1CYfPoTczin4ASYTwUdH9iK');
+    expect(c.signer.publicKey).toBe('0x2691c4e0a42c029658db99ea8a362425d7218b72c158758049e4cd5581492826');
+    expect(c.hash)
+      .toBe('0x5591f75aac034e1d595af2684374eea74bae301279f37f63e065d921bdc3efb0');
+  });
+
   it('should convert an TxWithEvent', () => {
     const xt = testBlocks[0].extrinsics[0];
     const c = base.toNamedPrimitive(xt) as any;
@@ -171,7 +182,8 @@ describe('substrate converters', () => {
 
     expect(args.calls[0].value).toBe(14200000000);
     expect(args.calls[0].dest).toStrictEqual({
-      'id': '12DuPUY19gJkitzYg4LR1Rijj5hKp7xmM96CYr7QmozmYdBk'
+      'id': '12DuPUY19gJkitzYg4LR1Rijj5hKp7xmM96CYr7QmozmYdBk',
+      'publicKey': '0x361387c4094a44fa64865664c60216d1a2d3acef0ab04e0b7d5ebd7ffc42b7f2'
     });
   });
 
@@ -196,6 +208,15 @@ describe('substrate converters', () => {
     expect(() => {
       const _ = base.toNamedPrimitive(null);
     }).toThrow();
+  });
+
+  it('should include public key for multi address args', () => {
+    const b = testBlocksFrom('pk14435209.cbor.bin')[0];
+    const c = base.toNamedPrimitive(b) as any;
+    const { dest } = c.extrinsics[2].extrinsic.call.args;
+
+    expect(dest.id).toBe('14NEHDwc5PPQfEjzLVDbVbi4djQLQZ9u7mMU3BPhTFJf4cD6');
+    expect(dest.publicKey).toBe('0x94e58ead97ea7dbbc1f671d23a8d52a66e5659da2eddc1d139e0c49d8f648441');
   });
 
   it('should convert big numbers to strings', () => {
