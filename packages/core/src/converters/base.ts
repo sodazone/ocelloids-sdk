@@ -2,7 +2,14 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import {
-  EventRecord, Event, Extrinsic, SignedBlock, Block, FunctionMetadataLatest, MultiAddress
+  EventRecord,
+  Event,
+  Extrinsic,
+  SignedBlock,
+  Block,
+  FunctionMetadataLatest,
+  Address,
+  MultiAddress
 } from '@polkadot/types/interfaces';
 import type { Codec } from '@polkadot/types/types';
 import type { AnyJson, CallBase, AnyTuple } from '@polkadot/types-codec/types';
@@ -77,6 +84,14 @@ function isHumanizable(object: any): object is Humanizable {
   return object.toHuman !== undefined;
 }
 
+function expandAddress(address: Address | MultiAddress) {
+  return Object.assign(
+    {},
+    address.toPrimitive(),
+    { publicKey: address.value.toHex() }
+  );
+}
+
 /**
  * Maps the `Event` data names to its corresponding values.
  */
@@ -135,10 +150,7 @@ function callBaseToPrimitive({ argsDef, args, registry }: CallBase<AnyTuple, Fun
       const calls = args[i] as unknown as CallBase<AnyTuple, FunctionMetadataLatest>[];
       json[argName] = calls.map(callBaseToPrimitive);
     } else if (type === 'MultiAddress') {
-      json[argName] = Object.assign({},
-        args[i].toPrimitive(),
-        { publicKey: (args[i] as MultiAddress).value.toHex() }
-      );
+      json[argName] = expandAddress(args[i] as MultiAddress);
     } else {
       json[argName] = args[i].toPrimitive();
     }
@@ -169,11 +181,7 @@ function extrinsicToNamedPrimitive(
     nonce: nonce.toPrimitive(),
     tip: tip.toPrimitive(),
     signature: signature.toPrimitive(),
-    signer: Object.assign(
-      {},
-      signer.toPrimitive(),
-      { publicKey: signer.value.toHex() }
-    ),
+    signer: expandAddress(signer),
     isSigned,
     isEmpty,
     call: {
@@ -215,16 +223,16 @@ export function eventWithIdAndTxToNamedPrimitive(event: EventWithIdAndTx) {
  * Converts a `ExtrinsicWithId` object to a primitive representation with named fields.
  */
 export function extrinsicWithIdToNamedPrimitive(data: ExtrinsicWithId) {
-  const { extrinsicId, blockHash, blockNumber, blockPosition, extraSigners: origins } = data;
+  const { extrinsicId, blockHash, blockNumber, blockPosition, extraSigners } = data;
   return {
     ...extrinsicToNamedPrimitive(data as Extrinsic),
     blockNumber: blockNumber.toPrimitive(),
     blockHash: blockHash.toPrimitive(),
     blockPosition,
     extrinsicId,
-    origins: origins.map(o => ({
+    extraSigners: extraSigners.map(o => ({
       type: o.type,
-      address: o.address.toPrimitive()
+      address: expandAddress(o.address)
     }))
   };
 }

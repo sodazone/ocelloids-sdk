@@ -86,7 +86,7 @@ describe('substrate converters', () => {
     expect(c).toBeDefined();
     expect(c.extrinsic).toBeDefined();
     expect(c.extrinsic.extrinsicId).toBeDefined();
-    expect(c.extrinsic.origins).toBeDefined();
+    expect(c.extrinsic.extraSigners).toStrictEqual([]);
     expect(c.events).toBeDefined();
     expect(c.events[0].eventId).toBeDefined();
   });
