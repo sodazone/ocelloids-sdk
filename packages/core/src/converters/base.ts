@@ -9,7 +9,8 @@ import {
   Block,
   FunctionMetadataLatest,
   Address,
-  MultiAddress
+  MultiAddress,
+  AccountId
 } from '@polkadot/types/interfaces';
 import type { Codec } from '@polkadot/types/types';
 import type { AnyJson, CallBase, AnyTuple } from '@polkadot/types-codec/types';
@@ -84,12 +85,12 @@ function isHumanizable(object: any): object is Humanizable {
   return object.toHuman !== undefined;
 }
 
-function expandAddress(address: Address | MultiAddress) {
-  return Object.assign(
-    {},
-    address.toPrimitive(),
-    { publicKey: address.value.toHex() }
-  );
+function expandAddress(address: AccountId | Address | MultiAddress) {
+  const accountId : AccountId = (address as any).value ?? address;
+  return {
+    id: accountId.toPrimitive(),
+    publicKey: accountId.toHex()
+  };
 }
 
 /**
@@ -151,6 +152,10 @@ function callBaseToPrimitive({ argsDef, args, registry }: CallBase<AnyTuple, Fun
       json[argName] = calls.map(callBaseToPrimitive);
     } else if (type === 'MultiAddress') {
       json[argName] = expandAddress(args[i] as MultiAddress);
+    } else if (type === 'Address') {
+      json[argName] = expandAddress(args[i] as Address);
+    } else if (type === 'AccountId') {
+      json[argName] = expandAddress(args[i] as AccountId);
     } else {
       json[argName] = args[i].toPrimitive();
     }
