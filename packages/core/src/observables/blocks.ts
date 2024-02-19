@@ -41,8 +41,8 @@ export function heads(finalized = false) {
     return (source.pipe(
       switchMap(api => {
         return finalized ?
-          api.rpc.chain.subscribeFinalizedHeads() :
-          api.rpc.chain.subscribeNewHeads();
+          api.derive.chain.subscribeFinalizedHeads() :
+          api.derive.chain.subscribeNewHeads();
       }),
       debug(l, header => header.number.toHuman()),
       share()
