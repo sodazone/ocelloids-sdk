@@ -7,7 +7,6 @@
   "entryPointStrategy": "packages",
   "darkHighlightTheme": "github-dark",
   "lightHighlightTheme": "github-light",
-	"includeVersion": true,
 	"excludeExternals": true,
 	"excludePrivate": true,
 	"hideGenerator": true,

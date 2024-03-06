@@ -8,5 +8,6 @@
     "src/index.ts"
   ],
   "entryPointStrategy": "expand",
+  "includeVersion": true,
   "tsconfig": "../../tsconfig.docs.json"
 }
