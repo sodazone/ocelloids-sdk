@@ -1,16 +1,16 @@
 {
-"excludePrivate": true,
-"excludeProtected": true,
-"hideGenerator": true,
-"name": "Ocelloids SDK",
-"out": "docs",
-"tsconfig": "./tsconfig.docs.json",
-"darkHighlightTheme": "github-dark",
-"lightHighlightTheme": "github-light",
-"entryPointStrategy": "packages",
-"excludeExternals": true,
-"entryPoints": [
+  "name": "Ocelloids SDK",
+  "entryPoints": [
     "packages/core",
     "packages/pallets/*"
-]
+  ],
+  "entryPointStrategy": "packages",
+  "darkHighlightTheme": "github-dark",
+  "lightHighlightTheme": "github-light",
+	"includeVersion": true,
+	"excludeExternals": true,
+	"excludePrivate": true,
+	"hideGenerator": true,
+  "tsconfig": "./tsconfig.docs.json",
+  "out": "docs"
 }
