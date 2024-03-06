@@ -7,9 +7,9 @@
   "entryPointStrategy": "packages",
   "darkHighlightTheme": "github-dark",
   "lightHighlightTheme": "github-light",
-	"excludeExternals": true,
-	"excludePrivate": true,
-	"hideGenerator": true,
+  "excludeExternals": true,
+  "excludePrivate": true,
+  "hideGenerator": true,
   "tsconfig": "./tsconfig.docs.json",
   "out": "docs"
 }
