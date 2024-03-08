@@ -2698,8 +2698,8 @@ __metadata:
   resolution: "@sodazone/ocelloids-contracts@workspace:packages/pallets/contracts"
   dependencies:
     "@polkadot/api-contract": ^10.11.2
-    "@sodazone/ocelloids": 1.2.1-dev.0
-    "@sodazone/ocelloids-test": 1.2.1-dev.0
+    "@sodazone/ocelloids": 1.2.1
+    "@sodazone/ocelloids-test": 1.2.1
   languageName: unknown
   linkType: soft
 
@@ -2708,7 +2708,7 @@ __metadata:
   resolution: "@sodazone/ocelloids-examples@workspace:examples"
   dependencies:
     "@polkadot/rpc-provider": ^10.11.2
-    "@sodazone/ocelloids": 1.2.1-dev.0
+    "@sodazone/ocelloids": 1.2.1
     "@substrate/connect": ^0.8.4
     graph-data-structure: ^3.5.0
     hjson: ^3.2.2
@@ -2729,7 +2729,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@sodazone/ocelloids-test@1.2.1-dev.0, @sodazone/ocelloids-test@workspace:packages/test":
+"@sodazone/ocelloids-test@1.2.1, @sodazone/ocelloids-test@workspace:packages/test":
   version: 0.0.0-use.local
   resolution: "@sodazone/ocelloids-test@workspace:packages/test"
   dependencies:
@@ -2745,8 +2745,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@sodazone/ocelloids-tools@workspace:tools"
   dependencies:
-    "@sodazone/ocelloids": 1.2.1-dev.0
-    "@sodazone/ocelloids-test": 1.2.1-dev.0
+    "@sodazone/ocelloids": 1.2.1
+    "@sodazone/ocelloids-test": 1.2.1
     cbor-x: ^1.5.7
     citty: ^0.1.5
     shx: ^0.3.4
@@ -2755,12 +2755,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@sodazone/ocelloids@1.2.1-dev.0, @sodazone/ocelloids@workspace:packages/core":
+"@sodazone/ocelloids@1.2.1, @sodazone/ocelloids@workspace:packages/core":
   version: 0.0.0-use.local
   resolution: "@sodazone/ocelloids@workspace:packages/core"
   dependencies:
     "@polkadot/api": ^10.11.2
-    "@sodazone/ocelloids-test": 1.2.1-dev.0
+    "@sodazone/ocelloids-test": 1.2.1
     "@substrate/connect-known-chains": ^1.0.6
     mingo: ^6.4.10
     rxjs: ^7.8.1
