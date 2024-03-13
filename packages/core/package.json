@@ -26,9 +26,9 @@
     "url": "https://github.com/sodazone/ocelloids.git"
   },
   "dependencies": {
-    "@polkadot/api": "^10.11.2",
-    "@substrate/connect-known-chains": "^1.0.6",
-    "mingo": "^6.4.10",
+    "@polkadot/api": "^10.12.2",
+    "@substrate/connect-known-chains": "^1.1.1",
+    "mingo": "^6.4.12",
     "rxjs": "^7.8.1"
   },
   "devDependencies": {
