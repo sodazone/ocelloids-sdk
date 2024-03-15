@@ -1,5 +1,5 @@
 {
-  "name": "@sodazone/ocelloids-contracts",
+  "name": "@sodazone/ocelloids-sdk-contracts",
   "version": "1.2.2-dev.0",
   "description": "Contracts pallet support.",
   "main": "./dist/index.cjs",
@@ -23,14 +23,14 @@
   "repository": {
     "type": "git",
     "directory": "packages/pallets/contracts",
-    "url": "https://github.com/sodazone/ocelloids.git"
+    "url": "https://github.com/sodazone/ocelloids-sdk.git"
   },
   "dependencies": {
     "@polkadot/api-contract": "^10.12.2",
-    "@sodazone/ocelloids": "1.2.2-dev.0"
+    "@sodazone/ocelloids-sdk": "1.2.2-dev.0"
   },
   "devDependencies": {
-    "@sodazone/ocelloids-test": "1.2.2-dev.0"
+    "@sodazone/ocelloids-sdk-test": "1.2.2-dev.0"
   },
   "files": [
     "dist",

@@ -3,7 +3,7 @@
 
 import { DecodedEvent, DecodedMessage } from '@polkadot/api-contract/types';
 
-import { types } from '@sodazone/ocelloids';
+import { types } from '@sodazone/ocelloids-sdk';
 
 /**
  * Represents a decoded contract message with associated extrinsic.

@@ -1,7 +1,7 @@
 // Copyright 2023-2024 SO/DA zone
 // SPDX-License-Identifier: Apache-2.0
 
-import { mockRxApi } from '@sodazone/ocelloids-test';
+import { mockRxApi } from '@sodazone/ocelloids-sdk-test';
 import { blocks } from '../index.js';
 import { mongoFilter } from './mongo-filter.js';
 import { ControlQuery } from '../subjects/query.js';

@@ -10,7 +10,7 @@ import { formatBalance } from '@polkadot/util';
 import {
   SubstrateApis,
   config
-} from '@sodazone/ocelloids';
+} from '@sodazone/ocelloids-sdk';
 import {
   bufferCount, merge, map, switchMap, mergeAll
 } from 'rxjs';

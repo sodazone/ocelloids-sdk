@@ -5,7 +5,7 @@ import type { TxWithEvent } from '@polkadot/api-derive/types';
 
 import { from, of } from 'rxjs';
 
-import { testBlocks, testExtrinsics, testEventRecords } from '@sodazone/ocelloids-test';
+import { testBlocks, testExtrinsics, testEventRecords } from '@sodazone/ocelloids-sdk-test';
 
 import { extractEventsWithTx, extractEvents, extractExtrinsics, extractTxWithEvents } from './extract.js';
 import { EventWithId, EventWithIdAndTx, ExtrinsicWithId, TxWithIdAndEvent } from '../types/interfaces.js';

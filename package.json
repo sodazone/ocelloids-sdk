@@ -7,12 +7,12 @@
     "Marc Fornós <marc@soda.zone>",
     "Xueying Wang <xueying@soda.zone>"
   ],
-  "bugs": "https://github.com/sodazone/ocelloids/issues",
+  "bugs": "https://github.com/sodazone/ocelloids-sdk/issues",
   "description": "Software development kit for building monitoring applications for Substrate networks.",
   "engines": {
     "node": ">=18.14"
   },
-  "homepage": "https://github.com/sodazone/ocelloids#readme",
+  "homepage": "https://github.com/sodazone/ocelloids-sdk#readme",
   "jest": {
     "collectCoverage": true,
     "coveragePathIgnorePatterns": [
@@ -34,9 +34,9 @@
     "examples"
   ],
   "scripts": {
-    "build": "yarn workspaces foreach -pt --exclude @sodazone/ocelloids-tools --exclude @sodazone/ocelloids-examples run build",
-    "build:tools": "yarn workspace @sodazone/ocelloids-tools run build",
-    "build:examples": "yarn workspace @sodazone/ocelloids-examples run build",
+    "build": "yarn workspaces foreach -pt --exclude @sodazone/ocelloids-sdk-tools --exclude @sodazone/ocelloids-sdk-examples run build",
+    "build:tools": "yarn workspace @sodazone/ocelloids-sdk-tools run build",
+    "build:examples": "yarn workspace @sodazone/ocelloids-sdk-examples run build",
     "docs": "typedoc",
     "lint": "eslint --cache --fix \"packages/**/src/**/*.ts\"",
     "test": "jest",

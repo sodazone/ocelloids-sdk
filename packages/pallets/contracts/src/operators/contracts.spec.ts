@@ -9,13 +9,13 @@ import {
   testContractBlocks,
   testContractEvents,
   testContractCodeHash
-} from '@sodazone/ocelloids-test';
+} from '@sodazone/ocelloids-sdk-test';
 
 import { Abi } from '@polkadot/api-contract';
 
 import { from } from 'rxjs';
 
-import { types, mongoFilter } from '@sodazone/ocelloids';
+import { types, mongoFilter } from '@sodazone/ocelloids-sdk';
 
 import { contractConstructors, contractEvents, contractMessages } from './contracts.js';
 import { ContractMessageWithTx } from '../types/interfaces.js';

@@ -1,7 +1,7 @@
 // Copyright 2023-2024 SO/DA zone
 // SPDX-License-Identifier: Apache-2.0
 
-import { WsProvider } from '@sodazone/ocelloids-test';
+import { WsProvider } from '@sodazone/ocelloids-sdk-test';
 
 import { SubstrateApis } from './substrate-apis.js';
 

@@ -26,7 +26,7 @@ Here's an example `tsconfig.json` file:
 
 ### Setting Up Launch Configuration
 
-Now, let's create a launch configuration in VS Code that includes the source maps of `@sodazone/ocelloids`. This configuration will allow us to debug our code and step into the source code of the `@sodazone/ocelloids` package.
+Now, let's create a launch configuration in VS Code that includes the source maps of `@sodazone/ocelloids-sdk`. This configuration will allow us to debug our code and step into the source code of the `@sodazone/ocelloids-sdk` package.
 
 1. Open your project in VS Code.
 2. Create a new file named `.vscode/launch.json` in the root folder of your project.

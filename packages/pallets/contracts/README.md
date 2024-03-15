@@ -1,9 +1,9 @@
 # Ocelloids Contracts Module
 
-<a href="https://www.npmjs.com/package/@sodazone/ocelloids-contracts">
+<a href="https://www.npmjs.com/package/@sodazone/ocelloids-sdk-contracts">
   <img 
-    src="https://img.shields.io/npm/v/@sodazone/ocelloids-contracts?color=69D2E7&labelColor=69D2E7&logo=npm&logoColor=333333"
-    alt="npm @sodazone/ocelloids-contracts"
+    src="https://img.shields.io/npm/v/@sodazone/ocelloids-sdk-contracts?color=69D2E7&labelColor=69D2E7&logo=npm&logoColor=333333"
+    alt="npm @sodazone/ocelloids-sdk-contracts"
   />
 </a>
 
@@ -37,12 +37,12 @@ import { Abi } from '@polkadot/api-contract';
 import {
   SubstrateApis,
   blocks
-} from '@sodazone/ocelloids';
+} from '@sodazone/ocelloids-sdk';
 
 import {
   filterContractEvents,
   converters
-} from '@sodazone/ocelloids-contracts';
+} from '@sodazone/ocelloids-sdk-contracts';
 
 const CONTRACT_ADDRESS = '5GdHQQkRHvEEE4sDkcLkxCCumSkw2SFBJSLKzbMTNARLTXz3';
 

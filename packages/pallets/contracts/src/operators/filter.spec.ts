@@ -5,7 +5,7 @@ import {
   testContractMetadata,
   testContractAddress,
   testContractBlocks,
-} from '@sodazone/ocelloids-test';
+} from '@sodazone/ocelloids-sdk-test';
 
 import { Abi } from '@polkadot/api-contract';
 

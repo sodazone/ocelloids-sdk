@@ -20,7 +20,7 @@ import {
   blocksInRange,
   converters,
   filterEvents
-} from '@sodazone/ocelloids';
+} from '@sodazone/ocelloids-sdk';
 
 import { setTokenDefaultsFromChainInfo } from '../common/index.js';
 

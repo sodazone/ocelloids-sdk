@@ -6,8 +6,8 @@ import { of } from 'rxjs';
 import {
   testBlocks,
   nestedItems
-} from '@sodazone/ocelloids-test';
-import type { DataToMatch } from '@sodazone/ocelloids-test';
+} from '@sodazone/ocelloids-sdk-test';
+import type { DataToMatch } from '@sodazone/ocelloids-sdk-test';
 
 import { flattenCalls } from './flatten.js';
 import { types } from '../index.js';

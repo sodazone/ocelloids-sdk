@@ -2,11 +2,12 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { ApiPromise } from '@polkadot/api';
+import { EventRecord } from '@polkadot/types/interfaces';
 import { Abi } from '@polkadot/api-contract';
 
 import { Observable, from, of, filter, map, mergeMap, share } from 'rxjs';
 
-import { mongoFilter, types } from '@sodazone/ocelloids';
+import { mongoFilter, types } from '@sodazone/ocelloids-sdk';
 
 import { ContractConstructorWithTx, ContractEventWithBlockEvent, ContractMessageWithTx } from '../types/interfaces.js';
 import { AddressParam } from '../types/types.js';
@@ -159,8 +160,9 @@ export function contractEvents(
         //   contract: 'AccountId32',
         //   data: 'Bytes',
         // }
-        const { data } = blockEvent.data as any;
-        const decodedEvent = abi.decodeEvent(data.toU8a(true));
+
+        // TODO expects an EventRecord
+        const decodedEvent = abi.decodeEvent({ event: blockEvent } as unknown as EventRecord);
 
         return {
           blockEvent,

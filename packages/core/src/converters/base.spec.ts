@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 import type { AnyJson } from '@polkadot/types-codec/types';
 
-import { testBlocks, testBlocksFrom } from '@sodazone/ocelloids-test';
+import { testBlocks, testBlocksFrom } from '@sodazone/ocelloids-sdk-test';
 
 import { base } from './base.js';
 import { GenericEventWithId, GenericEventWithIdAndTx } from '../types/event.js';

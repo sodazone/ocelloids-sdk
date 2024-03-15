@@ -20,7 +20,7 @@
   </a>
   <picture>
     <img
-      src="https://img.shields.io/librariesio/release/npm/@sodazone/ocelloids?color=69D2E7&labelColor=A7DBD8"
+      src="https://img.shields.io/librariesio/release/npm/@sodazone/ocelloids-sdk?color=69D2E7&labelColor=A7DBD8"
       alt="Dependencies"
     />
   </picture>
@@ -58,15 +58,15 @@ Check our [Quickstart Guide](https://github.com/sodazone/ocelloids/blob/main/gui
 
 ### Ocelloids Core
 
-<a href="https://www.npmjs.com/package/@sodazone/ocelloids">
+<a href="https://www.npmjs.com/package/@sodazone/ocelloids-sdk">
   <img 
-    src="https://img.shields.io/npm/v/@sodazone/ocelloids?color=69D2E7&labelColor=69D2E7&logo=npm&logoColor=333333"
-    alt="npm @sodazone/ocelloids"
+    src="https://img.shields.io/npm/v/@sodazone/ocelloids-sdk?color=69D2E7&labelColor=69D2E7&logo=npm&logoColor=333333"
+    alt="npm @sodazone/ocelloids-sdk"
   />
 </a>
 
 ```shell
-npm i @sodazone/ocelloids
+npm i @sodazone/ocelloids-sdk
 ```
 
 Provides essential abstractions, reactive operators, base type converters, and pallet-independent functionality.
@@ -75,15 +75,15 @@ Source code [packages/core](https://github.com/sodazone/ocelloids/tree/main/pack
 
 ### Ocelloids Contracts
 
-<a href="https://www.npmjs.com/package/@sodazone/ocelloids-contracts">
+<a href="https://www.npmjs.com/package/@sodazone/ocelloids-sdk-contracts">
   <img 
-    src="https://img.shields.io/npm/v/@sodazone/ocelloids-contracts?color=69D2E7&labelColor=69D2E7&logo=npm&logoColor=333333"
-    alt="npm @sodazone/ocelloids-contracts"
+    src="https://img.shields.io/npm/v/@sodazone/ocelloids-sdk-contracts?color=69D2E7&labelColor=69D2E7&logo=npm&logoColor=333333"
+    alt="npm @sodazone/ocelloids-sdk-contracts"
   />
 </a>
 
 ```shell
-npm i @sodazone/ocelloids-contracts
+npm i @sodazone/ocelloids-sdk-contracts
 ```
 
 Provides operators and type converters for the contracts pallet.
@@ -107,7 +107,7 @@ import {
   SubstrateApis,
   finalizedBlocks,
   filterEvents
-} from '@sodazone/ocelloids';
+} from '@sodazone/ocelloids-sdk';
 
 const apis = new SubstrateApis({
   polkadot: {
@@ -196,7 +196,7 @@ import { switchMap } from 'rxjs';
 import {
   SubstrateApis,
   mongoFilter
-} from '@sodazone/ocelloids';
+} from '@sodazone/ocelloids-sdk';
 
 const apis = new SubstrateApis({
   polkadot: {
@@ -230,7 +230,7 @@ import {
   blocksInRange,
   filterEvents,
   ControlQuery
-} from '@sodazone/ocelloids';
+} from '@sodazone/ocelloids-sdk';
 
 function transfersOf(addresses: string[]) {
   return ControlQuery.from({
@@ -343,7 +343,7 @@ Additional test data and mocks are available in `packages/test/` for your conven
 
 #### Visual Studio Code
 
-If you encounter the issue of `@sodazone/ocelloids-test` being marked as unresolved 
+If you encounter the issue of `@sodazone/ocelloids-sdk-test` being marked as unresolved 
 in the `spec` test files after building the project, you can resolve it by following these steps:
 
 * Open any typescript file of the project.

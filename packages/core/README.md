@@ -1,9 +1,9 @@
 # Ocelloids Core Module
 
-<a href="https://www.npmjs.com/package/@sodazone/ocelloids">
+<a href="https://www.npmjs.com/package/@sodazone/ocelloids-sdk">
   <img 
-    src="https://img.shields.io/npm/v/@sodazone/ocelloids?color=69D2E7&labelColor=69D2E7&logo=npm&logoColor=333333"
-    alt="npm @sodazone/ocelloids"
+    src="https://img.shields.io/npm/v/@sodazone/ocelloids-sdk?color=69D2E7&labelColor=69D2E7&logo=npm&logoColor=333333"
+    alt="npm @sodazone/ocelloids-sdk"
   />
 </a>
 
@@ -68,7 +68,7 @@ Here's a simple demonstration:
 ```typescript
 import { WsProvider } from '@polkadot/api';
 
-import { SubstrateApis } from '@sodazone/ocelloids';
+import { SubstrateApis } from '@sodazone/ocelloids-sdk';
 
 const apis = new SubstrateApis({
   network: {

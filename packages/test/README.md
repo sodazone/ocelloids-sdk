@@ -18,7 +18,7 @@ The `packages/test` module source folder is structured as follows:
 You can leverage the test data and mocks provided by the `ocelloids-test` module for your Jest tests. Here's an example:
 
 ```typescript
-import { testBlocks, mockRxApi } from '@sodazone/ocelloids-test';
+import { testBlocks, mockRxApi } from '@sodazone/ocelloids-sdk-test';
 
 it('should emit the latest new block', done => {
   const testPipe = blocks()(mockRxApi);

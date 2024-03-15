@@ -14,7 +14,7 @@ import {
   finalizedBlocks,
   filterEvents,
   ControlQuery
-} from '@sodazone/ocelloids';
+} from '@sodazone/ocelloids-sdk';
 import { tap } from 'rxjs';
 
 function watcher({ url, threshold, verbose }) {

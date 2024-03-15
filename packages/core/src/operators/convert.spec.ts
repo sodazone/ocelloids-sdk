@@ -3,7 +3,7 @@
 
 import { from } from 'rxjs';
 
-import { testBlocks } from '@sodazone/ocelloids-test';
+import { testBlocks } from '@sodazone/ocelloids-sdk-test';
 import { convert } from './convert.js';
 
 describe('convert operator', () => {

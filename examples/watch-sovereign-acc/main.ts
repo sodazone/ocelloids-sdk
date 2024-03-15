@@ -8,7 +8,7 @@ import { BN, formatBalance } from '@polkadot/util';
 import { AccountInfo } from '@polkadot/types/interfaces';
 import { Option } from '@polkadot/types-codec';
 
-import { SubstrateApis } from '@sodazone/ocelloids';
+import { SubstrateApis } from '@sodazone/ocelloids-sdk';
 
 import { switchMap, combineLatest, filter, map, timer } from 'rxjs';
 

@@ -17,12 +17,12 @@ import {
   SubstrateApis,
   blocksInRange,
   extractTxWithEvents
-} from '@sodazone/ocelloids';
+} from '@sodazone/ocelloids-sdk';
 
 import {
   contractConstructors,
   converters
-} from '@sodazone/ocelloids-contracts';
+} from '@sodazone/ocelloids-sdk-contracts';
 
 function watcher({ metadataPath, codeHash, verbose }) {
   const contractMetadataJson = readFileSync(metadataPath).toString();

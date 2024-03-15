@@ -14,12 +14,12 @@ import {
   SubstrateApis,
   blocksInRange,
   blocks
-} from '@sodazone/ocelloids';
+} from '@sodazone/ocelloids-sdk';
 
 import {
   filterContractCalls,
   converters
-} from '@sodazone/ocelloids-contracts';
+} from '@sodazone/ocelloids-sdk-contracts';
 
 import { printHeader, objectToStructuredString } from './utils.js';
 

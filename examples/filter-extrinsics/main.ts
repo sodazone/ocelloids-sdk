@@ -17,7 +17,7 @@ import {
   blocks,
   types,
   filterExtrinsics
-} from '@sodazone/ocelloids';
+} from '@sodazone/ocelloids-sdk';
 
 function watcher({ urls, verbose }) {
   process.stdin.setEncoding('utf-8');

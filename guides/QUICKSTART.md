@@ -40,20 +40,20 @@ npx tsc --init --module nodenext --outDir ./out --skipLibCheck true --sourceMap 
 Install the core package of the SDK:
 
 ```shell
-npm i @sodazone/ocelloids
+npm i @sodazone/ocelloids-sdk
 ```
 
 If you require specific pallet support, install the corresponding package. For `pallet-contracts` support:
 
 ```shell
-npm i @sodazone/ocelloids-contracts
+npm i @sodazone/ocelloids-sdk-contracts
 ```
 
 Create an `index.ts` file as the entrypoint for your monitor:
 
 ```shell
 cat <<EOF > index.ts
-import { SubstrateApis, blocks } from '@sodazone/ocelloids';
+import { SubstrateApis, blocks } from '@sodazone/ocelloids-sdk';
 import { WsProvider } from '@polkadot/api';
 
 // 1. Initialise Polkadot.js APIs
@@ -246,7 +246,7 @@ The Ocelloids SDK provides separate packages for Substrate pallet support, keepi
 To use the `pallet-contracts` package, simply install it with npm:
 
 ```shell
-npm i @sodazone/ocelloids-contracts
+npm i @sodazone/ocelloids-sdk-contracts
 ```
 
 The package offers convenient operators for handling contract calls, events, and constructors, automatically decoding ABI. You can filter over decoded data using the [`filterContractCalls`](https://sodazone.github.io/ocelloids/functions/_sodazone_ocelloids_contracts.filterContractCalls.html) operator, for example:
@@ -255,11 +255,11 @@ The package offers convenient operators for handling contract calls, events, and
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 
-import { SubstrateApis, blocks } from '@sodazone/ocelloids';
+import { SubstrateApis, blocks } from '@sodazone/ocelloids-sdk';
 
 import { WsProvider } from '@polkadot/api';
 import { Abi } from '@polkadot/api-contract';
-import { filterContractCalls } from '@sodazone/ocelloids-contracts';
+import { filterContractCalls } from '@sodazone/ocelloids-sdk-contracts';
 
 // 1. Initialise Polkadot.js APIs
 const apis = new SubstrateApis({

@@ -29,7 +29,7 @@ export interface Control<T, S> extends Subject<S> {
  * ## Example
  *
  * ```ts
- * import { ControlQuery } from '@sodazone/ocelloids';
+ * import { ControlQuery } from '@sodazone/ocelloids-sdk';
  *
  * // Filter all balance transfer from an EventRecord for an address
  * ControlQuery.from({

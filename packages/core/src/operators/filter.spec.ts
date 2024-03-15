@@ -5,7 +5,7 @@ import { from } from 'rxjs';
 
 import { filterEvents, filterEventsWithTx } from './filter.js';
 
-import { testBlocks } from '@sodazone/ocelloids-test';
+import { testBlocks } from '@sodazone/ocelloids-sdk-test';
 import { BlockEvent, EventWithIdAndTx } from '../types/interfaces.js';
 
 describe('filter operators', () => {

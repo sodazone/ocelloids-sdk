@@ -12,7 +12,7 @@ import {
   mongoFilter,
   filterExtrinsics,
   extractEventsWithTx
-} from '@sodazone/ocelloids';
+} from '@sodazone/ocelloids-sdk';
 
 import { contractEvents, contractMessages } from './index.js';
 import { ContractEventWithBlockEvent, ContractMessageWithTx } from '../types/interfaces.js';

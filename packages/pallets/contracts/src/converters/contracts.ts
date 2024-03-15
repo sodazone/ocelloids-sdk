@@ -4,7 +4,7 @@
 import type { AnyJson, Codec } from '@polkadot/types-codec/types';
 import { AbiParam, DecodedEvent, DecodedMessage } from '@polkadot/api-contract/types';
 
-import { converters } from '@sodazone/ocelloids';
+import { converters } from '@sodazone/ocelloids-sdk';
 
 import { ContractEventWithBlockEvent, ContractMessageWithTx } from '../types/interfaces.js';
 

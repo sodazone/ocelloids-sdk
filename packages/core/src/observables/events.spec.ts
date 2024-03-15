@@ -3,7 +3,7 @@
 
 import type { EventRecord } from '@polkadot/types/interfaces';
 
-import { mockRxApi, testEventRecords } from '@sodazone/ocelloids-test';
+import { mockRxApi, testEventRecords } from '@sodazone/ocelloids-sdk-test';
 
 import { events } from './events.js';
 

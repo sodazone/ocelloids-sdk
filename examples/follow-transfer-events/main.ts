@@ -19,7 +19,7 @@ import {
   config,
   filterEvents,
   ControlQuery
-} from '@sodazone/ocelloids';
+} from '@sodazone/ocelloids-sdk';
 
 const graph = Graph();
 const KRAKEN = '12xtAYsRUrmbniiWQqJtECiBQrMn8AypQcXhnQAc6RB6XkLW';
