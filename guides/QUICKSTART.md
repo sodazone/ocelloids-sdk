@@ -161,11 +161,11 @@ apis.rx.polkadot.pipe(
 
 3. Use a debugger:
 
-For more details, check our guide on [debugging](https://github.com/sodazone/ocelloids/blob/main/guides/DEBUGGING.md)
+For more details, check our guide on [debugging](https://github.com/sodazone/ocelloids-sdk/blob/main/guides/DEBUGGING.md)
 
 ### Using Operators
 
-The Ocelloids SDK provides a set of useful [operators](https://sodazone.github.io/ocelloids/modules/_sodazone_ocelloids.html) hat can be applied to observables to retrieve specific data. One such operator is `mongoFilter`, explained in the previous section. Other operators like [`filterExtrinsics`](https://sodazone.github.io/ocelloids/functions/_sodazone_ocelloids.filterExtrinsics.html) and [`filterEvents`](https://sodazone.github.io/ocelloids/functions/_sodazone_ocelloids.filterEvents.html) abstract commonly used patternss. 
+The Ocelloids SDK provides a set of useful [operators](https://sodazone.github.io/ocelloids-sdk/modules/_sodazone_ocelloids.html) hat can be applied to observables to retrieve specific data. One such operator is `mongoFilter`, explained in the previous section. Other operators like [`filterExtrinsics`](https://sodazone.github.io/ocelloids-sdk/functions/_sodazone_ocelloids_sdk.filterExtrinsics.html) and [`filterEvents`](https://sodazone.github.io/ocelloids-sdk/functions/_sodazone_ocelloids_sdk.filterEvents.html) abstract commonly used patternss. 
 
 For example, `filterExtrinsics` takes a `SignedBlockExtended` observable as input, extracts extrinsics with events, flattens batched extrinsics, and applies a filter to the results. You can use it to filter successful balance transfer extrinsics:
 
@@ -249,7 +249,7 @@ To use the `pallet-contracts` package, simply install it with npm:
 npm i @sodazone/ocelloids-sdk-contracts
 ```
 
-The package offers convenient operators for handling contract calls, events, and constructors, automatically decoding ABI. You can filter over decoded data using the [`filterContractCalls`](https://sodazone.github.io/ocelloids/functions/_sodazone_ocelloids_contracts.filterContractCalls.html) operator, for example:
+The package offers convenient operators for handling contract calls, events, and constructors, automatically decoding ABI. You can filter over decoded data using the [`filterContractCalls`](https://sodazone.github.io/ocelloids-sdk/functions/_sodazone_ocelloids_sdk_contracts.filterContractCalls.html) operator, for example:
 
 ```typescript
 import { readFileSync } from 'node:fs';
@@ -300,7 +300,7 @@ apis.rx.rococo.pipe(
 
 ### Backtesting
 
-You might want to ensure that your filter works correctly before running your monitor with real-time data. To test your filter, you can use the [`blocksInRange`](https://sodazone.github.io/ocelloids/functions/_sodazone_ocelloids.blocksInRange.html) observable to scan a range of historical blocks where you are certain your filter should match and validate the output.
+You might want to ensure that your filter works correctly before running your monitor with real-time data. To test your filter, you can use the [`blocksInRange`](https://sodazone.github.io/ocelloids-sdk/functions/_sodazone_ocelloids_sdk.blocksInRange.html) observable to scan a range of historical blocks where you are certain your filter should match and validate the output.
 
 For example, to test a filter monitoring staking rewards paid out to your account, you can use the following program:
 

@@ -2,19 +2,19 @@
 
 <picture>
   <img
-    src="https://github.com/sodazone/ocelloids/blob/main/.github/assets/oc-sdk.png?raw=true"
+    src="https://github.com/sodazone/ocelloids-sdk/blob/main/.github/assets/oc-sdk.png?raw=true"
     width="330"
     height="auto"
     alt=""
   />
 </picture>
 
-[Packages](https://github.com/sodazone/ocelloids/#installation) | [Documentation](https://sodazone.github.io/ocelloids/) | [Examples](https://github.com/sodazone/ocelloids/tree/main/examples)
+[Packages](https://github.com/sodazone/ocelloids-sdk/#installation) | [Documentation](https://sodazone.github.io/ocelloids-sdk/) | [Examples](https://github.com/sodazone/ocelloids-sdk/tree/main/examples)
 
 <p align="center">
-  <a href="https://github.com/sodazone/ocelloids/actions/workflows/ci.yml">
+  <a href="https://github.com/sodazone/ocelloids-sdk/actions/workflows/ci.yml">
     <img
-      src="https://img.shields.io/github/actions/workflow/status/sodazone/ocelloids/ci.yml?branch=main&color=69D2E7&labelColor=A7DBD8"
+      src="https://img.shields.io/github/actions/workflow/status/sodazone/ocelloids-sdk/ci.yml?branch=main&color=69D2E7&labelColor=A7DBD8"
       alt="CI"
     />
   </a>
@@ -24,9 +24,9 @@
       alt="Dependencies"
     />
   </picture>
-  <a href="https://github.com/sodazone/ocelloids/blob/main/LICENSE">
+  <a href="https://github.com/sodazone/ocelloids-sdk/blob/main/LICENSE">
     <img
-      src="https://img.shields.io/github/license/sodazone/ocelloids?color=69D2E7&labelColor=A7DBD8"
+      src="https://img.shields.io/github/license/sodazone/ocelloids-sdk?color=69D2E7&labelColor=A7DBD8"
       alt="License"
     />
   </a>
@@ -52,7 +52,7 @@ It simplifies the implementation of multi-chain monitoring programs and provides
 
 ## Quickstart
 
-Check our [Quickstart Guide](https://github.com/sodazone/ocelloids/blob/main/guides/QUICKSTART.md) to set up your first Ocelloids monitoring program.
+Check our [Quickstart Guide](https://github.com/sodazone/ocelloids-sdk/blob/main/guides/QUICKSTART.md) to set up your first Ocelloids monitoring program.
 
 ## Installation
 
@@ -88,13 +88,13 @@ npm i @sodazone/ocelloids-sdk-contracts
 
 Provides operators and type converters for the contracts pallet.
 
-Source code [packages/pallets/contracts](https://github.com/sodazone/ocelloids/tree/main/packages/pallets/contracts).
+Source code [packages/pallets/contracts](https://github.com/sodazone/ocelloids-sdk/tree/main/packages/pallets/contracts).
 
 ## Usage
 
-Refer to the [SDK documentation](https://sodazone.github.io/ocelloids/).
+Refer to the [SDK documentation](https://sodazone.github.io/ocelloids-sdk/).
 
-You can also explore some example applications in the [examples/](https://github.com/sodazone/ocelloids/tree/main/examples) folder.
+You can also explore some example applications in the [examples/](https://github.com/sodazone/ocelloids-sdk/tree/main/examples) folder.
 
 ### Example: Filtering Transfer Events
 
@@ -327,7 +327,7 @@ The development support tools include functionalities such as chain data capture
 
 #### Examples
 
-The [examples/](https://github.com/sodazone/ocelloids/tree/main/examples) folder contains example applications.
+The [examples/](https://github.com/sodazone/ocelloids-sdk/tree/main/examples) folder contains example applications.
 
 ### Testing
 

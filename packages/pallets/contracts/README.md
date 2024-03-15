@@ -21,7 +21,7 @@ The `packages/pallets/contracts` module source folder is structured as follows:
 
 ## Usage
 
-Refer to the [SDK documentation](https://sodazone.github.io/ocelloids/).
+Refer to the [SDK documentation](https://sodazone.github.io/ocelloids-sdk/).
 
 ### Example: Tracking Contract Events
 
@@ -92,5 +92,5 @@ Output:
 }
 ```
 
-For more detailed examples, please refer to the [watch-contracts](https://github.com/sodazone/ocelloids/tree/main/examples/watch-contracts) example application.
+For more detailed examples, please refer to the [watch-contracts](https://github.com/sodazone/ocelloids-sdk/tree/main/examples/watch-contracts) example application.
 

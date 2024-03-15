@@ -1,6 +1,6 @@
 # Ocelloids Test Module
 
-The Ocelloids SDK Test Module provides real network data captured using the Ocelloids [Capture Tool](https://github.com/sodazone/ocelloids/tree/main/tools) for unit testing purposes. It also includes Jest mocks that are necessary for testing.
+The Ocelloids SDK Test Module provides real network data captured using the Ocelloids [Capture Tool](https://github.com/sodazone/ocelloids-sdk/tree/main/tools) for unit testing purposes. It also includes Jest mocks that are necessary for testing.
 
 ## Layout
 
@@ -15,7 +15,7 @@ The `packages/test` module source folder is structured as follows:
 
 ### Using Available Test Data and Mocks
 
-You can leverage the test data and mocks provided by the `ocelloids-test` module for your Jest tests. Here's an example:
+You can leverage the test data and mocks provided by the `ocelloids-sdk-test` module for your Jest tests. Here's an example:
 
 ```typescript
 import { testBlocks, mockRxApi } from '@sodazone/ocelloids-sdk-test';

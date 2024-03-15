@@ -26,9 +26,9 @@ The `packages/core` module source folder is structured as follows:
 
 ## Usage
 
-Refer to the [SDK documentation](https://sodazone.github.io/ocelloids/).
+Refer to the [SDK documentation](https://sodazone.github.io/ocelloids-sdk/).
 
-Additionally, check out the [examples/](https://github.com/sodazone/ocelloids/tree/main/examples) folder for example applications.
+Additionally, check out the [examples/](https://github.com/sodazone/ocelloids-sdk/tree/main/examples) folder for example applications.
 
 ## Logging
 
@@ -96,7 +96,7 @@ const apis = new SubstrateApis({
 
 For more detailed information on extending types and methods in the API, please refer to the Polkadot.js documentation on [Extending Types](https://polkadot.js.org/docs/api/start/types.extend) and [Custom RPC](https://polkadot.js.org/docs/api/start/rpc.custom).
 
-You can also explore a practical example of how custom methods and types are registered in the [watch-contracts](https://github.com/sodazone/ocelloids/tree/main/examples/watch-contracts) example application.
+You can also explore a practical example of how custom methods and types are registered in the [watch-contracts](https://github.com/sodazone/ocelloids-sdk/tree/main/examples/watch-contracts) example application.
 
 ## Nested Calls Flattener
 

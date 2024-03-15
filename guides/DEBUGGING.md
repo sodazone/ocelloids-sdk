@@ -66,7 +66,7 @@ Below is a screenshot capturing a breakpoint in action within Ocelloids mongo fi
 <div align="center">
 
 <picture>
-<img src="https://github.com/sodazone/ocelloids/blob/main/guides/assets/debugging_screenshot.png?raw=true"
+<img src="https://github.com/sodazone/ocelloids-sdk/blob/main/guides/assets/debugging_screenshot.png?raw=true"
     width="100%"
     height="auto"
     alt="Ocelloids Debugging Screenshot" />
