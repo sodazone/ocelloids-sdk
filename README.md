@@ -12,18 +12,14 @@
 [Packages](https://github.com/sodazone/ocelloids-sdk/#installation) | [Documentation](https://sodazone.github.io/ocelloids-sdk/) | [Examples](https://github.com/sodazone/ocelloids-sdk/tree/main/examples)
 
 <p align="center">
-  <a href="https://github.com/sodazone/ocelloids-sdk/actions/workflows/ci.yml">
-    <img
+  <a href="https://github.com/sodazone/ocelloids-sdk/actions/workflows/ci.yml"><img
       src="https://img.shields.io/github/actions/workflow/status/sodazone/ocelloids-sdk/ci.yml?branch=main&color=69D2E7&labelColor=A7DBD8"
       alt="CI"
-    />
-  </a>
-  <a href="https://github.com/sodazone/ocelloids-sdk/blob/main/LICENSE">
-    <img
+    /></a>
+  <a href="https://github.com/sodazone/ocelloids-sdk/blob/main/LICENSE"><img
       src="https://img.shields.io/github/license/sodazone/ocelloids-sdk?color=69D2E7&labelColor=A7DBD8"
       alt="License"
-    />
-  </a>
+    /></a>
 </p>
 </div>
 
