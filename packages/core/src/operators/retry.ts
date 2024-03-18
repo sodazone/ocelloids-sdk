@@ -25,8 +25,8 @@ export type TruncatedExpBackoffConfig = {
  * @returns A delay function compatible with the retry operator.
  */
 export function truncatedExpBackoff(
-  baseDelay: number,
-  maxDelay: number,
+  baseDelay: number = 10,
+  maxDelay: number = 900000, // 15 minutes,
   scheduler: SchedulerLike = asyncScheduler
 ) {
   return (_error: any, retryCount: number) : Observable<number> => {
@@ -50,12 +50,12 @@ export function truncatedExpBackoff(
  * @returns A retry operator that uses truncated exponential backoff for retry attempts.
  */
 export function retryWithTruncatedExpBackoff<T>({
-  baseDelay = 10,
-  maxDelay = 900000, // 15 minutes,
-  maxCount = Infinity
+  baseDelay,
+  maxDelay,
+  maxCount
 } : TruncatedExpBackoffConfig = {}) {
   return retry<T>({
-    count: maxCount,
+    count: maxCount ?? Infinity,
     delay: truncatedExpBackoff(
       baseDelay,
       maxDelay
