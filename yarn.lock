@@ -2803,8 +2803,8 @@ __metadata:
   resolution: "@sodazone/ocelloids-sdk-contracts@workspace:packages/pallets/contracts"
   dependencies:
     "@polkadot/api-contract": ^10.12.2
-    "@sodazone/ocelloids-sdk": 1.2.3-dev.0
-    "@sodazone/ocelloids-sdk-test": 1.2.3-dev.0
+    "@sodazone/ocelloids-sdk": 1.2.3
+    "@sodazone/ocelloids-sdk-test": 1.2.3
   languageName: unknown
   linkType: soft
 
@@ -2813,7 +2813,7 @@ __metadata:
   resolution: "@sodazone/ocelloids-sdk-examples@workspace:examples"
   dependencies:
     "@polkadot/rpc-provider": ^10.12.2
-    "@sodazone/ocelloids-sdk": 1.2.3-dev.0
+    "@sodazone/ocelloids-sdk": 1.2.3
     "@substrate/connect": ^0.8.8
     graph-data-structure: ^3.5.0
     hjson: ^3.2.2
@@ -2834,7 +2834,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@sodazone/ocelloids-sdk-test@1.2.3-dev.0, @sodazone/ocelloids-sdk-test@workspace:packages/test":
+"@sodazone/ocelloids-sdk-test@1.2.3, @sodazone/ocelloids-sdk-test@workspace:packages/test":
   version: 0.0.0-use.local
   resolution: "@sodazone/ocelloids-sdk-test@workspace:packages/test"
   dependencies:
@@ -2850,8 +2850,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@sodazone/ocelloids-sdk-tools@workspace:tools"
   dependencies:
-    "@sodazone/ocelloids-sdk": 1.2.3-dev.0
-    "@sodazone/ocelloids-sdk-test": 1.2.3-dev.0
+    "@sodazone/ocelloids-sdk": 1.2.3
+    "@sodazone/ocelloids-sdk-test": 1.2.3
     cbor-x: ^1.5.8
     citty: ^0.1.6
     shx: ^0.3.4
@@ -2860,12 +2860,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@sodazone/ocelloids-sdk@1.2.3-dev.0, @sodazone/ocelloids-sdk@workspace:packages/core":
+"@sodazone/ocelloids-sdk@1.2.3, @sodazone/ocelloids-sdk@workspace:packages/core":
   version: 0.0.0-use.local
   resolution: "@sodazone/ocelloids-sdk@workspace:packages/core"
   dependencies:
     "@polkadot/api": ^10.12.2
-    "@sodazone/ocelloids-sdk-test": 1.2.3-dev.0
+    "@sodazone/ocelloids-sdk-test": 1.2.3
     "@substrate/connect-known-chains": ^1.1.1
     mingo: ^6.4.12
     rxjs: ^7.8.1

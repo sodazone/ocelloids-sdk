@@ -1,6 +1,6 @@
 {
   "name": "@sodazone/ocelloids-sdk",
-  "version": "1.2.3-dev.0",
+  "version": "1.2.3",
   "description": "Software development kit for building monitoring applications for Substrate networks.",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -32,7 +32,7 @@
     "rxjs": "^7.8.1"
   },
   "devDependencies": {
-    "@sodazone/ocelloids-sdk-test": "1.2.3-dev.0"
+    "@sodazone/ocelloids-sdk-test": "1.2.3"
   },
   "files": [
     "dist",
@@ -51,6 +51,5 @@
   "tsup": {
     "bundle": true,
     "skipNodeModulesBundle": true
-  },
-  "stableVersion": "1.2.2"
+  }
 }
