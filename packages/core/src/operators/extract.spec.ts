@@ -51,6 +51,7 @@ describe('extractors over extended signed blocks', () => {
       testPipe.subscribe({
         next: (extrinsic: ExtrinsicWithId) => {
           expect(extrinsic).toBeDefined();
+          expect(extrinsic.toHuman()).not.toBeNull();
           expect(extrinsic.method.toString())
             .toEqual(testExtrinsics[index].extrinsic.method.toString());
           expect(extrinsic.data).toEqual(testExtrinsics[index].extrinsic.data);
@@ -70,6 +71,7 @@ describe('extractors over extended signed blocks', () => {
       testPipe.subscribe({
         next: (event: EventWithId) => {
           expect(event).toBeDefined();
+          expect(event.toHuman()).not.toBeNull();
           expect(event.method).toEqual(testEventRecords[index].event.method);
           expect(event.data.toString()).toEqual(testEventRecords[index].event.data.toString());
           expect(event.blockHash).toBeDefined();
