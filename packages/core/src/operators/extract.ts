@@ -4,7 +4,7 @@
 import type { SignedBlock } from '@polkadot/types/interfaces';
 import type { SignedBlockExtended } from '@polkadot/api-derive/types';
 
-import { Observable, mergeMap, share } from 'rxjs';
+import { Observable, from, mergeMap, share, map } from 'rxjs';
 
 import { GenericExtrinsicWithId, enhanceTxWithIdAndEvents } from '../types/extrinsic.js';
 import { GenericEventWithId, GenericEventWithIdAndTx } from '../types/event.js';
@@ -119,55 +119,63 @@ export function extractExtrinsics() {
 export function extractEvents() {
   return (source: Observable<SignedBlockExtended>): Observable<BlockEvent> => {
     return source.pipe(
-      mergeMap(({ block, extrinsics, events }) => {
-        const blockNumber = block.header.number;
-        const blockHash = block.hash;
-
+      map(({block, events}) => {
+        return {
+          extrinsics: block.extrinsics,
+          events,
+          blockNumber: block.header.number,
+          blockHash: block.hash
+        };
+      }),
+      mergeMap(({ extrinsics, events, blockHash, blockNumber }) => {
         let prevXtIndex = -1;
         let xtEventIndex = 0;
-
+        let extrinsicWithId: ExtrinsicWithId | undefined;
+        // TODO: use inner Observable to stream events
         // Loops through each event record in the block and enhance it with block context.
         // If event is emitted from an extrinsic, enhance also with extrinsic context.
-        return events.reduce((blockEvents: BlockEvent[], { phase, event }, i) => {
-          const eventBlockContext: EventBlockContext = {
-            blockNumber,
-            blockHash,
-            blockPosition: i
-          };
-          const extrinsicIndex = phase.isApplyExtrinsic ? phase.asApplyExtrinsic.toNumber() : undefined;
-
-          if (extrinsicIndex) {
-            const extrinsic = new GenericExtrinsicWithId(extrinsics[extrinsicIndex].extrinsic, {
+        return from(events).pipe(
+          map(({ phase, event }, index) => {
+            const eventBlockContext: EventBlockContext = {
               blockNumber,
               blockHash,
-              blockPosition: extrinsicIndex
-            });
-            // If we have moved on to the next extrinsic,
-            // reset the event index to 0
-            if (extrinsicIndex > prevXtIndex) {
-              xtEventIndex = 0;
+              blockPosition: index
+            };
+            const extrinsicIndex = phase.isApplyExtrinsic ? phase.asApplyExtrinsic.toNumber() : undefined;
+            if (extrinsicIndex) {
+              if (extrinsicWithId === undefined) {
+                extrinsicWithId = new GenericExtrinsicWithId(extrinsics[extrinsicIndex], {
+                  blockNumber,
+                  blockHash,
+                  blockPosition: extrinsicIndex
+                });
+              }
+
+              const blockEvent = new GenericEventWithIdAndTx(event, {
+                ...eventBlockContext,
+                extrinsicId: extrinsicWithId.extrinsicId,
+                extrinsic: extrinsicWithId,
+                extrinsicPosition: xtEventIndex
+              });
+
+              // If we have moved on to the next extrinsic,
+              // reset the event index to 0
+              if (extrinsicIndex > prevXtIndex) {
+                xtEventIndex = 0;
+                extrinsicWithId = undefined;
+              }
+
+              // Increase event index in extrinsic for next loop
+              xtEventIndex++;
+              // Assign current extrinsic index to prevXtIndex
+              prevXtIndex = extrinsicIndex;
+
+              return blockEvent;
             }
 
-            blockEvents.push(
-              new GenericEventWithIdAndTx(event, {
-                ...eventBlockContext,
-                extrinsicId: extrinsic.extrinsicId,
-                extrinsic,
-                extrinsicPosition: xtEventIndex
-              })
-            );
-            // Increase event index in extrinsic for next loop
-            xtEventIndex++;
-            // Assign current extrinsic index to prevXtIndex
-            prevXtIndex = extrinsicIndex;
-          } else {
-            blockEvents.push(
-              new GenericEventWithId(event, eventBlockContext)
-            );
-          }
-
-          return blockEvents;
-        }, []);
+            return new GenericEventWithId(event, eventBlockContext);
+          }),
+        );
       }),
       share()
     );
