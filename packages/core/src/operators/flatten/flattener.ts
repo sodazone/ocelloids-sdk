@@ -12,6 +12,8 @@ import { isEventType } from './util.js';
 
 const l = logger('oc-ops-flatten');
 
+const MAX_EVENTS = 200;
+
 /**
  * Enum representing static, well-known boundaries.
  */
@@ -58,6 +60,11 @@ export class Flattener {
   constructor(tx: TxWithIdAndEvent) {
     const { extrinsic } = tx;
     const { registry } = extrinsic;
+
+    if (tx.events.length > MAX_EVENTS) {
+      l.warn(`Number of events (${tx.events.length}) in tx exceeds max limit of ${MAX_EVENTS}. Skipping flatten...`);
+      throw new Error(`Number of events (${tx.events.length}) in tx exceeds max limit of ${MAX_EVENTS}`);
+    }
 
     // work on a copy of the events and extrinsics
     this.events = tx.events.slice().reverse().map(e => ({

@@ -10,6 +10,8 @@ import { TxWithIdAndEvent } from '../../types/interfaces.js';
 import { callAsTxWithBoundary, getArgValueFromTx, isEventType } from './util.js';
 import { Boundaries, Flattener } from './flattener.js';
 
+const MAX_BATCH_CALLS = 50;
+
 const BatchCompleted = 'utility.BatchCompleted';
 const BatchCompletedWithErrors = 'utility.BatchCompletedWithErrors';
 const BatchInterrupted = 'utility.BatchInterrupted';
@@ -186,6 +188,9 @@ function mapBatchInterrupt(
 export function extractBatchCalls(tx: TxWithIdAndEvent, flattener: Flattener) {
   const { extrinsic } = tx;
   const calls = extrinsic.args[0] as unknown as CallBase<AnyTuple, FunctionMetadataLatest>[];
+  if (calls.length > MAX_BATCH_CALLS) {
+    throw new Error('Batch too large to process');
+  }
 
   const batchCompletedIndex = flattener.findEventIndex(BatchCompleted);
   const batchInterruptedIndex = flattener.findEventIndex(BatchInterrupted);
@@ -216,6 +221,9 @@ export function extractBatchCalls(tx: TxWithIdAndEvent, flattener: Flattener) {
 export function extractBatchAllCalls(tx: TxWithIdAndEvent) {
   const { extrinsic, dispatchError } = tx;
   const calls = extrinsic.args[0] as unknown as CallBase<AnyTuple, FunctionMetadataLatest>[];
+  if (calls.length > MAX_BATCH_CALLS) {
+    throw new Error('Batch too large to process');
+  }
 
   if (dispatchError === undefined) {
     // If batch executed successfully, extract as normal batch complete calls
@@ -239,6 +247,9 @@ export function extractBatchAllCalls(tx: TxWithIdAndEvent) {
 export function extractForceBatchCalls(tx: TxWithIdAndEvent, flattener: Flattener) {
   const { extrinsic } = tx;
   const calls = extrinsic.args[0] as unknown as CallBase<AnyTuple, FunctionMetadataLatest>[];
+  if (calls.length > MAX_BATCH_CALLS) {
+    throw new Error('Batch too large to process');
+  }
 
   const batchCompletedIndex = flattener.findEventIndex(BatchCompleted);
   const batchErroredIndex = flattener.findEventIndex(BatchCompletedWithErrors);

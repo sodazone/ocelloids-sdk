@@ -11,15 +11,19 @@ import { Flattener } from './flatten/flattener.js';
 import { hasParser } from './flatten/index.js';
 
 function withFlattener(tx: TxWithIdAndEvent, sorted: boolean) {
-  const flattener = new Flattener(tx);
-  flattener.flatten();
-  return sorted
-    ? flattener.flattenedCalls.sort(
-      (a: TxWithIdAndEvent, b: TxWithIdAndEvent) => {
-        return (a.levelId ?? '0').localeCompare(b.levelId ?? '0');
-      }
-    )
-    : flattener.flattenedCalls;
+  try {
+    const flattener = new Flattener(tx);
+    flattener.flatten();
+    return sorted
+      ? flattener.flattenedCalls.sort(
+        (a: TxWithIdAndEvent, b: TxWithIdAndEvent) => {
+          return (a.levelId ?? '0').localeCompare(b.levelId ?? '0');
+        }
+      )
+      : flattener.flattenedCalls;
+  } catch (error) {
+    return [tx];
+  }
 }
 
 /**
