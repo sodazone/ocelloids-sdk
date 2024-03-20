@@ -28,10 +28,11 @@ export type ExtraSigner = {
  */
 export class GenericExtrinsicWithId extends GenericExtrinsic
   implements ExtrinsicWithId {
-  blockNumber: Compact<BlockNumber>;
-  blockHash: IU8a;
-  blockPosition: number;
-  extraSigners: ExtraSigner[];
+  protected readonly _extrinsic: GenericExtrinsic;
+  readonly blockNumber: Compact<BlockNumber>;
+  readonly blockHash: IU8a;
+  readonly blockPosition: number;
+  readonly extraSigners: ExtraSigner[];
 
   constructor(
     value: GenericExtrinsic,
@@ -42,12 +43,27 @@ export class GenericExtrinsicWithId extends GenericExtrinsic
     } : ExtrinsicBlockContext,
     extraSigners: ExtraSigner[] = []
   ) {
-    super(value.registry, value.toU8a());
+    super(value.registry);
 
+    this._extrinsic = value;
     this.blockNumber = blockNumber;
     this.blockPosition = blockPosition;
     this.blockHash = blockHash;
     this.extraSigners = extraSigners;
+
+    return new Proxy(this, {
+      get<T>(target: GenericExtrinsicWithId, p: keyof GenericExtrinsic):T {
+        if (p === 'toHuman') {
+          return target.toHuman as T;
+        }
+
+        if (p in target._extrinsic) {
+          return target._extrinsic[p] as T;
+        }
+
+        return target[p] as T;
+      }
+    });
   }
 
   /**
@@ -80,7 +96,7 @@ export class GenericExtrinsicWithId extends GenericExtrinsic
           address: o.address.toHuman()
         }
       )),
-      ...(super.toHuman(isExpanded) as any)
+      ...(this._extrinsic.toHuman(isExpanded) as any)
     };
   }
 }

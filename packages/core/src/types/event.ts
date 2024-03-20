@@ -13,9 +13,10 @@ import { EventBlockContext, EventExtrinsicContext, EventWithId, EventWithIdAndTx
  */
 export class GenericEventWithId extends GenericEvent
   implements EventWithId {
-  blockNumber: Compact<BlockNumber>;
-  blockHash: IU8a;
-  blockPosition: number;
+  protected readonly _event: GenericEvent;
+  readonly blockNumber: Compact<BlockNumber>;
+  readonly blockHash: IU8a;
+  readonly blockPosition: number;
 
   constructor(
     value: GenericEvent,
@@ -25,10 +26,26 @@ export class GenericEventWithId extends GenericEvent
       blockPosition
     }: EventBlockContext
   ) {
-    super(value.registry, value.toU8a());
+    super(value.registry);
+
+    this._event = value;
     this.blockNumber = blockNumber;
     this.blockHash = blockHash;
     this.blockPosition = blockPosition;
+
+    return new Proxy(this, {
+      get<T>(target: GenericEventWithId, p: keyof GenericEvent):T {
+        if (p === 'toHuman') {
+          return target.toHuman as T;
+        }
+
+        if (p in target._event) {
+          return target._event[p] as T;
+        }
+
+        return target[p] as T;
+      }
+    });
   }
 
   /**
@@ -52,7 +69,7 @@ export class GenericEventWithId extends GenericEvent
       blockPosition: this.blockPosition,
       blockNumber: this.blockNumber.toHuman(),
       blockHash: this.blockHash.toHuman(),
-      ...(super.toHuman(isExpanded) as any)
+      ...(this._event.toHuman(isExpanded) as any)
     };
   }
 }
