@@ -2,7 +2,7 @@
 
 <picture>
   <img
-    src="https://github.com/sodazone/ocelloids-sdk/blob/main/.github/assets/oc-sdk.png?raw=true"
+    src="https://github.com/sodazone/ocelloids-sdk/blob/main/.github/assets/oc_sdk.png?raw=true"
     width="330"
     height="auto"
     alt=""
