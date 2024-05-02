@@ -7,11 +7,11 @@ import { SubstrateApis } from './substrate-apis.js';
 
 const apis = new SubstrateApis({
   polkadot: {
-    provider: new WsProvider('wss://polkadot.local.test')
+    provider: new WsProvider('wss://polkadot.local.test'),
   },
   rococo: {
-    provider: new WsProvider('wss://rococo.local.test')
-  }
+    provider: new WsProvider('wss://rococo.local.test'),
+  },
 });
 
 describe('substrate APIs', () => {

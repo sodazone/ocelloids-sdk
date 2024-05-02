@@ -12,17 +12,17 @@ const l = logger('oc-mingo-ops');
 
 function bn(x: AnyVal) {
   switch (typeof x) {
-  case 'number':
-  case 'string':
-  case 'bigint':
-    return bnToBn(x);
-  default:
-    throw new Error(`unable to convert ${typeof x} to BN`);
+    case 'number':
+    case 'string':
+    case 'bigint':
+      return bnToBn(x);
+    default:
+      throw new Error(`unable to convert ${typeof x} to BN`);
   }
 }
 
 function compare(a: AnyVal, b: AnyVal, f: Predicate<AnyVal>): boolean {
-  return ensureArray(a).some(x => f(x, b));
+  return ensureArray(a).some((x) => f(x, b));
 }
 
 function $bn_lt(a: AnyVal, b: AnyVal): boolean {
@@ -49,9 +49,7 @@ function $bn_neq(a: AnyVal, b: AnyVal): boolean {
   return compare(a, b, (x: AnyVal, y: AnyVal) => !bn(x).eq(bn(y)));
 }
 
-function createQueryOperator(
-  predicate: Predicate<AnyVal>
-): QueryOperator {
+function createQueryOperator(predicate: Predicate<AnyVal>): QueryOperator {
   const f = (selector: string, value: AnyVal, options: Options) => {
     const opts = { unwrapArray: true };
     const depth = Math.max(1, selector.split('.').length - 1);
@@ -67,18 +65,21 @@ function createQueryOperator(
 
 export function installOperators() {
   // Register query operators
-  if (getOperator(OperatorType.QUERY, '$bn_lt', {
-    useGlobalContext: true, context: BASIC_CONTEXT
-  }) === null) {
+  if (
+    getOperator(OperatorType.QUERY, '$bn_lt', {
+      useGlobalContext: true,
+      context: BASIC_CONTEXT,
+    }) === null
+  ) {
     l.debug('register operators');
 
     useOperators(OperatorType.QUERY, {
-      '$bn_lt': createQueryOperator($bn_lt),
-      '$bn_lte': createQueryOperator($bn_lte),
-      '$bn_gt': createQueryOperator($bn_gt),
-      '$bn_gte': createQueryOperator($bn_gte),
-      '$bn_eq': createQueryOperator($bn_eq),
-      '$bn_neq': createQueryOperator($bn_neq)
+      $bn_lt: createQueryOperator($bn_lt),
+      $bn_lte: createQueryOperator($bn_lte),
+      $bn_gt: createQueryOperator($bn_gt),
+      $bn_gte: createQueryOperator($bn_gte),
+      $bn_eq: createQueryOperator($bn_eq),
+      $bn_neq: createQueryOperator($bn_neq),
     });
   }
 }

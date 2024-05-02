@@ -8,7 +8,13 @@ import { Observable, from, mergeMap, share, map } from 'rxjs';
 
 import { GenericExtrinsicWithId, enhanceTxWithIdAndEvents } from '../types/extrinsic.js';
 import { GenericEventWithId, GenericEventWithIdAndTx } from '../types/event.js';
-import { EventWithIdAndTx, ExtrinsicWithId, TxWithIdAndEvent, BlockEvent, EventBlockContext } from '../types/interfaces.js';
+import {
+  EventWithIdAndTx,
+  ExtrinsicWithId,
+  TxWithIdAndEvent,
+  BlockEvent,
+  EventBlockContext,
+} from '../types/interfaces.js';
 
 /**
  * Operator to extract extrinsics with paired events from blocks.
@@ -30,27 +36,25 @@ import { EventWithIdAndTx, ExtrinsicWithId, TxWithIdAndEvent, BlockEvent, EventB
  * @see {@link TxWithIdAndEvent}
  */
 export function extractTxWithEvents() {
-  return (source: Observable<SignedBlockExtended>)
-  : Observable<TxWithIdAndEvent> => {
-    return (source.pipe(
+  return (source: Observable<SignedBlockExtended>): Observable<TxWithIdAndEvent> => {
+    return source.pipe(
       mergeMap(({ block, extrinsics, events }) => {
         const blockNumber = block.header.number;
         const blockHash = block.hash;
-        return extrinsics.map(
-          (xt, blockPosition) => {
-            return enhanceTxWithIdAndEvents(
-              {
-                blockNumber,
-                blockHash,
-                blockPosition
-              },
-              xt,
-              events
-            );
-          });
+        return extrinsics.map((xt, blockPosition) => {
+          return enhanceTxWithIdAndEvents(
+            {
+              blockNumber,
+              blockHash,
+              blockPosition,
+            },
+            xt,
+            events
+          );
+        });
       }),
       share()
-    ));
+    );
   };
 }
 
@@ -73,24 +77,22 @@ export function extractTxWithEvents() {
  * @see {@link ExtrinsicWithId}
  */
 export function extractExtrinsics() {
-  return (source: Observable<SignedBlock>)
-  : Observable<ExtrinsicWithId> => {
-    return (source.pipe(
-      mergeMap(({block}) => {
+  return (source: Observable<SignedBlock>): Observable<ExtrinsicWithId> => {
+    return source.pipe(
+      mergeMap(({ block }) => {
         const blockNumber = block.header.number;
         const blockHash = block.hash;
         return block.extrinsics.map(
-          (xt, blockPosition) => new GenericExtrinsicWithId(
-            xt,
-            {
+          (xt, blockPosition) =>
+            new GenericExtrinsicWithId(xt, {
               blockNumber,
               blockHash,
-              blockPosition
-            }
-          ));
+              blockPosition,
+            })
+        );
       }),
       share()
-    ));
+    );
   };
 }
 
@@ -119,12 +121,12 @@ export function extractExtrinsics() {
 export function extractEvents() {
   return (source: Observable<SignedBlockExtended>): Observable<BlockEvent> => {
     return source.pipe(
-      map(({block, events}) => {
+      map(({ block, events }) => {
         return {
           extrinsics: block.extrinsics,
           events,
           blockNumber: block.header.number,
-          blockHash: block.hash
+          blockHash: block.hash,
         };
       }),
       mergeMap(({ extrinsics, events, blockHash, blockNumber }) => {
@@ -139,7 +141,7 @@ export function extractEvents() {
             const eventBlockContext: EventBlockContext = {
               blockNumber,
               blockHash,
-              blockPosition: index
+              blockPosition: index,
             };
             const extrinsicIndex = phase.isApplyExtrinsic ? phase.asApplyExtrinsic.toNumber() : undefined;
             if (extrinsicIndex) {
@@ -147,7 +149,7 @@ export function extractEvents() {
                 extrinsicWithId = new GenericExtrinsicWithId(extrinsics[extrinsicIndex], {
                   blockNumber,
                   blockHash,
-                  blockPosition: extrinsicIndex
+                  blockPosition: extrinsicIndex,
                 });
               }
 
@@ -155,7 +157,7 @@ export function extractEvents() {
                 ...eventBlockContext,
                 extrinsicId: extrinsicWithId.extrinsicId,
                 extrinsic: extrinsicWithId,
-                extrinsicPosition: xtEventIndex
+                extrinsicPosition: xtEventIndex,
               });
 
               // If we have moved on to the next extrinsic,
@@ -174,7 +176,7 @@ export function extractEvents() {
             }
 
             return new GenericEventWithId(event, eventBlockContext);
-          }),
+          })
         );
       }),
       share()
@@ -221,7 +223,7 @@ export function extractEventsWithTx() {
             blockPosition: event.blockPosition,
             extrinsicPosition,
             extrinsicId: extrinsic.extrinsicId,
-            extrinsic
+            extrinsic,
           }) as EventWithIdAndTx;
 
           eventWithIdAndTx.extrinsic = extrinsic;

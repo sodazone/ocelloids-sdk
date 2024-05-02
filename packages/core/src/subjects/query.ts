@@ -20,7 +20,7 @@ export interface Control<T, S> extends Subject<S> {
    * Changes the value of the control.
    * @param value The new value for the control.
    */
-  change: (value: T) => void
+  change: (value: T) => void;
 }
 
 /**
@@ -46,9 +46,7 @@ export interface Control<T, S> extends Subject<S> {
  * });
  * ```
  */
-export class ControlQuery
-  extends BehaviorSubject<Query>
-  implements Control<Criteria, Query> {
+export class ControlQuery extends BehaviorSubject<Query> implements Control<Criteria, Query> {
   /**
    * Constructs a new instance of the `ControlQuery` class.
    * @param criteria The initial criteria for the query.
@@ -78,10 +76,7 @@ export class ControlQuery
    * Creates a `ControlQuery` instance.
    * @param criteria The initial criteria for the query.
    */
-  static from(criteria: ControlQuery | Criteria) : ControlQuery {
-    return ControlQuery.isControlQuery(criteria)
-      ? criteria
-      : new ControlQuery(criteria);
+  static from(criteria: ControlQuery | Criteria): ControlQuery {
+    return ControlQuery.isControlQuery(criteria) ? criteria : new ControlQuery(criteria);
   }
 }
-

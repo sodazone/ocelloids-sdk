@@ -23,13 +23,12 @@ import { Observable, share, switchMap } from 'rxjs';
  * ```
  */
 export function pendingExtrinsics() {
-  return (source: Observable<ApiRx>)
-  : Observable<Vec<Extrinsic>> => {
-    return (source.pipe(
-      switchMap(api => {
+  return (source: Observable<ApiRx>): Observable<Vec<Extrinsic>> => {
+    return source.pipe(
+      switchMap((api) => {
         return api.rpc.author.pendingExtrinsics();
       }),
       share()
-    ));
+    );
   };
 }

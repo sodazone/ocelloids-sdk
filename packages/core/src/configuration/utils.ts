@@ -11,7 +11,7 @@ import { ProviderInterface } from '@polkadot/rpc-provider/types';
  * @returns A provider instance.
  * @throws Error if the endpoint URL has an unknown URI scheme.
  */
-export function providerFromUrl(endpoint: string | string[]) : ProviderInterface {
+export function providerFromUrl(endpoint: string | string[]): ProviderInterface {
   const ep = Array.isArray(endpoint) ? endpoint[0] : endpoint;
   if (ep.startsWith('ws')) {
     // WS Supports multiple endpoints

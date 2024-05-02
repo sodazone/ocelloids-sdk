@@ -19,8 +19,7 @@ describe('range', () => {
       const delayAmount = time('--|');
       const expected = '        a-b-c-d-e-f-g-h-i-(j|)';
 
-      const e1 = bnRange(1, 10)
-        .pipe(concatMap((x, i) => of(x).pipe(delay(i === 0 ? 0 : delayAmount))));
+      const e1 = bnRange(1, 10).pipe(concatMap((x, i) => of(x).pipe(delay(i === 0 ? 0 : delayAmount))));
       const values = {
         a: new BN(1),
         b: new BN(2),
@@ -42,8 +41,7 @@ describe('range', () => {
       const delayAmount = time('--|');
       const expected = '        a-b-c-d-(e|)';
 
-      const e1 = bnRange(1, 5)
-        .pipe(concatMap((x, i) => of(x).pipe(delay(i === 0 ? 0 : delayAmount))));
+      const e1 = bnRange(1, 5).pipe(concatMap((x, i) => of(x).pipe(delay(i === 0 ? 0 : delayAmount))));
 
       const values = {
         a: new BN(1),
@@ -62,9 +60,7 @@ describe('range', () => {
     bnRange(12, 4).subscribe(function (x) {
       results.push(x);
     });
-    expect(results).toStrictEqual([
-      new BN(12), new BN(13), new BN(14), new BN(15)
-    ]);
+    expect(results).toStrictEqual([new BN(12), new BN(13), new BN(14), new BN(15)]);
   });
 
   it('should return empty for range(0)', () => {

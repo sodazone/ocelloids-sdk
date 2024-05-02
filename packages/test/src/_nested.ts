@@ -9,22 +9,25 @@ export type DataToMatch = {
   name: string;
   events: Event[];
   extraSigners: {
-    type: string,
-    address: string
-  }[],
-  levelId?: string,
-  dispatchError: Record<string, any> | undefined
-}
+    type: string;
+    address: string;
+  }[];
+  levelId?: string;
+  dispatchError: Record<string, any> | undefined;
+};
 
 export type TestItem = {
-  extrinsic: TxWithEvent,
-  events: EventRecord[],
-  data: DataToMatch[]
-}
+  extrinsic: TxWithEvent;
+  events: EventRecord[];
+  data: DataToMatch[];
+};
 
 // Polkadot 16037760-2 multisig-proxy-proxy extrinsic
 const testMultisigProxyBlocks = testBlocksFrom('polkadot16037760.cbor.bin');
-const testMultisigProxyExtrinsics = testMultisigProxyBlocks.reduce((acc: TxWithEvent[], tb) => acc.concat(tb.extrinsics), []);
+const testMultisigProxyExtrinsics = testMultisigProxyBlocks.reduce(
+  (acc: TxWithEvent[], tb) => acc.concat(tb.extrinsics),
+  []
+);
 const testMultisigProxyExtrinsic = testMultisigProxyExtrinsics[2];
 const testMultisigProxyEvents = testMultisigProxyBlocks[0].events;
 const testMultisigProxyData: DataToMatch[] = [
@@ -35,79 +38,79 @@ const testMultisigProxyData: DataToMatch[] = [
     extraSigners: [
       {
         type: 'multisig',
-        address: '17BA8dMH2ZDBJJNDf2UqvwJJ9xWQus6y1y7bhS3Lp9CHLuQ'
+        address: '17BA8dMH2ZDBJJNDf2UqvwJJ9xWQus6y1y7bhS3Lp9CHLuQ',
       },
       {
         type: 'proxied',
-        address: '12easLRmTHY2AGmsYoxKsm967bdc5RfuqFFQt2LVG5Qvf6EP'
+        address: '12easLRmTHY2AGmsYoxKsm967bdc5RfuqFFQt2LVG5Qvf6EP',
       },
       {
         type: 'proxied',
-        address: '15j4dg5GzsL1bw2U2AWgeyAk6QTxq43V7ZPbXdAmbVLjvDCK'
-      }
+        address: '15j4dg5GzsL1bw2U2AWgeyAk6QTxq43V7ZPbXdAmbVLjvDCK',
+      },
     ],
-    dispatchError: undefined
+    dispatchError: undefined,
   },
   {
     levelId: '0.0',
     name: 'proxy.proxy',
-    events: testMultisigProxyExtrinsic.events.slice(6,7),
+    events: testMultisigProxyExtrinsic.events.slice(6, 7),
     extraSigners: [
       {
         type: 'multisig',
-        address: '17BA8dMH2ZDBJJNDf2UqvwJJ9xWQus6y1y7bhS3Lp9CHLuQ'
+        address: '17BA8dMH2ZDBJJNDf2UqvwJJ9xWQus6y1y7bhS3Lp9CHLuQ',
       },
       {
         type: 'proxied',
-        address: '12easLRmTHY2AGmsYoxKsm967bdc5RfuqFFQt2LVG5Qvf6EP'
+        address: '12easLRmTHY2AGmsYoxKsm967bdc5RfuqFFQt2LVG5Qvf6EP',
       },
       {
         type: 'proxied',
-        address: '15j4dg5GzsL1bw2U2AWgeyAk6QTxq43V7ZPbXdAmbVLjvDCK'
-      }
+        address: '15j4dg5GzsL1bw2U2AWgeyAk6QTxq43V7ZPbXdAmbVLjvDCK',
+      },
     ],
-    dispatchError: undefined
+    dispatchError: undefined,
   },
   {
     levelId: '0.0.0',
     name: 'proxy.proxy',
-    events: testMultisigProxyExtrinsic.events.slice(5,6),
+    events: testMultisigProxyExtrinsic.events.slice(5, 6),
     extraSigners: [
       {
         type: 'multisig',
-        address: '17BA8dMH2ZDBJJNDf2UqvwJJ9xWQus6y1y7bhS3Lp9CHLuQ'
+        address: '17BA8dMH2ZDBJJNDf2UqvwJJ9xWQus6y1y7bhS3Lp9CHLuQ',
       },
       {
         type: 'proxied',
-        address: '12easLRmTHY2AGmsYoxKsm967bdc5RfuqFFQt2LVG5Qvf6EP'
+        address: '12easLRmTHY2AGmsYoxKsm967bdc5RfuqFFQt2LVG5Qvf6EP',
       },
       {
         type: 'proxied',
-        address: '15j4dg5GzsL1bw2U2AWgeyAk6QTxq43V7ZPbXdAmbVLjvDCK'
-      }
+        address: '15j4dg5GzsL1bw2U2AWgeyAk6QTxq43V7ZPbXdAmbVLjvDCK',
+      },
     ],
-    dispatchError: undefined
+    dispatchError: undefined,
   },
   {
     levelId: '0.0.0.0',
     name: 'convictionVoting.vote',
-    events: testMultisigProxyExtrinsic.events.slice(0,5),
+    events: testMultisigProxyExtrinsic.events.slice(0, 5),
     extraSigners: [
       {
         type: 'multisig',
-        address: '17BA8dMH2ZDBJJNDf2UqvwJJ9xWQus6y1y7bhS3Lp9CHLuQ'
+        address: '17BA8dMH2ZDBJJNDf2UqvwJJ9xWQus6y1y7bhS3Lp9CHLuQ',
       },
       {
         type: 'proxied',
-        address: '12easLRmTHY2AGmsYoxKsm967bdc5RfuqFFQt2LVG5Qvf6EP'
+        address: '12easLRmTHY2AGmsYoxKsm967bdc5RfuqFFQt2LVG5Qvf6EP',
       },
       {
         type: 'proxied',
-        address: '15j4dg5GzsL1bw2U2AWgeyAk6QTxq43V7ZPbXdAmbVLjvDCK'
-      }
+        address: '15j4dg5GzsL1bw2U2AWgeyAk6QTxq43V7ZPbXdAmbVLjvDCK',
+      },
     ],
-    dispatchError: undefined
-  }
+    dispatchError: undefined,
+  },
 ];
 
 // Rococo 8695659-2 batch-batch extrinsic
@@ -121,21 +124,21 @@ const testBatchData: DataToMatch[] = [
     name: 'utility.batch',
     events: testBatchExtrinsic.events.slice(7),
     extraSigners: [],
-    dispatchError: undefined
+    dispatchError: undefined,
   },
   {
     levelId: '0.2',
     name: 'system.remark',
-    events: testBatchExtrinsic.events.slice(6,7),
+    events: testBatchExtrinsic.events.slice(6, 7),
     extraSigners: [],
-    dispatchError: undefined
+    dispatchError: undefined,
   },
   {
     levelId: '0.1',
     name: 'utility.batch',
-    events: testBatchExtrinsic.events.slice(4,6),
+    events: testBatchExtrinsic.events.slice(4, 6),
     extraSigners: [],
-    dispatchError: undefined
+    dispatchError: undefined,
   },
   {
     levelId: '0.1.2',
@@ -143,8 +146,8 @@ const testBatchData: DataToMatch[] = [
     events: [],
     extraSigners: [],
     dispatchError: {
-      'Arithmetic': 'Underflow'
-    }
+      Arithmetic: 'Underflow',
+    },
   },
   {
     levelId: '0.1.1',
@@ -152,23 +155,23 @@ const testBatchData: DataToMatch[] = [
     events: [],
     extraSigners: [],
     dispatchError: {
-      'Arithmetic': 'Underflow'
-    }
+      Arithmetic: 'Underflow',
+    },
   },
   {
     levelId: '0.1.0',
     name: 'balances.transferKeepAlive',
-    events: testBatchExtrinsic.events.slice(2,4),
+    events: testBatchExtrinsic.events.slice(2, 4),
     extraSigners: [],
-    dispatchError: undefined
+    dispatchError: undefined,
   },
   {
     levelId: '0.0',
     name: 'system.remark',
-    events: testBatchExtrinsic.events.slice(0,2),
+    events: testBatchExtrinsic.events.slice(0, 2),
     extraSigners: [],
-    dispatchError: undefined
-  }
+    dispatchError: undefined,
+  },
 ];
 
 // Rococo 8695536-2 forceBatch-forceBatch extrinsic
@@ -182,28 +185,28 @@ const testForceBatchData: DataToMatch[] = [
     name: 'utility.forceBatch',
     events: testForceBatchExtrinsic.events.slice(10),
     extraSigners: [],
-    dispatchError: undefined
+    dispatchError: undefined,
   },
   {
     levelId: '0.0',
     name: 'system.remark',
     events: testForceBatchExtrinsic.events.slice(0, 2),
     extraSigners: [],
-    dispatchError: undefined
+    dispatchError: undefined,
   },
   {
     levelId: '0.1',
     name: 'utility.forceBatch',
     events: testForceBatchExtrinsic.events.slice(7, 9),
     extraSigners: [],
-    dispatchError: undefined
+    dispatchError: undefined,
   },
   {
     levelId: '0.1.0',
     name: 'balances.transferKeepAlive',
     events: testForceBatchExtrinsic.events.slice(2, 4),
     extraSigners: [],
-    dispatchError: undefined
+    dispatchError: undefined,
   },
   {
     levelId: '0.1.1',
@@ -211,23 +214,23 @@ const testForceBatchData: DataToMatch[] = [
     events: testForceBatchExtrinsic.events.slice(4, 5),
     extraSigners: [],
     dispatchError: {
-      'Arithmetic': 'Underflow'
-    }
+      Arithmetic: 'Underflow',
+    },
   },
   {
     levelId: '0.1.2',
     name: 'balances.transferKeepAlive',
     events: testForceBatchExtrinsic.events.slice(5, 7),
     extraSigners: [],
-    dispatchError: undefined
+    dispatchError: undefined,
   },
   {
     levelId: '0.2',
     name: 'system.remark',
     events: testForceBatchExtrinsic.events.slice(9, 10),
     extraSigners: [],
-    dispatchError: undefined
-  }
+    dispatchError: undefined,
+  },
 ];
 
 // Westend 10091936-2 batch-batchAll-batch-batchAll extrinsic
@@ -241,28 +244,28 @@ const testDeepNestedData: DataToMatch[] = [
     name: 'utility.batch',
     events: testDeepNestedExtrinsic.events.slice(7),
     extraSigners: [],
-    dispatchError: undefined
+    dispatchError: undefined,
   },
   {
     levelId: '0.0',
     name: 'balances.transfer',
-    events: testDeepNestedExtrinsic.events.slice(0,2),
+    events: testDeepNestedExtrinsic.events.slice(0, 2),
     extraSigners: [],
-    dispatchError: undefined
+    dispatchError: undefined,
   },
   {
     levelId: '0.1',
     name: 'utility.batchAll',
-    events: testDeepNestedExtrinsic.events.slice(4,6),
+    events: testDeepNestedExtrinsic.events.slice(4, 6),
     extraSigners: [],
-    dispatchError: undefined
+    dispatchError: undefined,
   },
   {
     levelId: '0.1.0',
     name: 'utility.batch',
-    events: testDeepNestedExtrinsic.events.slice(2,4),
+    events: testDeepNestedExtrinsic.events.slice(2, 4),
     extraSigners: [],
-    dispatchError: undefined
+    dispatchError: undefined,
   },
   {
     levelId: '0.1.0.0',
@@ -270,11 +273,11 @@ const testDeepNestedData: DataToMatch[] = [
     events: [],
     extraSigners: [],
     dispatchError: {
-      'Module': {
-        'index': '0',
-        'error': '5'
-      }
-    }
+      Module: {
+        index: '0',
+        error: '5',
+      },
+    },
   },
   {
     levelId: '0.1.0.0.0',
@@ -282,24 +285,27 @@ const testDeepNestedData: DataToMatch[] = [
     events: [],
     extraSigners: [],
     dispatchError: {
-      'Module': {
-        'index': '0',
-        'error': '5'
-      }
-    }
+      Module: {
+        index: '0',
+        error: '5',
+      },
+    },
   },
   {
     levelId: '0.2',
     name: 'balances.transfer',
-    events: testDeepNestedExtrinsic.events.slice(6,7),
+    events: testDeepNestedExtrinsic.events.slice(6, 7),
     extraSigners: [],
-    dispatchError: undefined
-  }
+    dispatchError: undefined,
+  },
 ];
 
 // Polkadot 18977445-2 multisig-proxy-proxy extrinsic
 const testMultisigThreshold1Blocks = testBlocksFrom('polkadot18977445.cbor.bin');
-const testMultisigThreshold1Extrinsics = testMultisigThreshold1Blocks.reduce((acc: TxWithEvent[], tb) => acc.concat(tb.extrinsics), []);
+const testMultisigThreshold1Extrinsics = testMultisigThreshold1Blocks.reduce(
+  (acc: TxWithEvent[], tb) => acc.concat(tb.extrinsics),
+  []
+);
 const testMultisigThreshold1Extrinsic = testMultisigThreshold1Extrinsics[2];
 const testMultisigThreshold1Events = testMultisigThreshold1Blocks[0].events;
 const testMultisigThreshold1Data: DataToMatch[] = [
@@ -310,10 +316,10 @@ const testMultisigThreshold1Data: DataToMatch[] = [
     extraSigners: [
       {
         type: 'multisig',
-        address: '13tpYpgt83Fv9oJoKSYotaMiGCD4quww4jTjpd2tFXos49pE'
-      }
+        address: '13tpYpgt83Fv9oJoKSYotaMiGCD4quww4jTjpd2tFXos49pE',
+      },
     ],
-    dispatchError: undefined
+    dispatchError: undefined,
   },
   {
     levelId: '0.0',
@@ -322,43 +328,43 @@ const testMultisigThreshold1Data: DataToMatch[] = [
     extraSigners: [
       {
         type: 'multisig',
-        address: '13tpYpgt83Fv9oJoKSYotaMiGCD4quww4jTjpd2tFXos49pE'
-      }
+        address: '13tpYpgt83Fv9oJoKSYotaMiGCD4quww4jTjpd2tFXos49pE',
+      },
     ],
-    dispatchError: undefined
-  }
+    dispatchError: undefined,
+  },
 ];
 
 export const nestedItems = {
   testMultisigProxy: {
     extrinsic: testMultisigProxyExtrinsic,
     events: testMultisigProxyEvents,
-    data: testMultisigProxyData
+    data: testMultisigProxyData,
   },
   testBatch: {
     extrinsic: testBatchExtrinsic,
     events: testBatchEvents,
-    data: testBatchData
+    data: testBatchData,
   },
   testForceBatch: {
     extrinsic: testForceBatchExtrinsic,
     events: testForceBatchEvents,
-    data: testForceBatchData
+    data: testForceBatchData,
   },
   testDeepNested: {
     extrinsic: testDeepNestedExtrinsic,
     events: testDeepNestedEvents,
-    data: testDeepNestedData
+    data: testDeepNestedData,
   },
   testMultisigThreshold1: {
     extrinsic: testMultisigThreshold1Extrinsic,
     events: testMultisigThreshold1Events,
-    data: testMultisigThreshold1Data
-  }
+    data: testMultisigThreshold1Data,
+  },
 } as {
-  testMultisigProxy: TestItem,
-  testBatch: TestItem,
-  testForceBatch: TestItem,
-  testDeepNested: TestItem,
-  testMultisigThreshold1: TestItem
+  testMultisigProxy: TestItem;
+  testBatch: TestItem;
+  testForceBatch: TestItem;
+  testDeepNested: TestItem;
+  testMultisigThreshold1: TestItem;
 };

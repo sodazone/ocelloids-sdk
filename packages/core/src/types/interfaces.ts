@@ -12,21 +12,21 @@ import { GenericEventWithId } from './event.js';
  * Represents an extrinsic with additional identifier information.
  */
 export interface ExtrinsicWithId extends GenericExtrinsicWithId {
-  blockNumber: Compact<BlockNumber>,
-  blockHash: IU8a,
-  blockPosition: number,
-  extrinsicId: string,
-  extraSigners: ExtraSigner[]
+  blockNumber: Compact<BlockNumber>;
+  blockHash: IU8a;
+  blockPosition: number;
+  extrinsicId: string;
+  extraSigners: ExtraSigner[];
 }
 
 /**
  * Represents an event with additional identifier information and block context.
  */
 export interface EventWithId extends GenericEventWithId {
-  blockNumber: Compact<BlockNumber>,
-  blockHash: IU8a,
-  blockPosition: number,
-  eventId: string
+  blockNumber: Compact<BlockNumber>;
+  blockHash: IU8a;
+  blockPosition: number;
+  eventId: string;
 }
 
 /**
@@ -42,9 +42,9 @@ export interface TxWithIdAndEvent extends TxWithEvent {
  * Represents an event with additional block context and extrinsic information
  */
 export interface EventWithIdAndTx extends EventWithId {
-  extrinsicPosition: number,
-  extrinsicId: string,
-  extrinsic: ExtrinsicWithId
+  extrinsicPosition: number;
+  extrinsicId: string;
+  extrinsic: ExtrinsicWithId;
 }
 
 /**
@@ -53,7 +53,7 @@ export interface EventWithIdAndTx extends EventWithId {
  */
 export interface ExtrinsicBlockContext {
   blockNumber: Compact<BlockNumber>;
-  blockHash: IU8a,
+  blockHash: IU8a;
   blockPosition: number;
 }
 
@@ -63,8 +63,8 @@ export interface ExtrinsicBlockContext {
  */
 export interface EventBlockContext {
   blockNumber: Compact<BlockNumber>;
-  blockHash: IU8a,
-  blockPosition: number
+  blockHash: IU8a;
+  blockPosition: number;
 }
 
 /**
@@ -72,9 +72,9 @@ export interface EventBlockContext {
  * the ID of the extrinsic, the block number, the block hash and the position of the event in the block.
  */
 export interface EventExtrinsicContext extends EventBlockContext {
-  extrinsicPosition: number,
-  extrinsicId: string,
-  extrinsic: ExtrinsicWithId
+  extrinsicPosition: number;
+  extrinsicId: string;
+  extrinsic: ExtrinsicWithId;
 }
 
 /**
@@ -82,7 +82,7 @@ export interface EventExtrinsicContext extends EventBlockContext {
  * an event associated to an extrinsic or an event without extrinsic.
  */
 export interface BlockEvent extends EventWithId {
-  extrinsicPosition?: number,
-  extrinsicId?: string,
-  extrinsic?: ExtrinsicWithId
+  extrinsicPosition?: number;
+  extrinsicId?: string;
+  extrinsic?: ExtrinsicWithId;
 }

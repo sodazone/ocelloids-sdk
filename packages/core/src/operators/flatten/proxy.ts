@@ -11,7 +11,7 @@ import { Flattener } from './flattener.js';
 
 const ProxyExecuted = 'proxy.ProxyExecuted';
 const ProxyExecutedBoundary = {
-  eventName: ProxyExecuted
+  eventName: ProxyExecuted,
 };
 
 /**
@@ -36,13 +36,13 @@ export function extractProxyCalls(tx: TxWithIdAndEvent, flattener: Flattener) {
   const executedEvent = flattener.getEvent(proxyExecutedIndex);
   const [callResult] = executedEvent.data as unknown as [Result<Null, DispatchError>];
 
-  return [callAsTxWithBoundary(
-    {
+  return [
+    callAsTxWithBoundary({
       call,
       tx,
       boundary: ProxyExecutedBoundary,
       callError: callResult.isErr ? callResult.asErr : undefined,
-      extraSigner: { type: 'proxied', address: real }
-    }
-  )];
+      extraSigner: { type: 'proxied', address: real },
+    }),
+  ];
 }

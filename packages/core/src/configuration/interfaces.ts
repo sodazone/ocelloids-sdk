@@ -25,7 +25,7 @@ import type { ApiOptions } from '@polkadot/api/types';
  * ```
  */
 export interface Configuration {
-  [key: string]:  ApiOptions,
+  [key: string]: ApiOptions;
 }
 
 /**
@@ -33,4 +33,4 @@ export interface Configuration {
  *
  * @internal
  */
-export type ApiNames<T extends Configuration> = keyof T & string
+export type ApiNames<T extends Configuration> = keyof T & string;

@@ -33,8 +33,6 @@ export function debugOnly<T>(l: Logger, f?: (obj: T) => AnyJson) {
 export function debug<T>(l: Logger, f?: (obj: T) => AnyJson) {
   const donly = debugOnly(l, f);
   return (source: Observable<T>) => {
-    return source.pipe(
-      tap(donly)
-    );
+    return source.pipe(tap(donly));
   };
 }

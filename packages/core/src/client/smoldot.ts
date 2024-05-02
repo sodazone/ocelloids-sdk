@@ -5,21 +5,9 @@ import { Worker, MessagePort } from 'node:worker_threads';
 
 import { logger } from '@polkadot/util';
 
-import {
-  type Client,
-  type ClientOptions,
-  type Chain,
-  QueueFullError,
-  start
-} from 'smoldot';
+import { type Client, type ClientOptions, type Chain, QueueFullError, start } from 'smoldot';
 
-import type {
-  ScClient,
-  AddChain,
-  Chain as ScChain,
-  Config as ScConfig,
-  WellKnownChain
-} from '@substrate/connect';
+import type { ScClient, AddChain, Chain as ScChain, Config as ScConfig, WellKnownChain } from '@substrate/connect';
 
 const l = logger('oc-smoldot-worker');
 
@@ -36,23 +24,23 @@ const defaultLogger = (level: number, target: string, message: string) => {
 };
 
 type ExtConfig = ScConfig & {
-  clientOptions?: ClientOptions
+  clientOptions?: ClientOptions;
 };
 
 // Regular expression to extract the property "id"
 // from a JSON string. Note that 'g' makes it stateful.
-const idRe = /"id"\s*:\s*"(.+)?"/gmi;
+const idRe = /"id"\s*:\s*"(.+)?"/gim;
 
 // JSON-RPC callback function
 type JsonRpcCallback = (msg: string) => void;
 
-function getIdFromJSON(json: string) : string | null {
+function getIdFromJSON(json: string): string | null {
   idRe.lastIndex = 0;
   const match = idRe.exec(json);
   return match === null ? match : match[1];
 }
 
-function getChainId(json: string) : string {
+function getChainId(json: string): string {
   const chainId = getIdFromJSON(json);
   if (chainId === null) {
     throw new Error('Chain id not found in chain spec.');
@@ -67,7 +55,8 @@ function getChainId(json: string) : string {
  * @returns A Smoldot {@link Client}.
  */
 function startSmoldot(options?: ClientOptions): Client {
-  const worker = new Worker(`
+  const worker = new Worker(
+    `
     // from "@substrate/connect/worker"
     const { parentPort } = require('node:worker_threads');
     const smoldot = require('smoldot/worker');
@@ -81,10 +70,12 @@ function startSmoldot(options?: ClientOptions): Client {
         .catch(error => console.error('[smoldot-worker]', error))
         .finally(() => process.exit());
     });
-  `, {
-    name: 'smoldot-worker',
-    eval: true
-  });
+  `,
+    {
+      name: 'smoldot-worker',
+      eval: true,
+    }
+  );
 
   l.debug('resource limits:', worker.resourceLimits);
 
@@ -93,7 +84,7 @@ function startSmoldot(options?: ClientOptions): Client {
 
   return start({
     ...options,
-    portToWorker: port2
+    portToWorker: port2,
   });
 }
 
@@ -103,10 +94,7 @@ function startSmoldot(options?: ClientOptions): Client {
  * @param chain - The Substrate chain.
  * @param jsonRpcCallback - Callback function to handle JSON-RPC responses.
  */
-async function jsonRpcMessageLoop(
-  chain: Chain,
-  jsonRpcCallback: JsonRpcCallback
-) {
+async function jsonRpcMessageLoop(chain: Chain, jsonRpcCallback: JsonRpcCallback) {
   let running = true;
   while (running) {
     let jsonRpcResponse;
@@ -135,7 +123,7 @@ export const createScClient = (config?: ExtConfig): ScClient => {
   const clientOptions = config?.clientOptions ?? {
     // 4 = debug, 2 = warning
     maxLogLevel: l.noop === l.debug ? 2 : 4,
-    logCallback: defaultLogger
+    logCallback: defaultLogger,
   };
 
   const client = startSmoldot(clientOptions);
@@ -143,7 +131,7 @@ export const createScClient = (config?: ExtConfig): ScClient => {
   const chains = new Map<string, Chain>();
 
   // Add a chain to Smoldot
-  const addChain : AddChain = async (
+  const addChain: AddChain = async (
     chainSpec: string,
     jsonRpcCallback?: JsonRpcCallback,
     databaseContent?: string
@@ -152,55 +140,51 @@ export const createScClient = (config?: ExtConfig): ScClient => {
       throw new Error('JSON-RPC must be enabled.');
     }
 
-    try {
-      const chainId = getChainId(chainSpec);
-      const chain = await client.addChain({
-        chainSpec,
-        potentialRelayChains: [...chains.values()],
-        databaseContent
-      });
+    const chainId = getChainId(chainSpec);
+    const chain = await client.addChain({
+      chainSpec,
+      potentialRelayChains: [...chains.values()],
+      databaseContent,
+    });
 
-      chains.set(chainId, chain);
+    chains.set(chainId, chain);
 
-      // Start the JSON-RPC message loop for the chain
-      jsonRpcMessageLoop(chain, jsonRpcCallback);
+    // Start the JSON-RPC message loop for the chain
+    jsonRpcMessageLoop(chain, jsonRpcCallback);
 
-      return {
-        sendJsonRpc: (msg: string) => {
-          try {
-            chain.sendJsonRpc(msg);
-          } catch (error) {
-            if (error instanceof QueueFullError) {
-              jsonRpcCallback(
-                JSON.stringify({
-                  jsonrpc: '2.0',
-                  id: getIdFromJSON(msg) ?? 'unknown',
-                  error: {
-                    code: -32005, // non-std limit exceeded, std alt: -32603
-                    message: 'The server is busy. Please try again later.',
-                  },
-                }),
-              );
-            } else {
-              throw error;
-            }
+    return {
+      sendJsonRpc: (msg: string) => {
+        try {
+          chain.sendJsonRpc(msg);
+        } catch (error) {
+          if (error instanceof QueueFullError) {
+            jsonRpcCallback(
+              JSON.stringify({
+                jsonrpc: '2.0',
+                id: getIdFromJSON(msg) ?? 'unknown',
+                error: {
+                  code: -32005, // non-std limit exceeded, std alt: -32603
+                  message: 'The server is busy. Please try again later.',
+                },
+              })
+            );
+          } else {
+            throw error;
           }
-        },
-        remove: () => {
-          try {
-            chain.remove();
-            chains.delete(chainId);
-          } finally {
-            if (chains.size === 0) {
-              client.terminate();
-            }
+        }
+      },
+      remove: () => {
+        try {
+          chain.remove();
+          chains.delete(chainId);
+        } finally {
+          if (chains.size === 0) {
+            client.terminate();
           }
-        },
-        addChain,
-      };
-    } catch (error) {
-      throw error;
-    }
+        }
+      },
+      addChain,
+    };
   };
 
   // Return the Substrate Connect client
@@ -213,6 +197,6 @@ export const createScClient = (config?: ExtConfig): ScClient => {
     ) => {
       const spec = await import('@substrate/connect-known-chains/' + wellKnownChain);
       return await addChain(await spec.chainSpec, jsonRpcCallback, databaseContent);
-    }
+    },
   };
 };

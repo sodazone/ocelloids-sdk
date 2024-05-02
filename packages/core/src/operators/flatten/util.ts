@@ -10,12 +10,12 @@ import { ExtrinsicWithId, TxWithIdAndEvent } from '../../types/interfaces.js';
 import { Boundary } from './flattener.js';
 
 type CallContext = {
-  call: CallBase<AnyTuple, FunctionMetadataLatest>,
-  tx: TxWithIdAndEvent,
-  boundary?: Boundary,
-  callError?: DispatchError,
-  extraSigner? : ExtraSigner
-}
+  call: CallBase<AnyTuple, FunctionMetadataLatest>;
+  tx: TxWithIdAndEvent;
+  boundary?: Boundary;
+  callError?: DispatchError;
+  extraSigner?: ExtraSigner;
+};
 
 /**
  * Converts a nested call to a TxWithIdAndEvent.
@@ -25,22 +25,20 @@ type CallContext = {
  * @param context - The call context containing the original transaction, events, call error, and extra signer.
  * @returns The TxWithIdAndEvent, with updated extrinsic and dispatch error.
  */
-export function callAsTxWithBoundary(
-  { call, tx, boundary, callError, extraSigner }: CallContext
-) {
+export function callAsTxWithBoundary({ call, tx, boundary, callError, extraSigner }: CallContext) {
   const { extrinsic } = tx;
   const flatCall = new GenericCall(extrinsic.registry, call);
   const { blockNumber, blockPosition, blockHash } = extrinsic;
   const flatExtrinsic = new GenericExtrinsic(extrinsic.registry, {
     method: flatCall,
-    signature: extrinsic.inner.signature
+    signature: extrinsic.inner.signature,
   });
   const txWithId = new GenericExtrinsicWithId(
     flatExtrinsic,
     {
       blockNumber,
       blockHash,
-      blockPosition
+      blockPosition,
     },
     extrinsic.extraSigners
   );
@@ -53,9 +51,9 @@ export function callAsTxWithBoundary(
     call: {
       ...tx,
       dispatchError: callError ? callError : tx.dispatchError,
-      extrinsic: txWithId
+      extrinsic: txWithId,
     },
-    boundary
+    boundary,
   };
 }
 
@@ -70,13 +68,11 @@ export function callAsTxWithBoundary(
 export function getArgValueFromTx(extrinsic: ExtrinsicWithId, name: string) {
   const { args, argsDef } = extrinsic.method;
   const keys = Object.keys(argsDef);
-  const indexOfData = keys.findIndex(k => k === name);
+  const indexOfData = keys.findIndex((k) => k === name);
   if (indexOfData !== -1) {
     return args[indexOfData];
   }
-  throw new Error(
-    `Extrinsic ${extrinsic.method.toHuman()} does not contain argument with name ${name}`
-  );
+  throw new Error(`Extrinsic ${extrinsic.method.toHuman()} does not contain argument with name ${name}`);
 }
 
 /**
@@ -90,17 +86,13 @@ export function getArgValueFromTx(extrinsic: ExtrinsicWithId, name: string) {
 export function getArgValueFromEvent(event: Event, name: string) {
   const { names } = event.data;
   if (!names) {
-    throw new Error(
-      `Event ${event.section}.${event.method} does not have list of data names`
-    );
+    throw new Error(`Event ${event.section}.${event.method} does not have list of data names`);
   }
-  const indexOfData = names.findIndex(k => k === name);
+  const indexOfData = names.findIndex((k) => k === name);
   if (indexOfData !== -1) {
     return event.data[indexOfData];
   }
-  throw new Error(
-    `Event ${event.section}.${event.method} does not contain argument with name ${name}`
-  );
+  throw new Error(`Event ${event.section}.${event.method} does not contain argument with name ${name}`);
 }
 
 /**
@@ -111,7 +103,7 @@ export function getArgValueFromEvent(event: Event, name: string) {
  * @param event - The event instance
  * @returns true if the event matches any of the event names.
  */
-export function isEventType(names: string | string[], event: Event) : boolean {
+export function isEventType(names: string | string[], event: Event): boolean {
   return Array.isArray(names)
     ? names.includes(`${event.section}.${event.method}`)
     : names === `${event.section}.${event.method}`;

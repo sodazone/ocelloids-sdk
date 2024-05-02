@@ -8,14 +8,13 @@ export const mockPromiseApi = {
   events: {
     contracts: {
       Instantiated: {
-        is: (event: Event) => event.method === 'Instantiated'
-          && event.section === 'contracts'
-      }
-    }
+        is: (event: Event) => event.method === 'Instantiated' && event.section === 'contracts',
+      },
+    },
   },
   query: {
     contracts: {
-      contractInfoOf: () => {}
-    }
-  }
+      contractInfoOf: () => {},
+    },
+  },
 } as unknown as ApiPromise;

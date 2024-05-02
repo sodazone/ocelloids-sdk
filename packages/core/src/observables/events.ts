@@ -18,12 +18,11 @@ import { Observable, map, share, switchMap } from 'rxjs';
  * ```
  */
 export function events() {
-  return (source: Observable<ApiRx>)
-  : Observable<EventRecord> => {
-    return (source.pipe(
-      switchMap(api => api.query.system.events()),
-      map(codec => codec as EventRecord),
+  return (source: Observable<ApiRx>): Observable<EventRecord> => {
+    return source.pipe(
+      switchMap((api) => api.query.system.events()),
+      map((codec) => codec as EventRecord),
       share()
-    ));
+    );
   };
 }

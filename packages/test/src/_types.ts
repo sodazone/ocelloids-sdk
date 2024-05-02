@@ -5,4 +5,4 @@ export type BinBlock = {
   block: Uint8Array;
   events: Uint8Array[];
   author?: Uint8Array;
-}
+};

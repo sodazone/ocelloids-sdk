@@ -17,7 +17,7 @@ import { AddressParam } from '../types/types.js';
 function getArgValueFromTx(extrinsic: types.ExtrinsicWithId, name: string) {
   const { args, argsDef } = extrinsic.method;
   const keys = Object.keys(argsDef);
-  const indexOfData = keys.findIndex(k => k === name);
+  const indexOfData = keys.findIndex((k) => k === name);
   return args[indexOfData];
 }
 
@@ -29,28 +29,25 @@ function getArgValueFromTx(extrinsic: types.ExtrinsicWithId, name: string) {
  * @param address The contract address or an array of addresses.
  * @returns An Observable that emits ContractMessageWithTx objects.
  */
-export function contractMessages(abi: Abi, address: AddressParam ) {
+export function contractMessages(abi: Abi, address: AddressParam) {
   const criteria = {
     'extrinsic.call.section': 'contracts',
     'extrinsic.call.method': 'call',
-    'extrinsic.call.args.dest.id': Array.isArray(address)
-      ? { $in: address }
-      : address
+    'extrinsic.call.args.dest.id': Array.isArray(address) ? { $in: address } : address,
   };
 
-  return (source: Observable<types.TxWithIdAndEvent>)
-  : Observable<ContractMessageWithTx> => {
-    return (source.pipe(
+  return (source: Observable<types.TxWithIdAndEvent>): Observable<ContractMessageWithTx> => {
+    return source.pipe(
       mongoFilter(criteria),
-      map(tx => {
+      map((tx) => {
         const data = getArgValueFromTx(tx.extrinsic, 'data');
         return {
           ...tx,
-          ...abi.decodeMessage(data.toU8a())
+          ...abi.decodeMessage(data.toU8a()),
         };
       }),
       share()
-    ));
+    );
   };
 }
 
@@ -64,23 +61,19 @@ export function contractMessages(abi: Abi, address: AddressParam ) {
  *
  * @returns An observable that emits the decoded contract constructor with associated block event and transaction.
  */
-export function contractConstructors(api: ApiPromise, abi: Abi, codeHash: string ) {
+export function contractConstructors(api: ApiPromise, abi: Abi, codeHash: string) {
   const criteria = {
     'extrinsic.call.section': 'contracts',
     'extrinsic.call.method': {
-      $in: [
-        'instantiate',
-        'instantiateWithCode'
-      ]
+      $in: ['instantiate', 'instantiateWithCode'],
     },
   };
 
-  return (source: Observable<types.TxWithIdAndEvent>)
-  : Observable<ContractConstructorWithTx> => {
-    return (source.pipe(
+  return (source: Observable<types.TxWithIdAndEvent>): Observable<ContractConstructorWithTx> => {
+    return source.pipe(
       mongoFilter(criteria),
       mergeMap((tx: types.TxWithIdAndEvent) => {
-        const instantiatedEvent = tx.events.find(ev => api.events.contracts.Instantiated.is(ev));
+        const instantiatedEvent = tx.events.find((ev) => api.events.contracts.Instantiated.is(ev));
 
         if (instantiatedEvent !== undefined) {
           // We cast as any below to avoid importing `@polkadotjs/api-augment`
@@ -94,17 +87,17 @@ export function contractConstructors(api: ApiPromise, abi: Abi, codeHash: string
           const { contract } = instantiatedEvent.data as any;
 
           return from(api.query.contracts.contractInfoOf(contract)).pipe(
-            map((contractInfo : any) => {
+            map((contractInfo: any) => {
               // contractInfo is of type Option<PalletContractsStorageContractInfo>
               if (contractInfo.isSome) {
                 return {
                   tx,
-                  contractCodeHash: contractInfo.unwrap().codeHash.toString()
+                  contractCodeHash: contractInfo.unwrap().codeHash.toString(),
                 };
               }
               return {
                 tx,
-                contractCodeHash: null
+                contractCodeHash: null,
               };
             })
           );
@@ -112,7 +105,7 @@ export function contractConstructors(api: ApiPromise, abi: Abi, codeHash: string
 
         return of({
           tx,
-          contractCodeHash: null
+          contractCodeHash: null,
         });
       }),
       filter(({ contractCodeHash }) => contractCodeHash === codeHash),
@@ -120,11 +113,11 @@ export function contractConstructors(api: ApiPromise, abi: Abi, codeHash: string
         const data = getArgValueFromTx(tx.extrinsic, 'data');
         return {
           ...tx,
-          ...abi.decodeConstructor(data.toU8a())
+          ...abi.decodeConstructor(data.toU8a()),
         };
       }),
       share()
-    ));
+    );
   };
 }
 
@@ -135,23 +128,17 @@ export function contractConstructors(api: ApiPromise, abi: Abi, codeHash: string
  * @param address The contract address or an array of addresses.
  * @returns An Observable that emits ContractEventWithBlockEvent objects.
  */
-export function contractEvents(
-  abi: Abi,
-  address: AddressParam
-) {
+export function contractEvents(abi: Abi, address: AddressParam) {
   const criteria = {
-    'section': 'contracts',
-    'method': 'ContractEmitted',
-    'data.contract': Array.isArray(address)
-      ? { $in: address }
-      : address
+    section: 'contracts',
+    method: 'ContractEmitted',
+    'data.contract': Array.isArray(address) ? { $in: address } : address,
   };
 
-  return (source: Observable<types.EventWithIdAndTx>)
-  : Observable<ContractEventWithBlockEvent> => {
+  return (source: Observable<types.EventWithIdAndTx>): Observable<ContractEventWithBlockEvent> => {
     return source.pipe(
       mongoFilter(criteria),
-      map(blockEvent => {
+      map((blockEvent) => {
         // We cast as any below to avoid importing `@polkadotjs/api-augment`
         // as we want to keep the library side-effects-free.
         // Since we have filtered for contracts.ContractEmitted events,
@@ -166,7 +153,7 @@ export function contractEvents(
 
         return {
           blockEvent,
-          ...decodedEvent
+          ...decodedEvent,
         };
       }),
       share()

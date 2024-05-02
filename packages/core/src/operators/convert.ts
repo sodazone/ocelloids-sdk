@@ -16,10 +16,7 @@ import { Converter, base } from '../converters/index.js';
  * @see {@link Converter}
  */
 export function convert<T>(converter: Converter = base) {
-  return (source: Observable<T>)
-  : Observable<AnyJson> => {
-    return source.pipe(
-      map(record => converter.toNamedPrimitive(record))
-    );
+  return (source: Observable<T>): Observable<AnyJson> => {
+    return source.pipe(map((record) => converter.toNamedPrimitive(record)));
   };
 }

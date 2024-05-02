@@ -42,13 +42,8 @@ const l = logger('oc-ops-mongo-filter');
  * @see {@link ControlQuery}
  * @see {@link [Mongo Documentation](https://www.mongodb.com/docs/manual/tutorial/query-documents/)}
  */
-export function mongoFilter<T>(
-  criteria: Criteria | ControlQuery,
-  converter: Converter = base
-) {
-  const query = ControlQuery.isControlQuery(criteria)
-    ? criteria
-    : ControlQuery.from(criteria as Criteria);
+export function mongoFilter<T>(criteria: Criteria | ControlQuery, converter: Converter = base) {
+  const query = ControlQuery.isControlQuery(criteria) ? criteria : ControlQuery.from(criteria as Criteria);
 
   /**
    * Returns a filtered observable stream based on the provided query.
@@ -60,13 +55,11 @@ export function mongoFilter<T>(
     // we do not want to reset the outter observables.
     // So, we just use the current value from the behavior subject.
     return source.pipe(
-      filter(
-        record => {
-          const converted = converter.toNamedPrimitive(record);
-          debugOnly(l, x => JSON.stringify(x, null, 2))(converted);
-          return query.value.test(converted as RawObject);
-        }
-      )
+      filter((record) => {
+        const converted = converter.toNamedPrimitive(record);
+        debugOnly(l, (x) => JSON.stringify(x, null, 2))(converted);
+        return query.value.test(converted as RawObject);
+      })
     );
   };
 }

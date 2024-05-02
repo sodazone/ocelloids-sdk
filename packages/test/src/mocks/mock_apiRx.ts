@@ -13,30 +13,22 @@ const apiMock = {
   rpc: {
     chain: {
       subscribeNewHeads: () => from(testHeaders),
-      subscribeFinalizedHeads: () => from(testHeaders)
+      subscribeFinalizedHeads: () => from(testHeaders),
     },
   },
   query: {
     system: {
-      events: () => from(testEventRecords)
-    }
+      events: () => from(testEventRecords),
+    },
   },
   derive: {
     chain: {
-      getBlockByNumber: (blockNumber: BN) =>  of(
-        testBlocks.find(
-          b => b.block.header.number.toBn().eq(blockNumber)
-        )
-      ),
+      getBlockByNumber: (blockNumber: BN) => of(testBlocks.find((b) => b.block.header.number.toBn().eq(blockNumber))),
       subscribeNewBlocks: () => from(testBlocks),
       subscribeFinalizedBlocks: () => from(testBlocks),
       subscribeNewHeads: () => from(testHeaders),
       subscribeFinalizedHeads: () => from(testHeaders),
-      getBlock: (hash: Uint8Array | string) => of(
-        testBlocks.find(
-          b => b.block.hash.eq(hash)
-        )
-      )
+      getBlock: (hash: Uint8Array | string) => of(testBlocks.find((b) => b.block.hash.eq(hash))),
     },
   },
 } as unknown as ApiRx;

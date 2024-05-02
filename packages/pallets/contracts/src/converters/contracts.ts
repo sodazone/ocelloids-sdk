@@ -40,24 +40,30 @@ function contractMessageToNamedPrimitive(data: DecodedMessage) {
   // fromU8a: Function
   // toU8a: Function
   // selector: to be transformed to primitive type
-  const picked = (
-    ({ isDefault, isMutating, isPayable, docs, identifier, index, method, path }) =>
-      ({ isDefault, isMutating, isPayable, docs, identifier, index, method, path })
-  )(data.message);
+  const picked = (({ isDefault, isMutating, isPayable, docs, identifier, index, method, path }) => ({
+    isDefault,
+    isMutating,
+    isPayable,
+    docs,
+    identifier,
+    index,
+    method,
+    path,
+  }))(data.message);
 
   return {
     args: contractParamsToNamedPrimitive(data.message.args, data.args),
     message: {
       ...picked,
-      selector: data.message.selector.toPrimitive()
-    }
+      selector: data.message.selector.toPrimitive(),
+    },
   };
 }
 
 function contractMessageWithTxToNamedPrimitive(data: ContractMessageWithTx) {
   return {
     ...contractMessageToNamedPrimitive(data),
-    ...converters.helpers.txWithEventToNamedPrimitive(data)
+    ...converters.helpers.txWithEventToNamedPrimitive(data),
   };
 }
 
@@ -66,10 +72,7 @@ function contractEventToNamedPrimitive(data: DecodedEvent) {
   // We are leaving out:
   // args: AbiParam[] -> contains type Enum that does not comply with AnyJson
   // fromU8a: Function
-  const picked = (
-    ({ docs, identifier, index }) =>
-      ({ docs, identifier, index })
-  )(data.event);
+  const picked = (({ docs, identifier, index }) => ({ docs, identifier, index }))(data.event);
 
   return {
     event: picked,
@@ -80,7 +83,7 @@ function contractEventToNamedPrimitive(data: DecodedEvent) {
 function contractEventWithBlockEventToNamedPrimitive(data: ContractEventWithBlockEvent) {
   return {
     blockEvent: converters.helpers.eventToNamedPrimitive(data.blockEvent),
-    ...contractEventToNamedPrimitive(data)
+    ...contractEventToNamedPrimitive(data),
   };
 }
 
@@ -96,17 +99,17 @@ function contractEventWithBlockEventToNamedPrimitive(data: ContractEventWithBloc
  * @throws If no converter is found for the given object.
  */
 // We are leveraging on guards for type inference.
-// eslint-disable-next-line complexity
+
 function toNamedPrimitive<T>(data: T): Record<string, AnyJson> {
   switch (true) {
-  case isContractMessageWithTx(data):
-    return contractMessageWithTxToNamedPrimitive(data as ContractMessageWithTx);
-  case isContractMessage(data):
-    return contractMessageToNamedPrimitive(data as DecodedMessage);
-  case isContractEventWithBlockEvent(data):
-    return contractEventWithBlockEventToNamedPrimitive(data as ContractEventWithBlockEvent);
-  default:
-    throw new Error(`No converter found for ${JSON.stringify(data)}`);
+    case isContractMessageWithTx(data):
+      return contractMessageWithTxToNamedPrimitive(data as ContractMessageWithTx);
+    case isContractMessage(data):
+      return contractMessageToNamedPrimitive(data as DecodedMessage);
+    case isContractEventWithBlockEvent(data):
+      return contractEventWithBlockEventToNamedPrimitive(data as ContractEventWithBlockEvent);
+    default:
+      throw new Error(`No converter found for ${JSON.stringify(data)}`);
   }
 }
 
@@ -121,8 +124,7 @@ function toNamedPrimitives<T>(data: T): Record<string, AnyJson>[] {
   return Array.isArray(data) ? data.map(toNamedPrimitive) : [toNamedPrimitive(data)];
 }
 
-export const contracts : converters.Converter = {
+export const contracts: converters.Converter = {
   toNamedPrimitive,
-  toNamedPrimitives
+  toNamedPrimitives,
 };
-

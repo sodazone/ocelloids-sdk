@@ -6,13 +6,7 @@ import { Abi } from '@polkadot/api-contract';
 
 import { Observable, share } from 'rxjs';
 
-import {
-  ControlQuery,
-  Criteria,
-  mongoFilter,
-  filterExtrinsics,
-  extractEventsWithTx
-} from '@sodazone/ocelloids-sdk';
+import { ControlQuery, Criteria, mongoFilter, filterExtrinsics, extractEventsWithTx } from '@sodazone/ocelloids-sdk';
 
 import { contractEvents, contractMessages } from './index.js';
 import { ContractEventWithBlockEvent, ContractMessageWithTx } from '../types/interfaces.js';
@@ -32,8 +26,8 @@ export function filterContractCalls(
   abi: Abi,
   address: AddressParam,
   callsCriteria?: ControlQuery | Criteria,
-  extrinsicsCriteria : Criteria = {
-    dispatchError: { $exists: false }
+  extrinsicsCriteria: Criteria = {
+    dispatchError: { $exists: false },
   }
 ) {
   let callsQuery: ControlQuery | undefined;
@@ -42,17 +36,14 @@ export function filterContractCalls(
     callsQuery = ControlQuery.from(callsCriteria);
   }
 
-  return (source: Observable<SignedBlockExtended>)
-      : Observable<ContractMessageWithTx> => {
+  return (source: Observable<SignedBlockExtended>): Observable<ContractMessageWithTx> => {
     return source.pipe(
       filterExtrinsics(extrinsicsCriteria),
       contractMessages(abi, address),
       // If callsCriteria is defined,
       // filters over the decoded message, tx or event.
       // Else, pass through all contract messages.
-      callsQuery ?
-        mongoFilter(callsQuery, contracts) :
-        x => x,
+      callsQuery ? mongoFilter(callsQuery, contracts) : (x) => x,
       // Share multicast
       share()
     );
@@ -72,8 +63,8 @@ export function filterContractEvents(
   abi: Abi,
   address: AddressParam,
   eventsCriteria?: ControlQuery | Criteria,
-  extrinsicsCriteria : Criteria = {
-    dispatchError: { $exists: false }
+  extrinsicsCriteria: Criteria = {
+    dispatchError: { $exists: false },
   }
 ) {
   let eventsQuery: ControlQuery | undefined;
@@ -82,17 +73,14 @@ export function filterContractEvents(
     eventsQuery = ControlQuery.from(eventsCriteria);
   }
 
-  return (source: Observable<SignedBlockExtended>)
-        : Observable<ContractEventWithBlockEvent> => {
+  return (source: Observable<SignedBlockExtended>): Observable<ContractEventWithBlockEvent> => {
     return source.pipe(
       filterExtrinsics(extrinsicsCriteria),
       extractEventsWithTx(),
       contractEvents(abi, address),
       // Filters over the decoded event
       // if query or criteria is provided
-      eventsQuery ?
-        mongoFilter(eventsQuery, contracts) :
-        x => x,
+      eventsQuery ? mongoFilter(eventsQuery, contracts) : (x) => x,
       // Share multicast
       share()
     );

@@ -10,7 +10,7 @@ import {
   FunctionMetadataLatest,
   Address,
   MultiAddress,
-  AccountId
+  AccountId,
 } from '@polkadot/types/interfaces';
 import type { Codec } from '@polkadot/types/types';
 import type { AnyJson, CallBase, AnyTuple } from '@polkadot/types-codec/types';
@@ -22,9 +22,7 @@ import { EventWithId, EventWithIdAndTx, ExtrinsicWithId, TxWithIdAndEvent } from
    ================================================================ */
 
 function isExtrinsic(object: any): object is Extrinsic {
-  return object.signature !== undefined
-    && object.method !== undefined
-    && object.era !== undefined;
+  return object.signature !== undefined && object.method !== undefined && object.era !== undefined;
 }
 
 function isExtrinsicWithId(object: any): object is ExtrinsicWithId {
@@ -70,7 +68,7 @@ function isBlock(object: any): object is Block {
 }
 
 function isRecord(obj: AnyJson): obj is Record<string, AnyJson> {
-  return obj !== null && typeof obj === 'object' &&  Object.getOwnPropertySymbols(obj).length === 0;
+  return obj !== null && typeof obj === 'object' && Object.getOwnPropertySymbols(obj).length === 0;
 }
 
 function isCodec(object: any): object is Codec {
@@ -86,10 +84,10 @@ function isHumanizable(object: any): object is Humanizable {
 }
 
 function expandAddress(address: AccountId | Address | MultiAddress) {
-  const accountId : AccountId = (address as any).value ?? address;
+  const accountId: AccountId = (address as any).value ?? address;
   return {
     id: accountId.toPrimitive(),
-    publicKey: accountId.toHex()
+    publicKey: accountId.toHex(),
   };
 }
 
@@ -117,20 +115,18 @@ export function eventToNamedPrimitive(event: Event) {
   return {
     section: event.section,
     method: event.method,
-    data: eventNamesToPrimitive(event)
+    data: eventNamesToPrimitive(event),
   };
 }
 
 /**
  * Converts an `EventRecord` object to a primitive representation with named fields.
  */
-function eventRecordToNamedPrimitive(
-  { event, phase, topics }: EventRecord
-) {
+function eventRecordToNamedPrimitive({ event, phase, topics }: EventRecord) {
   return {
     phase: phase.toPrimitive(),
     topics: topics.toPrimitive(),
-    event: eventToNamedPrimitive(event)
+    event: eventToNamedPrimitive(event),
   };
 }
 
@@ -167,19 +163,17 @@ function callBaseToPrimitive({ argsDef, args, registry }: CallBase<AnyTuple, Fun
 /**
  * Converts an `Extrinsic` object to a primitive representation with named fields.
  */
-function extrinsicToNamedPrimitive(
-  {
-    hash,
-    signature,
-    isSigned,
-    isEmpty,
-    signer,
-    method,
-    era,
-    nonce,
-    tip
-  }: Extrinsic
-) : Record<string, AnyJson> {
+function extrinsicToNamedPrimitive({
+  hash,
+  signature,
+  isSigned,
+  isEmpty,
+  signer,
+  method,
+  era,
+  nonce,
+  tip,
+}: Extrinsic): Record<string, AnyJson> {
   return {
     hash: hash.toPrimitive(),
     era: era.toHuman(),
@@ -193,7 +187,7 @@ function extrinsicToNamedPrimitive(
       method: method.method,
       section: method.section,
       args: callBaseToPrimitive(method),
-    }
+    },
   };
 }
 
@@ -207,7 +201,7 @@ export function eventWithIdToNamedPrimitive(event: EventWithId) {
     blockNumber: blockNumber.toPrimitive(),
     blockHash: blockHash.toPrimitive(),
     blockPosition,
-    eventId
+    eventId,
   };
 }
 
@@ -220,7 +214,7 @@ export function eventWithIdAndTxToNamedPrimitive(event: EventWithIdAndTx) {
     ...eventWithIdToNamedPrimitive(event),
     extrinsicId,
     extrinsicPosition,
-    extrinsic: extrinsicToNamedPrimitive(extrinsic)
+    extrinsic: extrinsicToNamedPrimitive(extrinsic),
   };
 }
 
@@ -235,10 +229,10 @@ export function extrinsicWithIdToNamedPrimitive(data: ExtrinsicWithId) {
     blockHash: blockHash.toPrimitive(),
     blockPosition,
     extrinsicId,
-    extraSigners: extraSigners.map(o => ({
+    extraSigners: extraSigners.map((o) => ({
       type: o.type,
-      address: expandAddress(o.address)
-    }))
+      address: expandAddress(o.address),
+    })),
   };
 }
 
@@ -250,7 +244,7 @@ export function txWithEventToNamedPrimitive(data: TxWithEvent) {
     extrinsic: extrinsicToNamedPrimitive(data.extrinsic as Extrinsic),
     events: data.events?.map(eventToNamedPrimitive) || [],
     dispatchInfo: data.dispatchInfo?.toHuman(),
-    dispatchError: data.dispatchError?.toHuman()
+    dispatchError: data.dispatchError?.toHuman(),
   };
 }
 
@@ -263,19 +257,19 @@ export function txWithIdAndEventToNamedPrimitive(data: TxWithIdAndEvent) {
     events: data.events?.map(eventWithIdToNamedPrimitive) || [],
     dispatchInfo: data.dispatchInfo?.toHuman(),
     dispatchError: data.dispatchError?.toHuman(),
-    levelId: data.levelId
+    levelId: data.levelId,
   };
 }
 
 /**
  * Converts a `Block` object to a primitive representation with named fields.
  */
-function blockToNamedPrimitive({hash, contentHash, header, extrinsics}: Block) {
+function blockToNamedPrimitive({ hash, contentHash, header, extrinsics }: Block) {
   return {
     hash: hash.toHex(),
     contentHash: contentHash.toHex(),
     header: header.toPrimitive(),
-    extrinsics: extrinsics.map(extrinsicToNamedPrimitive)
+    extrinsics: extrinsics.map(extrinsicToNamedPrimitive),
   };
 }
 
@@ -285,7 +279,7 @@ function blockToNamedPrimitive({hash, contentHash, header, extrinsics}: Block) {
 function signedBlockToNamedPrimitive(data: SignedBlock) {
   return {
     block: blockToNamedPrimitive(data.block),
-    justifications: data.justifications?.toPrimitive()
+    justifications: data.justifications?.toPrimitive(),
   };
 }
 
@@ -294,12 +288,9 @@ function signedBlockToNamedPrimitive(data: SignedBlock) {
  *
  * Wraps the value in a 'value' key for non-indexable JSON objects.
  */
-function codecToNamedPrimitive(data: Codec)
-: Record<string, AnyJson> {
+function codecToNamedPrimitive(data: Codec): Record<string, AnyJson> {
   const converted = data.toPrimitive();
-  return isRecord(converted)
-    ? converted
-    : { value: converted};
+  return isRecord(converted) ? converted : { value: converted };
 }
 
 /**
@@ -317,43 +308,43 @@ function codecToNamedPrimitive(data: Codec)
 // eslint-disable-next-line complexity
 function toNamedPrimitive<T>(data: T): Record<string, AnyJson> {
   switch (true) {
-  case isEventWithIdAndTx(data):
-    return eventWithIdAndTxToNamedPrimitive(data as EventWithIdAndTx);
-  case isEventWithId(data):
-    return eventWithIdToNamedPrimitive(data as EventWithId);
-  case isEventRecord(data):
-    return eventRecordToNamedPrimitive(data as EventRecord);
-  case isEvent(data):
-    return eventToNamedPrimitive(data as Event);
-  case isTxWithIdAndEvent(data):
-    return txWithIdAndEventToNamedPrimitive(data as TxWithIdAndEvent);
-  case isTxWithEvent(data):
-    return txWithEventToNamedPrimitive(data as TxWithEvent);
-  case isExtrinsicWithId(data):
-    return extrinsicWithIdToNamedPrimitive(data as ExtrinsicWithId);
-  case isExtrinsic(data):
-    return extrinsicToNamedPrimitive(data as Extrinsic);
-  case isSignedBlockExtended(data):
-    return {
-      author: (data as SignedBlockExtended).author?.toPrimitive(),
-      extrinsics: (data as SignedBlockExtended).extrinsics.map(txWithEventToNamedPrimitive),
-      events: (data as SignedBlockExtended).events.map(eventRecordToNamedPrimitive),
-      ...signedBlockToNamedPrimitive(data as SignedBlock),
-    };
-  case isSignedBlock(data):
-    return signedBlockToNamedPrimitive(data as SignedBlock);
-  case isBlock(data):
-    return blockToNamedPrimitive(data as Block);
-  case isCodec(data):
-    return codecToNamedPrimitive(data as Codec);
-  case isHumanizable(data):
-    return (data as Humanizable).toHuman() as Record<string, AnyJson>;
-  default:
-    try {
-      return data as Record<string, AnyJson>;
-    } catch {
-      throw new Error(`No converter found for ${JSON.stringify(data)}`);
-    }
+    case isEventWithIdAndTx(data):
+      return eventWithIdAndTxToNamedPrimitive(data as EventWithIdAndTx);
+    case isEventWithId(data):
+      return eventWithIdToNamedPrimitive(data as EventWithId);
+    case isEventRecord(data):
+      return eventRecordToNamedPrimitive(data as EventRecord);
+    case isEvent(data):
+      return eventToNamedPrimitive(data as Event);
+    case isTxWithIdAndEvent(data):
+      return txWithIdAndEventToNamedPrimitive(data as TxWithIdAndEvent);
+    case isTxWithEvent(data):
+      return txWithEventToNamedPrimitive(data as TxWithEvent);
+    case isExtrinsicWithId(data):
+      return extrinsicWithIdToNamedPrimitive(data as ExtrinsicWithId);
+    case isExtrinsic(data):
+      return extrinsicToNamedPrimitive(data as Extrinsic);
+    case isSignedBlockExtended(data):
+      return {
+        author: (data as SignedBlockExtended).author?.toPrimitive(),
+        extrinsics: (data as SignedBlockExtended).extrinsics.map(txWithEventToNamedPrimitive),
+        events: (data as SignedBlockExtended).events.map(eventRecordToNamedPrimitive),
+        ...signedBlockToNamedPrimitive(data as SignedBlock),
+      };
+    case isSignedBlock(data):
+      return signedBlockToNamedPrimitive(data as SignedBlock);
+    case isBlock(data):
+      return blockToNamedPrimitive(data as Block);
+    case isCodec(data):
+      return codecToNamedPrimitive(data as Codec);
+    case isHumanizable(data):
+      return (data as Humanizable).toHuman() as Record<string, AnyJson>;
+    default:
+      try {
+        return data as Record<string, AnyJson>;
+      } catch {
+        throw new Error(`No converter found for ${JSON.stringify(data)}`);
+      }
   }
 }
 
@@ -373,16 +364,16 @@ export interface Converter {
   toNamedPrimitives: <T>(data: T) => Record<string, AnyJson>[];
 }
 
-export const base : Converter = {
+export const base: Converter = {
   toNamedPrimitive,
-  toNamedPrimitives
+  toNamedPrimitives,
 };
 
 export const guards = {
-  isTxWithEvent
+  isTxWithEvent,
 };
 
 export const helpers = {
   txWithEventToNamedPrimitive,
-  eventToNamedPrimitive
+  eventToNamedPrimitive,
 };

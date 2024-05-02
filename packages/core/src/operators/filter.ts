@@ -23,14 +23,10 @@ import type { BlockEvent, EventWithIdAndTx, TxWithIdAndEvent } from '../types/in
  *
  * @see {@link TxWithIdAndEvent}
  */
-export function filterExtrinsics(
-  extrinsicsCriteria: ControlQuery | Criteria,
-  flatten: boolean = true
-) {
+export function filterExtrinsics(extrinsicsCriteria: ControlQuery | Criteria, flatten: boolean = true) {
   const xtQuery = ControlQuery.from(extrinsicsCriteria);
 
-  return (source: Observable<SignedBlockExtended>)
-    : Observable<TxWithIdAndEvent> => {
+  return (source: Observable<SignedBlockExtended>): Observable<TxWithIdAndEvent> => {
     return source.pipe(
       // Extracts extrinsics with events
       extractTxWithEvents(),
@@ -38,9 +34,7 @@ export function filterExtrinsics(
       // pass through flattenCalls operator to recursively flatten
       // nested batch, multisig, proxy, etc. calls.
       // Else, pass through.
-      flatten ?
-        flattenCalls() :
-        x => x,
+      flatten ? flattenCalls() : (x) => x,
       // Filters at the extrinsic level
       // mainly for success or failure
       mongoFilter(xtQuery)
@@ -70,13 +64,12 @@ export function filterExtrinsics(
  */
 export function filterEventsWithTx(
   eventsCriteria: ControlQuery | Criteria,
-  extrinsicsCriteria : Criteria = {},
+  extrinsicsCriteria: Criteria = {},
   flatten: boolean = false
 ) {
   const eventsQuery = ControlQuery.from(eventsCriteria);
 
-  return (source: Observable<SignedBlockExtended>)
-    : Observable<EventWithIdAndTx> => {
+  return (source: Observable<SignedBlockExtended>): Observable<EventWithIdAndTx> => {
     return source.pipe(
       filterExtrinsics(extrinsicsCriteria, flatten),
       // Maps the events with
@@ -101,13 +94,10 @@ export function filterEventsWithTx(
  *
  * @see {@link BlockEvent}
  */
-export function filterEvents(
-  eventsCriteria: ControlQuery | Criteria
-) {
+export function filterEvents(eventsCriteria: ControlQuery | Criteria) {
   const eventsQuery = ControlQuery.from(eventsCriteria);
 
-  return (source: Observable<SignedBlockExtended>)
-    : Observable<BlockEvent> => {
+  return (source: Observable<SignedBlockExtended>): Observable<BlockEvent> => {
     return source.pipe(
       extractEvents(),
       // Filters over the events

@@ -11,9 +11,9 @@ import { Observable, retry, asyncScheduler, SchedulerLike } from 'rxjs';
  * @property maxCount  - The maximum number of retry attempts. If not specified, retries will continue indefinitely.
  */
 export type TruncatedExpBackoffConfig = {
-  baseDelay?: number,
-  maxDelay?: number,
-  maxCount?: number
+  baseDelay?: number;
+  maxDelay?: number;
+  maxCount?: number;
 };
 
 /**
@@ -29,7 +29,7 @@ export function truncatedExpBackoff(
   maxDelay: number = 900000, // 15 minutes,
   scheduler: SchedulerLike = asyncScheduler
 ) {
-  return (_error: any, retryCount: number) : Observable<number> => {
+  return (_error: any, retryCount: number): Observable<number> => {
     const delay = Math.min(baseDelay * 2 ** retryCount, maxDelay);
 
     return new Observable((subscriber) => {
@@ -49,17 +49,10 @@ export function truncatedExpBackoff(
  * @param config An object containing configuration options for truncatedExpBackoff.
  * @returns A retry operator that uses truncated exponential backoff for retry attempts.
  */
-export function retryWithTruncatedExpBackoff<T>({
-  baseDelay,
-  maxDelay,
-  maxCount
-} : TruncatedExpBackoffConfig = {}) {
+export function retryWithTruncatedExpBackoff<T>({ baseDelay, maxDelay, maxCount }: TruncatedExpBackoffConfig = {}) {
   return retry<T>({
     count: maxCount ?? Infinity,
-    delay: truncatedExpBackoff(
-      baseDelay,
-      maxDelay
-    ),
-    resetOnSuccess: true
+    delay: truncatedExpBackoff(baseDelay, maxDelay),
+    resetOnSuccess: true,
   });
 }

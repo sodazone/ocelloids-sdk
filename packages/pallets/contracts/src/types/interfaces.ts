@@ -8,17 +8,15 @@ import { types } from '@sodazone/ocelloids-sdk';
 /**
  * Represents a decoded contract message with associated extrinsic.
  */
-export interface ContractMessageWithTx
-extends types.TxWithIdAndEvent, DecodedMessage {
+export interface ContractMessageWithTx extends types.TxWithIdAndEvent, DecodedMessage {
   // empty impl.
 }
 
-export type ContractConstructorWithTx = ContractMessageWithTx
+export type ContractConstructorWithTx = ContractMessageWithTx;
 
 /**
  * Represents a decoded contract event with the associated block event.
  */
-export interface ContractEventWithBlockEvent
-extends DecodedEvent {
-  blockEvent: types.EventWithId
+export interface ContractEventWithBlockEvent extends DecodedEvent {
+  blockEvent: types.EventWithId;
 }

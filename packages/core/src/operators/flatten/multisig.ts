@@ -14,7 +14,7 @@ import { Boundaries, Flattener } from './flattener.js';
 
 const MultisigExecuted = 'multisig.MultisigExecuted';
 const MultisigExecutedBoundary = {
-  eventName: MultisigExecuted
+  eventName: MultisigExecuted,
 };
 
 /**
@@ -48,18 +48,18 @@ export function extractAsMultiCall(tx: TxWithIdAndEvent, flattener: Flattener) {
 
   const call = getArgValueFromTx(tx.extrinsic, 'call') as Call;
 
-  return [callAsTxWithBoundary(
-    {
+  return [
+    callAsTxWithBoundary({
       call,
       tx,
       boundary: MultisigExecutedBoundary,
       callError: callResult.isErr ? callResult.asErr : undefined,
       extraSigner: {
         type: 'multisig',
-        address: multisigAddress
-      }
-    }
-  )];
+        address: multisigAddress,
+      },
+    }),
+  ];
 }
 
 /**
@@ -77,25 +77,24 @@ export function extractAsMutiThreshold1Call(tx: TxWithIdAndEvent) {
   const { extrinsic } = tx;
   const otherSignatories = getArgValueFromTx(tx.extrinsic, 'other_signatories') as Vec<AccountId32>;
   // Signer must be added to the signatories to obtain the multisig address
-  const signatories = otherSignatories.map(s => s.toString());
+  const signatories = otherSignatories.map((s) => s.toString());
   signatories.push(extrinsic.signer.toString());
   const multisig = createKeyMulti(signatories, 1);
-  const multisigAddress = extrinsic.registry.createTypeUnsafe(
-    'Address',
-    [isU8a(multisig) ? u8aToHex(multisig) : multisig]
-  ) as Address;
+  const multisigAddress = extrinsic.registry.createTypeUnsafe('Address', [
+    isU8a(multisig) ? u8aToHex(multisig) : multisig,
+  ]) as Address;
 
   const call = getArgValueFromTx(tx.extrinsic, 'call') as Call;
 
-  return [callAsTxWithBoundary(
-    {
+  return [
+    callAsTxWithBoundary({
       call,
       tx,
       boundary: Boundaries.ALL,
       extraSigner: {
         type: 'multisig',
-        address: multisigAddress
-      }
-    }
-  )];
+        address: multisigAddress,
+      },
+    }),
+  ];
 }

@@ -5,27 +5,25 @@ import type { BlockNumber } from '@polkadot/types/interfaces';
 import type { AnyJson, IU8a } from '@polkadot/types-codec/types';
 import { Compact, GenericEvent } from '@polkadot/types';
 
-import { EventBlockContext, EventExtrinsicContext, EventWithId, EventWithIdAndTx, ExtrinsicWithId } from './interfaces.js';
+import {
+  EventBlockContext,
+  EventExtrinsicContext,
+  EventWithId,
+  EventWithIdAndTx,
+  ExtrinsicWithId,
+} from './interfaces.js';
 
 /**
  * A subclass of GenericEvent that includes contextual information
  * of an event in a block.
  */
-export class GenericEventWithId extends GenericEvent
-  implements EventWithId {
+export class GenericEventWithId extends GenericEvent implements EventWithId {
   protected readonly _event: GenericEvent;
   readonly blockNumber: Compact<BlockNumber>;
   readonly blockHash: IU8a;
   readonly blockPosition: number;
 
-  constructor(
-    value: GenericEvent,
-    {
-      blockNumber,
-      blockHash,
-      blockPosition
-    }: EventBlockContext
-  ) {
+  constructor(value: GenericEvent, { blockNumber, blockHash, blockPosition }: EventBlockContext) {
     super(value.registry);
 
     this._event = value;
@@ -34,7 +32,7 @@ export class GenericEventWithId extends GenericEvent
     this.blockPosition = blockPosition;
 
     return new Proxy(this, {
-      get<T>(target: GenericEventWithId, p: keyof GenericEvent):T {
+      get<T>(target: GenericEventWithId, p: keyof GenericEvent): T {
         if (p === 'toHuman') {
           return target.toHuman as T;
         }
@@ -44,7 +42,7 @@ export class GenericEventWithId extends GenericEvent
         }
 
         return target[p] as T;
-      }
+      },
     });
   }
 
@@ -69,7 +67,7 @@ export class GenericEventWithId extends GenericEvent
       blockPosition: this.blockPosition,
       blockNumber: this.blockNumber.toHuman(),
       blockHash: this.blockHash.toHuman(),
-      ...(this._event.toHuman(isExpanded) as any)
+      ...(this._event.toHuman(isExpanded) as any),
     };
   }
 }
@@ -78,20 +76,14 @@ export class GenericEventWithId extends GenericEvent
  * A subclass of GenericEventWithId that includes contextual information
  * of an event in an extrinsic.
  */
-export class GenericEventWithIdAndTx extends GenericEventWithId
-  implements EventWithIdAndTx {
+export class GenericEventWithIdAndTx extends GenericEventWithId implements EventWithIdAndTx {
   extrinsicPosition: number;
   extrinsicId: string;
   extrinsic: ExtrinsicWithId;
 
   constructor(
     value: GenericEvent,
-    {
-      extrinsicPosition,
-      extrinsicId,
-      extrinsic,
-      ...eventBlockContext
-    } : EventExtrinsicContext
+    { extrinsicPosition, extrinsicId, extrinsic, ...eventBlockContext }: EventExtrinsicContext
   ) {
     super(value, eventBlockContext);
     this.extrinsicPosition = extrinsicPosition;
@@ -108,7 +100,7 @@ export class GenericEventWithIdAndTx extends GenericEventWithId
       extrinsicId: this.extrinsicId,
       extrinsicPosition: this.extrinsicPosition,
       extrinsic: this.extrinsic.toHuman(),
-      ...(super.toHuman(isExpanded) as any)
+      ...(super.toHuman(isExpanded) as any),
     };
   }
 }

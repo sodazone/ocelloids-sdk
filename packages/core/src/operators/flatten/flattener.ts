@@ -17,25 +17,27 @@ const MAX_EVENTS = 200;
 /**
  * Enum representing static, well-known boundaries.
  */
-// eslint-disable-next-line no-shadow
+
 export enum Boundaries {
-  ALL
+  ALL,
 }
 
 /**
  * Type defining a boundary for events demarcation to correlate with a call.
  */
-export type Boundary = {
-  /**
-   * The event name, i.e. `section.method`.
-   */
-  eventName: string,
-  /**
-   * Offset to exclude the current event from the boundary.
-   * Defaults to 0.
-   */
-  offset?: number
-} | Boundaries;
+export type Boundary =
+  | {
+      /**
+       * The event name, i.e. `section.method`.
+       */
+      eventName: string;
+      /**
+       * Offset to exclude the current event from the boundary.
+       * Defaults to 0.
+       */
+      offset?: number;
+    }
+  | Boundaries;
 
 /**
  * Checks if a boundary is of type `Boundaries.ALL`.
@@ -50,12 +52,12 @@ const isAllBoundary = (boundary: Boundary): boundary is Boundaries => {
  */
 export class Flattener {
   private events: {
-    event: EventWithId,
-    callId: number
+    event: EventWithId;
+    callId: number;
   }[];
   private calls: TxWithIdAndEvent[];
   private pointer: number;
-  private tx : TxWithIdAndEvent;
+  private tx: TxWithIdAndEvent;
 
   constructor(tx: TxWithIdAndEvent) {
     const { extrinsic } = tx;
@@ -67,15 +69,22 @@ export class Flattener {
     }
 
     // work on a copy of the events and extrinsics
-    this.events = tx.events.slice().reverse().map(e => ({
-      event: e,
-      callId: 0
-    }));
+    this.events = tx.events
+      .slice()
+      .reverse()
+      .map((e) => ({
+        event: e,
+        callId: 0,
+      }));
     this.tx = {
-      events: this.events.map(({event}) => event),
-      dispatchError: tx.dispatchError ? registry.createType('DispatchError', tx.dispatchError) as DispatchError : undefined,
-      dispatchInfo: tx.dispatchInfo ? registry.createType('DispatchInfo', tx.dispatchInfo) as DispatchInfo : undefined,
-      extrinsic: new GenericExtrinsicWithId(extrinsic, extrinsic)
+      events: this.events.map(({ event }) => event),
+      dispatchError: tx.dispatchError
+        ? (registry.createType('DispatchError', tx.dispatchError) as DispatchError)
+        : undefined,
+      dispatchInfo: tx.dispatchInfo
+        ? (registry.createType('DispatchInfo', tx.dispatchInfo) as DispatchInfo)
+        : undefined,
+      extrinsic: new GenericExtrinsicWithId(extrinsic, extrinsic),
     };
 
     this.calls = [];
@@ -89,11 +98,7 @@ export class Flattener {
    * @param id - The level identifier for the current call; e.g. '0.0.1'. Defaults to '0'.
    */
   flatten(boundary?: Boundary, id = '0') {
-    l.debug(
-      'flatten(boundary, extrinsic)',
-      boundary,
-      this.tx.extrinsic.method.toHuman()
-    );
+    l.debug('flatten(boundary, extrinsic)', boundary, this.tx.extrinsic.method.toHuman());
     this.tx.levelId = id;
     this.calls.push(this.tx);
     this.correlate(boundary);
@@ -114,8 +119,8 @@ export class Flattener {
    */
   get flattenedCalls() {
     const flattenedCalls = this.calls.map((call, i) => {
-      const eventsForCall = this.events.filter(e => e.callId === i);
-      call.events = eventsForCall.map(e => e.event).reverse();
+      const eventsForCall = this.events.filter((e) => e.callId === i);
+      call.events = eventsForCall.map((e) => e.event).reverse();
       return call;
     });
     return flattenedCalls;
@@ -148,19 +153,21 @@ export class Flattener {
     return this.pointer + 1;
   }
 
-  toString() : string {
-    return JSON.stringify({
-      extrinsicId: this.tx.extrinsic.extrinsicId,
-      tx: this.tx.extrinsic.method.toHuman(),
-      pointer: this.pointer,
-      calls: this.calls.map(c => ({
-        levelId: c.levelId,
-        method: c.extrinsic.method.toHuman()
-      })),
-      events: this.events.map(e => (
-        e.callId + '::' + e.event.method
-      ))
-    }, null, 2);
+  toString(): string {
+    return JSON.stringify(
+      {
+        extrinsicId: this.tx.extrinsic.extrinsicId,
+        tx: this.tx.extrinsic.method.toHuman(),
+        pointer: this.pointer,
+        calls: this.calls.map((c) => ({
+          levelId: c.levelId,
+          method: c.extrinsic.method.toHuman(),
+        })),
+        events: this.events.map((e) => e.callId + '::' + e.event.method),
+      },
+      null,
+      2
+    );
   }
 
   private correlate(boundary?: Boundary) {
@@ -182,16 +189,14 @@ export class Flattener {
     } else {
       const { eventName, offset } = boundary;
       // the offset controls the exclusion from the current correlation set
-      const eventIndex = this.events.slice(this.pointer + (offset ?? 0))
-        .findIndex(e => isEventType(eventName, e.event));
+      const eventIndex = this.events
+        .slice(this.pointer + (offset ?? 0))
+        .findIndex((e) => isEventType(eventName, e.event));
       const callId = this.calls.length - 1;
 
-      l.debug(
-        '> (callId, pointer, eventName, eventIndex)',
-        callId, this.pointer, eventName, eventIndex
-      );
+      l.debug('> (callId, pointer, eventName, eventIndex)', callId, this.pointer, eventName, eventIndex);
 
-      this.pointer +=  eventIndex + 1;
+      this.pointer += eventIndex + 1;
       this.pointer = Math.min(this.events.length, this.pointer);
 
       l.debug('> new pointer', this.pointer);
@@ -202,7 +207,7 @@ export class Flattener {
 
       l.debug(
         '> correlation([callId::event])',
-        this.events.map(e => e.callId + '::' + e.event.method)
+        this.events.map((e) => e.callId + '::' + e.event.method)
       );
     }
   }

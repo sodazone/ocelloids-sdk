@@ -32,14 +32,12 @@ export function bnRange(start: AnyBN, count: AnyBN): Observable<BN> {
 
   const end = bnCount.add(bnStart);
 
-  return new Observable(
-    (subscriber) => {
-      let n = bnStart;
-      while (n.lt(end) && !subscriber.closed) {
-        subscriber.next(n);
-        n = n.add(ONE);
-      }
-      subscriber.complete();
+  return new Observable((subscriber) => {
+    let n = bnStart;
+    while (n.lt(end) && !subscriber.closed) {
+      subscriber.next(n);
+      n = n.add(ONE);
     }
-  );
+    subscriber.complete();
+  });
 }

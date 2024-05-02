@@ -8,7 +8,7 @@ import {
   testContractExtrinsics,
   testContractBlocks,
   testContractEvents,
-  testContractCodeHash
+  testContractCodeHash,
 } from '@sodazone/ocelloids-sdk-test';
 
 import { Abi } from '@polkadot/api-contract';
@@ -24,31 +24,34 @@ import { contracts } from '../converters/contracts.js';
 const testContractBlock = testContractBlocks[0];
 const blockNumber = testContractBlock.block.header.number;
 const blockHash = testContractBlock.block.header.hash;
-const extrinsics = testContractExtrinsics.map(
-  (xt, blockPosition) => types.enhanceTxWithIdAndEvents(
+const extrinsics = testContractExtrinsics.map((xt, blockPosition) =>
+  types.enhanceTxWithIdAndEvents(
     {
       blockNumber,
       blockHash,
-      blockPosition
+      blockPosition,
     },
     xt,
     testContractBlock.events
   )
 );
 
-const events = testContractEvents.map((ev, blockPosition) => new types.GenericEventWithId(ev, {
-  blockNumber,
-  blockHash,
-  blockPosition
-}));
+const events = testContractEvents.map(
+  (ev, blockPosition) =>
+    new types.GenericEventWithId(ev, {
+      blockNumber,
+      blockHash,
+      blockPosition,
+    })
+);
 const instantiateTx = extrinsics[2];
 const eventsFromInstantiateTx = events.splice(2, 14);
-const testEventsWithIdAndTx = eventsFromInstantiateTx.map(ev => {
+const testEventsWithIdAndTx = eventsFromInstantiateTx.map((ev) => {
   return new types.GenericEventWithIdAndTx(ev, {
     extrinsic: instantiateTx.extrinsic,
     extrinsicId: instantiateTx.extrinsic.extrinsicId,
     extrinsicPosition: 0,
-    ...ev
+    ...ev,
   });
 });
 
@@ -64,12 +67,12 @@ describe('Wasm contracts operator', () => {
       const expectedContractMessages = [
         {
           identifier: 'transfer',
-          selector: '0x84a15da1'
+          selector: '0x84a15da1',
         },
         {
           identifier: 'approve',
-          selector: '0x681266a0'
-        }
+          selector: '0x681266a0',
+        },
       ];
       const testPipe = contractMessages(testAbi, testContractAddress)(from(extrinsics));
       let index = 0;
@@ -90,7 +93,7 @@ describe('Wasm contracts operator', () => {
         next: found,
         complete: () => {
           expect(found).toHaveBeenCalledTimes(2);
-        }
+        },
       });
     });
 
@@ -98,20 +101,22 @@ describe('Wasm contracts operator', () => {
       const found = jest.fn();
       const testPipe = contractMessages(testAbi, testContractAddress)(from(extrinsics));
 
-      testPipe.pipe(
-        mongoFilter(
-          {
-            'args.value': { $bn_gt: 800000000 },
-            'message.identifier': 'transfer'
-          },
-          contracts
+      testPipe
+        .pipe(
+          mongoFilter(
+            {
+              'args.value': { $bn_gt: 800000000 },
+              'message.identifier': 'transfer',
+            },
+            contracts
+          )
         )
-      ).subscribe({
-        next: found,
-        complete: () => {
-          expect(found).toHaveBeenCalledTimes(1);
-        }
-      });
+        .subscribe({
+          next: found,
+          complete: () => {
+            expect(found).toHaveBeenCalledTimes(1);
+          },
+        });
     });
   });
 
@@ -119,13 +124,12 @@ describe('Wasm contracts operator', () => {
     const txWithIdAndEventObs = from(extrinsics.splice(0, 3));
 
     beforeEach(() => {
-      jest.spyOn(mockPromiseApi.query.contracts, 'contractInfoOf')
-        .mockResolvedValue({
-          isSome: () => true,
-          unwrap: () => ({
-            codeHash: testContractCodeHash
-          })
-        } as any);
+      jest.spyOn(mockPromiseApi.query.contracts, 'contractInfoOf').mockResolvedValue({
+        isSome: () => true,
+        unwrap: () => ({
+          codeHash: testContractCodeHash,
+        }),
+      } as any);
     });
 
     afterEach(() => {
@@ -138,7 +142,7 @@ describe('Wasm contracts operator', () => {
       const testPipe = contractConstructors(mockPromiseApi, testAbi, testContractCodeHash)(txWithIdAndEventObs);
 
       testPipe.subscribe({
-        next: constructor => {
+        next: (constructor) => {
           found();
           expect(constructor).toBeDefined();
           expect(constructor.message).toBeDefined();
@@ -146,7 +150,7 @@ describe('Wasm contracts operator', () => {
         },
         complete: () => {
           expect(found).toHaveBeenCalledTimes(1);
-        }
+        },
       });
     });
 
@@ -155,19 +159,21 @@ describe('Wasm contracts operator', () => {
 
       const testPipe = contractConstructors(mockPromiseApi, testAbi, testContractCodeHash)(txWithIdAndEventObs);
 
-      testPipe.pipe(
-        mongoFilter(
-          {
-            'message.identifier': 'new'
-          },
-          contracts
+      testPipe
+        .pipe(
+          mongoFilter(
+            {
+              'message.identifier': 'new',
+            },
+            contracts
+          )
         )
-      ).subscribe({
-        next: found,
-        complete: () => {
-          expect(found).toHaveBeenCalledTimes(1);
-        }
-      });
+        .subscribe({
+          next: found,
+          complete: () => {
+            expect(found).toHaveBeenCalledTimes(1);
+          },
+        });
     });
   });
 
@@ -188,7 +194,7 @@ describe('Wasm contracts operator', () => {
         },
         complete: () => {
           expect(found).toHaveBeenCalledTimes(1);
-        }
+        },
       });
     });
 
@@ -200,7 +206,7 @@ describe('Wasm contracts operator', () => {
         next: found,
         complete: () => {
           expect(found).toHaveBeenCalledTimes(1);
-        }
+        },
       });
     });
 
@@ -208,20 +214,22 @@ describe('Wasm contracts operator', () => {
       const found = jest.fn();
       const testPipe = contractEvents(testAbi, testContractAddress)(from(testEventsWithIdAndTx));
 
-      testPipe.pipe(
-        mongoFilter(
-          {
-            'args.value': { $bn_gt: 800000000 },
-            'event.identifier': 'Transfer'
-          },
-          contracts
+      testPipe
+        .pipe(
+          mongoFilter(
+            {
+              'args.value': { $bn_gt: 800000000 },
+              'event.identifier': 'Transfer',
+            },
+            contracts
+          )
         )
-      ).subscribe({
-        next: found,
-        complete: () => {
-          expect(found).toHaveBeenCalledTimes(1);
-        }
-      });
+        .subscribe({
+          next: found,
+          complete: () => {
+            expect(found).toHaveBeenCalledTimes(1);
+          },
+        });
     });
   });
 });

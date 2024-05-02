@@ -21,7 +21,7 @@ function observerForBlocks(done: jest.DoneCallback) {
   const complete = jest.fn().mockImplementation(() => {
     done();
   });
-  return {next, complete};
+  return { next, complete };
 }
 
 function observerForHeads(done: jest.DoneCallback) {
@@ -35,12 +35,12 @@ function observerForHeads(done: jest.DoneCallback) {
   const complete = jest.fn().mockImplementation(() => {
     done();
   });
-  return {next, complete};
+  return { next, complete };
 }
 
 describe('blocks reactive observable', () => {
   describe('blocks', () => {
-    it('should emit the latest new head', done => {
+    it('should emit the latest new head', (done) => {
       const testPipe = heads()(mockRxApi);
       const o = observerForHeads(done);
       testPipe.subscribe(o);
@@ -49,7 +49,7 @@ describe('blocks reactive observable', () => {
       expect(o.complete).toHaveBeenCalledTimes(1);
     });
 
-    it('should emit the latest finalized head', done => {
+    it('should emit the latest finalized head', (done) => {
       const testPipe = finalizedHeads()(mockRxApi);
       const o = observerForHeads(done);
       testPipe.subscribe(o);
@@ -58,7 +58,7 @@ describe('blocks reactive observable', () => {
       expect(o.complete).toHaveBeenCalledTimes(1);
     });
 
-    it('should emit the latest new block', done => {
+    it('should emit the latest new block', (done) => {
       const testPipe = blocks()(mockRxApi);
       const o = observerForBlocks(done);
       testPipe.subscribe(o);
@@ -67,7 +67,7 @@ describe('blocks reactive observable', () => {
       expect(o.complete).toHaveBeenCalledTimes(1);
     });
 
-    it('should emit the latest finalized block', done => {
+    it('should emit the latest finalized block', (done) => {
       const testPipe = finalizedBlocks()(mockRxApi);
       const o = observerForBlocks(done);
       testPipe.subscribe(o);
@@ -92,7 +92,7 @@ describe('blocks reactive observable', () => {
       const calls = jest.fn();
       testPipe.subscribe({
         next: calls,
-        complete: done
+        complete: done,
       });
 
       expect(calls).toHaveBeenCalledTimes(3);
@@ -103,10 +103,13 @@ describe('blocks reactive observable', () => {
 
       // Mock rx api implementation for getBlockByNumber() to throw on second block
       const testPipe = mockRxApi.pipe(
-        map(api => {
-          spy = jest.spyOn(api.derive.chain, 'getBlockByNumber')
+        map((api) => {
+          spy = jest
+            .spyOn(api.derive.chain, 'getBlockByNumber')
             .mockImplementationOnce(() => of(testBlocks[0]))
-            .mockImplementationOnce(() => {throw Error('Mock error');});
+            .mockImplementationOnce(() => {
+              throw Error('Mock error');
+            });
           return api;
         }),
         blocksInRange(15950017, 3)

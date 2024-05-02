@@ -3,10 +3,7 @@
 
 import { of } from 'rxjs';
 
-import {
-  testBlocks,
-  nestedItems
-} from '@sodazone/ocelloids-sdk-test';
+import { testBlocks, nestedItems } from '@sodazone/ocelloids-sdk-test';
 import type { DataToMatch } from '@sodazone/ocelloids-sdk-test';
 
 import { flattenCalls } from './flatten.js';
@@ -17,17 +14,19 @@ const { number, hash } = testBlocks[0].block.header;
 
 describe('flatten call operator', () => {
   describe('flattenCall', () => {
-    const assertResults = (
-      result: TxWithIdAndEvent,
-      nestedCalls: DataToMatch[]
-    ) => {
+    const assertResults = (result: TxWithIdAndEvent, nestedCalls: DataToMatch[]) => {
       expect(result).toBeDefined();
 
-      const { levelId, extrinsic: { method, extraSigners }, events, dispatchError } = result;
+      const {
+        levelId,
+        extrinsic: { method, extraSigners },
+        events,
+        dispatchError,
+      } = result;
 
       expect(levelId).toBeDefined();
 
-      const call = nestedCalls.find(c => c.levelId === levelId)!;
+      const call = nestedCalls.find((c) => c.levelId === levelId)!;
 
       // Assert that nested calls are extracted correctly
       const name = `${method.section}.${method.method}`;
@@ -49,13 +48,13 @@ describe('flatten call operator', () => {
       });
     };
 
-    it('should flatten nested multisig + proxy extrinsics', done => {
+    it('should flatten nested multisig + proxy extrinsics', (done) => {
       const { extrinsic, events, data } = nestedItems.testMultisigProxy;
       const testNestedTxWithId = types.enhanceTxWithIdAndEvents(
         {
           blockNumber: number,
           blockPosition: 2,
-          blockHash: hash
+          blockHash: hash,
         },
         extrinsic,
         events
@@ -71,17 +70,17 @@ describe('flatten call operator', () => {
         complete: () => {
           expect(c).toBe(data.length);
           done();
-        }
+        },
       });
     });
 
-    it('should flatten nested batch extrinsics', done => {
+    it('should flatten nested batch extrinsics', (done) => {
       const { extrinsic, events, data } = nestedItems.testBatch;
       const testNestedBatchTxWithId = types.enhanceTxWithIdAndEvents(
         {
           blockNumber: number,
           blockPosition: 2,
-          blockHash: hash
+          blockHash: hash,
         },
         extrinsic,
         events
@@ -97,17 +96,17 @@ describe('flatten call operator', () => {
         complete: () => {
           expect(c).toBe(data.length);
           done();
-        }
+        },
       });
     });
 
-    it('should flatten force batch extrinsics', done => {
+    it('should flatten force batch extrinsics', (done) => {
       const { extrinsic, events, data } = nestedItems.testForceBatch;
       const testForceBatchTxWithId = types.enhanceTxWithIdAndEvents(
         {
           blockNumber: number,
           blockPosition: 2,
-          blockHash: hash
+          blockHash: hash,
         },
         extrinsic,
         events
@@ -123,17 +122,17 @@ describe('flatten call operator', () => {
         complete: () => {
           expect(c).toBe(data.length);
           done();
-        }
+        },
       });
     });
 
-    it('should flatten deep nested batch + batchAll extrinsics', done => {
+    it('should flatten deep nested batch + batchAll extrinsics', (done) => {
       const { extrinsic, events, data } = nestedItems.testDeepNested;
       const testDeepNestedTxWithId = types.enhanceTxWithIdAndEvents(
         {
           blockNumber: number,
           blockPosition: 2,
-          blockHash: hash
+          blockHash: hash,
         },
         extrinsic,
         events
@@ -149,17 +148,17 @@ describe('flatten call operator', () => {
         complete: () => {
           expect(c).toBe(data.length);
           done();
-        }
+        },
       });
     });
 
-    it('should flatten multisig threshold 1 extrinsics', done => {
+    it('should flatten multisig threshold 1 extrinsics', (done) => {
       const { extrinsic, events, data } = nestedItems.testMultisigThreshold1;
       const testMultisigThreshold1TxWithId = types.enhanceTxWithIdAndEvents(
         {
           blockNumber: number,
           blockPosition: 2,
-          blockHash: hash
+          blockHash: hash,
         },
         extrinsic,
         events
@@ -175,17 +174,17 @@ describe('flatten call operator', () => {
         complete: () => {
           expect(c).toBe(data.length);
           done();
-        }
+        },
       });
     });
 
-    it('should work with batched and non-batched extrinsics', done => {
+    it('should work with batched and non-batched extrinsics', (done) => {
       const { extrinsic, events, data } = nestedItems.testDeepNested;
       const testDeepNestedTxWithId = types.enhanceTxWithIdAndEvents(
         {
           blockNumber: number,
           blockPosition: 2,
-          blockHash: hash
+          blockHash: hash,
         },
         extrinsic,
         events
@@ -194,7 +193,7 @@ describe('flatten call operator', () => {
         {
           blockNumber: number,
           blockPosition: 2,
-          blockHash: hash
+          blockHash: hash,
         },
         testBlocks[0].extrinsics[2],
         testBlocks[0].events
@@ -210,16 +209,16 @@ describe('flatten call operator', () => {
         complete: () => {
           expect(c).toBe(data.length + 1);
           done();
-        }
+        },
       });
     });
 
-    it('should work with non-batched extrinsics', done => {
+    it('should work with non-batched extrinsics', (done) => {
       const testNonBatchTxWithId = types.enhanceTxWithIdAndEvents(
         {
           blockNumber: number,
           blockPosition: 2,
-          blockHash: hash
+          blockHash: hash,
         },
         testBlocks[0].extrinsics[2],
         testBlocks[0].events
@@ -235,16 +234,16 @@ describe('flatten call operator', () => {
           expect(result.extrinsic.method.toHuman()).toEqual({
             args: {
               dest: { Id: '16hp43x8DUZtU8L3cJy9Z8JMwTzuu8ZZRWqDZnpMhp464oEd' },
-              value: '733,682,465,000'
+              value: '733,682,465,000',
             },
             method: 'transferKeepAlive',
-            section: 'balances'
+            section: 'balances',
           });
         },
         complete: () => {
           expect(c).toBe(1);
           done();
-        }
+        },
       });
     });
   });

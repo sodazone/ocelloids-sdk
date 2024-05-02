@@ -6,9 +6,9 @@ import { createScClient } from './smoldot.js';
 jest.mock('node:worker_threads', () => {
   return {
     Worker: jest.fn().mockImplementation(() => ({
-      postMessage: jest.fn()
+      postMessage: jest.fn(),
     })),
-    MessagePort: jest.fn()
+    MessagePort: jest.fn(),
   };
 });
 
@@ -22,8 +22,8 @@ jest.mock('smoldot', () => {
     ...original,
     start: jest.fn(() => ({
       addChain: mockAddChain,
-      terminate: mockTerminate
-    }))
+      terminate: mockTerminate,
+    })),
   };
 });
 
@@ -44,11 +44,7 @@ describe('smoldot provider', () => {
     expect(mockAddChain).toHaveBeenCalledTimes(1);
   });
   it('should add multiple chains and pass the relays', async () => {
-    mockAddChain
-      .mockReturnValueOnce(1)
-      .mockReturnValueOnce(2)
-      .mockReturnValueOnce(3)
-      .mockReturnValueOnce(4);
+    mockAddChain.mockReturnValueOnce(1).mockReturnValueOnce(2).mockReturnValueOnce(3).mockReturnValueOnce(4);
 
     const rpc = jest.fn();
     const client = createScClient();
@@ -60,15 +56,15 @@ describe('smoldot provider', () => {
 
     expect(mockAddChain).toHaveBeenCalledTimes(4);
     expect(mockAddChain).toHaveBeenLastCalledWith({
-      'chainSpec': '{"id":"xyz"}',
-      'databaseContent': undefined,
-      'potentialRelayChains': [1,2,3]
+      chainSpec: '{"id":"xyz"}',
+      databaseContent: undefined,
+      potentialRelayChains: [1, 2, 3],
     });
   });
 
   it('should terminate when all chains are removed', async () => {
     mockAddChain.mockReturnValue({
-      remove: () => {}
+      remove: () => {},
     });
 
     const rpc = jest.fn();
@@ -80,7 +76,7 @@ describe('smoldot provider', () => {
     chains.push(await client.addChain('{"id":"ghi"}', rpc));
     chains.push(await client.addChain('{"id":"xyz"}', rpc));
 
-    chains.forEach(chain => chain.remove());
+    chains.forEach((chain) => chain.remove());
 
     expect(mockTerminate).not.toHaveBeenCalled();
 

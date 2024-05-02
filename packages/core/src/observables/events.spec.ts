@@ -9,7 +9,7 @@ import { events } from './events.js';
 
 describe('events reactive observable', () => {
   describe('events', () => {
-    it('should emit the latest system events', done => {
+    it('should emit the latest system events', (done) => {
       const testPipe = events()(mockRxApi);
       let index = 0;
       const next = jest.fn().mockImplementation((result: EventRecord) => {

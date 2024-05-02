@@ -16,4 +16,3 @@ export { Smoldot } from './client/index.js';
 export * as config from './configuration/index.js';
 export * as converters from './converters/index.js';
 export * as types from './types/index.js';
-

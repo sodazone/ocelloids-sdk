@@ -21,14 +21,14 @@ const DispatchedAs = 'utility.DispatchedAs';
 
 const ItemFailedBoundary = {
   eventName: ItemFailed,
-  offset: 1
+  offset: 1,
 };
 const ItemCompletedBoundary = {
   eventName: ItemCompleted,
-  offset: 1
+  offset: 1,
 };
 const DispatchedAsBoundary = {
-  eventName: DispatchedAs
+  eventName: DispatchedAs,
 };
 
 /**
@@ -46,30 +46,24 @@ function mapBatchErrored(
 ) {
   let from = flattener.nextPointer;
 
-  return calls.map(call => {
-    const  eventIndex = flattener.findEventIndex(
-      [ItemCompleted, ItemFailed], from
-    );
+  return calls.map((call) => {
+    const eventIndex = flattener.findEventIndex([ItemCompleted, ItemFailed], from);
     const event = flattener.getEvent(eventIndex);
     from = eventIndex + 1;
 
     if (isEventType(ItemFailed, event)) {
-      return callAsTxWithBoundary(
-        {
-          call,
-          tx,
-          boundary: ItemFailedBoundary,
-          callError: event.data[0] as DispatchError
-        }
-      );
-    }
-    return callAsTxWithBoundary(
-      {
+      return callAsTxWithBoundary({
         call,
         tx,
-        boundary: ItemCompletedBoundary
-      }
-    );
+        boundary: ItemFailedBoundary,
+        callError: event.data[0] as DispatchError,
+      });
+    }
+    return callAsTxWithBoundary({
+      call,
+      tx,
+      boundary: ItemCompletedBoundary,
+    });
   });
 }
 
@@ -80,18 +74,14 @@ function mapBatchErrored(
  * @returns The extracted call as {@link TxWithIdAndEvent}.
  */
 export function extractAsDerivativeCall(tx: TxWithIdAndEvent) {
-  const [_, call] = tx.extrinsic.args as unknown as [
-    u16, CallBase<AnyTuple, FunctionMetadataLatest>
-  ];
+  const [_, call] = tx.extrinsic.args as unknown as [u16, CallBase<AnyTuple, FunctionMetadataLatest>];
 
   return [
-    callAsTxWithBoundary(
-      {
-        call,
-        tx,
-        boundary: Boundaries.ALL
-      }
-    )
+    callAsTxWithBoundary({
+      call,
+      tx,
+      boundary: Boundaries.ALL,
+    }),
   ];
 }
 
@@ -114,22 +104,22 @@ export function extractDispatchAsCall(tx: TxWithIdAndEvent, flattener: Flattener
     const dispatchedAsEvent = events[dispatchedAsIndex];
     const [callResult] = dispatchedAsEvent.data as unknown as [Result<Null, DispatchError>];
 
-    return [callAsTxWithBoundary(
-      {
+    return [
+      callAsTxWithBoundary({
         call,
         tx,
         boundary: DispatchedAsBoundary,
-        callError: callResult.isErr ? callResult.asErr : undefined
-      }
-    )];
+        callError: callResult.isErr ? callResult.asErr : undefined,
+      }),
+    ];
   } else {
-    return [callAsTxWithBoundary(
-      {
+    return [
+      callAsTxWithBoundary({
         call,
         tx,
-        boundary: Boundaries.ALL
-      }
-    )];
+        boundary: Boundaries.ALL,
+      }),
+    ];
   }
 }
 
@@ -138,40 +128,34 @@ function mapBatch(
   tx: TxWithIdAndEvent,
   boundary = ItemCompletedBoundary
 ) {
-  return calls.map(call => (
-    callAsTxWithBoundary(
-      {
-        call,
-        tx,
-        boundary
-      }
-    )
-  ));
+  return calls.map((call) =>
+    callAsTxWithBoundary({
+      call,
+      tx,
+      boundary,
+    })
+  );
 }
 
 function mapBatchInterrupt(
   calls: CallBase<AnyTuple, FunctionMetadataLatest>[],
   tx: TxWithIdAndEvent,
   interruptIndex: number,
-  callError: DispatchError,
+  callError: DispatchError
 ) {
   return calls.map((call, i) => {
     if (i < interruptIndex) {
-      return callAsTxWithBoundary(
-        {
-          call,
-          tx,
-          boundary: ItemCompletedBoundary
-        }
-      );
+      return callAsTxWithBoundary({
+        call,
+        tx,
+        boundary: ItemCompletedBoundary,
+      });
     } else {
-      return callAsTxWithBoundary(
-        {
-          call,
-          tx,
-          callError
-        }
-      );
+      return callAsTxWithBoundary({
+        call,
+        tx,
+        callError,
+      });
     }
   });
 }
@@ -194,10 +178,9 @@ export function extractBatchCalls(tx: TxWithIdAndEvent, flattener: Flattener) {
 
   const batchCompletedIndex = flattener.findEventIndex(BatchCompleted);
   const batchInterruptedIndex = flattener.findEventIndex(BatchInterrupted);
-  const isInterrupted = (
+  const isInterrupted =
     (batchCompletedIndex === -1 && batchInterruptedIndex > -1) ||
-    (batchInterruptedIndex > -1 && batchInterruptedIndex < batchCompletedIndex)
-  );
+    (batchInterruptedIndex > -1 && batchInterruptedIndex < batchCompletedIndex);
 
   if (isInterrupted) {
     const interruptedEvent = flattener.getEvent(batchInterruptedIndex);
@@ -254,10 +237,9 @@ export function extractForceBatchCalls(tx: TxWithIdAndEvent, flattener: Flattene
   const batchCompletedIndex = flattener.findEventIndex(BatchCompleted);
   const batchErroredIndex = flattener.findEventIndex(BatchCompletedWithErrors);
 
-  const isErrored = (
+  const isErrored =
     (batchCompletedIndex === -1 && batchErroredIndex > -1) ||
-    (batchErroredIndex > -1 && batchErroredIndex < batchCompletedIndex)
-  );
+    (batchErroredIndex > -1 && batchErroredIndex < batchCompletedIndex);
 
   if (isErrored) {
     return mapBatchErrored(calls, tx, flattener);

@@ -22,7 +22,7 @@ export function testBlocksFrom(file: string, mds: `0x${string}` = metadataStatic
 
   registry.setMetadata(metadata);
 
-  return blocks.map(b => {
+  return blocks.map((b) => {
     const block = registry.createType('SignedBlock', b.block);
     const records = registry.createType('Vec<EventRecord>', b.events, true);
     const author = registry.createType('AccountId', b.author);
@@ -38,8 +38,7 @@ export function testBlocksFrom(file: string, mds: `0x${string}` = metadataStatic
 }
 
 export const testBlocks = testBlocksFrom('blocks.cbor.bin').slice(0, 3);
-export const testHeaders = testBlocks.map(tb => tb.block.header);
+export const testHeaders = testBlocks.map((tb) => tb.block.header);
 export const testExtrinsics = testBlocks.reduce((acc: TxWithEvent[], tb) => acc.concat(tb.extrinsics), []);
 export const testEventRecords = testBlocks.reduce((acc: EventRecord[], tb) => acc.concat(tb.events), []);
 export const testEvents = testExtrinsics.reduce((acc: Event[], txt) => acc.concat(txt.events), []);
-

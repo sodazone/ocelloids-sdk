@@ -19,15 +19,14 @@ import { GenericEventWithId } from './event.js';
  * @property address - The address associated with the account.
  */
 export type ExtraSigner = {
-  type: 'proxied' | 'multisig',
-  address: Address
-}
+  type: 'proxied' | 'multisig';
+  address: Address;
+};
 
 /**
  * A subclass of GenericExtrinsic that includes identifier information.
  */
-export class GenericExtrinsicWithId extends GenericExtrinsic
-  implements ExtrinsicWithId {
+export class GenericExtrinsicWithId extends GenericExtrinsic implements ExtrinsicWithId {
   protected readonly _extrinsic: GenericExtrinsic;
   readonly blockNumber: Compact<BlockNumber>;
   readonly blockHash: IU8a;
@@ -36,11 +35,7 @@ export class GenericExtrinsicWithId extends GenericExtrinsic
 
   constructor(
     value: GenericExtrinsic,
-    {
-      blockNumber,
-      blockPosition,
-      blockHash
-    } : ExtrinsicBlockContext,
+    { blockNumber, blockPosition, blockHash }: ExtrinsicBlockContext,
     extraSigners: ExtraSigner[] = []
   ) {
     super(value.registry);
@@ -52,7 +47,7 @@ export class GenericExtrinsicWithId extends GenericExtrinsic
     this.extraSigners = extraSigners;
 
     return new Proxy(this, {
-      get<T>(target: GenericExtrinsicWithId, p: keyof GenericExtrinsic):T {
+      get<T>(target: GenericExtrinsicWithId, p: keyof GenericExtrinsic): T {
         if (p === 'toHuman') {
           return target.toHuman as T;
         }
@@ -62,7 +57,7 @@ export class GenericExtrinsicWithId extends GenericExtrinsic
         }
 
         return target[p] as T;
-      }
+      },
     });
   }
 
@@ -90,13 +85,11 @@ export class GenericExtrinsicWithId extends GenericExtrinsic
       blockNumber: this.blockNumber.toHuman(),
       blockHash: this.blockHash.toHuman(),
       position: this.blockPosition,
-      extraSigners: this.extraSigners?.map(o => (
-        {
-          type: o.type,
-          address: o.address.toHuman()
-        }
-      )),
-      ...(this._extrinsic.toHuman(isExpanded) as any)
+      extraSigners: this.extraSigners?.map((o) => ({
+        type: o.type,
+        address: o.address.toHuman(),
+      })),
+      ...(this._extrinsic.toHuman(isExpanded) as any),
     };
   }
 }
@@ -111,18 +104,20 @@ export function enhanceTxWithIdAndEvents(
   xtContext: ExtrinsicBlockContext,
   tx: TxWithEvent,
   events: EventRecord[]
-) : TxWithIdAndEvent {
+): TxWithIdAndEvent {
   const { blockHash, blockNumber, blockPosition: xtIndex } = xtContext;
   const eventsWithId: EventWithId[] = [];
 
   for (let index = 0; index < events.length; index++) {
     const { phase, event } = events[index];
     if (phase.isApplyExtrinsic && phase.asApplyExtrinsic.eq(xtIndex)) {
-      eventsWithId.push(new GenericEventWithId(event, {
-        blockHash,
-        blockNumber,
-        blockPosition: index
-      }));
+      eventsWithId.push(
+        new GenericEventWithId(event, {
+          blockHash,
+          blockNumber,
+          blockPosition: index,
+        })
+      );
     }
   }
 

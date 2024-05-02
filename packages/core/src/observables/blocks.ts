@@ -16,11 +16,9 @@ const l = logger('oc-blocks');
 
 // see https://github.com/polkadot-js/api/pull/5787
 function subscribeFinalizedBlocks(api: ApiRx) {
-  return api.derive.chain.subscribeFinalizedHeads().pipe(
-    concatMap(header =>
-      api.derive.chain.getBlock(header.createdAtHash || header.hash)
-    )
-  );
+  return api.derive.chain
+    .subscribeFinalizedHeads()
+    .pipe(concatMap((header) => api.derive.chain.getBlock(header.createdAtHash || header.hash)));
 }
 
 /**
@@ -36,17 +34,14 @@ function subscribeFinalizedBlocks(api: ApiRx) {
  * @see {@link finalizedHeads}
  */
 export function heads(finalized = false) {
-  return (source: Observable<ApiRx>)
-  : Observable<Header> => {
-    return (source.pipe(
-      switchMap(api => {
-        return finalized ?
-          api.derive.chain.subscribeFinalizedHeads() :
-          api.derive.chain.subscribeNewHeads();
+  return (source: Observable<ApiRx>): Observable<Header> => {
+    return source.pipe(
+      switchMap((api) => {
+        return finalized ? api.derive.chain.subscribeFinalizedHeads() : api.derive.chain.subscribeNewHeads();
       }),
-      debug(l, header => header.number.toHuman()),
+      debug(l, (header) => header.number.toHuman()),
       share()
-    ));
+    );
   };
 }
 
@@ -80,17 +75,14 @@ export function finalizedHeads() {
  * @see {@link finalizedBlocks}
  */
 export function blocks(finalized = false) {
-  return (source: Observable<ApiRx>)
-  : Observable<SignedBlockExtended> => {
-    return (source.pipe(
-      switchMap(api => {
-        return finalized ?
-          subscribeFinalizedBlocks(api) :
-          api.derive.chain.subscribeNewBlocks();
+  return (source: Observable<ApiRx>): Observable<SignedBlockExtended> => {
+    return source.pipe(
+      switchMap((api) => {
+        return finalized ? subscribeFinalizedBlocks(api) : api.derive.chain.subscribeNewBlocks();
       }),
-      debug(l, b => b.block.header.number.toHuman()),
+      debug(l, (b) => b.block.header.number.toHuman()),
       share()
-    ));
+    );
   };
 }
 
@@ -118,13 +110,12 @@ export function finalizedBlocks() {
  * @param {ApiPromise} api The promise API instance
  */
 export function blockFromHeader(api: ApiPromise) {
-  return (source: Observable<Header>)
-  : Observable<SignedBlockExtended> => {
-    return (source.pipe(
-      mergeMap(header => {
+  return (source: Observable<Header>): Observable<SignedBlockExtended> => {
+    return source.pipe(
+      mergeMap((header) => {
         return from(api.derive.chain.getBlock(header.hash));
       })
-    ));
+    );
   };
 }
 
@@ -138,25 +129,16 @@ export function blockFromHeader(api: ApiPromise) {
  * @param sorted - (Optional) Whether to emit blocks sequentially. Default is `true`.
  * @returns An Observable that emits blocks within the specified range.
  */
-export function blocksInRange(
-  start: AnyBN,
-  count: AnyBN,
-  sorted = true
-) {
-  return (source: Observable<ApiRx>)
-  : Observable<SignedBlockExtended> => {
-    return (source.pipe(
-      switchMap(api =>
+export function blocksInRange(start: AnyBN, count: AnyBN, sorted = true) {
+  return (source: Observable<ApiRx>): Observable<SignedBlockExtended> => {
+    return source.pipe(
+      switchMap((api) =>
         bnRange(start, count).pipe(
-          sorted ?
-            concatMap(number =>
-              api.derive.chain.getBlockByNumber(number)
-            ) :
-            mergeMap(number =>
-              api.derive.chain.getBlockByNumber(number))
+          sorted
+            ? concatMap((number) => api.derive.chain.getBlockByNumber(number))
+            : mergeMap((number) => api.derive.chain.getBlockByNumber(number))
         )
       )
-    ));
+    );
   };
 }
-
