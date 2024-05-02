@@ -25,8 +25,8 @@
 
 ---
 
-Ocelloids[^1] SDK is an open-source software development kit for monitoring Polkadot and Substrate based networks.
-It simplifies the implementation of multi-chain monitoring programs and provides domain-specific logic for different pallets.
+Ocelloids[^1] SDK is an open-source software development kit written in Typescript for Polkadot and Substrate based networks.
+It simplifies the implementation of multi-chain programs and provides domain-specific logic for different pallets.
 
 ## Features
 
@@ -42,7 +42,7 @@ It simplifies the implementation of multi-chain monitoring programs and provides
 
 ## Quickstart
 
-Check our [Quickstart Guide](https://github.com/sodazone/ocelloids-sdk/blob/main/guides/QUICKSTART.md) to set up your first Ocelloids monitoring program.
+Check our [Quickstart Guide](https://github.com/sodazone/ocelloids-sdk/blob/main/guides/QUICKSTART.md) to set up your first Ocelloids program.
 
 ## Installation
 
