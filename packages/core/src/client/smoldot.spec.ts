@@ -3,13 +3,12 @@
 
 import { createScClient } from './smoldot.js';
 
-jest.mock('node:worker_threads', () => {
+jest.mock('web-worker', () => {
   return {
-    Worker: jest.fn().mockImplementation(() => ({
+    default: jest.fn().mockImplementation(() => ({
       postMessage: jest.fn(),
-    })),
-    MessagePort: jest.fn(),
-  };
+    }))
+  }
 });
 
 const mockAddChain = jest.fn();
