@@ -1,7 +1,7 @@
 // Copyright 2023-2024 SO/DA zone
 // SPDX-License-Identifier: Apache-2.0
 
-import { Worker, MessagePort } from 'node:worker_threads';
+import Worker from 'web-worker';
 
 import { logger } from '@polkadot/util';
 
@@ -55,7 +55,7 @@ function getChainId(json: string): string {
  * @returns A Smoldot {@link Client}.
  */
 function startSmoldot(options?: ClientOptions): Client {
-  const worker = new Worker(
+  const worker = new Worker.default(
     `
     // from "@substrate/connect/worker"
     const { parentPort } = require('node:worker_threads');
@@ -76,8 +76,6 @@ function startSmoldot(options?: ClientOptions): Client {
       eval: true,
     }
   );
-
-  l.debug('resource limits:', worker.resourceLimits);
 
   const { port1, port2 } = new MessageChannel();
   worker.postMessage(port1, [port1 as unknown as MessagePort]);
