@@ -5,7 +5,8 @@ import { logger } from '@polkadot/util';
 
 import { type Client, type ClientOptions, type Chain, QueueFullError, start } from 'smoldot';
 
-import type { ScClient, AddChain, Chain as ScChain, Config as ScConfig } from '@substrate/connect';
+import type { ScClient, AddChain, Chain as ScChain, Config as ScConfig, WellKnownChain } from '@substrate/connect';
+import { getSpec } from './know-chains.js';
 
 const l = logger('oc-smoldot-worker');
 
@@ -171,8 +172,8 @@ export const createScClient = (config?: ExtConfig): ScClient => {
   // Return the Substrate Connect client
   return {
     addChain,
-    addWellKnownChain: async () => {
-      throw new Error('Well known chains by name are not supported, please provide the spec.');
+    addWellKnownChain: async (id: WellKnownChain, jsonRpcCallback?: JsonRpcCallback, databaseContent?: string) => {
+      return addChain(await getSpec(id), jsonRpcCallback, databaseContent);
     },
   };
 };
