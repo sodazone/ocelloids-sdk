@@ -1,13 +1,11 @@
 // Copyright 2023-2024 SO/DA zone
 // SPDX-License-Identifier: Apache-2.0
 
-import Worker from 'web-worker';
-
 import { logger } from '@polkadot/util';
 
 import { type Client, type ClientOptions, type Chain, QueueFullError, start } from 'smoldot';
 
-import type { ScClient, AddChain, Chain as ScChain, Config as ScConfig, WellKnownChain } from '@substrate/connect';
+import type { ScClient, AddChain, Chain as ScChain, Config as ScConfig } from '@substrate/connect';
 
 const l = logger('oc-smoldot-worker');
 
@@ -51,32 +49,12 @@ function getChainId(json: string): string {
 /**
  * Create a worker thread and start the Smoldot client.
  *
+ * @param workerFactory - The worker factory function.
  * @param options - Options for initializing the Smoldot client.
  * @returns A Smoldot {@link Client}.
  */
-function startSmoldot(options?: ClientOptions): Client {
-  const worker = new Worker.default(
-    `
-    // from "@substrate/connect/worker"
-    const { parentPort } = require('node:worker_threads');
-    const smoldot = require('smoldot/worker');
-    const { compileBytecode } = require('smoldot/bytecode');
-    
-    compileBytecode().then(bytecode => parentPort.postMessage(bytecode));
-    
-    parentPort.once('message', data => {
-      smoldot
-        .run(data)
-        .catch(error => console.error('[smoldot-worker]', error))
-        .finally(() => process.exit());
-    });
-  `,
-    {
-      name: 'smoldot-worker',
-      eval: true,
-    }
-  );
-
+function startSmoldot(workerFactory: () => Worker, options?: ClientOptions): Client {
+  const worker = workerFactory();
   const { port1, port2 } = new MessageChannel();
   worker.postMessage(port1, [port1 as unknown as MessagePort]);
 
@@ -123,8 +101,13 @@ export const createScClient = (config?: ExtConfig): ScClient => {
     maxLogLevel: l.noop === l.debug ? 2 : 4,
     logCallback: defaultLogger,
   };
+  const workerFactory = config?.embeddedNodeConfig?.workerFactory;
 
-  const client = startSmoldot(clientOptions);
+  if (workerFactory === undefined) {
+    throw new Error('Plase provide a worker factory, see [DOC]');
+  }
+
+  const client = startSmoldot(workerFactory, clientOptions);
 
   const chains = new Map<string, Chain>();
 
@@ -188,13 +171,8 @@ export const createScClient = (config?: ExtConfig): ScClient => {
   // Return the Substrate Connect client
   return {
     addChain,
-    addWellKnownChain: async (
-      wellKnownChain: WellKnownChain,
-      jsonRpcCallback?: JsonRpcCallback,
-      databaseContent?: string
-    ) => {
-      const spec = await import('@substrate/connect-known-chains/' + wellKnownChain);
-      return await addChain(await spec.chainSpec, jsonRpcCallback, databaseContent);
+    addWellKnownChain: async () => {
+      throw new Error('Well known chains by name are not supported, please provide the spec.');
     },
   };
 };

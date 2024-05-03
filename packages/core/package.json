@@ -46,15 +46,20 @@
       "require": "./dist/index.cjs",
       "import": "./dist/index.js",
       "browser": "./dist/browser/index.js"
+    },
+    "./worker": {
+      "import": "./dist/worker/smoldot-worker.js",
+      "browser": "./dist/worker/smoldot-worker.js"
     }
-  },
-  "scripts": {
-    "build": "tsup src/index.ts --format cjs,esm --dts --sourcemap --clean --minify && yarn build:browser",
-    "build:browser": "esbuild src/index.ts --bundle --packages=external --minify --sourcemap --platform=browser --outdir=dist/browser"
   },
   "tsup": {
     "bundle": true,
     "skipNodeModulesBundle": true
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts --sourcemap --clean --minify && yarn build:worker && yarn build:browser",
+    "build:worker": "esbuild src/client/worker/smoldot-worker.ts --bundle --packages=external --minify --format=esm --outdir=dist/worker",
+    "build:browser": "esbuild src/index.ts --define:import.meta=\"{}\" --bundle --packages=external --minify --sourcemap --platform=browser --outdir=dist/browser"
   },
   "stableVersion": "1.2.4"
 }

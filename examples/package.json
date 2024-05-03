@@ -32,13 +32,15 @@
     "yargs": "^17.7.2"
   },
   "devDependencies": {
-    "tsup": "^8.0.2"
+    "tsup": "^8.0.2",
+    "tsx": "^4.9.0"
   },
   "tsup": {
     "shims": true
   },
   "scripts": {
-    "build": "tsup **/main.ts --clean --minify"
+    "build": "tsup **/main.ts --clean --minify && yarn copy",
+    "copy": "cp ./light-client/worker.mjs ./dist/light-client/worker.mjs"
   },
   "stableVersion": "1.2.4"
 }
