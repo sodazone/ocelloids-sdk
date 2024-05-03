@@ -32,15 +32,13 @@
     "yargs": "^17.7.2"
   },
   "devDependencies": {
-    "shx": "^0.3.4",
     "tsup": "^8.0.2"
   },
   "tsup": {
     "shims": true
   },
   "scripts": {
-    "build": "tsup **/main.ts --clean --minify && yarn sed:shebang",
-    "sed:shebang": "shx sed -i \"s/\\/env ts-node-esm/\\/env node/g\" dist/**/*.cjs > /dev/null"
+    "build": "tsup **/main.ts --clean --minify"
   },
   "stableVersion": "1.2.4"
 }
