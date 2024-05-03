@@ -39,8 +39,7 @@
     "shims": true
   },
   "scripts": {
-    "build": "tsup **/main.ts --clean --minify && yarn copy",
-    "copy": "cp ./light-client/worker.mjs ./dist/light-client/worker.mjs"
+    "build": "tsup **/main.ts --clean --minify"
   },
   "stableVersion": "1.2.4"
 }
