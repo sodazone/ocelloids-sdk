@@ -7,7 +7,6 @@ import Worker from 'web-worker';
 import { isMainThread } from 'node:worker_threads';
 
 import { ScProvider } from '@polkadot/rpc-provider/substrate-connect';
-import { polkadot } from '@substrate/connect-known-chains';
 
 import { SubstrateApis, Smoldot, blocks } from '@sodazone/ocelloids-sdk';
 
@@ -28,7 +27,7 @@ function workerFactory() {
 
 async function watcher() {
   const provider = new ScProvider(
-    Smoldot, polkadot
+    Smoldot, Smoldot.WellKnownChain.polkadot
   );
 
   await provider.connect({
