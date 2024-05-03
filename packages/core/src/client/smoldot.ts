@@ -3,12 +3,22 @@
 
 import { logger } from '@polkadot/util';
 
+import Worker from 'web-worker';
+
 import { type Client, type ClientOptions, type Chain, QueueFullError, start } from 'smoldot';
 
 import type { ScClient, AddChain, Chain as ScChain, Config as ScConfig, WellKnownChain } from '@substrate/connect';
 import { getSpec } from './know-chains.js';
 
 const l = logger('oc-smoldot-worker');
+
+function defaultFactory(): Worker {
+  const ctor = typeof Worker === 'function' ? Worker : Worker.default;
+  return new ctor(new URL('./worker/smoldot-worker.js', import.meta.url), {
+    name: 'oc-smoldot-worker',
+    type: 'module',
+  });
+}
 
 const defaultLogger = (level: number, target: string, message: string) => {
   if (level === 1) {
@@ -102,12 +112,8 @@ export const createScClient = (config?: ExtConfig): ScClient => {
     maxLogLevel: l.noop === l.debug ? 2 : 4,
     logCallback: defaultLogger,
   };
-  const workerFactory = config?.embeddedNodeConfig?.workerFactory;
 
-  if (workerFactory === undefined) {
-    throw new Error('Plase provide a worker factory, see [DOC]');
-  }
-
+  const workerFactory = config?.embeddedNodeConfig?.workerFactory ?? defaultFactory;
   const client = startSmoldot(workerFactory, clientOptions);
 
   const chains = new Map<string, Chain>();

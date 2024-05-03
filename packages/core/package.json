@@ -54,7 +54,8 @@
   },
   "tsup": {
     "bundle": true,
-    "skipNodeModulesBundle": true
+    "skipNodeModulesBundle": true,
+    "shims": true
   },
   "scripts": {
     "build": "tsup src/index.ts --format cjs,esm --dts --sourcemap --clean --minify && yarn build:worker && yarn build:browser",

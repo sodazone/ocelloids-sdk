@@ -10,31 +10,11 @@ import { ScProvider } from '@polkadot/rpc-provider/substrate-connect';
 
 import { SubstrateApis, Smoldot, blocks } from '@sodazone/ocelloids-sdk';
 
-function workerFactory() {
-  try {
-    //@ts-expect-error constructor
-    return new Worker.default(new URL('./worker.mjs', import.meta.url), {
-      name: 'oc-smoldot-worker',
-      type: 'module'
-    })
-  } catch (error) {
-    return new Worker('./dist/light-client/worker.mjs', {
-      name: 'oc-smoldot-worker',
-      type: 'module'
-    })
-  }
-}
 
 async function watcher() {
   const provider = new ScProvider(
     Smoldot, Smoldot.WellKnownChain.polkadot
   );
-
-  await provider.connect({
-    embeddedNodeConfig: {
-      workerFactory
-    }
-  })
 
   const apis = new SubstrateApis({
     polkadot: {
