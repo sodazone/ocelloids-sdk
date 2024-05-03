@@ -3,7 +3,6 @@
 // Copyright 2023-2024 SO/DA zone
 // SPDX-License-Identifier: Apache-2.0
 
-import Worker from 'web-worker';
 import { isMainThread } from 'node:worker_threads';
 
 import { ScProvider } from '@polkadot/rpc-provider/substrate-connect';
