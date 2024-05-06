@@ -8,7 +8,6 @@ addEventListener(
   (event) => {
     smoldot
       .run(event.data)
-      .catch((error) => console.error('[smoldot-worker]', error))
       .finally(() => close());
   },
   {
