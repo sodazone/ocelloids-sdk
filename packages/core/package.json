@@ -48,7 +48,8 @@
       "browser": "./dist/browser/index.js"
     },
     "./worker": {
-      "import": "./dist/worker/smoldot-worker.js"
+      "import": "./dist/worker/smoldot-worker.js",
+      "browser": "./dist/worker/smoldot-worker.js"
     }
   },
   "tsup": {
