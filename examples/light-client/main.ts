@@ -1,13 +1,16 @@
-#!/usr/bin/env ts-node-esm
+#!/usr/bin/env node
 
 // Copyright 2023-2024 SO/DA zone
 // SPDX-License-Identifier: Apache-2.0
+
+import { isMainThread } from 'node:worker_threads';
 
 import { ScProvider } from '@polkadot/rpc-provider/substrate-connect';
 
 import { SubstrateApis, Smoldot, blocks } from '@sodazone/ocelloids-sdk';
 
-function watcher() {
+
+async function watcher() {
   const provider = new ScProvider(
     Smoldot, Smoldot.WellKnownChain.polkadot
   );
@@ -29,5 +32,7 @@ function watcher() {
   });
 }
 
-watcher();
+if (isMainThread) {
+  watcher().then().catch(console.error);
+}
 

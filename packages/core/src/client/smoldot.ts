@@ -1,15 +1,24 @@
 // Copyright 2023-2024 SO/DA zone
 // SPDX-License-Identifier: Apache-2.0
 
-import { Worker, MessagePort } from 'node:worker_threads';
-
 import { logger } from '@polkadot/util';
+
+import Worker from 'web-worker';
 
 import { type Client, type ClientOptions, type Chain, QueueFullError, start } from 'smoldot';
 
 import type { ScClient, AddChain, Chain as ScChain, Config as ScConfig, WellKnownChain } from '@substrate/connect';
+import { getSpec } from './know-chains.js';
 
 const l = logger('oc-smoldot-worker');
+
+function defaultFactory(): Worker {
+  const ctor = typeof Worker === 'function' ? Worker : Worker.default;
+  return new ctor(new URL('./worker/smoldot-worker.js', import.meta.url), {
+    name: 'oc-smoldot-worker',
+    type: 'module',
+  });
+}
 
 const defaultLogger = (level: number, target: string, message: string) => {
   if (level === 1) {
@@ -51,34 +60,12 @@ function getChainId(json: string): string {
 /**
  * Create a worker thread and start the Smoldot client.
  *
+ * @param workerFactory - The worker factory function.
  * @param options - Options for initializing the Smoldot client.
  * @returns A Smoldot {@link Client}.
  */
-function startSmoldot(options?: ClientOptions): Client {
-  const worker = new Worker(
-    `
-    // from "@substrate/connect/worker"
-    const { parentPort } = require('node:worker_threads');
-    const smoldot = require('smoldot/worker');
-    const { compileBytecode } = require('smoldot/bytecode');
-    
-    compileBytecode().then(bytecode => parentPort.postMessage(bytecode));
-    
-    parentPort.once('message', data => {
-      smoldot
-        .run(data)
-        .catch(error => console.error('[smoldot-worker]', error))
-        .finally(() => process.exit());
-    });
-  `,
-    {
-      name: 'smoldot-worker',
-      eval: true,
-    }
-  );
-
-  l.debug('resource limits:', worker.resourceLimits);
-
+function startSmoldot(workerFactory: () => Worker, options?: ClientOptions): Client {
+  const worker = workerFactory();
   const { port1, port2 } = new MessageChannel();
   worker.postMessage(port1, [port1 as unknown as MessagePort]);
 
@@ -126,7 +113,8 @@ export const createScClient = (config?: ExtConfig): ScClient => {
     logCallback: defaultLogger,
   };
 
-  const client = startSmoldot(clientOptions);
+  const workerFactory = config?.embeddedNodeConfig?.workerFactory ?? defaultFactory;
+  const client = startSmoldot(workerFactory, clientOptions);
 
   const chains = new Map<string, Chain>();
 
@@ -190,13 +178,8 @@ export const createScClient = (config?: ExtConfig): ScClient => {
   // Return the Substrate Connect client
   return {
     addChain,
-    addWellKnownChain: async (
-      wellKnownChain: WellKnownChain,
-      jsonRpcCallback?: JsonRpcCallback,
-      databaseContent?: string
-    ) => {
-      const spec = await import('@substrate/connect-known-chains/' + wellKnownChain);
-      return await addChain(await spec.chainSpec, jsonRpcCallback, databaseContent);
+    addWellKnownChain: async (id: WellKnownChain, jsonRpcCallback?: JsonRpcCallback, databaseContent?: string) => {
+      return addChain(await getSpec(id), jsonRpcCallback, databaseContent);
     },
   };
 };

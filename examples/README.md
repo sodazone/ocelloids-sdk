@@ -65,5 +65,5 @@ Blocks: 100 (tx: 364, events: 4931)
 These examples serve as practical illustrations of how to utilize the Ocelloids SDK and can be customized to fit your specific use cases.
 
 If you prefer to run TypeScript `main.ts` files directly, either for development or quick testing without the need for building,
-you have the option to use either [ts-node-esm](https://github.com/TypeStrong/ts-node) or [Bun](https://bun.sh/).
+you have the option to use either [tsx](https://github.com/privatenumber/tsx) or [Bun](https://bun.sh/).
 

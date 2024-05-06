@@ -3,17 +3,27 @@
 
 import { createScClient } from './smoldot.js';
 
-jest.mock('node:worker_threads', () => {
-  return {
-    Worker: jest.fn().mockImplementation(() => ({
-      postMessage: jest.fn(),
-    })),
-    MessagePort: jest.fn(),
-  };
+import Worker from 'web-worker';
+
+function workerFactory(): Worker {
+  // eslint-disable-next-line
+  // @ts-ignore
+  return new Worker('test');
+}
+
+jest.mock('web-worker', () => {
+  return jest.fn().mockImplementation(() => ({
+    postMessage: jest.fn(),
+  }));
 });
 
 const mockAddChain = jest.fn();
 const mockTerminate = jest.fn();
+const options = {
+  embeddedNodeConfig: {
+    workerFactory,
+  },
+};
 
 jest.mock('smoldot', () => {
   const original = jest.requireActual('smoldot');
@@ -33,12 +43,12 @@ describe('smoldot provider', () => {
   });
 
   it('should create the client', () => {
-    const client = createScClient();
+    const client = createScClient(options);
     expect(client).toBeDefined();
   });
   it('should add a chain', async () => {
     const rpc = jest.fn();
-    const client = createScClient();
+    const client = createScClient(options);
     const chain = await client.addChain('{"id":"xyz"}', rpc);
     expect(chain).toBeDefined();
     expect(mockAddChain).toHaveBeenCalledTimes(1);
@@ -47,7 +57,7 @@ describe('smoldot provider', () => {
     mockAddChain.mockReturnValueOnce(1).mockReturnValueOnce(2).mockReturnValueOnce(3).mockReturnValueOnce(4);
 
     const rpc = jest.fn();
-    const client = createScClient();
+    const client = createScClient(options);
 
     await client.addChain('{"id":"abc"}', rpc);
     await client.addChain('{"id":"def"}', rpc);
@@ -68,7 +78,7 @@ describe('smoldot provider', () => {
     });
 
     const rpc = jest.fn();
-    const client = createScClient();
+    const client = createScClient(options);
     const chains = [];
 
     const first = await client.addChain('{"id":"abc"}', rpc);
