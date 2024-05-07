@@ -8,7 +8,7 @@ import Worker from 'web-worker';
 import { type Client, type ClientOptions, type Chain, QueueFullError, start } from 'smoldot';
 
 import type { ScClient, AddChain, Chain as ScChain, Config as ScConfig, WellKnownChain } from '@substrate/connect';
-import { getSpec } from './know-chains.js';
+import { getSpec } from './known-chains.js';
 
 const l = logger('oc-smoldot-worker');
 
