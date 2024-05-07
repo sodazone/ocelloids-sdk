@@ -24,7 +24,8 @@ export enum Boundaries {
 /**
  * Type defining a boundary for events demarcation to correlate with a call.
  */
-export type Boundary = {
+export type Boundary =
+  | {
       /**
        * The event name, i.e. `section.method`.
        */
