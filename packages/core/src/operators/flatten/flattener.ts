@@ -17,7 +17,6 @@ const MAX_EVENTS = 200;
 /**
  * Enum representing static, well-known boundaries.
  */
-
 export enum Boundaries {
   ALL,
 }
@@ -25,8 +24,7 @@ export enum Boundaries {
 /**
  * Type defining a boundary for events demarcation to correlate with a call.
  */
-export type Boundary =
-  | {
+export type Boundary = {
       /**
        * The event name, i.e. `section.method`.
        */
@@ -99,6 +97,7 @@ export class Flattener {
    */
   flatten(boundary?: Boundary, id = '0') {
     l.debug('flatten(boundary, extrinsic)', boundary, this.tx.extrinsic.method.toHuman());
+
     this.tx.levelId = id;
     this.calls.push(this.tx);
     this.correlate(boundary);
