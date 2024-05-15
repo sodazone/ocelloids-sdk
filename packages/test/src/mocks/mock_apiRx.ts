@@ -3,11 +3,11 @@
 
 /* istanbul ignore file */
 
-import { BN } from '@polkadot/util';
-import { ApiRx } from '@polkadot/api';
+import { ApiRx } from '@polkadot/api'
+import { BN } from '@polkadot/util'
 
-import { Observable, from, of } from 'rxjs';
-import { testBlocks, testEventRecords, testHeaders } from '../_blocks.js';
+import { Observable, from, of } from 'rxjs'
+import { testBlocks, testEventRecords, testHeaders } from '../_blocks.js'
 
 const apiMock = {
   rpc: {
@@ -31,6 +31,6 @@ const apiMock = {
       getBlock: (hash: Uint8Array | string) => of(testBlocks.find((b) => b.block.hash.eq(hash))),
     },
   },
-} as unknown as ApiRx;
+} as unknown as ApiRx
 
-export const mockRxApi: Observable<ApiRx> = of(apiMock);
+export const mockRxApi: Observable<ApiRx> = of(apiMock)

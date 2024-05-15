@@ -1,23 +1,23 @@
 // Copyright 2023-2024 SO/DA zone
 // SPDX-License-Identifier: Apache-2.0
 
-import { Observable, concatMap } from 'rxjs';
+import { Observable, concatMap } from 'rxjs'
 
-import { TxWithIdAndEvent } from '../types/interfaces.js';
-import { Flattener } from './flatten/flattener.js';
-import { hasParser } from './flatten/index.js';
+import { TxWithIdAndEvent } from '../types/interfaces.js'
+import { Flattener } from './flatten/flattener.js'
+import { hasParser } from './flatten/index.js'
 
 function withFlattener(tx: TxWithIdAndEvent, sorted: boolean) {
   try {
-    const flattener = new Flattener(tx);
-    flattener.flatten();
+    const flattener = new Flattener(tx)
+    flattener.flatten()
     return sorted
       ? flattener.flattenedCalls.sort((a: TxWithIdAndEvent, b: TxWithIdAndEvent) => {
-          return (a.levelId ?? '0').localeCompare(b.levelId ?? '0');
+          return (a.levelId ?? '0').localeCompare(b.levelId ?? '0')
         })
-      : flattener.flattenedCalls;
-  } catch (error) {
-    return [tx];
+      : flattener.flattenedCalls
+  } catch (_error) {
+    return [tx]
   }
 }
 
@@ -36,6 +36,6 @@ function withFlattener(tx: TxWithIdAndEvent, sorted: boolean) {
  */
 export function flattenCalls(sorted = true) {
   return (source: Observable<TxWithIdAndEvent>): Observable<TxWithIdAndEvent> => {
-    return source.pipe(concatMap((tx) => (hasParser(tx) ? withFlattener(tx, sorted) : [tx])));
-  };
+    return source.pipe(concatMap((tx) => (hasParser(tx) ? withFlattener(tx, sorted) : [tx])))
+  }
 }

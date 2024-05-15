@@ -1,13 +1,13 @@
 // Copyright 2023-2024 SO/DA zone
 // SPDX-License-Identifier: Apache-2.0
 
-import { EventRecord, BlockNumber, Address } from '@polkadot/types/interfaces';
-import { Compact, GenericExtrinsic } from '@polkadot/types';
-import type { TxWithEvent } from '@polkadot/api-derive/types';
-import type { AnyJson, IU8a } from '@polkadot/types-codec/types';
+import type { TxWithEvent } from '@polkadot/api-derive/types'
+import { Compact, GenericExtrinsic } from '@polkadot/types'
+import type { AnyJson, IU8a } from '@polkadot/types-codec/types'
+import { Address, BlockNumber, EventRecord } from '@polkadot/types/interfaces'
 
-import { EventWithId, ExtrinsicBlockContext, ExtrinsicWithId, TxWithIdAndEvent } from './interfaces.js';
-import { GenericEventWithId } from './event.js';
+import { GenericEventWithId } from './event.js'
+import { EventWithId, ExtrinsicBlockContext, ExtrinsicWithId, TxWithIdAndEvent } from './interfaces.js'
 
 /**
  * Represents additional addresses involved in flattened extrinsics.
@@ -19,46 +19,46 @@ import { GenericEventWithId } from './event.js';
  * @property address - The address associated with the account.
  */
 export type ExtraSigner = {
-  type: 'proxied' | 'multisig';
-  address: Address;
-};
+  type: 'proxied' | 'multisig'
+  address: Address
+}
 
 /**
  * A subclass of GenericExtrinsic that includes identifier information.
  */
 export class GenericExtrinsicWithId extends GenericExtrinsic implements ExtrinsicWithId {
-  protected readonly _extrinsic: GenericExtrinsic;
-  readonly blockNumber: Compact<BlockNumber>;
-  readonly blockHash: IU8a;
-  readonly blockPosition: number;
-  readonly extraSigners: ExtraSigner[];
+  protected readonly _extrinsic: GenericExtrinsic
+  readonly blockNumber: Compact<BlockNumber>
+  readonly blockHash: IU8a
+  readonly blockPosition: number
+  readonly extraSigners: ExtraSigner[]
 
   constructor(
     value: GenericExtrinsic,
     { blockNumber, blockPosition, blockHash }: ExtrinsicBlockContext,
     extraSigners: ExtraSigner[] = []
   ) {
-    super(value.registry);
+    super(value.registry)
 
-    this._extrinsic = value;
-    this.blockNumber = blockNumber;
-    this.blockPosition = blockPosition;
-    this.blockHash = blockHash;
-    this.extraSigners = extraSigners;
+    this._extrinsic = value
+    this.blockNumber = blockNumber
+    this.blockPosition = blockPosition
+    this.blockHash = blockHash
+    this.extraSigners = extraSigners
 
     return new Proxy(this, {
       get<T>(target: GenericExtrinsicWithId, p: keyof GenericExtrinsic): T {
         if (p === 'toHuman') {
-          return target.toHuman as T;
+          return target.toHuman as T
         }
 
         if (p in target._extrinsic) {
-          return target._extrinsic[p] as T;
+          return target._extrinsic[p] as T
         }
 
-        return target[p] as T;
+        return target[p] as T
       },
-    });
+    })
   }
 
   /**
@@ -69,11 +69,11 @@ export class GenericExtrinsicWithId extends GenericExtrinsic implements Extrinsi
    * - `<position>` is the positional index of the extrinsic within the block, starting from 0.
    */
   get extrinsicId() {
-    return `${this.blockNumber.toString()}-${this.blockPosition}`;
+    return `${this.blockNumber.toString()}-${this.blockPosition}`
   }
 
   addExtraSigner(s: ExtraSigner) {
-    this.extraSigners.push(s);
+    this.extraSigners.push(s)
   }
 
   /**
@@ -90,7 +90,7 @@ export class GenericExtrinsicWithId extends GenericExtrinsic implements Extrinsi
         address: o.address.toHuman(),
       })),
       ...(this._extrinsic.toHuman(isExpanded) as any),
-    };
+    }
   }
 }
 
@@ -105,11 +105,11 @@ export function enhanceTxWithIdAndEvents(
   tx: TxWithEvent,
   events: EventRecord[]
 ): TxWithIdAndEvent {
-  const { blockHash, blockNumber, blockPosition: xtIndex } = xtContext;
-  const eventsWithId: EventWithId[] = [];
+  const { blockHash, blockNumber, blockPosition: xtIndex } = xtContext
+  const eventsWithId: EventWithId[] = []
 
   for (let index = 0; index < events.length; index++) {
-    const { phase, event } = events[index];
+    const { phase, event } = events[index]
     if (phase.isApplyExtrinsic && phase.asApplyExtrinsic.eq(xtIndex)) {
       eventsWithId.push(
         new GenericEventWithId(event, {
@@ -117,11 +117,11 @@ export function enhanceTxWithIdAndEvents(
           blockNumber,
           blockPosition: index,
         })
-      );
+      )
     }
   }
 
-  tx.events = eventsWithId;
-  tx.extrinsic = new GenericExtrinsicWithId(tx.extrinsic, xtContext);
-  return tx as TxWithIdAndEvent;
+  tx.events = eventsWithId
+  tx.extrinsic = new GenericExtrinsicWithId(tx.extrinsic, xtContext)
+  return tx as TxWithIdAndEvent
 }

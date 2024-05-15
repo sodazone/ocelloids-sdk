@@ -1,15 +1,15 @@
 // Copyright 2023-2024 SO/DA zone
 // SPDX-License-Identifier: Apache-2.0
 
-import type { SignedBlockExtended } from '@polkadot/api-derive/types';
+import type { SignedBlockExtended } from '@polkadot/api-derive/types'
 
-import { Observable, share } from 'rxjs';
+import { Observable, share } from 'rxjs'
 
-import { extractEvents, extractEventsWithTx, extractTxWithEvents } from './extract.js';
-import { flattenCalls } from './flatten.js';
-import { mongoFilter } from './mongo-filter.js';
-import { ControlQuery, Criteria } from '../index.js';
-import type { BlockEvent, EventWithIdAndTx, TxWithIdAndEvent } from '../types/interfaces.js';
+import { ControlQuery, Criteria } from '../index.js'
+import type { BlockEvent, EventWithIdAndTx, TxWithIdAndEvent } from '../types/interfaces.js'
+import { extractEvents, extractEventsWithTx, extractTxWithEvents } from './extract.js'
+import { flattenCalls } from './flatten.js'
+import { mongoFilter } from './mongo-filter.js'
 
 /**
  * Filters extrinsics based on the provided criteria.
@@ -24,7 +24,7 @@ import type { BlockEvent, EventWithIdAndTx, TxWithIdAndEvent } from '../types/in
  * @see {@link TxWithIdAndEvent}
  */
 export function filterExtrinsics(extrinsicsCriteria: ControlQuery | Criteria, flatten: boolean = true) {
-  const xtQuery = ControlQuery.from(extrinsicsCriteria);
+  const xtQuery = ControlQuery.from(extrinsicsCriteria)
 
   return (source: Observable<SignedBlockExtended>): Observable<TxWithIdAndEvent> => {
     return source.pipe(
@@ -38,8 +38,8 @@ export function filterExtrinsics(extrinsicsCriteria: ControlQuery | Criteria, fl
       // Filters at the extrinsic level
       // mainly for success or failure
       mongoFilter(xtQuery)
-    );
-  };
+    )
+  }
 }
 
 /**
@@ -67,7 +67,7 @@ export function filterEventsWithTx(
   extrinsicsCriteria: Criteria = {},
   flatten: boolean = false
 ) {
-  const eventsQuery = ControlQuery.from(eventsCriteria);
+  const eventsQuery = ControlQuery.from(eventsCriteria)
 
   return (source: Observable<SignedBlockExtended>): Observable<EventWithIdAndTx> => {
     return source.pipe(
@@ -79,8 +79,8 @@ export function filterEventsWithTx(
       mongoFilter(eventsQuery),
       // Share multicast
       share()
-    );
-  };
+    )
+  }
 }
 
 /**
@@ -95,7 +95,7 @@ export function filterEventsWithTx(
  * @see {@link BlockEvent}
  */
 export function filterEvents(eventsCriteria: ControlQuery | Criteria) {
-  const eventsQuery = ControlQuery.from(eventsCriteria);
+  const eventsQuery = ControlQuery.from(eventsCriteria)
 
   return (source: Observable<SignedBlockExtended>): Observable<BlockEvent> => {
     return source.pipe(
@@ -104,6 +104,6 @@ export function filterEvents(eventsCriteria: ControlQuery | Criteria) {
       mongoFilter(eventsQuery),
       // Share multicast
       share()
-    );
-  };
+    )
+  }
 }

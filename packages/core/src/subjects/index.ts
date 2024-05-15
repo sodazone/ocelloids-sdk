@@ -6,4 +6,4 @@
  *
  * @module
  */
-export * from './query.js';
+export * from './query.js'

@@ -1,18 +1,18 @@
 // Copyright 2023-2024 SO/DA zone
 // SPDX-License-Identifier: Apache-2.0
 
-import { MultiAddress, DispatchError } from '@polkadot/types/interfaces';
-import type { Call } from '@polkadot/types/interfaces/runtime';
-import type { Result, Null } from '@polkadot/types-codec';
+import type { Null, Result } from '@polkadot/types-codec'
+import { DispatchError, MultiAddress } from '@polkadot/types/interfaces'
+import type { Call } from '@polkadot/types/interfaces/runtime'
 
-import { TxWithIdAndEvent } from '../../types/interfaces.js';
-import { callAsTxWithBoundary, getArgValueFromTx } from './util.js';
-import { Flattener } from './flattener.js';
+import { TxWithIdAndEvent } from '../../types/interfaces.js'
+import { Flattener } from './flattener.js'
+import { callAsTxWithBoundary, getArgValueFromTx } from './util.js'
 
-const ProxyExecuted = 'proxy.ProxyExecuted';
+const ProxyExecuted = 'proxy.ProxyExecuted'
 const ProxyExecutedBoundary = {
   eventName: ProxyExecuted,
-};
+}
 
 /**
  * Extracts proxy calls from a transaction.
@@ -23,18 +23,18 @@ const ProxyExecutedBoundary = {
  * @returns The extracted proxy call as TxWithIdAndEvent.
  */
 export function extractProxyCalls(tx: TxWithIdAndEvent, flattener: Flattener) {
-  const { extrinsic } = tx;
-  const real = getArgValueFromTx(extrinsic, 'real') as MultiAddress;
-  const call = getArgValueFromTx(extrinsic, 'call') as Call;
+  const { extrinsic } = tx
+  const real = getArgValueFromTx(extrinsic, 'real') as MultiAddress
+  const call = getArgValueFromTx(extrinsic, 'call') as Call
 
-  const proxyExecutedIndex = flattener.findEventIndex(ProxyExecuted);
+  const proxyExecutedIndex = flattener.findEventIndex(ProxyExecuted)
 
   if (proxyExecutedIndex === -1) {
-    return [];
+    return []
   }
 
-  const executedEvent = flattener.getEvent(proxyExecutedIndex);
-  const [callResult] = executedEvent.data as unknown as [Result<Null, DispatchError>];
+  const executedEvent = flattener.getEvent(proxyExecutedIndex)
+  const [callResult] = executedEvent.data as unknown as [Result<Null, DispatchError>]
 
   return [
     callAsTxWithBoundary({
@@ -44,5 +44,5 @@ export function extractProxyCalls(tx: TxWithIdAndEvent, flattener: Flattener) {
       callError: callResult.isErr ? callResult.asErr : undefined,
       extraSigner: { type: 'proxied', address: real },
     }),
-  ];
+  ]
 }

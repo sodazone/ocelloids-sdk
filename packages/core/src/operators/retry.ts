@@ -1,7 +1,7 @@
 // Copyright 2023-2024 SO/DA zone
 // SPDX-License-Identifier: Apache-2.0
 
-import { Observable, retry, asyncScheduler, SchedulerLike } from 'rxjs';
+import { Observable, SchedulerLike, asyncScheduler, retry } from 'rxjs'
 
 /**
  * Configuration options for the truncated exponential backoff strategy.
@@ -11,10 +11,10 @@ import { Observable, retry, asyncScheduler, SchedulerLike } from 'rxjs';
  * @property maxCount  - The maximum number of retry attempts. If not specified, retries will continue indefinitely.
  */
 export type TruncatedExpBackoffConfig = {
-  baseDelay?: number;
-  maxDelay?: number;
-  maxCount?: number;
-};
+  baseDelay?: number
+  maxDelay?: number
+  maxCount?: number
+}
 
 /**
  * A custom retry strategy that implements truncated exponential backoff.
@@ -30,17 +30,17 @@ export function truncatedExpBackoff(
   scheduler: SchedulerLike = asyncScheduler
 ) {
   return (_error: any, retryCount: number): Observable<number> => {
-    const delay = Math.min(baseDelay * 2 ** retryCount, maxDelay);
+    const delay = Math.min(baseDelay * 2 ** retryCount, maxDelay)
 
     return new Observable((subscriber) => {
       return scheduler.schedule(function () {
         if (!subscriber.closed) {
-          subscriber.next(1);
-          subscriber.complete();
+          subscriber.next(1)
+          subscriber.complete()
         }
-      }, delay);
-    });
-  };
+      }, delay)
+    })
+  }
 }
 
 /**
@@ -54,5 +54,5 @@ export function retryWithTruncatedExpBackoff<T>({ baseDelay, maxDelay, maxCount 
     count: maxCount ?? Infinity,
     delay: truncatedExpBackoff(baseDelay, maxDelay),
     resetOnSuccess: true,
-  });
+  })
 }

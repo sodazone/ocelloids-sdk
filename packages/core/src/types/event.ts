@@ -1,9 +1,9 @@
 // Copyright 2023-2024 SO/DA zone
 // SPDX-License-Identifier: Apache-2.0
 
-import type { BlockNumber } from '@polkadot/types/interfaces';
-import type { AnyJson, IU8a } from '@polkadot/types-codec/types';
-import { Compact, GenericEvent } from '@polkadot/types';
+import { Compact, GenericEvent } from '@polkadot/types'
+import type { AnyJson, IU8a } from '@polkadot/types-codec/types'
+import type { BlockNumber } from '@polkadot/types/interfaces'
 
 import {
   EventBlockContext,
@@ -11,39 +11,39 @@ import {
   EventWithId,
   EventWithIdAndTx,
   ExtrinsicWithId,
-} from './interfaces.js';
+} from './interfaces.js'
 
 /**
  * A subclass of GenericEvent that includes contextual information
  * of an event in a block.
  */
 export class GenericEventWithId extends GenericEvent implements EventWithId {
-  protected readonly _event: GenericEvent;
-  readonly blockNumber: Compact<BlockNumber>;
-  readonly blockHash: IU8a;
-  readonly blockPosition: number;
+  protected readonly _event: GenericEvent
+  readonly blockNumber: Compact<BlockNumber>
+  readonly blockHash: IU8a
+  readonly blockPosition: number
 
   constructor(value: GenericEvent, { blockNumber, blockHash, blockPosition }: EventBlockContext) {
-    super(value.registry);
+    super(value.registry)
 
-    this._event = value;
-    this.blockNumber = blockNumber;
-    this.blockHash = blockHash;
-    this.blockPosition = blockPosition;
+    this._event = value
+    this.blockNumber = blockNumber
+    this.blockHash = blockHash
+    this.blockPosition = blockPosition
 
     return new Proxy(this, {
       get<T>(target: GenericEventWithId, p: keyof GenericEvent): T {
         if (p === 'toHuman') {
-          return target.toHuman as T;
+          return target.toHuman as T
         }
 
         if (p in target._event) {
-          return target._event[p] as T;
+          return target._event[p] as T
         }
 
-        return target[p] as T;
+        return target[p] as T
       },
-    });
+    })
   }
 
   /**
@@ -54,7 +54,7 @@ export class GenericEventWithId extends GenericEvent implements EventWithId {
    * - `<block-position>` is the positional index of the event within the block, starting from 0.
    */
   get eventId() {
-    return `${this.blockNumber.toPrimitive()}-${this.blockPosition}`;
+    return `${this.blockNumber.toPrimitive()}-${this.blockPosition}`
   }
 
   /**
@@ -68,7 +68,7 @@ export class GenericEventWithId extends GenericEvent implements EventWithId {
       blockNumber: this.blockNumber.toHuman(),
       blockHash: this.blockHash.toHuman(),
       ...(this._event.toHuman(isExpanded) as any),
-    };
+    }
   }
 }
 
@@ -77,18 +77,18 @@ export class GenericEventWithId extends GenericEvent implements EventWithId {
  * of an event in an extrinsic.
  */
 export class GenericEventWithIdAndTx extends GenericEventWithId implements EventWithIdAndTx {
-  extrinsicPosition: number;
-  extrinsicId: string;
-  extrinsic: ExtrinsicWithId;
+  extrinsicPosition: number
+  extrinsicId: string
+  extrinsic: ExtrinsicWithId
 
   constructor(
     value: GenericEvent,
     { extrinsicPosition, extrinsicId, extrinsic, ...eventBlockContext }: EventExtrinsicContext
   ) {
-    super(value, eventBlockContext);
-    this.extrinsicPosition = extrinsicPosition;
-    this.extrinsicId = extrinsicId;
-    this.extrinsic = extrinsic;
+    super(value, eventBlockContext)
+    this.extrinsicPosition = extrinsicPosition
+    this.extrinsicId = extrinsicId
+    this.extrinsic = extrinsic
   }
 
   /**
@@ -101,6 +101,6 @@ export class GenericEventWithIdAndTx extends GenericEventWithId implements Event
       extrinsicPosition: this.extrinsicPosition,
       extrinsic: this.extrinsic.toHuman(),
       ...(super.toHuman(isExpanded) as any),
-    };
+    }
   }
 }

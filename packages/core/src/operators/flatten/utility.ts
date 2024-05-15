@@ -1,35 +1,35 @@
 // Copyright 2023-2024 SO/DA zone
 // SPDX-License-Identifier: Apache-2.0
 
-import type { FunctionMetadataLatest, DispatchError } from '@polkadot/types/interfaces';
-import type { CallBase, AnyTuple } from '@polkadot/types-codec/types';
-import type { u16, u32 } from '@polkadot/types-codec';
-import type { Result, Null } from '@polkadot/types-codec';
+import type { u16, u32 } from '@polkadot/types-codec'
+import type { Null, Result } from '@polkadot/types-codec'
+import type { AnyTuple, CallBase } from '@polkadot/types-codec/types'
+import type { DispatchError, FunctionMetadataLatest } from '@polkadot/types/interfaces'
 
-import { TxWithIdAndEvent } from '../../types/interfaces.js';
-import { callAsTxWithBoundary, getArgValueFromTx, isEventType } from './util.js';
-import { Boundaries, Flattener } from './flattener.js';
+import { TxWithIdAndEvent } from '../../types/interfaces.js'
+import { Boundaries, Flattener } from './flattener.js'
+import { callAsTxWithBoundary, getArgValueFromTx, isEventType } from './util.js'
 
-const MAX_BATCH_CALLS = 50;
+const MAX_BATCH_CALLS = 50
 
-const BatchCompleted = 'utility.BatchCompleted';
-const BatchCompletedWithErrors = 'utility.BatchCompletedWithErrors';
-const BatchInterrupted = 'utility.BatchInterrupted';
-const ItemFailed = 'utility.ItemFailed';
-const ItemCompleted = 'utility.ItemCompleted';
-const DispatchedAs = 'utility.DispatchedAs';
+const BatchCompleted = 'utility.BatchCompleted'
+const BatchCompletedWithErrors = 'utility.BatchCompletedWithErrors'
+const BatchInterrupted = 'utility.BatchInterrupted'
+const ItemFailed = 'utility.ItemFailed'
+const ItemCompleted = 'utility.ItemCompleted'
+const DispatchedAs = 'utility.DispatchedAs'
 
 const ItemFailedBoundary = {
   eventName: ItemFailed,
   offset: 1,
-};
+}
 const ItemCompletedBoundary = {
   eventName: ItemCompleted,
   offset: 1,
-};
+}
 const DispatchedAsBoundary = {
   eventName: DispatchedAs,
-};
+}
 
 /**
  * Maps calls in an errored batch to an array of TxWithIdAndEvent.
@@ -44,12 +44,12 @@ function mapBatchErrored(
   tx: TxWithIdAndEvent,
   flattener: Flattener
 ) {
-  let from = flattener.nextPointer;
+  let from = flattener.nextPointer
 
   return calls.map((call) => {
-    const eventIndex = flattener.findEventIndex([ItemCompleted, ItemFailed], from);
-    const event = flattener.getEvent(eventIndex);
-    from = eventIndex + 1;
+    const eventIndex = flattener.findEventIndex([ItemCompleted, ItemFailed], from)
+    const event = flattener.getEvent(eventIndex)
+    from = eventIndex + 1
 
     if (isEventType(ItemFailed, event)) {
       return callAsTxWithBoundary({
@@ -57,14 +57,14 @@ function mapBatchErrored(
         tx,
         boundary: ItemFailedBoundary,
         callError: event.data[0] as DispatchError,
-      });
+      })
     }
     return callAsTxWithBoundary({
       call,
       tx,
       boundary: ItemCompletedBoundary,
-    });
-  });
+    })
+  })
 }
 
 /**
@@ -74,7 +74,7 @@ function mapBatchErrored(
  * @returns The extracted call as {@link TxWithIdAndEvent}.
  */
 export function extractAsDerivativeCall(tx: TxWithIdAndEvent) {
-  const [_, call] = tx.extrinsic.args as unknown as [u16, CallBase<AnyTuple, FunctionMetadataLatest>];
+  const [_, call] = tx.extrinsic.args as unknown as [u16, CallBase<AnyTuple, FunctionMetadataLatest>]
 
   return [
     callAsTxWithBoundary({
@@ -82,7 +82,7 @@ export function extractAsDerivativeCall(tx: TxWithIdAndEvent) {
       tx,
       boundary: Boundaries.ALL,
     }),
-  ];
+  ]
 }
 
 /**
@@ -95,14 +95,14 @@ export function extractAsDerivativeCall(tx: TxWithIdAndEvent) {
  * @returns The extracted call as {@link TxWithIdAndEvent}.
  */
 export function extractDispatchAsCall(tx: TxWithIdAndEvent, flattener: Flattener) {
-  const { extrinsic, events } = tx;
-  const call = getArgValueFromTx(extrinsic, 'call') as CallBase<AnyTuple, FunctionMetadataLatest>;
+  const { extrinsic, events } = tx
+  const call = getArgValueFromTx(extrinsic, 'call') as CallBase<AnyTuple, FunctionMetadataLatest>
 
-  const dispatchedAsIndex = flattener.findEventIndex(DispatchedAs);
+  const dispatchedAsIndex = flattener.findEventIndex(DispatchedAs)
 
   if (dispatchedAsIndex > -1) {
-    const dispatchedAsEvent = events[dispatchedAsIndex];
-    const [callResult] = dispatchedAsEvent.data as unknown as [Result<Null, DispatchError>];
+    const dispatchedAsEvent = events[dispatchedAsIndex]
+    const [callResult] = dispatchedAsEvent.data as unknown as [Result<Null, DispatchError>]
 
     return [
       callAsTxWithBoundary({
@@ -111,7 +111,7 @@ export function extractDispatchAsCall(tx: TxWithIdAndEvent, flattener: Flattener
         boundary: DispatchedAsBoundary,
         callError: callResult.isErr ? callResult.asErr : undefined,
       }),
-    ];
+    ]
   } else {
     return [
       callAsTxWithBoundary({
@@ -119,7 +119,7 @@ export function extractDispatchAsCall(tx: TxWithIdAndEvent, flattener: Flattener
         tx,
         boundary: Boundaries.ALL,
       }),
-    ];
+    ]
   }
 }
 
@@ -134,7 +134,7 @@ function mapBatch(
       tx,
       boundary,
     })
-  );
+  )
 }
 
 function mapBatchInterrupt(
@@ -149,15 +149,15 @@ function mapBatchInterrupt(
         call,
         tx,
         boundary: ItemCompletedBoundary,
-      });
+      })
     } else {
       return callAsTxWithBoundary({
         call,
         tx,
         callError,
-      });
+      })
     }
-  });
+  })
 }
 
 /**
@@ -170,25 +170,25 @@ function mapBatchInterrupt(
  * with correlated events and dispatch result as {@link TxWithIdAndEvent}.
  */
 export function extractBatchCalls(tx: TxWithIdAndEvent, flattener: Flattener) {
-  const { extrinsic } = tx;
-  const calls = extrinsic.args[0] as unknown as CallBase<AnyTuple, FunctionMetadataLatest>[];
+  const { extrinsic } = tx
+  const calls = extrinsic.args[0] as unknown as CallBase<AnyTuple, FunctionMetadataLatest>[]
   if (calls.length > MAX_BATCH_CALLS) {
-    throw new Error('Batch too large to process');
+    throw new Error('Batch too large to process')
   }
 
-  const batchCompletedIndex = flattener.findEventIndex(BatchCompleted);
-  const batchInterruptedIndex = flattener.findEventIndex(BatchInterrupted);
+  const batchCompletedIndex = flattener.findEventIndex(BatchCompleted)
+  const batchInterruptedIndex = flattener.findEventIndex(BatchInterrupted)
   const isInterrupted =
     (batchCompletedIndex === -1 && batchInterruptedIndex > -1) ||
-    (batchInterruptedIndex > -1 && batchInterruptedIndex < batchCompletedIndex);
+    (batchInterruptedIndex > -1 && batchInterruptedIndex < batchCompletedIndex)
 
   if (isInterrupted) {
-    const interruptedEvent = flattener.getEvent(batchInterruptedIndex);
-    const [callIndex, callError] = interruptedEvent.data as unknown as [u32, DispatchError];
-    const interruptedIndex = callIndex.toNumber();
-    return mapBatchInterrupt(calls, tx, interruptedIndex, callError);
+    const interruptedEvent = flattener.getEvent(batchInterruptedIndex)
+    const [callIndex, callError] = interruptedEvent.data as unknown as [u32, DispatchError]
+    const interruptedIndex = callIndex.toNumber()
+    return mapBatchInterrupt(calls, tx, interruptedIndex, callError)
   } else {
-    return mapBatch(calls, tx);
+    return mapBatch(calls, tx)
   }
 }
 
@@ -202,18 +202,18 @@ export function extractBatchCalls(tx: TxWithIdAndEvent, flattener: Flattener) {
  * with correlated events and dispatch result as {@link TxWithIdAndEvent}.
  */
 export function extractBatchAllCalls(tx: TxWithIdAndEvent) {
-  const { extrinsic, dispatchError } = tx;
-  const calls = extrinsic.args[0] as unknown as CallBase<AnyTuple, FunctionMetadataLatest>[];
+  const { extrinsic, dispatchError } = tx
+  const calls = extrinsic.args[0] as unknown as CallBase<AnyTuple, FunctionMetadataLatest>[]
   if (calls.length > MAX_BATCH_CALLS) {
-    throw new Error('Batch too large to process');
+    throw new Error('Batch too large to process')
   }
 
   if (dispatchError === undefined) {
     // If batch executed successfully, extract as normal batch complete calls
-    return mapBatch(calls, tx);
+    return mapBatch(calls, tx)
   } else {
     // If batch failed, map inner calls with empty events
-    return mapBatch(calls, tx, undefined);
+    return mapBatch(calls, tx, undefined)
   }
 }
 
@@ -228,22 +228,22 @@ export function extractBatchAllCalls(tx: TxWithIdAndEvent) {
  * with correlated events and dispatch result as {@link TxWithIdAndEvent}.
  */
 export function extractForceBatchCalls(tx: TxWithIdAndEvent, flattener: Flattener) {
-  const { extrinsic } = tx;
-  const calls = extrinsic.args[0] as unknown as CallBase<AnyTuple, FunctionMetadataLatest>[];
+  const { extrinsic } = tx
+  const calls = extrinsic.args[0] as unknown as CallBase<AnyTuple, FunctionMetadataLatest>[]
   if (calls.length > MAX_BATCH_CALLS) {
-    throw new Error('Batch too large to process');
+    throw new Error('Batch too large to process')
   }
 
-  const batchCompletedIndex = flattener.findEventIndex(BatchCompleted);
-  const batchErroredIndex = flattener.findEventIndex(BatchCompletedWithErrors);
+  const batchCompletedIndex = flattener.findEventIndex(BatchCompleted)
+  const batchErroredIndex = flattener.findEventIndex(BatchCompletedWithErrors)
 
   const isErrored =
     (batchCompletedIndex === -1 && batchErroredIndex > -1) ||
-    (batchErroredIndex > -1 && batchErroredIndex < batchCompletedIndex);
+    (batchErroredIndex > -1 && batchErroredIndex < batchCompletedIndex)
 
   if (isErrored) {
-    return mapBatchErrored(calls, tx, flattener);
+    return mapBatchErrored(calls, tx, flattener)
   } else {
-    return mapBatch(calls, tx);
+    return mapBatch(calls, tx)
   }
 }

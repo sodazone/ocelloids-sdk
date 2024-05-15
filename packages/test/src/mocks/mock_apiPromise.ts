@@ -1,8 +1,8 @@
 // Copyright 2023-2024 SO/DA zone
 // SPDX-License-Identifier: Apache-2.0
 
-import { ApiPromise } from '@polkadot/api';
-import { Event } from '@polkadot/types/interfaces';
+import { ApiPromise } from '@polkadot/api'
+import { Event } from '@polkadot/types/interfaces'
 
 export const mockPromiseApi = {
   events: {
@@ -14,7 +14,9 @@ export const mockPromiseApi = {
   },
   query: {
     contracts: {
-      contractInfoOf: () => {},
+      contractInfoOf: () => {
+        // nothing
+      },
     },
   },
-} as unknown as ApiPromise;
+} as unknown as ApiPromise

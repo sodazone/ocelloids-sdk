@@ -1,35 +1,35 @@
 // Copyright 2023-2024 SO/DA zone
 // SPDX-License-Identifier: Apache-2.0
 
-import type { AnyJson, Codec } from '@polkadot/types-codec/types';
-import { AbiParam, DecodedEvent, DecodedMessage } from '@polkadot/api-contract/types';
+import { AbiParam, DecodedEvent, DecodedMessage } from '@polkadot/api-contract/types'
+import type { AnyJson, Codec } from '@polkadot/types-codec/types'
 
-import { converters } from '@sodazone/ocelloids-sdk';
+import { converters } from '@sodazone/ocelloids-sdk'
 
-import { ContractEventWithBlockEvent, ContractMessageWithTx } from '../types/interfaces.js';
+import { ContractEventWithBlockEvent, ContractMessageWithTx } from '../types/interfaces.js'
 
 function isContractMessage(object: any): object is DecodedMessage {
-  return object.args !== undefined && object.message !== undefined;
+  return object.args !== undefined && object.message !== undefined
 }
 
 function isContractMessageWithTx(object: any): object is ContractMessageWithTx {
-  return converters.guards.isTxWithEvent(object) && isContractMessage(object);
+  return converters.guards.isTxWithEvent(object) && isContractMessage(object)
 }
 
 function isContractEvent(object: any): object is DecodedEvent {
-  return object.args !== undefined && object.event !== undefined;
+  return object.args !== undefined && object.event !== undefined
 }
 
 function isContractEventWithBlockEvent(object: any): object is ContractEventWithBlockEvent {
-  return object.blockEvent !== undefined && isContractEvent(object);
+  return object.blockEvent !== undefined && isContractEvent(object)
 }
 
 function contractParamsToNamedPrimitive(abiParams: AbiParam[], args: Codec[]) {
-  const params: Record<string, AnyJson> = {};
+  const params: Record<string, AnyJson> = {}
   abiParams.forEach((param, i) => {
-    params[param.name] = args[i].toPrimitive();
-  });
-  return params;
+    params[param.name] = args[i].toPrimitive()
+  })
+  return params
 }
 
 function contractMessageToNamedPrimitive(data: DecodedMessage) {
@@ -49,7 +49,7 @@ function contractMessageToNamedPrimitive(data: DecodedMessage) {
     index,
     method,
     path,
-  }))(data.message);
+  }))(data.message)
 
   return {
     args: contractParamsToNamedPrimitive(data.message.args, data.args),
@@ -57,14 +57,14 @@ function contractMessageToNamedPrimitive(data: DecodedMessage) {
       ...picked,
       selector: data.message.selector.toPrimitive(),
     },
-  };
+  }
 }
 
 function contractMessageWithTxToNamedPrimitive(data: ContractMessageWithTx) {
   return {
     ...contractMessageToNamedPrimitive(data),
     ...converters.helpers.txWithEventToNamedPrimitive(data),
-  };
+  }
 }
 
 function contractEventToNamedPrimitive(data: DecodedEvent) {
@@ -72,19 +72,19 @@ function contractEventToNamedPrimitive(data: DecodedEvent) {
   // We are leaving out:
   // args: AbiParam[] -> contains type Enum that does not comply with AnyJson
   // fromU8a: Function
-  const picked = (({ docs, identifier, index }) => ({ docs, identifier, index }))(data.event);
+  const picked = (({ docs, identifier, index }) => ({ docs, identifier, index }))(data.event)
 
   return {
     event: picked,
     args: contractParamsToNamedPrimitive(data.event.args, data.args),
-  };
+  }
 }
 
 function contractEventWithBlockEventToNamedPrimitive(data: ContractEventWithBlockEvent) {
   return {
     blockEvent: converters.helpers.eventToNamedPrimitive(data.blockEvent),
     ...contractEventToNamedPrimitive(data),
-  };
+  }
 }
 
 /**
@@ -103,13 +103,13 @@ function contractEventWithBlockEventToNamedPrimitive(data: ContractEventWithBloc
 function toNamedPrimitive<T>(data: T): Record<string, AnyJson> {
   switch (true) {
     case isContractMessageWithTx(data):
-      return contractMessageWithTxToNamedPrimitive(data as ContractMessageWithTx);
+      return contractMessageWithTxToNamedPrimitive(data as ContractMessageWithTx)
     case isContractMessage(data):
-      return contractMessageToNamedPrimitive(data as DecodedMessage);
+      return contractMessageToNamedPrimitive(data as DecodedMessage)
     case isContractEventWithBlockEvent(data):
-      return contractEventWithBlockEventToNamedPrimitive(data as ContractEventWithBlockEvent);
+      return contractEventWithBlockEventToNamedPrimitive(data as ContractEventWithBlockEvent)
     default:
-      throw new Error(`No converter found for ${JSON.stringify(data)}`);
+      throw new Error(`No converter found for ${JSON.stringify(data)}`)
   }
 }
 
@@ -121,10 +121,10 @@ function toNamedPrimitive<T>(data: T): Record<string, AnyJson> {
  * @see toNamedPrimitive
  */
 function toNamedPrimitives<T>(data: T): Record<string, AnyJson>[] {
-  return Array.isArray(data) ? data.map(toNamedPrimitive) : [toNamedPrimitive(data)];
+  return Array.isArray(data) ? data.map(toNamedPrimitive) : [toNamedPrimitive(data)]
 }
 
 export const contracts: converters.Converter = {
   toNamedPrimitive,
   toNamedPrimitives,
-};
+}

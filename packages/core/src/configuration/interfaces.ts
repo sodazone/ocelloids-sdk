@@ -1,7 +1,7 @@
 // Copyright 2023-2024 SO/DA zone
 // SPDX-License-Identifier: Apache-2.0
 
-import type { ApiOptions } from '@polkadot/api/types';
+import type { ApiOptions } from '@polkadot/api/types'
 
 /**
  * The API configuration properties per chain.
@@ -25,7 +25,7 @@ import type { ApiOptions } from '@polkadot/api/types';
  * ```
  */
 export interface Configuration {
-  [key: string]: ApiOptions;
+  [key: string]: ApiOptions
 }
 
 /**
@@ -33,4 +33,4 @@ export interface Configuration {
  *
  * @internal
  */
-export type ApiNames<T extends Configuration> = keyof T & string;
+export type ApiNames<T extends Configuration> = keyof T & string

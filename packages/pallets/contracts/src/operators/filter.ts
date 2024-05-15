@@ -1,17 +1,17 @@
 // Copyright 2023-2024 SO/DA zone
 // SPDX-License-Identifier: Apache-2.0
 
-import type { SignedBlockExtended } from '@polkadot/api-derive/types';
-import { Abi } from '@polkadot/api-contract';
+import { Abi } from '@polkadot/api-contract'
+import type { SignedBlockExtended } from '@polkadot/api-derive/types'
 
-import { Observable, share } from 'rxjs';
+import { Observable, share } from 'rxjs'
 
-import { ControlQuery, Criteria, mongoFilter, filterExtrinsics, extractEventsWithTx } from '@sodazone/ocelloids-sdk';
+import { ControlQuery, Criteria, extractEventsWithTx, filterExtrinsics, mongoFilter } from '@sodazone/ocelloids-sdk'
 
-import { contractEvents, contractMessages } from './index.js';
-import { ContractEventWithBlockEvent, ContractMessageWithTx } from '../types/interfaces.js';
-import { AddressParam } from '../types/types.js';
-import { contracts } from '../converters/contracts.js';
+import { contracts } from '../converters/contracts.js'
+import { ContractEventWithBlockEvent, ContractMessageWithTx } from '../types/interfaces.js'
+import { AddressParam } from '../types/types.js'
+import { contractEvents, contractMessages } from './index.js'
 
 /**
  * Filters contract calls based on the provided criteria.
@@ -30,10 +30,10 @@ export function filterContractCalls(
     dispatchError: { $exists: false },
   }
 ) {
-  let callsQuery: ControlQuery | undefined;
+  let callsQuery: ControlQuery | undefined
 
   if (callsCriteria) {
-    callsQuery = ControlQuery.from(callsCriteria);
+    callsQuery = ControlQuery.from(callsCriteria)
   }
 
   return (source: Observable<SignedBlockExtended>): Observable<ContractMessageWithTx> => {
@@ -46,8 +46,8 @@ export function filterContractCalls(
       callsQuery ? mongoFilter(callsQuery, contracts) : (x) => x,
       // Share multicast
       share()
-    );
-  };
+    )
+  }
 }
 
 /**
@@ -67,10 +67,10 @@ export function filterContractEvents(
     dispatchError: { $exists: false },
   }
 ) {
-  let eventsQuery: ControlQuery | undefined;
+  let eventsQuery: ControlQuery | undefined
 
   if (eventsCriteria) {
-    eventsQuery = ControlQuery.from(eventsCriteria);
+    eventsQuery = ControlQuery.from(eventsCriteria)
   }
 
   return (source: Observable<SignedBlockExtended>): Observable<ContractEventWithBlockEvent> => {
@@ -83,6 +83,6 @@ export function filterContractEvents(
       eventsQuery ? mongoFilter(eventsQuery, contracts) : (x) => x,
       // Share multicast
       share()
-    );
-  };
+    )
+  }
 }

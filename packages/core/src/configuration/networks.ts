@@ -14,4 +14,4 @@ export const networks = {
   westend: 'wss://westend-rpc.polkadot.io',
   rococo: 'wss://rococo-rpc.polkadot.io',
   rococoContracts: 'wss://rococo-contracts-rpc.polkadot.io',
-};
+}

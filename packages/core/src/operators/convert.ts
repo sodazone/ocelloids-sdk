@@ -1,11 +1,11 @@
 // Copyright 2023-2024 SO/DA zone
 // SPDX-License-Identifier: Apache-2.0
 
-import type { AnyJson } from '@polkadot/types-codec/types';
+import type { AnyJson } from '@polkadot/types-codec/types'
 
-import { Observable, map } from 'rxjs';
+import { Observable, map } from 'rxjs'
 
-import { Converter, base } from '../converters/index.js';
+import { Converter, base } from '../converters/index.js'
 
 /**
  * Maps the values emitted by the source observable to their named primitive representation.
@@ -17,6 +17,6 @@ import { Converter, base } from '../converters/index.js';
  */
 export function convert<T>(converter: Converter = base) {
   return (source: Observable<T>): Observable<AnyJson> => {
-    return source.pipe(map((record) => converter.toNamedPrimitive(record)));
-  };
+    return source.pipe(map((record) => converter.toNamedPrimitive(record)))
+  }
 }

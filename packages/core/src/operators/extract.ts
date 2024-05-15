@@ -1,20 +1,20 @@
 // Copyright 2023-2024 SO/DA zone
 // SPDX-License-Identifier: Apache-2.0
 
-import type { SignedBlock } from '@polkadot/types/interfaces';
-import type { SignedBlockExtended } from '@polkadot/api-derive/types';
+import type { SignedBlockExtended } from '@polkadot/api-derive/types'
+import type { SignedBlock } from '@polkadot/types/interfaces'
 
-import { Observable, from, mergeMap, share, map } from 'rxjs';
+import { Observable, from, map, mergeMap, share } from 'rxjs'
 
-import { GenericExtrinsicWithId, enhanceTxWithIdAndEvents } from '../types/extrinsic.js';
-import { GenericEventWithId, GenericEventWithIdAndTx } from '../types/event.js';
+import { GenericEventWithId, GenericEventWithIdAndTx } from '../types/event.js'
+import { GenericExtrinsicWithId, enhanceTxWithIdAndEvents } from '../types/extrinsic.js'
 import {
+  BlockEvent,
+  EventBlockContext,
   EventWithIdAndTx,
   ExtrinsicWithId,
   TxWithIdAndEvent,
-  BlockEvent,
-  EventBlockContext,
-} from '../types/interfaces.js';
+} from '../types/interfaces.js'
 
 /**
  * Operator to extract extrinsics with paired events from blocks.
@@ -39,8 +39,8 @@ export function extractTxWithEvents() {
   return (source: Observable<SignedBlockExtended>): Observable<TxWithIdAndEvent> => {
     return source.pipe(
       mergeMap(({ block, extrinsics, events }) => {
-        const blockNumber = block.header.number;
-        const blockHash = block.hash;
+        const blockNumber = block.header.number
+        const blockHash = block.hash
         return extrinsics.map((xt, blockPosition) => {
           return enhanceTxWithIdAndEvents(
             {
@@ -50,12 +50,12 @@ export function extractTxWithEvents() {
             },
             xt,
             events
-          );
-        });
+          )
+        })
       }),
       share()
-    );
-  };
+    )
+  }
 }
 
 /**
@@ -80,8 +80,8 @@ export function extractExtrinsics() {
   return (source: Observable<SignedBlock>): Observable<ExtrinsicWithId> => {
     return source.pipe(
       mergeMap(({ block }) => {
-        const blockNumber = block.header.number;
-        const blockHash = block.hash;
+        const blockNumber = block.header.number
+        const blockHash = block.hash
         return block.extrinsics.map(
           (xt, blockPosition) =>
             new GenericExtrinsicWithId(xt, {
@@ -89,11 +89,11 @@ export function extractExtrinsics() {
               blockHash,
               blockPosition,
             })
-        );
+        )
       }),
       share()
-    );
-  };
+    )
+  }
 }
 
 /**
@@ -127,12 +127,12 @@ export function extractEvents() {
           events,
           blockNumber: block.header.number,
           blockHash: block.hash,
-        };
+        }
       }),
       mergeMap(({ extrinsics, events, blockHash, blockNumber }) => {
-        let prevXtIndex = -1;
-        let xtEventIndex = 0;
-        let extrinsicWithId: ExtrinsicWithId | undefined;
+        let prevXtIndex = -1
+        let xtEventIndex = 0
+        let extrinsicWithId: ExtrinsicWithId | undefined
         // TODO: use inner Observable to stream events
         // Loops through each event record in the block and enhance it with block context.
         // If event is emitted from an extrinsic, enhance also with extrinsic context.
@@ -142,15 +142,15 @@ export function extractEvents() {
               blockNumber,
               blockHash,
               blockPosition: index,
-            };
-            const extrinsicIndex = phase.isApplyExtrinsic ? phase.asApplyExtrinsic.toNumber() : undefined;
+            }
+            const extrinsicIndex = phase.isApplyExtrinsic ? phase.asApplyExtrinsic.toNumber() : undefined
             if (extrinsicIndex) {
               if (extrinsicWithId === undefined) {
                 extrinsicWithId = new GenericExtrinsicWithId(extrinsics[extrinsicIndex], {
                   blockNumber,
                   blockHash,
                   blockPosition: extrinsicIndex,
-                });
+                })
               }
 
               const blockEvent = new GenericEventWithIdAndTx(event, {
@@ -158,30 +158,30 @@ export function extractEvents() {
                 extrinsicId: extrinsicWithId.extrinsicId,
                 extrinsic: extrinsicWithId,
                 extrinsicPosition: xtEventIndex,
-              });
+              })
 
               // If we have moved on to the next extrinsic,
               // reset the event index to 0
               if (extrinsicIndex > prevXtIndex) {
-                xtEventIndex = 0;
-                extrinsicWithId = undefined;
+                xtEventIndex = 0
+                extrinsicWithId = undefined
               }
 
               // Increase event index in extrinsic for next loop
-              xtEventIndex++;
+              xtEventIndex++
               // Assign current extrinsic index to prevXtIndex
-              prevXtIndex = extrinsicIndex;
+              prevXtIndex = extrinsicIndex
 
-              return blockEvent;
+              return blockEvent
             }
 
-            return new GenericEventWithId(event, eventBlockContext);
+            return new GenericEventWithId(event, eventBlockContext)
           })
-        );
+        )
       }),
       share()
-    );
-  };
+    )
+  }
 }
 
 /**
@@ -212,9 +212,9 @@ export function extractEventsWithTx() {
   return (source: Observable<TxWithIdAndEvent>): Observable<EventWithIdAndTx> => {
     return source.pipe(
       mergeMap(({ extrinsic, events }) => {
-        const blockNumber = extrinsic.blockNumber;
-        const blockHash = extrinsic.blockHash;
-        const eventRecords: EventWithIdAndTx[] = [];
+        const blockNumber = extrinsic.blockNumber
+        const blockHash = extrinsic.blockHash
+        const eventRecords: EventWithIdAndTx[] = []
 
         for (const [extrinsicPosition, event] of events.entries()) {
           const eventWithIdAndTx = new GenericEventWithIdAndTx(event, {
@@ -224,15 +224,15 @@ export function extractEventsWithTx() {
             extrinsicPosition,
             extrinsicId: extrinsic.extrinsicId,
             extrinsic,
-          }) as EventWithIdAndTx;
+          }) as EventWithIdAndTx
 
-          eventWithIdAndTx.extrinsic = extrinsic;
+          eventWithIdAndTx.extrinsic = extrinsic
 
-          eventRecords.push(eventWithIdAndTx);
+          eventRecords.push(eventWithIdAndTx)
         }
 
-        return eventRecords;
+        return eventRecords
       })
-    );
-  };
+    )
+  }
 }

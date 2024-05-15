@@ -1,14 +1,14 @@
 // Copyright 2023-2024 SO/DA zone
 // SPDX-License-Identifier: Apache-2.0
 
-import { mockRxApi } from '@sodazone/ocelloids-sdk-test';
-import { blocks } from '../index.js';
-import { mongoFilter } from './mongo-filter.js';
-import { ControlQuery } from '../subjects/query.js';
+import { mockRxApi } from '@sodazone/ocelloids-sdk-test'
+import { blocks } from '../index.js'
+import { ControlQuery } from '../subjects/query.js'
+import { mongoFilter } from './mongo-filter.js'
 
 describe('control query', () => {
   it('should filter all non matching blocks', () => {
-    const found = jest.fn();
+    const found = jest.fn()
 
     blocks()(mockRxApi)
       .pipe(
@@ -19,13 +19,13 @@ describe('control query', () => {
           })
         )
       )
-      .subscribe(found);
+      .subscribe(found)
 
-    expect(found).not.toHaveBeenCalled;
-  });
+    expect(found).not.toHaveBeenCalled
+  })
 
   it('should filter balance transfers', () => {
-    const found = jest.fn();
+    const found = jest.fn()
 
     blocks()(mockRxApi)
       .pipe(
@@ -36,13 +36,13 @@ describe('control query', () => {
           })
         )
       )
-      .subscribe(found);
+      .subscribe(found)
 
-    expect(found).toHaveBeenCalledTimes(1);
-  });
+    expect(found).toHaveBeenCalledTimes(1)
+  })
 
   it('should filter balance transfers from criteria', () => {
-    const found = jest.fn();
+    const found = jest.fn()
 
     blocks()(mockRxApi)
       .pipe(
@@ -51,8 +51,8 @@ describe('control query', () => {
           'block.extrinsics.call.method': 'transferKeepAlive',
         })
       )
-      .subscribe(found);
+      .subscribe(found)
 
-    expect(found).toHaveBeenCalledTimes(1);
-  });
-});
+    expect(found).toHaveBeenCalledTimes(1)
+  })
+})

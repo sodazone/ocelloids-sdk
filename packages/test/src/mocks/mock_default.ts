@@ -3,6 +3,6 @@
 
 /* istanbul ignore file */
 
-import './mock_polkadot.js';
+import './mock_polkadot.js'
 
-export { WsProvider } from '@polkadot/api';
+export { WsProvider } from '@polkadot/api'

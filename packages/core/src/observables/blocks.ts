@@ -1,24 +1,24 @@
 // Copyright 2023-2024 SO/DA zone
 // SPDX-License-Identifier: Apache-2.0
 
-import { ApiPromise, ApiRx } from '@polkadot/api';
-import { logger } from '@polkadot/util';
+import { ApiPromise, ApiRx } from '@polkadot/api'
+import { logger } from '@polkadot/util'
 
-import type { SignedBlockExtended } from '@polkadot/api-derive/types';
-import type { Header } from '@polkadot/types/interfaces';
+import type { SignedBlockExtended } from '@polkadot/api-derive/types'
+import type { Header } from '@polkadot/types/interfaces'
 
-import { Observable, from, concatMap, mergeMap, share, switchMap } from 'rxjs';
+import { Observable, concatMap, from, mergeMap, share, switchMap } from 'rxjs'
 
-import { AnyBN, bnRange } from '../observables/bn.js';
-import { debug } from '../operators/debug.js';
+import { AnyBN, bnRange } from '../observables/bn.js'
+import { debug } from '../operators/debug.js'
 
-const l = logger('oc-blocks');
+const l = logger('oc-blocks')
 
 // see https://github.com/polkadot-js/api/pull/5787
 function subscribeFinalizedBlocks(api: ApiRx) {
   return api.derive.chain
     .subscribeFinalizedHeads()
-    .pipe(concatMap((header) => api.derive.chain.getBlock(header.createdAtHash || header.hash)));
+    .pipe(concatMap((header) => api.derive.chain.getBlock(header.createdAtHash || header.hash)))
 }
 
 /**
@@ -37,12 +37,12 @@ export function heads(finalized = false) {
   return (source: Observable<ApiRx>): Observable<Header> => {
     return source.pipe(
       switchMap((api) => {
-        return finalized ? api.derive.chain.subscribeFinalizedHeads() : api.derive.chain.subscribeNewHeads();
+        return finalized ? api.derive.chain.subscribeFinalizedHeads() : api.derive.chain.subscribeNewHeads()
       }),
       debug(l, (header) => header.number.toHuman()),
       share()
-    );
-  };
+    )
+  }
 }
 
 /**
@@ -53,7 +53,7 @@ export function heads(finalized = false) {
  * @see {@link heads}
  */
 export function finalizedHeads() {
-  return heads(true);
+  return heads(true)
 }
 
 /**
@@ -78,12 +78,12 @@ export function blocks(finalized = false) {
   return (source: Observable<ApiRx>): Observable<SignedBlockExtended> => {
     return source.pipe(
       switchMap((api) => {
-        return finalized ? subscribeFinalizedBlocks(api) : api.derive.chain.subscribeNewBlocks();
+        return finalized ? subscribeFinalizedBlocks(api) : api.derive.chain.subscribeNewBlocks()
       }),
       debug(l, (b) => b.block.header.number.toHuman()),
       share()
-    );
-  };
+    )
+  }
 }
 
 /**
@@ -101,7 +101,7 @@ export function blocks(finalized = false) {
  * @see {@link blocks}
  */
 export function finalizedBlocks() {
-  return blocks(true);
+  return blocks(true)
 }
 
 /**
@@ -113,10 +113,10 @@ export function blockFromHeader(api: ApiPromise) {
   return (source: Observable<Header>): Observable<SignedBlockExtended> => {
     return source.pipe(
       mergeMap((header) => {
-        return from(api.derive.chain.getBlock(header.hash));
+        return from(api.derive.chain.getBlock(header.hash))
       })
-    );
-  };
+    )
+  }
 }
 
 /**
@@ -139,6 +139,6 @@ export function blocksInRange(start: AnyBN, count: AnyBN, sorted = true) {
             : mergeMap((number) => api.derive.chain.getBlockByNumber(number))
         )
       )
-    );
-  };
+    )
+  }
 }

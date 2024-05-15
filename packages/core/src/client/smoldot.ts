@@ -1,60 +1,60 @@
 // Copyright 2023-2024 SO/DA zone
 // SPDX-License-Identifier: Apache-2.0
 
-import { logger } from '@polkadot/util';
+import { logger } from '@polkadot/util'
 
-import Worker from 'web-worker';
+import Worker from 'web-worker'
 
-import { type Client, type ClientOptions, type Chain, QueueFullError, start } from 'smoldot';
+import { type Chain, type Client, type ClientOptions, QueueFullError, start } from 'smoldot'
 
-import type { ScClient, AddChain, Chain as ScChain, Config as ScConfig, WellKnownChain } from '@substrate/connect';
-import { getSpec } from './known-chains.js';
+import type { AddChain, Chain as ScChain, ScClient, Config as ScConfig, WellKnownChain } from '@substrate/connect'
+import { getSpec } from './known-chains.js'
 
-const l = logger('oc-smoldot-worker');
+const l = logger('oc-smoldot-worker')
 
 function defaultFactory(): Worker {
-  const ctor = typeof Worker === 'function' ? Worker : Worker.default;
+  const ctor = typeof Worker === 'function' ? Worker : Worker.default
   return new ctor(new URL('./worker/smoldot-worker.js', import.meta.url), {
     name: 'oc-smoldot-worker',
     type: 'module',
-  });
+  })
 }
 
 const defaultLogger = (level: number, target: string, message: string) => {
   if (level === 1) {
-    l.error(`[${target}] ${message}`);
+    l.error(`[${target}] ${message}`)
   } else if (level === 2) {
-    l.warn(`[${target}] ${message}`);
+    l.warn(`[${target}] ${message}`)
   } else if (level === 3) {
-    l.log(`[${target}] ${message}`);
+    l.log(`[${target}] ${message}`)
   } else if (level >= 4) {
-    l.debug(`[${target}] ${message}`);
+    l.debug(`[${target}] ${message}`)
   }
-};
+}
 
 type ExtConfig = ScConfig & {
-  clientOptions?: ClientOptions;
-};
+  clientOptions?: ClientOptions
+}
 
 // Regular expression to extract the property "id"
 // from a JSON string. Note that 'g' makes it stateful.
-const idRe = /"id"\s*:\s*"(.+)?"/gim;
+const idRe = /"id"\s*:\s*"(.+)?"/gim
 
 // JSON-RPC callback function
-type JsonRpcCallback = (msg: string) => void;
+type JsonRpcCallback = (msg: string) => void
 
 function getIdFromJSON(json: string): string | null {
-  idRe.lastIndex = 0;
-  const match = idRe.exec(json);
-  return match === null ? match : match[1];
+  idRe.lastIndex = 0
+  const match = idRe.exec(json)
+  return match === null ? match : match[1]
 }
 
 function getChainId(json: string): string {
-  const chainId = getIdFromJSON(json);
+  const chainId = getIdFromJSON(json)
   if (chainId === null) {
-    throw new Error('Chain id not found in chain spec.');
+    throw new Error('Chain id not found in chain spec.')
   }
-  return chainId;
+  return chainId
 }
 
 /**
@@ -65,14 +65,14 @@ function getChainId(json: string): string {
  * @returns A Smoldot {@link Client}.
  */
 function startSmoldot(workerFactory: () => Worker, options?: ClientOptions): Client {
-  const worker = workerFactory();
-  const { port1, port2 } = new MessageChannel();
-  worker.postMessage(port1, [port1 as unknown as MessagePort]);
+  const worker = workerFactory()
+  const { port1, port2 } = new MessageChannel()
+  worker.postMessage(port1, [port1 as unknown as MessagePort])
 
   return start({
     ...options,
     portToWorker: port2,
-  });
+  })
 }
 
 /**
@@ -82,21 +82,21 @@ function startSmoldot(workerFactory: () => Worker, options?: ClientOptions): Cli
  * @param jsonRpcCallback - Callback function to handle JSON-RPC responses.
  */
 async function jsonRpcMessageLoop(chain: Chain, jsonRpcCallback: JsonRpcCallback) {
-  let running = true;
+  let running = true
   while (running) {
-    let jsonRpcResponse;
+    let jsonRpcResponse
 
     try {
-      jsonRpcResponse = await chain.nextJsonRpcResponse();
+      jsonRpcResponse = await chain.nextJsonRpcResponse()
     } catch {
-      running = false;
-      break;
+      running = false
+      break
     }
 
     try {
-      jsonRpcCallback(jsonRpcResponse);
+      jsonRpcCallback(jsonRpcResponse)
     } catch (error) {
-      l.error('JSON-RPC callback', error);
+      l.error('JSON-RPC callback', error)
     }
   }
 }
@@ -111,12 +111,12 @@ export const createScClient = (config?: ExtConfig): ScClient => {
     // 4 = debug, 2 = warning
     maxLogLevel: l.noop === l.debug ? 2 : 4,
     logCallback: defaultLogger,
-  };
+  }
 
-  const workerFactory = config?.embeddedNodeConfig?.workerFactory ?? defaultFactory;
-  const client = startSmoldot(workerFactory, clientOptions);
+  const workerFactory = config?.embeddedNodeConfig?.workerFactory ?? defaultFactory
+  const client = startSmoldot(workerFactory, clientOptions)
 
-  const chains = new Map<string, Chain>();
+  const chains = new Map<string, Chain>()
 
   // Add a chain to Smoldot
   const addChain: AddChain = async (
@@ -125,25 +125,25 @@ export const createScClient = (config?: ExtConfig): ScClient => {
     databaseContent?: string
   ): Promise<ScChain> => {
     if (jsonRpcCallback === undefined) {
-      throw new Error('JSON-RPC must be enabled.');
+      throw new Error('JSON-RPC must be enabled.')
     }
 
-    const chainId = getChainId(chainSpec);
+    const chainId = getChainId(chainSpec)
     const chain = await client.addChain({
       chainSpec,
       potentialRelayChains: [...chains.values()],
       databaseContent,
-    });
+    })
 
-    chains.set(chainId, chain);
+    chains.set(chainId, chain)
 
     // Start the JSON-RPC message loop for the chain
-    jsonRpcMessageLoop(chain, jsonRpcCallback);
+    jsonRpcMessageLoop(chain, jsonRpcCallback)
 
     return {
       sendJsonRpc: (msg: string) => {
         try {
-          chain.sendJsonRpc(msg);
+          chain.sendJsonRpc(msg)
         } catch (error) {
           if (error instanceof QueueFullError) {
             jsonRpcCallback(
@@ -155,31 +155,31 @@ export const createScClient = (config?: ExtConfig): ScClient => {
                   message: 'The server is busy. Please try again later.',
                 },
               })
-            );
+            )
           } else {
-            throw error;
+            throw error
           }
         }
       },
       remove: () => {
         try {
-          chain.remove();
-          chains.delete(chainId);
+          chain.remove()
+          chains.delete(chainId)
         } finally {
           if (chains.size === 0) {
-            client.terminate();
+            client.terminate()
           }
         }
       },
       addChain,
-    };
-  };
+    }
+  }
 
   // Return the Substrate Connect client
   return {
     addChain,
     addWellKnownChain: async (id: WellKnownChain, jsonRpcCallback?: JsonRpcCallback, databaseContent?: string) => {
-      return addChain(await getSpec(id), jsonRpcCallback, databaseContent);
+      return addChain(await getSpec(id), jsonRpcCallback, databaseContent)
     },
-  };
-};
+  }
+}

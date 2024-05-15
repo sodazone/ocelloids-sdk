@@ -1,21 +1,21 @@
 // Copyright 2023-2024 SO/DA zone
 // SPDX-License-Identifier: Apache-2.0
 
-import type { Call, Address } from '@polkadot/types/interfaces/runtime';
-import type { Result, Null } from '@polkadot/types-codec';
-import type { Vec } from '@polkadot/types-codec';
-import { AccountId32, DispatchError } from '@polkadot/types/interfaces';
-import { createKeyMulti } from '@polkadot/util-crypto';
-import { isU8a, u8aToHex } from '@polkadot/util';
+import type { Null, Result } from '@polkadot/types-codec'
+import type { Vec } from '@polkadot/types-codec'
+import { AccountId32, DispatchError } from '@polkadot/types/interfaces'
+import type { Address, Call } from '@polkadot/types/interfaces/runtime'
+import { isU8a, u8aToHex } from '@polkadot/util'
+import { createKeyMulti } from '@polkadot/util-crypto'
 
-import { TxWithIdAndEvent } from '../../types/interfaces.js';
-import { callAsTxWithBoundary, getArgValueFromEvent, getArgValueFromTx } from './util.js';
-import { Boundaries, Flattener } from './flattener.js';
+import { TxWithIdAndEvent } from '../../types/interfaces.js'
+import { Boundaries, Flattener } from './flattener.js'
+import { callAsTxWithBoundary, getArgValueFromEvent, getArgValueFromTx } from './util.js'
 
-const MultisigExecuted = 'multisig.MultisigExecuted';
+const MultisigExecuted = 'multisig.MultisigExecuted'
 const MultisigExecutedBoundary = {
   eventName: MultisigExecuted,
-};
+}
 
 /**
  * Extracts executed multisig calls from transactions.
@@ -33,20 +33,20 @@ const MultisigExecutedBoundary = {
  * Returns undefined if the 'MultisigExecuted' event is not found in the transaction events.
  */
 export function extractAsMultiCall(tx: TxWithIdAndEvent, flattener: Flattener) {
-  const { extrinsic } = tx;
+  const { extrinsic } = tx
 
-  const multisigExecutedIndex = flattener.findEventIndex(MultisigExecuted);
+  const multisigExecutedIndex = flattener.findEventIndex(MultisigExecuted)
 
   if (multisigExecutedIndex === -1) {
-    return [];
+    return []
   }
 
-  const executedEvent = flattener.getEvent(multisigExecutedIndex);
-  const callResult = getArgValueFromEvent(executedEvent, 'result') as Result<Null, DispatchError>;
-  const multisig = getArgValueFromEvent(executedEvent, 'multisig') as AccountId32;
-  const multisigAddress = extrinsic.registry.createTypeUnsafe('Address', [multisig.toHex()]) as Address;
+  const executedEvent = flattener.getEvent(multisigExecutedIndex)
+  const callResult = getArgValueFromEvent(executedEvent, 'result') as Result<Null, DispatchError>
+  const multisig = getArgValueFromEvent(executedEvent, 'multisig') as AccountId32
+  const multisigAddress = extrinsic.registry.createTypeUnsafe('Address', [multisig.toHex()]) as Address
 
-  const call = getArgValueFromTx(tx.extrinsic, 'call') as Call;
+  const call = getArgValueFromTx(tx.extrinsic, 'call') as Call
 
   return [
     callAsTxWithBoundary({
@@ -59,7 +59,7 @@ export function extractAsMultiCall(tx: TxWithIdAndEvent, flattener: Flattener) {
         address: multisigAddress,
       },
     }),
-  ];
+  ]
 }
 
 /**
@@ -74,17 +74,17 @@ export function extractAsMultiCall(tx: TxWithIdAndEvent, flattener: Flattener) {
  * @returns The extracted multisig call as TxWithIdAndEvent.
  */
 export function extractAsMutiThreshold1Call(tx: TxWithIdAndEvent) {
-  const { extrinsic } = tx;
-  const otherSignatories = getArgValueFromTx(tx.extrinsic, 'other_signatories') as Vec<AccountId32>;
+  const { extrinsic } = tx
+  const otherSignatories = getArgValueFromTx(tx.extrinsic, 'other_signatories') as Vec<AccountId32>
   // Signer must be added to the signatories to obtain the multisig address
-  const signatories = otherSignatories.map((s) => s.toString());
-  signatories.push(extrinsic.signer.toString());
-  const multisig = createKeyMulti(signatories, 1);
+  const signatories = otherSignatories.map((s) => s.toString())
+  signatories.push(extrinsic.signer.toString())
+  const multisig = createKeyMulti(signatories, 1)
   const multisigAddress = extrinsic.registry.createTypeUnsafe('Address', [
     isU8a(multisig) ? u8aToHex(multisig) : multisig,
-  ]) as Address;
+  ]) as Address
 
-  const call = getArgValueFromTx(tx.extrinsic, 'call') as Call;
+  const call = getArgValueFromTx(tx.extrinsic, 'call') as Call
 
   return [
     callAsTxWithBoundary({
@@ -96,5 +96,5 @@ export function extractAsMutiThreshold1Call(tx: TxWithIdAndEvent) {
         address: multisigAddress,
       },
     }),
-  ];
+  ]
 }

@@ -1,21 +1,21 @@
 // Copyright 2023-2024 SO/DA zone
 // SPDX-License-Identifier: Apache-2.0
 
+import { ApiPromise, ApiRx, ScProvider } from '@polkadot/api'
 import type {
   ApiOptions,
   DecoratedEvents,
   QueryableStorage,
   QueryableStorageMulti,
   SubmittableExtrinsics,
-} from '@polkadot/api/types';
-import { ApiPromise, ApiRx, ScProvider } from '@polkadot/api';
-import { logger } from '@polkadot/util';
+} from '@polkadot/api/types'
+import { logger } from '@polkadot/util'
 
-import { Observable, map, shareReplay } from 'rxjs';
+import { Observable, map, shareReplay } from 'rxjs'
 
-import type { ApiNames, Configuration } from '../configuration/index.js';
+import type { ApiNames, Configuration } from '../configuration/index.js'
 
-const l = logger('oc-substrate-apis');
+const l = logger('oc-substrate-apis')
 
 /**
  * Substrate APIs wrapper with multi-chain support.
@@ -58,40 +58,40 @@ const l = logger('oc-substrate-apis');
  * ```
  */
 export class SubstrateApis<C extends Configuration = Configuration, N extends ApiNames<C> = ApiNames<Configuration>> {
-  protected readonly options: Record<string, ApiOptions> = {};
-  protected readonly apiRx: Record<string, ApiRx> = {};
-  protected readonly promises: Record<string, ApiPromise> = {};
+  protected readonly options: Record<string, ApiOptions> = {}
+  protected readonly apiRx: Record<string, ApiRx> = {}
+  protected readonly promises: Record<string, ApiPromise> = {}
 
-  readonly chains: string[] = [];
+  readonly chains: string[] = []
 
   /**
    * @constructor
    * @param config The configuration instance
    */
   constructor(config: C) {
-    l.debug('Initialize Substrate APIs');
+    l.debug('Initialize Substrate APIs')
 
     Object.entries(config).forEach(([name, options]) => {
-      const { provider } = options;
+      const { provider } = options
 
       if (provider === undefined) {
-        throw new Error(`no provider specified for "${name}"`);
+        throw new Error(`no provider specified for "${name}"`)
       }
 
-      l.debug('-', name);
+      l.debug('-', name)
 
       if (provider instanceof ScProvider && !provider.isConnected) {
         // Smoldot requires to manually connect,
         // the promise is implicitly awaited by the rx pipe
         provider.connect().catch((error) => {
-          l.error(error);
-        });
+          l.error(error)
+        })
       }
 
-      this.options[name] = options;
+      this.options[name] = options
 
-      this.chains.push(name);
-    });
+      this.chains.push(name)
+    })
   }
 
   /**
@@ -122,22 +122,22 @@ export class SubstrateApis<C extends Configuration = Configuration, N extends Ap
    * @see ApiPromise
    */
   get promise(): Record<N, ApiPromise> {
-    const opts = this.options;
+    const opts = this.options
     return new Proxy(this.promises, {
       get(target, prop) {
-        const key = prop.toString();
+        const key = prop.toString()
         if (opts[key]) {
           // Lazy initialization
           if (!target[key]) {
-            l.debug('init ApiPromise', key);
-            target[key] = new ApiPromise(opts[key]);
-            target[key].isReadyOrError.catch((error) => l.error(error.message));
+            l.debug('init ApiPromise', key)
+            target[key] = new ApiPromise(opts[key])
+            target[key].isReadyOrError.catch((error) => l.error(error.message))
           }
-          return target[key];
+          return target[key]
         }
-        throw new Error(`${key} not found.`);
+        throw new Error(`${key} not found.`)
       },
-    });
+    })
   }
 
   /**
@@ -146,10 +146,10 @@ export class SubstrateApis<C extends Configuration = Configuration, N extends Ap
   get tx(): Record<N, SubmittableExtrinsics<'rxjs'>> {
     return new Proxy(this, {
       get(target, prop) {
-        const api = target.#proxyApiRx[prop.toString()];
-        return api.tx;
+        const api = target.#proxyApiRx[prop.toString()]
+        return api.tx
       },
-    }) as unknown as Record<string, SubmittableExtrinsics<'rxjs'>>;
+    }) as unknown as Record<string, SubmittableExtrinsics<'rxjs'>>
   }
 
   /**
@@ -175,10 +175,10 @@ export class SubstrateApis<C extends Configuration = Configuration, N extends Ap
   get events(): Record<N, DecoratedEvents<'rxjs'>> {
     return new Proxy(this, {
       get(target, prop) {
-        const api = target.#proxyApiRx[prop.toString()];
-        return api.events;
+        const api = target.#proxyApiRx[prop.toString()]
+        return api.events
       },
-    }) as unknown as Record<string, DecoratedEvents<'rxjs'>>;
+    }) as unknown as Record<string, DecoratedEvents<'rxjs'>>
   }
 
   /**
@@ -196,10 +196,10 @@ export class SubstrateApis<C extends Configuration = Configuration, N extends Ap
   get rx(): Record<N, Observable<ApiRx>> {
     return new Proxy(this, {
       get(target, prop) {
-        const api = target.#proxyApiRx[prop.toString()];
-        return api.isReady.pipe(shareReplay());
+        const api = target.#proxyApiRx[prop.toString()]
+        return api.isReady.pipe(shareReplay())
       },
-    }) as unknown as Record<string, Observable<ApiRx>>;
+    }) as unknown as Record<string, Observable<ApiRx>>
   }
 
   /**
@@ -221,13 +221,13 @@ export class SubstrateApis<C extends Configuration = Configuration, N extends Ap
   get query(): Record<N, Observable<QueryableStorage<'rxjs'>>> {
     return new Proxy(this, {
       get(target, prop) {
-        const api = target.#proxyApiRx[prop.toString()];
+        const api = target.#proxyApiRx[prop.toString()]
         return api.isReady.pipe(
           map((x) => x.query),
           shareReplay()
-        );
+        )
       },
-    }) as unknown as Record<N, Observable<QueryableStorage<'rxjs'>>>;
+    }) as unknown as Record<N, Observable<QueryableStorage<'rxjs'>>>
   }
 
   /**
@@ -236,21 +236,21 @@ export class SubstrateApis<C extends Configuration = Configuration, N extends Ap
   get queryMulti(): Record<N, Observable<QueryableStorageMulti<'rxjs'>>> {
     return new Proxy(this, {
       get(target, prop) {
-        const api = target.#proxyApiRx[prop.toString()];
+        const api = target.#proxyApiRx[prop.toString()]
         return api.isReady.pipe(
           map((x) => x.queryMulti),
           shareReplay()
-        );
+        )
       },
-    }) as unknown as Record<N, Observable<QueryableStorageMulti<'rxjs'>>>;
+    }) as unknown as Record<N, Observable<QueryableStorageMulti<'rxjs'>>>
   }
 
   /**
    * Returns a promise of diconnecting all the registered providers.
    */
   async disconnect() {
-    const promises = Object.entries(this.options).map(async ([_, opt]) => await opt.provider?.disconnect());
-    return Promise.all(promises).catch(l.error);
+    const promises = Object.entries(this.options).map(async ([_, opt]) => await opt.provider?.disconnect())
+    return Promise.all(promises).catch(l.error)
   }
 
   /**
@@ -261,19 +261,19 @@ export class SubstrateApis<C extends Configuration = Configuration, N extends Ap
   get #proxyApiRx(): Record<string, ApiRx> {
     return new Proxy(this, {
       get(target, prop) {
-        const opts = target.options;
-        const apiRx = target.apiRx;
-        const key = prop.toString();
+        const opts = target.options
+        const apiRx = target.apiRx
+        const key = prop.toString()
         if (opts[key]) {
           // Lazy initialization
           if (!apiRx[key]) {
-            l.debug('init ApiRx', key);
-            apiRx[key] = new ApiRx(opts[key]);
+            l.debug('init ApiRx', key)
+            apiRx[key] = new ApiRx(opts[key])
           }
-          return apiRx[key];
+          return apiRx[key]
         }
-        throw new Error(`${key} not found.`);
+        throw new Error(`${key} not found.`)
       },
-    }) as unknown as Record<string, ApiRx>;
+    }) as unknown as Record<string, ApiRx>
   }
 }

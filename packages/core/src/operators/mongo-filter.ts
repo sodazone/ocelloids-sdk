@@ -1,17 +1,17 @@
 // Copyright 2023-2024 SO/DA zone
 // SPDX-License-Identifier: Apache-2.0
 
-import { logger } from '@polkadot/util';
+import { logger } from '@polkadot/util'
 
-import { Observable, filter } from 'rxjs';
+import { Observable, filter } from 'rxjs'
 
-import { RawObject } from 'mingo/types';
+import { RawObject } from 'mingo/types'
 
-import { ControlQuery, Criteria } from '../index.js';
-import { Converter, base } from '../converters/index.js';
-import { debugOnly } from './debug.js';
+import { Converter, base } from '../converters/index.js'
+import { ControlQuery, Criteria } from '../index.js'
+import { debugOnly } from './debug.js'
 
-const l = logger('oc-ops-mongo-filter');
+const l = logger('oc-ops-mongo-filter')
 
 /**
  * Applies a MongoDB query language filter to an observable stream of data.
@@ -43,7 +43,7 @@ const l = logger('oc-ops-mongo-filter');
  * @see {@link [Mongo Documentation](https://www.mongodb.com/docs/manual/tutorial/query-documents/)}
  */
 export function mongoFilter<T>(criteria: Criteria | ControlQuery, converter: Converter = base) {
-  const query = ControlQuery.isControlQuery(criteria) ? criteria : ControlQuery.from(criteria as Criteria);
+  const query = ControlQuery.isControlQuery(criteria) ? criteria : ControlQuery.from(criteria as Criteria)
 
   /**
    * Returns a filtered observable stream based on the provided query.
@@ -56,10 +56,10 @@ export function mongoFilter<T>(criteria: Criteria | ControlQuery, converter: Con
     // So, we just use the current value from the behavior subject.
     return source.pipe(
       filter((record) => {
-        const converted = converter.toNamedPrimitive(record);
-        debugOnly(l, (x) => JSON.stringify(x, null, 2))(converted);
-        return query.value.test(converted as RawObject);
+        const converted = converter.toNamedPrimitive(record)
+        debugOnly(l, (x) => JSON.stringify(x, null, 2))(converted)
+        return query.value.test(converted as RawObject)
       })
-    );
-  };
+    )
+  }
 }

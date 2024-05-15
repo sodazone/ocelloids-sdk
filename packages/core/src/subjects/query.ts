@@ -1,16 +1,16 @@
 // Copyright 2023-2024 SO/DA zone
 // SPDX-License-Identifier: Apache-2.0
 
-import { BehaviorSubject, Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs'
 
-import { Query } from 'mingo';
-import { RawObject } from 'mingo/types';
-import { installOperators } from './mingo-ops.js';
+import { Query } from 'mingo'
+import { RawObject } from 'mingo/types'
+import { installOperators } from './mingo-ops.js'
 
 // Installs mingo operators if needed
-installOperators();
+installOperators()
 
-export type Criteria = RawObject;
+export type Criteria = RawObject
 
 /**
  * Represents a control subject that can be used to change the value of a query.
@@ -20,7 +20,7 @@ export interface Control<T, S> extends Subject<S> {
    * Changes the value of the control.
    * @param value The new value for the control.
    */
-  change: (value: T) => void;
+  change: (value: T) => void
 }
 
 /**
@@ -52,7 +52,7 @@ export class ControlQuery extends BehaviorSubject<Query> implements Control<Crit
    * @param criteria The initial criteria for the query.
    */
   constructor(criteria: Criteria) {
-    super(new Query(criteria));
+    super(new Query(criteria))
   }
 
   /**
@@ -60,7 +60,7 @@ export class ControlQuery extends BehaviorSubject<Query> implements Control<Crit
    * @param criteria The new criteria for the query.
    */
   change(criteria: Criteria): void {
-    this.next(new Query(criteria));
+    this.next(new Query(criteria))
   }
 
   /**
@@ -69,7 +69,7 @@ export class ControlQuery extends BehaviorSubject<Query> implements Control<Crit
    * @returns `true` if the object is an instance of `ControlQuery`, `false` otherwise.
    */
   static isControlQuery(obj: ControlQuery | Criteria): obj is ControlQuery {
-    return obj.change !== undefined;
+    return obj.change !== undefined
   }
 
   /**
@@ -77,6 +77,6 @@ export class ControlQuery extends BehaviorSubject<Query> implements Control<Crit
    * @param criteria The initial criteria for the query.
    */
   static from(criteria: ControlQuery | Criteria): ControlQuery {
-    return ControlQuery.isControlQuery(criteria) ? criteria : new ControlQuery(criteria);
+    return ControlQuery.isControlQuery(criteria) ? criteria : new ControlQuery(criteria)
   }
 }

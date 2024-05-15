@@ -6,4 +6,4 @@
  *
  * @module
  */
-export * from './substrate-apis.js';
+export * from './substrate-apis.js'

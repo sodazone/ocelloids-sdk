@@ -1,8 +1,8 @@
-import { ApiRx } from '@polkadot/api';
-import type { Extrinsic } from '@polkadot/types/interfaces';
-import type { Vec } from '@polkadot/types';
+import { ApiRx } from '@polkadot/api'
+import type { Vec } from '@polkadot/types'
+import type { Extrinsic } from '@polkadot/types/interfaces'
 
-import { Observable, share, switchMap } from 'rxjs';
+import { Observable, share, switchMap } from 'rxjs'
 
 /**
  * Returns an Observable that emits a Vec of pending extrinsics in the mempool.
@@ -26,9 +26,9 @@ export function pendingExtrinsics() {
   return (source: Observable<ApiRx>): Observable<Vec<Extrinsic>> => {
     return source.pipe(
       switchMap((api) => {
-        return api.rpc.author.pendingExtrinsics();
+        return api.rpc.author.pendingExtrinsics()
       }),
       share()
-    );
-  };
+    )
+  }
 }
