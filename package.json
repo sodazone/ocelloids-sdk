@@ -1,7 +1,7 @@
 {
   "sideEffects": false,
   "type": "module",
-  "version": "1.2.6",
+  "version": "1.2.7-dev.0",
   "author": "soda <projects@soda.zone>",
   "contributors": [
     "Marc Fornós <marc@soda.zone>",
@@ -74,5 +74,6 @@
     "@substrate/connect": "0.8.4",
     "web-worker": "1.2.0"
   },
-  "packageManager": "yarn@3.6.0"
+  "packageManager": "yarn@3.6.0",
+  "stableVersion": "1.2.6"
 }
