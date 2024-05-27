@@ -3239,7 +3239,7 @@ __metadata:
     "@substrate/connect-known-chains": ^1.1.4
     mingo: ^6.4.15
     rxjs: ^7.8.1
-    web-worker: ^1.3.0
+    web-worker: ^1.2.0
   languageName: unknown
   linkType: soft
 
@@ -7264,10 +7264,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"web-worker@npm:^1.3.0":
-  version: 1.3.0
-  resolution: "web-worker@npm:1.3.0"
-  checksum: ed1f869aefd1d81a43d0fbfe7b315a65beb6d7d2486b378c436a7047eed4216be34b2e6afca738b6fa95d016326b765f5f816355db33267dbf43b2b8a1837c0c
+"web-worker@npm:1.2.0":
+  version: 1.2.0
+  resolution: "web-worker@npm:1.2.0"
+  checksum: 1bb28348ddcf9b2e7c62c5fd02e49a84098795856cd905456de957271bba288e9618941cf69d8960f0a7ae81f5dfb74b427c0634be47ec69e3e955c4ec5213be
   languageName: node
   linkType: hard
 
