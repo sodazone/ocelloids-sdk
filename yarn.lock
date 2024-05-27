@@ -3239,7 +3239,7 @@ __metadata:
     "@substrate/connect-known-chains": ^1.1.4
     mingo: ^6.4.15
     rxjs: ^7.8.1
-    web-worker: ^1.2.0
+    web-worker: 1.2.0
   languageName: unknown
   linkType: soft
 
