@@ -1,6 +1,6 @@
 {
   "name": "@sodazone/ocelloids-sdk",
-  "version": "1.2.8-dev.0",
+  "version": "1.2.8",
   "description": "Software development kit for building monitoring applications for Substrate networks.",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -34,7 +34,7 @@
     "web-worker": "1.3.0"
   },
   "devDependencies": {
-    "@sodazone/ocelloids-sdk-test": "1.2.8-dev.0"
+    "@sodazone/ocelloids-sdk-test": "1.2.8"
   },
   "files": [
     "dist",
@@ -61,6 +61,5 @@
     "build": "tsup src/index.ts --format cjs,esm --dts --sourcemap --clean --minify && yarn build:worker && yarn build:browser",
     "build:worker": "esbuild src/client/worker/smoldot-worker.ts --bundle --packages=external --minify --format=esm --outdir=dist/worker",
     "build:browser": "esbuild src/index.ts --define:import.meta=\"{}\" --bundle --packages=external --minify --sourcemap --platform=browser --outdir=dist/browser"
-  },
-  "stableVersion": "1.2.7"
+  }
 }
