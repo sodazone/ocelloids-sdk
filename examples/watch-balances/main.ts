@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 // Copyright 2023-2024 SO/DA zone
 // SPDX-License-Identifier: Apache-2.0
 
@@ -53,10 +51,10 @@ function trackIO(address: string) {
     bufferCount(2,1),
     map(([x, y]) => ([{
       address,
-      balance: (x as AccountInfo).data
+      balance: (x as unknown as AccountInfo).data
     },{
       address,
-      balance: (y as AccountInfo).data
+      balance: (y as unknown as AccountInfo).data
     }]))
   );
 }

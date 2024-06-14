@@ -33,7 +33,7 @@
   },
   "devDependencies": {
     "tsup": "^8.1.0",
-    "tsx": "^4.11.2"
+    "tsx": "^4.15.4"
   },
   "tsup": {
     "shims": true

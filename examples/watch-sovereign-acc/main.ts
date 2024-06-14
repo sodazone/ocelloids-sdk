@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 // Copyright 2023-2024 SO/DA zone
 // SPDX-License-Identifier: Apache-2.0
 
@@ -56,7 +54,7 @@ const xcAsset = apis.query.moonbeam.pipe(
 timer(0, 60000).pipe(
   switchMap(_ => combineLatest([sovereignAccBalance, xcAsset]))
 ).subscribe(([acc, asset]) => {
-  const balance = (acc as AccountInfo).data.free.toBn();
+  const balance = (acc as unknown as AccountInfo).data.free.toBn();
   const assetSupply = asset.details.supply.toBn();
   const assetFormat = {
     decimals: (asset.metadata as any).decimals.toNumber(),
