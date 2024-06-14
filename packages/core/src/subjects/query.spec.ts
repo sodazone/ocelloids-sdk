@@ -1,11 +1,15 @@
 // Copyright 2023-2024 SO/DA zone
 // SPDX-License-Identifier: Apache-2.0
 
+import { installOperators } from './mingo-ops.js'
 import { ControlQuery } from './query.js'
 
 const testAddress = '1a1LcBX6hGPKg5aQ6DXZpAHCCzWjckhea4sz3P1PvL3oc4F'
 
 describe('control query', () => {
+  beforeAll(() => {
+    installOperators()
+  })
   it('should filter out dispatch errors', () => {
     const q = ControlQuery.from({
       dispatchError: { $eq: undefined },

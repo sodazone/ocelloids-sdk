@@ -14,6 +14,7 @@ import { logger } from '@polkadot/util'
 import { Observable, map, shareReplay } from 'rxjs'
 
 import type { ApiNames, Configuration } from '../configuration/index.js'
+import { installOperators } from '../subjects/mingo-ops.js'
 
 const l = logger('oc-substrate-apis')
 
@@ -70,6 +71,9 @@ export class SubstrateApis<C extends Configuration = Configuration, N extends Ap
    */
   constructor(config: C) {
     l.debug('Initialize Substrate APIs')
+
+    // Installs mingo operators if needed
+    installOperators()
 
     Object.entries(config).forEach(([name, options]) => {
       const { provider } = options
