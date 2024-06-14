@@ -15,7 +15,7 @@ import { Abi } from '@polkadot/api-contract'
 
 import { from } from 'rxjs'
 
-import { mongoFilter, types } from '@sodazone/ocelloids-sdk'
+import { mingo, mongoFilter, types } from '@sodazone/ocelloids-sdk'
 
 import { contracts } from '../converters/contracts.js'
 import { ContractMessageWithTx } from '../types/interfaces.js'
@@ -59,6 +59,7 @@ describe('Wasm contracts operator', () => {
   let testAbi: Abi
 
   beforeAll(() => {
+    mingo.installOperators()
     testAbi = new Abi(testContractMetadata)
   })
 
