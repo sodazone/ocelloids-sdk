@@ -1,7 +1,8 @@
 // Copyright 2023-2024 SO/DA zone
 // SPDX-License-Identifier: Apache-2.0
 
-import { bnToBn, logger } from '@polkadot/util'
+import { bnToBn, isU8a, logger } from '@polkadot/util'
+import { addressEq } from '@polkadot/util-crypto'
 
 import { OperatorType, Options, QueryOperator, getOperator, useOperators } from 'mingo/core'
 import { BASIC_CONTEXT } from 'mingo/init/basic'
@@ -49,6 +50,28 @@ function $bn_neq(a: AnyVal, b: AnyVal): boolean {
   return compare(a, b, (x: AnyVal, y: AnyVal) => !bn(x).eq(bn(y)))
 }
 
+function $address_eq(a: AnyVal, b: AnyVal): boolean {
+  if ((typeof a === 'string' || isU8a(a)) && (typeof b === 'string' || isU8a(b))) {
+    try {
+      return addressEq(a, b)
+    } catch (_) {
+      return false
+    }
+  }
+  return false
+}
+
+function $address_neq(a: AnyVal, b: AnyVal): boolean {
+  if ((typeof a === 'string' || isU8a(a)) && (typeof b === 'string' || isU8a(b))) {
+    try {
+      return !addressEq(a, b)
+    } catch (_) {
+      return false
+    }
+  }
+  return false
+}
+
 function createQueryOperator(predicate: Predicate<AnyVal>): QueryOperator {
   const f = (selector: string, value: AnyVal, options: Options) => {
     const opts = { unwrapArray: true }
@@ -80,6 +103,8 @@ export function installOperators() {
       $bn_gte: createQueryOperator($bn_gte),
       $bn_eq: createQueryOperator($bn_eq),
       $bn_neq: createQueryOperator($bn_neq),
+      $address_eq: createQueryOperator($address_eq),
+      $address_neq: createQueryOperator($address_neq),
     })
   }
 }

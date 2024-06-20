@@ -178,6 +178,70 @@ describe('mingo query ops', () => {
     }).toThrow()
   })
 
+  it('should compare eq addresses', () => {
+    const q = new Query({
+      'args.dest.id': { $address_eq: '14NEHDwc5PPQfEjzLVDbVbi4djQLQZ9u7mMU3BPhTFJf4cD6' },
+    })
+
+    expect(q.test(data)).toBeTruthy()
+  })
+
+  it('should compare eq addresses with different ss58 formats', () => {
+    const q = new Query({
+      'args.dest.id': { $address_eq: 'dfZvF6iz8qvsdGEWTHBoo2daJWq386QYfDXwfsycTJhicxLcc' },
+    })
+
+    expect(q.test(data)).toBeTruthy()
+  })
+
+  it('should compare eq addresses falsy case', () => {
+    const q = new Query({
+      'args.dest.id': { $address_eq: '12Dw5aURKmAG8fCRtBa28tEvBVDChnaoKsjpewv53d6e6766' },
+    })
+
+    expect(q.test(data)).toBeFalsy()
+  })
+
+  it('should compare neq addresses', () => {
+    const q = new Query({
+      'args.dest.id': { $address_neq: '12Dw5aURKmAG8fCRtBa28tEvBVDChnaoKsjpewv53d6e6766' },
+    })
+
+    expect(q.test(data)).toBeTruthy()
+  })
+
+  it('should compare neq addresses with different ss58 formats', () => {
+    const q = new Query({
+      'args.dest.id': { $address_neq: '7LxmCfshfK8TeiJWUmwZr6NqCWbGeyeAoEi61SvKX4Ea3UNn' },
+    })
+
+    expect(q.test(data)).toBeTruthy()
+  })
+
+  it('should compare neq addresses with different ss58 falsy case', () => {
+    const q = new Query({
+      'args.dest.id': { $address_neq: 'dfZvF6iz8qvsdGEWTHBoo2daJWq386QYfDXwfsycTJhicxLcc' },
+    })
+
+    expect(q.test(data)).toBeFalsy()
+  })
+
+  it('should return neq if is not valid address', () => {
+    const q = new Query({
+      'args.dest.id': { $address_neq: 'foobar' },
+    })
+
+    expect(q.test(data)).toBeFalsy()
+  })
+
+  it('should return neq if value is not string', () => {
+    const q = new Query({
+      'args.dest.id': { $address_neq: 111 },
+    })
+
+    expect(q.test(data)).toBeFalsy()
+  })
+
   it('should be idempotent on ops registration', () => {
     expect(() => {
       installOperators()
