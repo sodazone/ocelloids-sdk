@@ -26,7 +26,7 @@
     "url": "https://github.com/sodazone/ocelloids-sdk.git"
   },
   "dependencies": {
-    "@polkadot/api-contract": "^11.2.1",
+    "@polkadot/api-contract": "^12.2.1",
     "@sodazone/ocelloids-sdk": "1.2.12-dev.0"
   },
   "devDependencies": {

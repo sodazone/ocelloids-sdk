@@ -23,9 +23,9 @@
     "watch-transfer-events": "./dist/watch-transfer-events/main.cjs"
   },
   "dependencies": {
-    "@polkadot/rpc-provider": "^11.2.1",
+    "@polkadot/rpc-provider": "^12.2.1",
     "@sodazone/ocelloids-sdk": "1.2.12-dev.0",
-    "@substrate/connect": "^0.8.11",
+    "@substrate/connect": "^1.0.7",
     "graph-data-structure": "^3.5.0",
     "hjson": "^3.2.2",
     "rxjs": "^7.8.1",
@@ -33,7 +33,7 @@
   },
   "devDependencies": {
     "tsup": "^8.1.0",
-    "tsx": "^4.15.4"
+    "tsx": "^4.16.2"
   },
   "tsup": {
     "shims": true
