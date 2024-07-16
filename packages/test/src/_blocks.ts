@@ -8,9 +8,9 @@ import { decode } from 'cbor-x'
 import { createSignedBlockExtended } from '@polkadot/api-derive'
 import type { TxWithEvent } from '@polkadot/api-derive/types'
 import { Metadata, TypeRegistry } from '@polkadot/types'
-import metadataStatic from '@polkadot/types-support/metadata/static-polkadot'
 import type { AccountId, Event, EventRecord, SignedBlock } from '@polkadot/types/interfaces'
 
+import metadataStatic from './__data__/metadata/polkadot-hex-18977445.js'
 import type { BinBlock } from './_types.js'
 
 export function testBlocksFrom(file: string, mds: `0x${string}` = metadataStatic) {
