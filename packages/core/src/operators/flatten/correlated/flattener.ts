@@ -5,14 +5,13 @@ import { logger } from '@polkadot/util'
 
 import type { DispatchError, DispatchInfo } from '@polkadot/types/interfaces'
 
-import { GenericExtrinsicWithId } from '../../types/index.js'
-import { EventWithId, TxWithIdAndEvent } from '../../types/interfaces.js'
+import { GenericExtrinsicWithId } from '../../../types/index.js'
+import { EventWithId, TxWithIdAndEvent } from '../../../types/interfaces.js'
+import { Flattener } from '../interfaces.js'
+import { isEventType } from '../util.js'
 import { findParser } from './index.js'
-import { isEventType } from './util.js'
 
-const l = logger('oc-ops-flatten')
-
-const MAX_EVENTS = 200
+const l = logger('oc-ops-flattener')
 
 /**
  * Enum representing static, well-known boundaries.
@@ -49,7 +48,7 @@ const isAllBoundary = (boundary: Boundary): boundary is Boundaries => {
  * Flattens nested calls in the extrinsic and correlates the events belonging to each call.
  * Supports all the extractors registered in the {@link parsers} map.
  */
-export class Flattener {
+export class CorrelatedFlattener implements Flattener {
   private events: {
     event: EventWithId
     callId: number
@@ -61,11 +60,6 @@ export class Flattener {
   constructor(tx: TxWithIdAndEvent) {
     const { extrinsic } = tx
     const { registry } = extrinsic
-
-    if (tx.events.length > MAX_EVENTS) {
-      l.warn(`Number of events (${tx.events.length}) in tx exceeds max limit of ${MAX_EVENTS}. Skipping flatten...`)
-      throw new Error(`Number of events (${tx.events.length}) in tx exceeds max limit of ${MAX_EVENTS}`)
-    }
 
     // work on a copy of the events and extrinsics
     this.events = tx.events

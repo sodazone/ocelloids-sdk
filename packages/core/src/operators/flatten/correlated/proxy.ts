@@ -5,9 +5,9 @@ import type { Null, Result } from '@polkadot/types-codec'
 import { DispatchError, MultiAddress } from '@polkadot/types/interfaces'
 import type { Call } from '@polkadot/types/interfaces/runtime'
 
-import { TxWithIdAndEvent } from '../../types/interfaces.js'
-import { Flattener } from './flattener.js'
-import { callAsTxWithBoundary, getArgValueFromTx } from './util.js'
+import { TxWithIdAndEvent } from '../../../types/interfaces.js'
+import { callAsTxWithBoundary, getArgValueFromTx } from '../util.js'
+import { CorrelatedFlattener } from './flattener.js'
 
 const ProxyExecuted = 'proxy.ProxyExecuted'
 const ProxyExecutedBoundary = {
@@ -22,7 +22,7 @@ const ProxyExecutedBoundary = {
  * @param tx - The input transaction to extract proxy calls from .
  * @returns The extracted proxy call as TxWithIdAndEvent.
  */
-export function extractProxyCalls(tx: TxWithIdAndEvent, flattener: Flattener) {
+export function extractProxyCalls(tx: TxWithIdAndEvent, flattener: CorrelatedFlattener) {
   const { extrinsic } = tx
   const real = getArgValueFromTx(extrinsic, 'real') as MultiAddress
   const call = getArgValueFromTx(extrinsic, 'call') as Call
