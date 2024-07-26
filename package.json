@@ -8,7 +8,7 @@
     "Xueying Wang <xueying@soda.zone>"
   ],
   "bugs": "https://github.com/sodazone/ocelloids-sdk/issues",
-  "description": "Software development kit for building monitoring applications for Substrate networks.",
+  "description": "Software development kit for Polkadot and Substrate based networks.",
   "engines": {
     "node": ">=18.14"
   },
