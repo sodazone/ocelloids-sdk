@@ -8,13 +8,13 @@ import type { DataToMatch } from '@sodazone/ocelloids-sdk-test'
 
 import { types } from '../index.js'
 import { TxWithIdAndEvent } from '../types/interfaces.js'
-import { flattenCalls } from './flatten.js'
+import { FlattenerMode, flattenCalls } from './flatten.js'
 
 const { number, hash } = testBlocks[0].block.header
 
 describe('flatten call operator', () => {
   describe('flattenCall', () => {
-    const assertResults = (result: TxWithIdAndEvent, nestedCalls: DataToMatch[]) => {
+    const assertResults = (result: TxWithIdAndEvent, nestedCalls: DataToMatch[], correlated = true) => {
       expect(result).toBeDefined()
 
       const {
@@ -32,20 +32,22 @@ describe('flatten call operator', () => {
       const name = `${method.section}.${method.method}`
       expect(name).toEqual(call.name)
 
-      // Assert that nested call dispatch errors are correlated correctly
-      expect(dispatchError?.toHuman()).toEqual(call.dispatchError)
-
       // Assert that nested call origins are extracted correctly
       extraSigners.forEach((o, i) => {
         expect(o.type).toEqual(call.extraSigners[i].type)
         expect(o.address.toString()).toEqual(call.extraSigners[i].address)
       })
 
-      // Assert that nested call events are correlated correctly
-      events.forEach((e, i) => {
-        expect(e.section).toEqual(call.events[i].section)
-        expect(e.method).toEqual(call.events[i].method)
-      })
+      if (correlated) {
+        // Assert that nested call dispatch errors are correlated correctly
+        expect(dispatchError?.toHuman()).toEqual(call.dispatchError)
+
+        // Assert that nested call events are correlated correctly
+        events.forEach((e, i) => {
+          expect(e.section).toEqual(call.events[i].section)
+          expect(e.method).toEqual(call.events[i].method)
+        })
+      }
     }
 
     it('should flatten nested multisig + proxy extrinsics', (done) => {
@@ -91,6 +93,33 @@ describe('flatten call operator', () => {
       testPipe.subscribe({
         next: (result: TxWithIdAndEvent) => {
           assertResults(result, data)
+          c++
+        },
+        complete: () => {
+          expect(c).toBe(data.length)
+          done()
+        },
+      })
+    })
+
+    it('should flatten nested batch extrinsics without correlation', (done) => {
+      const { extrinsic, events, data } = nestedItems.testBatch
+      const testNestedBatchTxWithId = types.enhanceTxWithIdAndEvents(
+        {
+          blockNumber: number,
+          blockPosition: 2,
+          blockHash: hash,
+        },
+        extrinsic,
+        events
+      )
+      const testPipe = flattenCalls(FlattenerMode.BASIC)(of(testNestedBatchTxWithId))
+
+      let c = 0
+      testPipe.subscribe({
+        next: (result: TxWithIdAndEvent) => {
+          assertResults(result, data, false)
+          expect(result.events.length).toBe(testNestedBatchTxWithId.events.length)
           c++
         },
         complete: () => {
