@@ -8,7 +8,7 @@ import { decode } from 'cbor-x'
 import { createSignedBlockExtended } from '@polkadot/api-derive'
 import type { TxWithEvent } from '@polkadot/api-derive/types'
 import { Metadata, TypeRegistry } from '@polkadot/types'
-import type { AccountId, Event, EventRecord, SignedBlock } from '@polkadot/types/interfaces'
+import type { AccountId, Event, EventRecord, Extrinsic, SignedBlock } from '@polkadot/types/interfaces'
 
 import metadataStatic from './__data__/metadata/polkadot-hex-18977445.js'
 import type { BinBlock } from './_types.js'
@@ -35,6 +35,15 @@ export function testBlocksFrom(file: string, mds: `0x${string}` = metadataStatic
       author as AccountId
     )
   })
+}
+
+export function cloneExtrinsic(extrinsic: Extrinsic, mds: `0x${string}` = metadataStatic) {
+  const registry = new TypeRegistry()
+  const metadata = new Metadata(registry, mds)
+
+  registry.setMetadata(metadata)
+
+  return registry.createType('Extrinsic', extrinsic) as Extrinsic
 }
 
 export const testBlocks = testBlocksFrom('blocks.cbor.bin').slice(0, 3)
