@@ -100,9 +100,11 @@ You can also explore a practical example of how custom methods and types are reg
 
 ## Nested Calls Flattener
 
-The Flattener, a specialized helper class, recursively extracts all nested calls from a given extrinsic. It assigns the subset of events in that extrinsic corresponding to each call and maps any execution errors to the extracted calls. This is particularly useful when dealing with extrinsics containing nested batch, multisig, or proxy calls.
+The `CorrelatedFlattener`, a specialized helper class, recursively extracts all nested calls from a given extrinsic. It assigns the subset of events within that extrinsic to each call and maps any execution errors to the extracted calls. This is particularly useful when dealing with extrinsics that contain nested batch, multisig, or proxy calls.
 
-The Flattener is utilized within the `flattenCalls` operator and is also exported for external use, such as in an observer handler:
+A `BasicFlattener` is also provided to skip event correlation while still extracting nested calls.
+
+The flatteners are used within the `flattenCalls` operator and are also exported for external use, such as in an observer handler:
 
 ```javascript
 // Flatten and log extrinsic 8695536-2 on Rococo ([Subscan link](https://rococo.subscan.io/extrinsic/8695536-2))
@@ -112,7 +114,7 @@ apis.rx.polkadot.pipe(
   filter(tx => tx.extrinsic.extrinsicId === '8695536-2') // Filter for only the `forceBatch` extrinsic
 ).subscribe(tx => {
   // Initialise flattener and flatten nested calls
-  const flattener = new Flattener(tx);
+  const flattener = new CorrelatedFlattener(tx);
   flattener.flatten();
   const calls = flattener.flattenedCalls;
   calls.forEach(c => {
