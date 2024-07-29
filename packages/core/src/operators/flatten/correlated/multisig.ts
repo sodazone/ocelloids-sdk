@@ -6,7 +6,7 @@ import { AccountId32, DispatchError } from '@polkadot/types/interfaces'
 import type { Address, Call } from '@polkadot/types/interfaces/runtime'
 
 import { TxWithIdAndEvent } from '../../../types/interfaces.js'
-import { callAsTxWithBoundary, getArgValueFromEvent, getArgValueFromTx, getMultisigAddres } from '../util.js'
+import { callAsTxWithBoundary, getArgValueFromEvent, getArgValueFromTx, getMultisigAddress } from '../util.js'
 import { Boundaries, CorrelatedFlattener } from './flattener.js'
 
 const MultisigExecuted = 'multisig.MultisigExecuted'
@@ -71,7 +71,7 @@ export function extractAsMultiCall(tx: TxWithIdAndEvent, flattener: CorrelatedFl
  * @returns The extracted multisig call as TxWithIdAndEvent.
  */
 export function extractAsMutiThreshold1Call(tx: TxWithIdAndEvent) {
-  const multisigAddress = getMultisigAddres(tx.extrinsic)
+  const multisigAddress = getMultisigAddress(tx.extrinsic, 1)
   const call = getArgValueFromTx(tx.extrinsic, 'call') as Call
 
   return [

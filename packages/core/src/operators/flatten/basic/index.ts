@@ -1,6 +1,6 @@
 import { TxWithIdAndEvent } from '../../../types/interfaces.js'
 
-import { extractAsMultiCall } from './multisig.js'
+import { extractAsMultiCall, extractAsMutiThreshold1Call } from './multisig.js'
 import { extractProxyCalls } from './proxy.js'
 import { extractAnyBatchCalls, extractAsDerivativeCall } from './utility.js'
 
@@ -10,7 +10,7 @@ const parsers: Record<string, CallParser> = {
   'proxy.proxy': extractProxyCalls,
   'proxy.proxyAnnounced': extractProxyCalls,
   'multisig.asMulti': extractAsMultiCall,
-  'multisig.asMultiThreshold1': extractAsMultiCall,
+  'multisig.asMultiThreshold1': extractAsMutiThreshold1Call,
   'utility.batch': extractAnyBatchCalls,
   'utility.batchAll': extractAnyBatchCalls,
   'utility.forceBatch': extractAnyBatchCalls,

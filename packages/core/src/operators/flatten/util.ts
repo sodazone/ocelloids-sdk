@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { GenericCall, GenericExtrinsic } from '@polkadot/types'
-import type { Vec } from '@polkadot/types-codec'
+import type { Vec, u16 } from '@polkadot/types-codec'
 import type { AnyTuple, CallBase } from '@polkadot/types-codec/types'
 import type { AccountId32, DispatchError, Event, FunctionMetadataLatest } from '@polkadot/types/interfaces'
 import type { Address } from '@polkadot/types/interfaces/runtime'
@@ -62,9 +62,13 @@ export function callAsTxWithBoundary({ call, tx, boundary, callError, extraSigne
 }
 
 /**
+ * Constructs a transaction with a flattened call and optional extra signer.
  *
- * @param ctx The call context
- * @returns
+ * This function creates a new extrinsic with the provided call and any extra signers,
+ * incorporating additional information such as block number, position, and hash.
+ *
+ * @param ctx - The call context containing the call, transaction details, and optional extra signer.
+ * @returns An object with the updated transaction, including the modified extrinsic.
  */
 export function callAsTx({ call, tx, extraSigner }: CallContext) {
   const { extrinsic } = tx
@@ -113,16 +117,18 @@ export function getArgValueFromTx(extrinsic: ExtrinsicWithId, name: string) {
 }
 
 /**
+ * Generates a multisig address from the given extrinsic.
  *
- * @param extrinsic
- * @returns
+ * @param extrinsic - The extrinsic containing the signer and other signatories.
+ * @param threshold - (Optional) Number of required signatories. Defaults to the value from the extrinsic.
+ * @returns The computed multisig address.
  */
-export function getMultisigAddres(extrinsic: ExtrinsicWithId) {
+export function getMultisigAddress(extrinsic: ExtrinsicWithId, threshold?: number) {
   const otherSignatories = getArgValueFromTx(extrinsic, 'other_signatories') as Vec<AccountId32>
   // Signer must be added to the signatories to obtain the multisig address
   const signatories = otherSignatories.map((s) => s.toString())
   signatories.push(extrinsic.signer.toString())
-  const multisig = createKeyMulti(signatories, 1)
+  const multisig = createKeyMulti(signatories, threshold ?? (getArgValueFromTx(extrinsic, 'threshold') as u16))
   const multisigAddress = extrinsic.registry.createTypeUnsafe('Address', [
     isU8a(multisig) ? u8aToHex(multisig) : multisig,
   ]) as Address

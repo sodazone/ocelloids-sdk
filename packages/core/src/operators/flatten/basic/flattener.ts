@@ -2,6 +2,10 @@ import { TxWithIdAndEvent } from '../../../types/interfaces.js'
 import { Flattener } from '../interfaces.js'
 import { findParser } from './index.js'
 
+/**
+ * Flattens nested calls in the extrinsic without event correlation.
+ * Supports all the extractors registered in the {@link parsers} map.
+ */
 export class BasicFlattener implements Flattener {
   private calls: TxWithIdAndEvent[]
   private tx: TxWithIdAndEvent
