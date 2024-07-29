@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 import { WellKnownChain } from '@substrate/connect'
 
 async function chainSpecOf(conf: Promise<{ chainSpec: string }>) {
