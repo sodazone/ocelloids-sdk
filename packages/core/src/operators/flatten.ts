@@ -4,13 +4,21 @@
 import { Observable, concatMap } from 'rxjs'
 
 import { TxWithIdAndEvent } from '../types/interfaces.js'
-import { Flattener } from './flatten/flattener.js'
-import { hasParser } from './flatten/index.js'
+import { createFlattener, isNested } from './flatten/index.js'
 
-function withFlattener(tx: TxWithIdAndEvent, sorted: boolean) {
+export enum FlattenerMode {
+  BASIC,
+  CORRELATED,
+}
+
+export { Flattener, createFlattener } from './flatten/index.js'
+
+function withFlattener(tx: TxWithIdAndEvent, mode: FlattenerMode, sorted: boolean) {
   try {
-    const flattener = new Flattener(tx)
+    const flattener = createFlattener(tx, mode)
+
     flattener.flatten()
+
     return sorted
       ? flattener.flattenedCalls.sort((a: TxWithIdAndEvent, b: TxWithIdAndEvent) => {
           return (a.levelId ?? '0').localeCompare(b.levelId ?? '0')
@@ -34,8 +42,8 @@ function withFlattener(tx: TxWithIdAndEvent, sorted: boolean) {
  *
  * @param sorted - (Optional) preserve the order of nested calls. Defaults to true.
  */
-export function flattenCalls(sorted = true) {
+export function flattenCalls(mode = FlattenerMode.CORRELATED, sorted = true) {
   return (source: Observable<TxWithIdAndEvent>): Observable<TxWithIdAndEvent> => {
-    return source.pipe(concatMap((tx) => (hasParser(tx) ? withFlattener(tx, sorted) : [tx])))
+    return source.pipe(concatMap((tx) => (isNested(tx) ? withFlattener(tx, mode, sorted) : [tx])))
   }
 }

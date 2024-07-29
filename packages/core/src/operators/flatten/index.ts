@@ -1,49 +1,51 @@
-// Copyright 2023-2024 SO/DA zone
-// SPDX-License-Identifier: Apache-2.0
+import { logger } from '@polkadot/util'
 
 import { TxWithIdAndEvent } from '../../types/interfaces.js'
-import { Boundary, Flattener } from './flattener.js'
-import { extractAsMultiCall, extractAsMutiThreshold1Call } from './multisig.js'
-import { extractProxyCalls } from './proxy.js'
-import { extractAsDerivativeCall, extractBatchAllCalls, extractBatchCalls, extractForceBatchCalls } from './utility.js'
+
+import { FlattenerMode } from '../flatten.js'
+import { BasicFlattener } from './basic/flattener.js'
+import { CorrelatedFlattener } from './correlated/flattener.js'
+import { hasParser } from './correlated/index.js'
+import { Flattener } from './index.js'
+
+const l = logger('oc-ops-flattener')
+
+const DEFAULT_MAX_EVENTS = 200
+
+export * from './interfaces.js'
 
 /**
- * Type that represents an extractor function.
+ * Creates a flattener instance based on the provided transaction and mode.
+ *
+ * If the mode is set to BASIC, or if the number of events in the transaction exceeds the maximum allowed,
+ * a BasicFlattener is returned. Otherwise, a CorrelatedFlattener is used to support event correlation.
+ *
+ * @param tx - The transaction containing ID and associated events.
+ * @param mode - The mode of flattening to use (BASIC or correlated).
+ * @param maxEvents - The maximum number of events allowed for correlated flattening (defaults to DEFAULT_MAX_EVENTS).
+ * @returns A Flattener instance appropriate for the given mode and transaction.
  */
-type CallParser = (
-  tx: TxWithIdAndEvent,
-  flattener: Flattener
-) => {
-  call: TxWithIdAndEvent
-  boundary?: Boundary
-}[]
+export function createFlattener(tx: TxWithIdAndEvent, mode: FlattenerMode, maxEvents = DEFAULT_MAX_EVENTS): Flattener {
+  if (mode === FlattenerMode.BASIC) {
+    return new BasicFlattener(tx)
+  }
 
-/**
- * Parsers object which maps method signatures to their corresponding extractor functions.
- * Extractor functions take a transaction as input and return the nested call(s)
- * as an array of transactions, a single transaction, or undefined based on the extraction logic.
- */
-export const parsers: Record<string, CallParser> = {
-  'proxy.proxy': extractProxyCalls,
-  'proxy.proxyAnnounced': extractProxyCalls,
-  'multisig.asMulti': extractAsMultiCall,
-  'multisig.asMultiThreshold1': extractAsMutiThreshold1Call,
-  'utility.batch': extractBatchCalls,
-  'utility.batchAll': extractBatchAllCalls,
-  'utility.forceBatch': extractForceBatchCalls,
-  'utility.asDerivative': extractAsDerivativeCall,
+  if (tx.events.length > maxEvents) {
+    l.warn(
+      `Number of events (${tx.events.length}) in tx exceeds max limit of ${maxEvents}. Fallback to skip event correlation.`
+    )
+    return new BasicFlattener(tx)
+  }
+
+  return new CorrelatedFlattener(tx)
 }
 
 /**
- * Returns a call parser matching the extrinsic call name or undefined.
+ * Determines if a transaction is nested based on the presence of a flattener parser for the extrinsic call.
+ *
+ * @param tx - The transaction to check.
+ * @returns True if the transaction is nested, false otherwise.
  */
-export function findParser({ extrinsic: { method } }: TxWithIdAndEvent): CallParser | undefined {
-  return parsers[`${method.section}.${method.method}`]
-}
-
-/**
- * Returns true if a parser exists for the given extrinsic call name.
- */
-export function hasParser(tx: TxWithIdAndEvent): boolean {
-  return findParser(tx) !== undefined
+export function isNested(tx: TxWithIdAndEvent): boolean {
+  return hasParser(tx)
 }

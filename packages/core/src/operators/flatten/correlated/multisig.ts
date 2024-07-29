@@ -2,15 +2,12 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import type { Null, Result } from '@polkadot/types-codec'
-import type { Vec } from '@polkadot/types-codec'
 import { AccountId32, DispatchError } from '@polkadot/types/interfaces'
 import type { Address, Call } from '@polkadot/types/interfaces/runtime'
-import { isU8a, u8aToHex } from '@polkadot/util'
-import { createKeyMulti } from '@polkadot/util-crypto'
 
-import { TxWithIdAndEvent } from '../../types/interfaces.js'
-import { Boundaries, Flattener } from './flattener.js'
-import { callAsTxWithBoundary, getArgValueFromEvent, getArgValueFromTx } from './util.js'
+import { TxWithIdAndEvent } from '../../../types/interfaces.js'
+import { callAsTxWithBoundary, getArgValueFromEvent, getArgValueFromTx, getMultisigAddress } from '../util.js'
+import { Boundaries, CorrelatedFlattener } from './flattener.js'
 
 const MultisigExecuted = 'multisig.MultisigExecuted'
 const MultisigExecutedBoundary = {
@@ -32,7 +29,7 @@ const MultisigExecutedBoundary = {
  * @returns The extracted multisig call as TxWithIdAndEvent.
  * Returns undefined if the 'MultisigExecuted' event is not found in the transaction events.
  */
-export function extractAsMultiCall(tx: TxWithIdAndEvent, flattener: Flattener) {
+export function extractAsMultiCall(tx: TxWithIdAndEvent, flattener: CorrelatedFlattener) {
   const { extrinsic } = tx
 
   const multisigExecutedIndex = flattener.findEventIndex(MultisigExecuted)
@@ -74,16 +71,7 @@ export function extractAsMultiCall(tx: TxWithIdAndEvent, flattener: Flattener) {
  * @returns The extracted multisig call as TxWithIdAndEvent.
  */
 export function extractAsMutiThreshold1Call(tx: TxWithIdAndEvent) {
-  const { extrinsic } = tx
-  const otherSignatories = getArgValueFromTx(tx.extrinsic, 'other_signatories') as Vec<AccountId32>
-  // Signer must be added to the signatories to obtain the multisig address
-  const signatories = otherSignatories.map((s) => s.toString())
-  signatories.push(extrinsic.signer.toString())
-  const multisig = createKeyMulti(signatories, 1)
-  const multisigAddress = extrinsic.registry.createTypeUnsafe('Address', [
-    isU8a(multisig) ? u8aToHex(multisig) : multisig,
-  ]) as Address
-
+  const multisigAddress = getMultisigAddress(tx.extrinsic, 1)
   const call = getArgValueFromTx(tx.extrinsic, 'call') as Call
 
   return [

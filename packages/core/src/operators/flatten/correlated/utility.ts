@@ -6,11 +6,9 @@ import type { Null, Result } from '@polkadot/types-codec'
 import type { AnyTuple, CallBase } from '@polkadot/types-codec/types'
 import type { DispatchError, FunctionMetadataLatest } from '@polkadot/types/interfaces'
 
-import { TxWithIdAndEvent } from '../../types/interfaces.js'
-import { Boundaries, Flattener } from './flattener.js'
-import { callAsTxWithBoundary, getArgValueFromTx, isEventType } from './util.js'
-
-const MAX_BATCH_CALLS = 50
+import { TxWithIdAndEvent } from '../../../types/interfaces.js'
+import { callAsTxWithBoundary, getArgValueFromTx, isEventType } from '../util.js'
+import { Boundaries, CorrelatedFlattener } from './flattener.js'
 
 const BatchCompleted = 'utility.BatchCompleted'
 const BatchCompletedWithErrors = 'utility.BatchCompletedWithErrors'
@@ -36,13 +34,13 @@ const DispatchedAsBoundary = {
  *
  * @param calls - Array of batch calls.
  * @param tx - The original transaction.
- * @param flattener - The {@link Flattener} instance.
+ * @param flattener - The {@link CorrelatedFlattener} instance.
  * @returns An array of batch calls mapped as {@link TxWithIdAndEvent}.
  */
 function mapBatchErrored(
   calls: CallBase<AnyTuple, FunctionMetadataLatest>[],
   tx: TxWithIdAndEvent,
-  flattener: Flattener
+  flattener: CorrelatedFlattener
 ) {
   let from = flattener.nextPointer
 
@@ -91,10 +89,10 @@ export function extractAsDerivativeCall(tx: TxWithIdAndEvent) {
  * maps the execution result from the event to the extracted call.
  *
  * @param tx - The 'dispatchAs' transaction.
- * @param flattener - The {@link Flattener} instance.
+ * @param flattener - The {@link CorrelatedFlattener} instance.
  * @returns The extracted call as {@link TxWithIdAndEvent}.
  */
-export function extractDispatchAsCall(tx: TxWithIdAndEvent, flattener: Flattener) {
+export function extractDispatchAsCall(tx: TxWithIdAndEvent, flattener: CorrelatedFlattener) {
   const { extrinsic, events } = tx
   const call = getArgValueFromTx(extrinsic, 'call') as CallBase<AnyTuple, FunctionMetadataLatest>
 
@@ -165,17 +163,13 @@ function mapBatchInterrupt(
  * 'BatchCompleted' event is emitted if all items are executed succesfully, otherwise emits 'BatchInterrupted'
  *
  * @param tx - The 'utility.batch' transaction.
- * @param flattener - The {@link Flattener} instance.
+ * @param flattener - The {@link CorrelatedFlattener} instance.
  * @returns The array of extracted batch calls
  * with correlated events and dispatch result as {@link TxWithIdAndEvent}.
  */
-export function extractBatchCalls(tx: TxWithIdAndEvent, flattener: Flattener) {
+export function extractBatchCalls(tx: TxWithIdAndEvent, flattener: CorrelatedFlattener) {
   const { extrinsic } = tx
   const calls = extrinsic.args[0] as unknown as CallBase<AnyTuple, FunctionMetadataLatest>[]
-  if (calls.length > MAX_BATCH_CALLS) {
-    throw new Error('Batch too large to process')
-  }
-
   const batchCompletedIndex = flattener.findEventIndex(BatchCompleted)
   const batchInterruptedIndex = flattener.findEventIndex(BatchInterrupted)
   const isInterrupted =
@@ -204,9 +198,6 @@ export function extractBatchCalls(tx: TxWithIdAndEvent, flattener: Flattener) {
 export function extractBatchAllCalls(tx: TxWithIdAndEvent) {
   const { extrinsic, dispatchError } = tx
   const calls = extrinsic.args[0] as unknown as CallBase<AnyTuple, FunctionMetadataLatest>[]
-  if (calls.length > MAX_BATCH_CALLS) {
-    throw new Error('Batch too large to process')
-  }
 
   if (dispatchError === undefined) {
     // If batch executed successfully, extract as normal batch complete calls
@@ -223,16 +214,13 @@ export function extractBatchAllCalls(tx: TxWithIdAndEvent) {
  * If some items fails, will emit ItemFailed for failed items, ItemCompleted for successful items, and BatchCompletedWithErrors at the end.
  *
  * @param tx - The transaction with ID and events.
- * @param flattener - The {@link Flattener} instance.
+ * @param flattener - The {@link CorrelatedFlattener} instance.
  * @returns The array of extracted batch calls
  * with correlated events and dispatch result as {@link TxWithIdAndEvent}.
  */
-export function extractForceBatchCalls(tx: TxWithIdAndEvent, flattener: Flattener) {
+export function extractForceBatchCalls(tx: TxWithIdAndEvent, flattener: CorrelatedFlattener) {
   const { extrinsic } = tx
   const calls = extrinsic.args[0] as unknown as CallBase<AnyTuple, FunctionMetadataLatest>[]
-  if (calls.length > MAX_BATCH_CALLS) {
-    throw new Error('Batch too large to process')
-  }
 
   const batchCompletedIndex = flattener.findEventIndex(BatchCompleted)
   const batchErroredIndex = flattener.findEventIndex(BatchCompletedWithErrors)
