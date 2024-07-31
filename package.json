@@ -1,7 +1,7 @@
 {
   "sideEffects": false,
   "type": "module",
-  "version": "1.2.12",
+  "version": "1.2.13-dev.0",
   "author": "soda <projects@soda.zone>",
   "contributors": [
     "Marc Fornós <marc@soda.zone>",
@@ -67,5 +67,6 @@
   "overrides": {
     "word-wrap": "1.2.4"
   },
-  "packageManager": "yarn@3.6.0"
+  "packageManager": "yarn@3.6.0",
+  "stableVersion": "1.2.12"
 }
