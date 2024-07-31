@@ -1,7 +1,8 @@
 // Copyright 2023-2024 SO/DA zone
 // SPDX-License-Identifier: Apache-2.0
 
-import type { SignedBlockExtended } from '@polkadot/api-derive/types'
+import type { SignedBlockExtended, TxWithEvent } from '@polkadot/api-derive/types'
+import type { u64 } from '@polkadot/types-codec'
 import type { SignedBlock } from '@polkadot/types/interfaces'
 
 import { Observable, from, map, mergeMap, share } from 'rxjs'
@@ -15,6 +16,15 @@ import {
   ExtrinsicWithId,
   TxWithIdAndEvent,
 } from '../types/interfaces.js'
+
+function getTimestampFromBlock(extrinsics: TxWithEvent[]) {
+  const setTimestamp = extrinsics.find(
+    ({ extrinsic: { method } }) => method.section === 'timestamp' && method.method === 'set'
+  )
+  if (setTimestamp) {
+    return setTimestamp.extrinsic.args[0] as u64
+  }
+}
 
 /**
  * Operator to extract extrinsics with paired events from blocks.
@@ -41,12 +51,14 @@ export function extractTxWithEvents() {
       mergeMap(({ block, extrinsics, events }) => {
         const blockNumber = block.header.number
         const blockHash = block.hash
+        const timestamp = getTimestampFromBlock(extrinsics)
         return extrinsics.map((xt, blockPosition) => {
           return enhanceTxWithIdAndEvents(
             {
               blockNumber,
               blockHash,
               blockPosition,
+              timestamp,
             },
             xt,
             events
@@ -121,15 +133,16 @@ export function extractExtrinsics() {
 export function extractEvents() {
   return (source: Observable<SignedBlockExtended>): Observable<BlockEvent> => {
     return source.pipe(
-      map(({ block, events }) => {
+      map(({ block, events, extrinsics }) => {
         return {
           extrinsics: block.extrinsics,
           events,
           blockNumber: block.header.number,
           blockHash: block.hash,
+          timestamp: getTimestampFromBlock(extrinsics),
         }
       }),
-      mergeMap(({ extrinsics, events, blockHash, blockNumber }) => {
+      mergeMap(({ extrinsics, events, blockHash, blockNumber, timestamp }) => {
         let prevXtIndex = -1
         let xtEventIndex = 0
         let extrinsicWithId: ExtrinsicWithId | undefined
@@ -142,6 +155,7 @@ export function extractEvents() {
               blockNumber,
               blockHash,
               blockPosition: index,
+              timestamp,
             }
             const extrinsicIndex = phase.isApplyExtrinsic ? phase.asApplyExtrinsic.toNumber() : undefined
             if (extrinsicIndex) {
@@ -150,6 +164,7 @@ export function extractEvents() {
                   blockNumber,
                   blockHash,
                   blockPosition: extrinsicIndex,
+                  timestamp,
                 })
               }
 

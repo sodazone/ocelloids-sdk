@@ -20,7 +20,7 @@ import {
 function watcher({ urls, verbose }) {
   process.stdin.setEncoding('utf-8');
   process.stdin.on('readable', () => {
-    var text = process.stdin.read();
+    const text = process.stdin.read();
     if (text !== null) {
       const parsed = parse(text);
 

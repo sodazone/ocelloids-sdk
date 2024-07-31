@@ -16,10 +16,11 @@ describe('extractors over extended signed blocks', () => {
       const testPipe = extractTxWithEvents()(from(testBlocks))
       let index = 0
       testPipe.subscribe({
-        next: (result: TxWithEvent) => {
+        next: (result: TxWithIdAndEvent) => {
           expect(result).toBeDefined()
           expect(result.extrinsic.method.toString()).toEqual(testExtrinsics[index].extrinsic.method.toString())
           expect(result.extrinsic.data).toEqual(testExtrinsics[index].extrinsic.data)
+          expect(result.extrinsic.timestamp).toBeDefined()
           index++
         },
         complete: done,
@@ -35,6 +36,7 @@ describe('extractors over extended signed blocks', () => {
           expect(result.extrinsic.data).toEqual(testExtrinsics[index].extrinsic.data)
           expect(result.extrinsic.blockHash).toBeDefined()
           expect(result.extrinsic.extrinsicId).toBeDefined()
+          expect(result.extrinsic.timestamp).toBeDefined()
           index++
         },
         complete: done,
@@ -75,6 +77,7 @@ describe('extractors over extended signed blocks', () => {
           expect(event.data.toString()).toEqual(testEventRecords[index].event.data.toString())
           expect(event.blockHash).toBeDefined()
           expect(event.eventId).toBeDefined()
+          expect(event.timestamp).toBeDefined()
           index++
         },
         complete: done,
@@ -95,6 +98,8 @@ describe('extractors over extended signed blocks', () => {
           expect(record.extrinsic.extrinsicId).toBeDefined()
           expect(record.blockHash.toString()).toEqual(record.extrinsic.blockHash.toString())
           expect(record.blockNumber.toString()).toEqual(record.extrinsic.blockNumber.toString())
+          expect(record.extrinsic.timestamp).toBeDefined()
+          expect(record.timestamp).toBeDefined()
         },
         complete: done,
       })

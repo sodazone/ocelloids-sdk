@@ -3,6 +3,7 @@
 
 import type { TxWithEvent } from '@polkadot/api-derive/types'
 import { Compact } from '@polkadot/types'
+import type { u64 } from '@polkadot/types-codec'
 import type { IU8a } from '@polkadot/types-codec/types'
 import type { BlockNumber } from '@polkadot/types/interfaces'
 import { GenericEventWithId } from './event.js'
@@ -17,6 +18,7 @@ export interface ExtrinsicWithId extends GenericExtrinsicWithId {
   blockPosition: number
   extrinsicId: string
   extraSigners: ExtraSigner[]
+  timestamp?: u64
 }
 
 /**
@@ -27,6 +29,7 @@ export interface EventWithId extends GenericEventWithId {
   blockHash: IU8a
   blockPosition: number
   eventId: string
+  timestamp?: u64
 }
 
 /**
@@ -55,6 +58,7 @@ export interface ExtrinsicBlockContext {
   blockNumber: Compact<BlockNumber>
   blockHash: IU8a
   blockPosition: number
+  timestamp?: u64
 }
 
 /**
@@ -65,6 +69,7 @@ export interface EventBlockContext {
   blockNumber: Compact<BlockNumber>
   blockHash: IU8a
   blockPosition: number
+  timestamp?: u64
 }
 
 /**
@@ -75,6 +80,7 @@ export interface EventExtrinsicContext extends EventBlockContext {
   extrinsicPosition: number
   extrinsicId: string
   extrinsic: ExtrinsicWithId
+  timestamp?: u64
 }
 
 /**

@@ -3,6 +3,7 @@
 
 import type { TxWithEvent } from '@polkadot/api-derive/types'
 import { Compact, GenericExtrinsic } from '@polkadot/types'
+import type { u64 } from '@polkadot/types-codec'
 import type { AnyJson, IU8a } from '@polkadot/types-codec/types'
 import { Address, BlockNumber, EventRecord } from '@polkadot/types/interfaces'
 
@@ -32,10 +33,11 @@ export class GenericExtrinsicWithId extends GenericExtrinsic implements Extrinsi
   readonly blockHash: IU8a
   readonly blockPosition: number
   readonly extraSigners: ExtraSigner[]
+  readonly timestamp?: u64
 
   constructor(
     value: GenericExtrinsic,
-    { blockNumber, blockPosition, blockHash }: ExtrinsicBlockContext,
+    { blockNumber, blockPosition, blockHash, timestamp }: ExtrinsicBlockContext,
     extraSigners: ExtraSigner[] = []
   ) {
     super(value.registry)
@@ -45,6 +47,7 @@ export class GenericExtrinsicWithId extends GenericExtrinsic implements Extrinsi
     this.blockPosition = blockPosition
     this.blockHash = blockHash
     this.extraSigners = extraSigners
+    this.timestamp = timestamp
 
     return new Proxy(this, {
       get<T>(target: GenericExtrinsicWithId, p: keyof GenericExtrinsic): T {
@@ -89,6 +92,7 @@ export class GenericExtrinsicWithId extends GenericExtrinsic implements Extrinsi
         type: o.type,
         address: o.address.toHuman(),
       })),
+      timestamp: this.timestamp?.toHuman(),
       ...(this._extrinsic.toHuman(isExpanded) as any),
     }
   }
@@ -105,7 +109,7 @@ export function enhanceTxWithIdAndEvents(
   tx: TxWithEvent,
   events: EventRecord[]
 ): TxWithIdAndEvent {
-  const { blockHash, blockNumber, blockPosition: xtIndex } = xtContext
+  const { blockHash, blockNumber, blockPosition: xtIndex, timestamp } = xtContext
   const eventsWithId: EventWithId[] = []
 
   for (let index = 0; index < events.length; index++) {
@@ -116,6 +120,7 @@ export function enhanceTxWithIdAndEvents(
           blockHash,
           blockNumber,
           blockPosition: index,
+          timestamp,
         })
       )
     }

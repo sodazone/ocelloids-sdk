@@ -1,7 +1,7 @@
 // Copyright 2023-2024 SO/DA zone
 // SPDX-License-Identifier: Apache-2.0
 
-import { Compact, GenericEvent } from '@polkadot/types'
+import { Compact, GenericEvent, u64 } from '@polkadot/types'
 import type { AnyJson, IU8a } from '@polkadot/types-codec/types'
 import type { BlockNumber } from '@polkadot/types/interfaces'
 
@@ -22,14 +22,16 @@ export class GenericEventWithId extends GenericEvent implements EventWithId {
   readonly blockNumber: Compact<BlockNumber>
   readonly blockHash: IU8a
   readonly blockPosition: number
+  readonly timestamp?: u64
 
-  constructor(value: GenericEvent, { blockNumber, blockHash, blockPosition }: EventBlockContext) {
+  constructor(value: GenericEvent, { blockNumber, blockHash, blockPosition, timestamp }: EventBlockContext) {
     super(value.registry)
 
     this._event = value
     this.blockNumber = blockNumber
     this.blockHash = blockHash
     this.blockPosition = blockPosition
+    this.timestamp = timestamp
 
     return new Proxy(this, {
       get<T>(target: GenericEventWithId, p: keyof GenericEvent): T {
@@ -67,6 +69,7 @@ export class GenericEventWithId extends GenericEvent implements EventWithId {
       blockPosition: this.blockPosition,
       blockNumber: this.blockNumber.toHuman(),
       blockHash: this.blockHash.toHuman(),
+      timestamp: this.timestamp?.toHuman(),
       ...(this._event.toHuman(isExpanded) as any),
     }
   }
