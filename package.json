@@ -67,6 +67,9 @@
   "overrides": {
     "word-wrap": "1.2.4"
   },
+  "resolutions": {
+    "web-worker": "1.2.0"
+  },
   "packageManager": "yarn@3.6.0",
   "stableVersion": "1.2.12"
 }
