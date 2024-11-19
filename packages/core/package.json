@@ -43,9 +43,9 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "browser": "./dist/browser/index.js",
+      "import": "./dist/index.js",
       "require": "./dist/index.cjs",
-      "import": "./dist/index.js"
+      "browser": "./dist/browser/index.js"
     },
     "./worker": {
       "import": "./dist/worker/smoldot-worker.js",
