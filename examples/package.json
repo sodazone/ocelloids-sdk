@@ -1,6 +1,6 @@
 {
   "name": "@sodazone/ocelloids-sdk-examples",
-  "version": "1.3.1",
+  "version": "1.3.2-dev.0",
   "description": "Ocelloids examples.",
   "private": true,
   "type": "module",
@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "@polkadot/rpc-provider": "^14.3.1",
-    "@sodazone/ocelloids-sdk": "1.3.1",
+    "@sodazone/ocelloids-sdk": "1.3.2-dev.0",
     "@substrate/connect": "^2.0.1",
     "graph-data-structure": "^4.2.0",
     "hjson": "^3.2.2",
@@ -40,5 +40,6 @@
   },
   "scripts": {
     "build": "tsup **/main.ts --clean --minify"
-  }
+  },
+  "stableVersion": "1.3.1"
 }
