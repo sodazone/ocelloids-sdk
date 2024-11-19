@@ -18,7 +18,7 @@
   "dependencies": {
     "@sodazone/ocelloids-sdk": "1.2.14-dev.0",
     "@sodazone/ocelloids-sdk-test": "1.2.14-dev.0",
-    "cbor-x": "^1.5.9",
+    "cbor-x": "^1.6.0",
     "citty": "^0.1.6"
   },
   "tsup": {
