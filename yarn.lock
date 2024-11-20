@@ -3180,7 +3180,6 @@ __metadata:
   dependencies:
     "@polkadot/rpc-provider": ^14.3.1
     "@sodazone/ocelloids-sdk": 1.3.2-dev.0
-    "@substrate/connect": ^2.0.1
     graph-data-structure: ^4.2.0
     hjson: ^3.2.2
     rxjs: ^7.8.1
@@ -3190,7 +3189,6 @@ __metadata:
   bin:
     filter-extrinsics: ./dist/filter-extrinsics/main.cjs
     follow-transfer-events: ./dist/follow-transfer-events/main.cjs
-    light-client: ./dist/light-client/main.cjs
     simple-fees: ./dist/simple-fees/main.cjs
     watch-balances: ./dist/watch-balances/main.cjs
     watch-contracts: ./dist/watch-contracts/main.cjs
@@ -3232,10 +3230,8 @@ __metadata:
   dependencies:
     "@polkadot/api": ^14.3.1
     "@sodazone/ocelloids-sdk-test": 1.3.2-dev.0
-    "@substrate/connect-known-chains": ^1.7.0
     mingo: ^6.4.15
     rxjs: ^7.8.1
-    web-worker: 1.3.0
   languageName: unknown
   linkType: soft
 
@@ -3246,14 +3242,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@substrate/connect-extension-protocol@npm:^2.2.1":
-  version: 2.2.1
-  resolution: "@substrate/connect-extension-protocol@npm:2.2.1"
-  checksum: ca7afa762bd81449e49d62dc97877370b67a3f4ec9094398314f04bfe76b561364d53b67fdc32743565037d5c01b94f4fc4e76b04e001047d837925c15b28dfa
-  languageName: node
-  linkType: hard
-
-"@substrate/connect-known-chains@npm:^1.1.5, @substrate/connect-known-chains@npm:^1.7.0":
+"@substrate/connect-known-chains@npm:^1.1.5":
   version: 1.7.0
   resolution: "@substrate/connect-known-chains@npm:1.7.0"
   checksum: deb958c6fc6d6d21d5294860184c4493a416016384951c9aa5fb30a488d87eca604f26230362f0b22bcf263aeb721570fe5f099af33a150031b089a13422e564
@@ -3272,25 +3261,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@substrate/connect@npm:^2.0.1":
-  version: 2.0.1
-  resolution: "@substrate/connect@npm:2.0.1"
-  dependencies:
-    "@substrate/connect-extension-protocol": ^2.2.1
-    "@substrate/connect-known-chains": ^1.7.0
-    "@substrate/smoldot-discovery": ^2.0.1
-    smoldot: 2.0.30
-  checksum: 03d73458be2bf1d8e38e4a89c6382c99bada43986b0af8fce04df2710a24e38b8d05f57efd10f161785b4ca154cbf748a7e61479218cb2f77b0c05b1627d135b
-  languageName: node
-  linkType: hard
-
-"@substrate/discovery@npm:^0.2.1":
-  version: 0.2.1
-  resolution: "@substrate/discovery@npm:0.2.1"
-  checksum: a4a4a42ad73b84fae07d82e1f0e81cdc9aa3a3e725a94b0781c761fb4878e625bf4cf87055948fd9add68e75eda539f1d6372605d1c7608384c47776f6d322d0
-  languageName: node
-  linkType: hard
-
 "@substrate/light-client-extension-helpers@npm:^1.0.0":
   version: 1.0.0
   resolution: "@substrate/light-client-extension-helpers@npm:1.0.0"
@@ -3305,15 +3275,6 @@ __metadata:
   peerDependencies:
     smoldot: 2.x
   checksum: 12b2180c1b5fa9884588e7e94c095ba6bdd4bc386ca54c2bd2d58e8b606b361b04636ae0536b1eb4a18398e31d191d5949e3b3ba9b3a01d6592f425fb671881c
-  languageName: node
-  linkType: hard
-
-"@substrate/smoldot-discovery@npm:^2.0.1":
-  version: 2.0.1
-  resolution: "@substrate/smoldot-discovery@npm:2.0.1"
-  dependencies:
-    "@substrate/discovery": ^0.2.1
-  checksum: 357c218e9b90bbb7a575600217300589b5226fd763e36d4787f2a7cbb164b17a0094c232a2d3691fdbc012f3bdc4a031570f7cd99910cf5500db139b553d8235
   languageName: node
   linkType: hard
 
@@ -7040,15 +7001,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"smoldot@npm:2.0.30":
-  version: 2.0.30
-  resolution: "smoldot@npm:2.0.30"
-  dependencies:
-    ws: ^8.8.1
-  checksum: 3a4c49b8055cf618be06b29f031d711e6b8559462ca7ed5ce49228d43683cbc504f7c600cce59acdaad7ed1a439b36c5f7a816d3d287118e402cd75c78c7aad1
-  languageName: node
-  linkType: hard
-
 "socks-proxy-agent@npm:^8.0.1":
   version: 8.0.2
   resolution: "socks-proxy-agent@npm:8.0.2"
@@ -7688,13 +7640,6 @@ __metadata:
   version: 3.3.2
   resolution: "web-streams-polyfill@npm:3.3.2"
   checksum: 0292f4113c1bda40d8e8ecebee39eb14cc2e2e560a65a6867980e394537a2645130e2c73f5ef6e641fd3697d2f71720ccf659aebaf69a9d5a773f653a0fdf39d
-  languageName: node
-  linkType: hard
-
-"web-worker@npm:1.2.0":
-  version: 1.2.0
-  resolution: "web-worker@npm:1.2.0"
-  checksum: 1bb28348ddcf9b2e7c62c5fd02e49a84098795856cd905456de957271bba288e9618941cf69d8960f0a7ae81f5dfb74b427c0634be47ec69e3e955c4ec5213be
   languageName: node
   linkType: hard
 

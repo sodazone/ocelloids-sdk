@@ -33,7 +33,6 @@ Here are the available binaries to run the example applications:
 
 * __filter-extrinsics__: Filters extrinsics using HJSON provided filters. Supports pipeable stdin and stdout.
 * __follow-transfer-events__: Simple demonstration of dynamic queries.
-* __light-client__: Demonstrates the usage of the alternative Smoldot light client provider.
 * __simple-fees__: Calculates simple fee stats for a block range.
 * __watch-balances__: Watches the change in balances of big exchange hot wallets from chain storage.
 * __watch-contracts__: Watches for contract messages of a specific contract and filters based on configured criteria. Supports pipeable stdout.

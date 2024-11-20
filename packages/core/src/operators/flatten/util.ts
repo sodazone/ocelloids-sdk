@@ -33,10 +33,18 @@ export function callAsTxWithBoundary({ call, tx, boundary, callError, extraSigne
   const { extrinsic } = tx
   const flatCall = new GenericCall(extrinsic.registry, call)
   const { blockNumber, blockPosition, blockHash } = extrinsic
-  const flatExtrinsic = new GenericExtrinsic(extrinsic.registry, {
-    method: flatCall,
-    signature: extrinsic.inner.signature,
-  })
+  const { signature } = extrinsic.inner
+
+  const flatExtrinsic =
+    typeof signature === 'object'
+      ? new GenericExtrinsic(extrinsic.registry, {
+          method: flatCall,
+          signature,
+        })
+      : new GenericExtrinsic(extrinsic.registry, {
+          method: flatCall,
+        })
+
   const txWithId = new GenericExtrinsicWithId(
     flatExtrinsic,
     {
@@ -74,10 +82,18 @@ export function callAsTx({ call, tx, extraSigner }: CallContext) {
   const { extrinsic } = tx
   const flatCall = new GenericCall(extrinsic.registry, call)
   const { blockNumber, blockPosition, blockHash } = extrinsic
-  const flatExtrinsic = new GenericExtrinsic(extrinsic.registry, {
-    method: flatCall,
-    signature: extrinsic.inner.signature,
-  })
+  const { signature } = extrinsic.inner
+
+  const flatExtrinsic =
+    typeof signature === 'object'
+      ? new GenericExtrinsic(extrinsic.registry, {
+          method: flatCall,
+          signature,
+        })
+      : new GenericExtrinsic(extrinsic.registry, {
+          method: flatCall,
+        })
+
   const txWithId = new GenericExtrinsicWithId(
     flatExtrinsic,
     {

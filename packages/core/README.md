@@ -16,7 +16,6 @@ The `packages/core` module source folder is structured as follows:
 | Directory                    | Description                               |
 |------------------------------|-------------------------------------------|
 |  apis                        | Multi-chain APIs                          |
-|  client                      | Alternative light client connector        |
 |  configuration               | Configuration                             |
 |  converters                  | Chain data type conversions               |
 |  observables                 | Reactive emitters                         |

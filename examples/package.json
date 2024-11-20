@@ -14,7 +14,6 @@
   "bin": {
     "filter-extrinsics": "./dist/filter-extrinsics/main.cjs",
     "follow-transfer-events": "./dist/follow-transfer-events/main.cjs",
-    "light-client": "./dist/light-client/main.cjs",
     "simple-fees": "./dist/simple-fees/main.cjs",
     "watch-balances": "./dist/watch-balances/main.cjs",
     "watch-contracts": "./dist/watch-contracts/main.cjs",
@@ -25,7 +24,6 @@
   "dependencies": {
     "@polkadot/rpc-provider": "^14.3.1",
     "@sodazone/ocelloids-sdk": "1.3.2-dev.0",
-    "@substrate/connect": "^2.0.1",
     "graph-data-structure": "^4.2.0",
     "hjson": "^3.2.2",
     "rxjs": "^7.8.1",
