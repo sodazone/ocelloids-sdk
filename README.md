@@ -1,23 +1,19 @@
+> [!IMPORTANT]
+> Due to the ongoing [Polkadot JS API](https://github.com/polkadot-js/api) deprecation, which is currently in maintenance-only mode, the Polkadot JS SDK project has been archived and is no longer maintained.
+
 <div align="center">
 
-<picture>
-  <img
-    src="https://github.com/sodazone/ocelloids-sdk/blob/main/.github/assets/oc_sdk.png?raw=true"
-    width="330"
-    height="auto"
-    alt=""
-  />
-</picture>
+<h1>Polkadot JS SDK</h1>
 
-[Packages](https://github.com/sodazone/ocelloids-sdk/#installation) | [Documentation](https://sodazone.github.io/ocelloids-sdk/) | [Examples](https://github.com/sodazone/ocelloids-sdk/tree/main/examples)
+[Packages](https://github.com/sodazone/pjs-sdk/#installation) | [Documentation](https://sodazone.github.io/pjs-sdk/) | [Examples](https://github.com/sodazone/pjs-sdk/tree/main/examples)
 
 <p align="center">
-  <a href="https://github.com/sodazone/ocelloids-sdk/actions/workflows/ci.yml"><img
-      src="https://img.shields.io/github/actions/workflow/status/sodazone/ocelloids-sdk/ci.yml?branch=main&color=69D2E7&labelColor=A7DBD8"
+  <a href="https://github.com/sodazone/pjs-sdk/actions/workflows/ci.yml"><img
+      src="https://img.shields.io/github/actions/workflow/status/sodazone/pjs-sdk/ci.yml?branch=main&color=69D2E7&labelColor=A7DBD8"
       alt="CI"
     /></a>
-  <a href="https://github.com/sodazone/ocelloids-sdk/blob/main/LICENSE"><img
-      src="https://img.shields.io/github/license/sodazone/ocelloids-sdk?color=69D2E7&labelColor=A7DBD8"
+  <a href="https://github.com/sodazone/pjs-sdk/blob/main/LICENSE"><img
+      src="https://img.shields.io/github/license/sodazone/pjs-sdk?color=69D2E7&labelColor=A7DBD8"
       alt="License"
     /></a>
 </p>
@@ -25,7 +21,7 @@
 
 ---
 
-Ocelloids[^1] SDK is an open-source software development kit written in Typescript for Polkadot and Substrate based networks.
+Polkadot JS SDK is an open-source software development kit written in Typescript for Polkadot and Substrate based networks.
 It simplifies the implementation of multi-chain programs and provides domain-specific logic for different pallets.
 
 ## Features
@@ -42,49 +38,49 @@ It simplifies the implementation of multi-chain programs and provides domain-spe
 
 ## Quickstart
 
-Check our [Quickstart Guide](https://github.com/sodazone/ocelloids-sdk/blob/main/guides/QUICKSTART.md) to set up your first Ocelloids program.
+Check our [Quickstart Guide](https://github.com/sodazone/pjs-sdk/blob/main/guides/QUICKSTART.md) to set up your first program.
 
 ## Installation
 
-### Ocelloids Core
+### PJS Core SDK
 
-<a href="https://www.npmjs.com/package/@sodazone/ocelloids-sdk">
+<a href="https://www.npmjs.com/package/@sodazone/pjs-sdk">
   <img 
-    src="https://img.shields.io/npm/v/@sodazone/ocelloids-sdk?color=69D2E7&labelColor=69D2E7&logo=npm&logoColor=333333"
-    alt="npm @sodazone/ocelloids-sdk"
+    src="https://img.shields.io/npm/v/@sodazone/pjs-sdk?color=69D2E7&labelColor=69D2E7&logo=npm&logoColor=333333"
+    alt="npm @sodazone/pjs-sdk"
   />
 </a>
 
 ```shell
-npm i @sodazone/ocelloids-sdk
+npm i @sodazone/pjs-sdk
 ```
 
 Provides essential abstractions, reactive operators, base type converters, and pallet-independent functionality.
 
-Source code [packages/core](https://github.com/sodazone/ocelloids/tree/main/packages/core).
+Source code [packages/core](https://github.com/sodazone/pjs-sdk/tree/main/packages/core).
 
-### Ocelloids Contracts
+### PJS Contracts SDK
 
-<a href="https://www.npmjs.com/package/@sodazone/ocelloids-sdk-contracts">
+<a href="https://www.npmjs.com/package/@sodazone/pjs-sdk-contracts">
   <img 
-    src="https://img.shields.io/npm/v/@sodazone/ocelloids-sdk-contracts?color=69D2E7&labelColor=69D2E7&logo=npm&logoColor=333333"
-    alt="npm @sodazone/ocelloids-sdk-contracts"
+    src="https://img.shields.io/npm/v/@sodazone/pjs-sdk-contracts?color=69D2E7&labelColor=69D2E7&logo=npm&logoColor=333333"
+    alt="npm @sodazone/pjs-sdk-contracts"
   />
 </a>
 
 ```shell
-npm i @sodazone/ocelloids-sdk-contracts
+npm i @sodazone/pjs-sdk-contracts
 ```
 
 Provides operators and type converters for the contracts pallet.
 
-Source code [packages/pallets/contracts](https://github.com/sodazone/ocelloids-sdk/tree/main/packages/pallets/contracts).
+Source code [packages/pallets/contracts](https://github.com/sodazone/pjs-sdk/tree/main/packages/pallets/contracts).
 
 ## Usage
 
-Refer to the [SDK documentation](https://sodazone.github.io/ocelloids-sdk/).
+Refer to the [SDK documentation](https://sodazone.github.io/pjs-sdk/).
 
-You can also explore some example applications in the [examples/](https://github.com/sodazone/ocelloids-sdk/tree/main/examples) folder.
+You can also explore some example applications in the [examples/](https://github.com/sodazone/pjs-sdk/tree/main/examples) folder.
 
 ### Example: Filtering Transfer Events
 
@@ -97,7 +93,7 @@ import {
   SubstrateApis,
   finalizedBlocks,
   filterEvents
-} from '@sodazone/ocelloids-sdk';
+} from '@sodazone/pjs-sdk';
 
 const apis = new SubstrateApis({
   polkadot: {
@@ -186,7 +182,7 @@ import { switchMap } from 'rxjs';
 import {
   SubstrateApis,
   mongoFilter
-} from '@sodazone/ocelloids-sdk';
+} from '@sodazone/pjs-sdk';
 
 const apis = new SubstrateApis({
   polkadot: {
@@ -220,7 +216,7 @@ import {
   blocksInRange,
   filterEvents,
   ControlQuery
-} from '@sodazone/ocelloids-sdk';
+} from '@sodazone/pjs-sdk';
 
 function transfersOf(addresses: string[]) {
   return ControlQuery.from({
@@ -317,7 +313,7 @@ The development support tools include functionalities such as chain data capture
 
 #### Examples
 
-The [examples/](https://github.com/sodazone/ocelloids-sdk/tree/main/examples) folder contains example applications.
+The [examples/](https://github.com/sodazone/pjs-sdk/tree/main/examples) folder contains example applications.
 
 ### Testing
 
@@ -333,7 +329,7 @@ Additional test data and mocks are available in `packages/test/` for your conven
 
 #### Visual Studio Code
 
-If you encounter the issue of `@sodazone/ocelloids-sdk-test` being marked as unresolved 
+If you encounter the issue of `@sodazone/pjs-sdk-test` being marked as unresolved 
 in the `spec` test files after building the project, you can resolve it by following these steps:
 
 * Open any typescript file of the project.
